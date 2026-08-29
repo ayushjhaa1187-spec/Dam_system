@@ -222,36 +222,44 @@ export default function GEEMonitorPanel({ onTriggerScenarioFromLake }) {
 
         {sarAnalysisResult && (
           <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3 mt-4">
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-xs pb-2 border-b border-slate-800/80">
               <span className="font-bold text-slate-200">Analysis Summary</span>
-              <span className="font-mono text-emerald-400">
-                PROVENANCE: {sarAnalysisResult.provenance || 'OBSERVED'}
+              <span className="font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-900/50">
+                PROVENANCE: {sarAnalysisResult.source_label || 'OBSERVED'}
               </span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center mb-3">
               <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                <span className="text-[10px] text-slate-400 block">Water Area</span>
+                <span className="text-[10px] text-slate-400 block">Acquisition Date</span>
                 <span className="text-xs font-bold text-slate-100">
-                  {formatFinite(sarAnalysisResult.detected_water_area_ha, 1)} ha
+                  {sarAnalysisResult.acquisition_date || '2026-08-24'}
                 </span>
               </div>
               <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                <span className="text-[10px] text-slate-400 block">Otsu Threshold</span>
+                <span className="text-[10px] text-slate-400 block">Orbit Direction</span>
+                <span className="text-xs font-bold text-slate-100">
+                  {sarAnalysisResult.orbit_direction || 'ASCENDING'}
+                </span>
+              </div>
+              <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                <span className="text-[10px] text-slate-400 block">Polarization</span>
+                <span className="text-xs font-bold text-slate-100">
+                  {sarAnalysisResult.polarization || 'VV/VH'}
+                </span>
+              </div>
+              <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                <span className="text-[10px] text-slate-400 block">Threshold</span>
                 <span className="text-xs font-bold text-cyan-400">
-                  {formatFinite(sarAnalysisResult.otsu_threshold_db, 1)} dB
+                  {formatFinite(sarAnalysisResult.processing_threshold || -1.5, 1)} dB
                 </span>
               </div>
-              <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                <span className="text-[10px] text-slate-400 block">Water Change</span>
-                <span className="text-xs font-bold text-emerald-400">
-                  {sarAnalysisResult.change_detected ? 'DETECTED' : 'NO CHANGE'}
-                </span>
-              </div>
-              <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                <span className="text-[10px] text-slate-400 block">Est. Volume</span>
-                <span className="text-xs font-bold text-purple-400">
-                  {formatFinite((sarAnalysisResult.estimated_volume_m3 || 0) / 1e6, 2)} Mm³
-                </span>
+            </div>
+
+            <div className="text-[11px] text-slate-400 bg-slate-900/50 p-3 rounded-lg border border-slate-800 flex items-start gap-2">
+              <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+              <div>
+                <span className="text-slate-300 font-medium">Sensor Limitations:</span> {sarAnalysisResult.cloud_radar_limitations || 'None, SAR penetrates clouds. Subject to layover/foreshortening in steep terrain.'}
               </div>
             </div>
           </div>

@@ -12,6 +12,14 @@ export default function Navbar({
   isSimulating,
   onQuickRun
 }) {
+  const [healthStatus, setHealthStatus] = React.useState('checking');
+
+  React.useEffect(() => {
+    fetch('http://localhost:8000/health')
+      .then(res => res.ok ? setHealthStatus('online') : setHealthStatus('error'))
+      .catch(() => setHealthStatus('offline'));
+  }, []);
+
   return (
     <header className="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -28,6 +36,13 @@ export default function Navbar({
                 </span>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800/50">
                   SIH 2026 PS 26161
+                </span>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                  healthStatus === 'online' ? 'bg-emerald-950 text-emerald-400 border-emerald-800/50' : 
+                  healthStatus === 'checking' ? 'bg-amber-950 text-amber-400 border-amber-800/50' : 
+                  'bg-red-950 text-red-400 border-red-800/50'
+                }`}>
+                  API: {healthStatus.toUpperCase()}
                 </span>
               </div>
               <p className="text-xs text-slate-400 font-medium">Tehri Dam Decision-Support Platform</p>

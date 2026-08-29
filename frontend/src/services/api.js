@@ -240,8 +240,8 @@ export const api = {
             },
           },
           provenance: {
-            level: 'MODELLED',
-            source: 'Coupled DualSPHysics-Delft3DFM',
+            level: 'DEMO / FIXTURE',
+            source: 'Illustrative Local Fallback',
             run_id: `sim_${Date.now().toString(16)}`,
           },
         };
@@ -395,7 +395,7 @@ export const api = {
           sensor: payload.sensor_type === 'sentinel_2_optical' ? 'Sentinel-2 MSI' : 'Sentinel-1 C-SAR GRD',
           orbit_mode: 'Descending Pass',
           data_latency_hrs: '12 to 24 hours',
-          validation_level: 'OBSERVED',
+          validation_level: 'DEMO / FIXTURE',
           disclaimer: 'Decision-support prototype; not a replacement for official flood-warning or emergency-management systems.',
         },
         simulation_comparison: {

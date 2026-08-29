@@ -210,6 +210,23 @@ export default function DamageAssessmentPanel({
                   HADR Rank Order
                 </span>
               </h3>
+              
+              <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800/80 mb-2">
+                <div className="text-[10px] text-slate-400 font-mono uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                  <CheckCircle className="w-3 h-3 text-cyan-500" />
+                  Transparent Priority Formula
+                </div>
+                <div className="text-xs text-slate-300 font-mono bg-slate-900 px-2 py-1.5 rounded inline-block">
+                  <span className="text-purple-400">Score</span> = 
+                  <span className="text-amber-400"> 0.35</span>(Arrival Time) + 
+                  <span className="text-red-400"> 0.30</span>(Depth/Velocity) + 
+                  <span className="text-orange-400"> 0.25</span>(Pop. Exposed) + 
+                  <span className="text-blue-400"> 0.10</span>(Critical Assets)
+                </div>
+                <p className="text-[10px] text-slate-500 mt-1.5 leading-tight">
+                  Settlements are ranked using this deterministic equation based on modelled hazard layers and exposed assets, preventing black-box risk scoring.
+                </p>
+              </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs text-slate-300">
