@@ -776,7 +776,8 @@ class GeospatialExporter:
             TableStyle([
                 ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0f172a")),
                 ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-                ("FONTNAME", (0, 0), (-1, 0), 8.5),
+                ("FONTSIZE", (0, 0), (-1, 0), 8.5),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
                 ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
                 ("TOPPADDING", (0, 0), (-1, -1), 4),
                 ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
