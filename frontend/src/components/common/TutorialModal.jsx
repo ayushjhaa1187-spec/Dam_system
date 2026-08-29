@@ -95,24 +95,24 @@ export default function TutorialModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl space-y-4 p-6 text-slate-100">
+    <div className="fixed inset-0 z-50 bg-hc-bg/80 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-hc-surface border border-hc-border rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl space-y-4 p-6 text-hc-ink">
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div className="flex items-center justify-between pb-3 border-b border-hc-border">
           <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <div className="w-8 h-8 rounded-lg bg-hc-active/10 border border-cyan-500/30 flex items-center justify-center text-hc-active">
               <Icon className="w-4 h-4" />
             </div>
             <div>
-              <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-wider font-semibold">
+              <span className="text-[10px] font-mono text-hc-active uppercase tracking-wider font-semibold">
                 {step.badge} &bull; Step {currentStep + 1} of {TUTORIAL_STEPS.length}
               </span>
-              <h3 className="text-base font-bold text-slate-100">{step.title}</h3>
+              <h3 className="text-base font-bold text-hc-ink">{step.title}</h3>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+            className="p-1 rounded-lg text-hc-textSecondary hover:text-hc-ink hover:bg-hc-secondary"
             aria-label="Close tutorial"
           >
             <X className="w-5 h-5" />
@@ -121,11 +121,11 @@ export default function TutorialModal({ isOpen, onClose }) {
 
         {/* Content */}
         <div className="space-y-3 py-2">
-          <p className="text-xs text-slate-300 leading-relaxed">{step.description}</p>
-          <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+          <p className="text-xs text-hc-textSecondary leading-relaxed">{step.description}</p>
+          <div className="bg-hc-bg p-3.5 rounded-xl border border-hc-border space-y-2">
             {step.bullets.map((b, idx) => (
-              <div key={idx} className="flex items-start space-x-2 text-xs text-slate-300">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+              <div key={idx} className="flex items-start space-x-2 text-xs text-hc-textSecondary">
+                <CheckCircle2 className="w-3.5 h-3.5 text-hc-active shrink-0 mt-0.5" />
                 <span>{b}</span>
               </div>
             ))}
@@ -133,14 +133,14 @@ export default function TutorialModal({ isOpen, onClose }) {
         </div>
 
         {/* Progress Bar & Buttons */}
-        <div className="pt-2 flex items-center justify-between border-t border-slate-800">
+        <div className="pt-2 flex items-center justify-between border-t border-hc-border">
           <div className="flex space-x-1.5">
             {TUTORIAL_STEPS.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrentStep(i)}
                 className={`h-1.5 rounded-full transition-all ${
-                  i === currentStep ? 'w-6 bg-cyan-400' : 'w-2 bg-slate-700'
+                  i === currentStep ? 'w-6 bg-hc-active' : 'w-2 bg-hc-border'
                 }`}
                 aria-label={`Go to step ${i + 1}`}
               />
@@ -151,7 +151,7 @@ export default function TutorialModal({ isOpen, onClose }) {
             {currentStep > 0 && (
               <button
                 onClick={handlePrev}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold flex items-center space-x-1"
+                className="px-3 py-1.5 rounded-xl bg-hc-secondary hover:bg-hc-border text-hc-textSecondary text-xs font-semibold flex items-center space-x-1"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Previous</span>
@@ -159,7 +159,7 @@ export default function TutorialModal({ isOpen, onClose }) {
             )}
             <button
               onClick={handleNext}
-              className="px-4 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold flex items-center space-x-1 shadow-md shadow-cyan-500/20"
+              className="px-4 py-1.5 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 text-xs font-bold flex items-center space-x-1 shadow-md shadow-cyan-500/20"
             >
               <span>{currentStep === TUTORIAL_STEPS.length - 1 ? 'Get Started' : 'Next'}</span>
               <ArrowRight className="w-3.5 h-3.5" />

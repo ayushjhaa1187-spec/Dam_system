@@ -107,7 +107,7 @@ export default function ImpactExportScreen({
   };
 
   return (
-    <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 text-slate-100">
+    <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 text-hc-ink">
       {/* Header */}
       <PageHeader
         category="DISASTER IMPACT &amp; GIS EXPORT CENTER &bull; SCREEN 5 OF 5"
@@ -166,7 +166,7 @@ export default function ImpactExportScreen({
       </div>
 
       {/* Tabs Navigation Bar */}
-      <div className="flex space-x-2 border-b border-slate-800 pb-2">
+      <div className="flex space-x-2 border-b border-hc-border pb-2">
         {[
           { id: 'exports', label: 'Export Downloads', icon: Download },
           { id: 'damage', label: 'HADR Damage & Logistics', icon: ShieldAlert },
@@ -182,8 +182,8 @@ export default function ImpactExportScreen({
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition ${
                 isActive
-                  ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+                  ? 'bg-hc-active/10 text-hc-active border border-cyan-500/30'
+                  : 'text-hc-textSecondary hover:text-hc-ink hover:bg-hc-surface/60'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -196,18 +196,18 @@ export default function ImpactExportScreen({
       {/* TAB 1: Complete Export Center */}
       {activeTab === 'exports' && (
         <div className="space-y-6">
-          <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div className="bg-hc-surface/80 border border-hc-border rounded-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-hc-border">
               <div>
-                <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-                  <Download className="w-4 h-4 text-cyan-400" />
+                <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                  <Download className="w-4 h-4 text-hc-active" />
                   <span>Standardized Geospatial &amp; HADR Export Formats</span>
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-hc-textSecondary mt-0.5">
                   All downloads include scenario/run ID, EPSG:4326 CRS, standard units, timestamp, solver provenance, and official disclaimers.
                 </p>
               </div>
-              <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950 px-2.5 py-1 rounded-lg border border-cyan-800/40">
+              <span className="text-[10px] font-mono text-hc-active bg-cyan-950 px-2.5 py-1 rounded-lg border border-cyan-800/40">
                 RUN ID: {payload.run_id}
               </span>
             </div>
@@ -216,169 +216,169 @@ export default function ImpactExportScreen({
               {/* 1. ESRI Shapefile Package */}
               <div
                 onClick={() => api.downloadShapefile(payload)}
-                className="p-4 bg-slate-950 hover:bg-slate-800/80 border border-slate-800 hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
+                className="p-4 bg-hc-bg hover:bg-hc-secondary/80 border border-hc-border hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-950 text-blue-400 flex items-center justify-center border border-blue-800/40">
+                  <div className="w-10 h-10 rounded-xl bg-blue-950 text-hc-primary flex items-center justify-center border border-blue-800/40">
                     <Layers className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-100 group-hover:text-cyan-400 transition">
+                    <h4 className="text-xs font-bold text-hc-ink group-hover:text-hc-active transition">
                       ESRI Shapefile Package (.zip)
                     </h4>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-hc-textSecondary">
                       Standard .shp, .shx, .dbf, .prj (WGS84), and .cpg (UTF-8)
                     </p>
                   </div>
                 </div>
-                <Download className="w-4 h-4 text-slate-400 group-hover:text-cyan-400" />
+                <Download className="w-4 h-4 text-hc-textSecondary group-hover:text-hc-active" />
               </div>
 
               {/* 2. Google Earth KML */}
               <div
                 onClick={() => api.downloadKML(payload)}
-                className="p-4 bg-slate-950 hover:bg-slate-800/80 border border-slate-800 hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
+                className="p-4 bg-hc-bg hover:bg-hc-secondary/80 border border-hc-border hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-950 text-emerald-400 flex items-center justify-center border border-emerald-800/40">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-950 text-hc-success flex items-center justify-center border border-emerald-800/40">
                     <Globe className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-100 group-hover:text-emerald-400 transition">
+                    <h4 className="text-xs font-bold text-hc-ink group-hover:text-hc-success transition">
                       Google Earth OGC KML (.kml)
                     </h4>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-hc-textSecondary">
                       3D extruded hazard polygons with elevation tags and gauges
                     </p>
                   </div>
                 </div>
-                <Download className="w-4 h-4 text-slate-400 group-hover:text-emerald-400" />
+                <Download className="w-4 h-4 text-hc-textSecondary group-hover:text-hc-success" />
               </div>
 
               {/* 3. GeoJSON FeatureCollection */}
               <div
                 onClick={() => api.downloadGeoJSON(payload)}
-                className="p-4 bg-slate-950 hover:bg-slate-800/80 border border-slate-800 hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
+                className="p-4 bg-hc-bg hover:bg-hc-secondary/80 border border-hc-border hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-purple-950 text-purple-400 flex items-center justify-center border border-purple-800/40">
+                  <div className="w-10 h-10 rounded-xl bg-purple-950 text-hc-assumption flex items-center justify-center border border-purple-800/40">
                     <FileCheck className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-100 group-hover:text-purple-400 transition">
+                    <h4 className="text-xs font-bold text-hc-ink group-hover:text-hc-assumption transition">
                       Web GIS GeoJSON (.geojson)
                     </h4>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-hc-textSecondary">
                       Browser GIS, QGIS, ArcGIS Online, and Mapbox ready
                     </p>
                   </div>
                 </div>
-                <Download className="w-4 h-4 text-slate-400 group-hover:text-purple-400" />
+                <Download className="w-4 h-4 text-hc-textSecondary group-hover:text-hc-assumption" />
               </div>
 
               {/* 4. Decision-Maker PDF Report */}
               <div
                 onClick={() => api.downloadPDFReport(payload)}
-                className="p-4 bg-slate-950 hover:bg-slate-800/80 border border-slate-800 hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
+                className="p-4 bg-hc-bg hover:bg-hc-secondary/80 border border-hc-border hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-red-950 text-red-400 flex items-center justify-center border border-red-800/40">
+                  <div className="w-10 h-10 rounded-xl bg-red-950 text-hc-critical flex items-center justify-center border border-red-800/40">
                     <FileText className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-100 group-hover:text-red-400 transition">
+                    <h4 className="text-xs font-bold text-hc-ink group-hover:text-hc-critical transition">
                       Executive Decision-Maker PDF Report (.pdf)
                     </h4>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-hc-textSecondary">
                       Multi-page briefing with breach mechanics & NDRF logistics
                     </p>
                   </div>
                 </div>
-                <Download className="w-4 h-4 text-slate-400 group-hover:text-red-400" />
+                <Download className="w-4 h-4 text-hc-textSecondary group-hover:text-hc-critical" />
               </div>
 
               {/* 5. GeoTIFF Flood Depth Raster */}
               <div
                 onClick={() => api.downloadGeoTIFF(payload, 'depth')}
-                className="p-4 bg-slate-950 hover:bg-slate-800/80 border border-slate-800 hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
+                className="p-4 bg-hc-bg hover:bg-hc-secondary/80 border border-hc-border hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-950 text-cyan-400 flex items-center justify-center border border-cyan-800/40">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-950 text-hc-active flex items-center justify-center border border-cyan-800/40">
                     <Layers className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-100 group-hover:text-cyan-400 transition">
+                    <h4 className="text-xs font-bold text-hc-ink group-hover:text-hc-active transition">
                       GeoTIFF Inundation Depth Raster (.tif)
                     </h4>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-hc-textSecondary">
                       Float32 georeferenced flood depth in meters (EPSG:4326)
                     </p>
                   </div>
                 </div>
-                <Download className="w-4 h-4 text-slate-400 group-hover:text-cyan-400" />
+                <Download className="w-4 h-4 text-hc-textSecondary group-hover:text-hc-active" />
               </div>
 
               {/* 6. GeoTIFF Velocity Raster */}
               <div
                 onClick={() => api.downloadGeoTIFF(payload, 'velocity')}
-                className="p-4 bg-slate-950 hover:bg-slate-800/80 border border-slate-800 hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
+                className="p-4 bg-hc-bg hover:bg-hc-secondary/80 border border-hc-border hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
               >
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-xl bg-amber-950 text-amber-400 flex items-center justify-center border border-amber-800/40">
                     <Layers className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-100 group-hover:text-amber-400 transition">
+                    <h4 className="text-xs font-bold text-hc-ink group-hover:text-amber-400 transition">
                       GeoTIFF Surge Velocity Raster (.tif)
                     </h4>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-hc-textSecondary">
                       Float32 peak flood wave velocity in m/s (EPSG:4326)
                     </p>
                   </div>
                 </div>
-                <Download className="w-4 h-4 text-slate-400 group-hover:text-amber-400" />
+                <Download className="w-4 h-4 text-hc-textSecondary group-hover:text-amber-400" />
               </div>
 
               {/* 7. CSV Situation & Exposure Summary */}
               <div
                 onClick={() => api.downloadCSVReport(payload)}
-                className="p-4 bg-slate-950 hover:bg-slate-800/80 border border-slate-800 hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
+                className="p-4 bg-hc-bg hover:bg-hc-secondary/80 border border-hc-border hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center border border-slate-700">
+                  <div className="w-10 h-10 rounded-xl bg-hc-secondary text-hc-textSecondary flex items-center justify-center border border-hc-border">
                     <FileText className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-100 group-hover:text-cyan-400 transition">
+                    <h4 className="text-xs font-bold text-hc-ink group-hover:text-hc-active transition">
                       HADR Settlement Exposure CSV (.csv)
                     </h4>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-hc-textSecondary">
                       Village exposure priority, arrival lead times, and losses
                     </p>
                   </div>
                 </div>
-                <Download className="w-4 h-4 text-slate-400 group-hover:text-cyan-400" />
+                <Download className="w-4 h-4 text-hc-textSecondary group-hover:text-hc-active" />
               </div>
 
               {/* 8. CSV Outflow Hydrograph */}
               <div
                 onClick={() => api.downloadHydrographCSV(payload)}
-                className="p-4 bg-slate-950 hover:bg-slate-800/80 border border-slate-800 hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
+                className="p-4 bg-hc-bg hover:bg-hc-secondary/80 border border-hc-border hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group shadow-sm"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center border border-slate-700">
+                  <div className="w-10 h-10 rounded-xl bg-hc-secondary text-hc-textSecondary flex items-center justify-center border border-hc-border">
                     <FileText className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-100 group-hover:text-cyan-400 transition">
+                    <h4 className="text-xs font-bold text-hc-ink group-hover:text-hc-active transition">
                       Breach Outflow Hydrograph CSV (.csv)
                     </h4>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-[11px] text-hc-textSecondary">
                       Discharge time series (m³/s) and cumulative outflow volume
                     </p>
                   </div>
                 </div>
-                <Download className="w-4 h-4 text-slate-400 group-hover:text-cyan-400" />
+                <Download className="w-4 h-4 text-hc-textSecondary group-hover:text-hc-active" />
               </div>
             </div>
           </div>
@@ -388,39 +388,39 @@ export default function ImpactExportScreen({
       {/* TAB 2: HADR Damage & Logistics */}
       {activeTab === 'damage' && (
         <div className="space-y-6">
-          <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2 pb-2 border-b border-slate-800">
-              <ShieldAlert className="w-4 h-4 text-red-400" />
+          <div className="bg-hc-surface/80 border border-hc-border rounded-2xl p-6 space-y-4">
+            <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2 pb-2 border-b border-hc-border">
+              <ShieldAlert className="w-4 h-4 text-hc-critical" />
               <span>Downstream District Exposure &amp; Vulnerability Matrix</span>
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-slate-950 rounded-xl border border-red-500/30 space-y-2">
-                <span className="text-[10px] font-mono font-bold text-red-400 uppercase">
+              <div className="p-4 bg-hc-bg rounded-xl border border-hc-critical/30 space-y-2">
+                <span className="text-[10px] font-mono font-bold text-hc-critical uppercase">
                   RED ZONE (Extreme Danger)
                 </span>
-                <h4 className="text-xs font-bold text-slate-100">0–30 km Corridor (Sirain to Koteshwar)</h4>
-                <p className="text-xs text-slate-300">
+                <h4 className="text-xs font-bold text-hc-ink">0–30 km Corridor (Sirain to Koteshwar)</h4>
+                <p className="text-xs text-hc-textSecondary">
                   Lead time <strong>&lt; 30 minutes</strong>. Forced immediate evacuation to high ridge line (&gt; 740m MSL).
                 </p>
               </div>
 
-              <div className="p-4 bg-slate-950 rounded-xl border border-amber-500/30 space-y-2">
+              <div className="p-4 bg-hc-bg rounded-xl border border-amber-500/30 space-y-2">
                 <span className="text-[10px] font-mono font-bold text-amber-400 uppercase">
                   ORANGE ZONE (High Hazard)
                 </span>
-                <h4 className="text-xs font-bold text-slate-100">30–70 km Corridor (Devprayag to Shivpuri)</h4>
-                <p className="text-xs text-slate-300">
+                <h4 className="text-xs font-bold text-hc-ink">30–70 km Corridor (Devprayag to Shivpuri)</h4>
+                <p className="text-xs text-hc-textSecondary">
                   Lead time <strong>30–120 minutes</strong>. Pre-emptive evacuation and high ground shelter relocation.
                 </p>
               </div>
 
-              <div className="p-4 bg-slate-950 rounded-xl border border-yellow-500/30 space-y-2">
+              <div className="p-4 bg-hc-bg rounded-xl border border-yellow-500/30 space-y-2">
                 <span className="text-[10px] font-mono font-bold text-yellow-400 uppercase">
                   YELLOW ZONE (Alluvial Plain)
                 </span>
-                <h4 className="text-xs font-bold text-slate-100">70–100 km Corridor (Rishikesh &amp; Haridwar)</h4>
-                <p className="text-xs text-slate-300">
+                <h4 className="text-xs font-bold text-hc-ink">70–100 km Corridor (Rishikesh &amp; Haridwar)</h4>
+                <p className="text-xs text-hc-textSecondary">
                   Lead time <strong>120–240 minutes</strong>. Barrage gate clearance and riverbank ghat evacuations.
                 </p>
               </div>
@@ -432,18 +432,18 @@ export default function ImpactExportScreen({
       {/* TAB 3: Satellite GEE Observation & Comparison */}
       {activeTab === 'satellite' && (
         <div className="space-y-6">
-          <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div className="bg-hc-surface/80 border border-hc-border rounded-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-hc-border">
               <div>
-                <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-                  <Satellite className="w-4 h-4 text-emerald-400" />
+                <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                  <Satellite className="w-4 h-4 text-hc-success" />
                   <span>Google Earth Engine &amp; Sentinel-1/2 Observation Surveillance</span>
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-hc-textSecondary mt-0.5">
                   Automated SAR backscatter differencing, cloud-cover filtering, permanent water masking, and slope false-positive removal.
                 </p>
               </div>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800/40">
+              <span className="text-[10px] font-mono text-hc-success bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800/40">
                 PROVENANCE: OBSERVED
               </span>
             </div>
@@ -451,11 +451,11 @@ export default function ImpactExportScreen({
             {/* Controls Bar */}
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Study Area Corridor</label>
+                <label className="text-xs text-hc-textSecondary block mb-1">Study Area Corridor</label>
                 <select
                   value={selectedZoneId}
                   onChange={(e) => setSelectedZoneId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-xs text-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-bg border border-hc-border text-xs text-hc-ink rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
                 >
                   {geeZones.map((z) => (
                     <option key={z.id} value={z.id}>
@@ -466,11 +466,11 @@ export default function ImpactExportScreen({
               </div>
 
               <div>
-                <label className="text-xs text-slate-400 block mb-1">Sensor Selection</label>
+                <label className="text-xs text-hc-textSecondary block mb-1">Sensor Selection</label>
                 <select
                   value={sensorType}
                   onChange={(e) => setSensorType(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-xs text-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-bg border border-hc-border text-xs text-hc-ink rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
                 >
                   <option value="sentinel_1_sar">Sentinel-1 C-SAR (Cloud-Penetrating Radar)</option>
                   <option value="sentinel_2_optical">Sentinel-2 Optical (Cloud &lt; 20% MNDWI)</option>
@@ -478,23 +478,23 @@ export default function ImpactExportScreen({
               </div>
 
               <div className="text-xs space-y-1">
-                <span className="text-slate-400 block">Masking Pipelines:</span>
+                <span className="text-hc-textSecondary block">Masking Pipelines:</span>
                 <div className="flex gap-2">
-                  <label className="flex items-center space-x-1 cursor-pointer text-[11px] text-slate-300">
+                  <label className="flex items-center space-x-1 cursor-pointer text-[11px] text-hc-textSecondary">
                     <input
                       type="checkbox"
                       checked={applyPermWater}
                       onChange={(e) => setApplyPermWater(e.target.checked)}
-                      className="rounded bg-slate-950 border-slate-700 text-cyan-500"
+                      className="rounded bg-hc-bg border-hc-border text-hc-active"
                     />
                     <span>Water Mask</span>
                   </label>
-                  <label className="flex items-center space-x-1 cursor-pointer text-[11px] text-slate-300">
+                  <label className="flex items-center space-x-1 cursor-pointer text-[11px] text-hc-textSecondary">
                     <input
                       type="checkbox"
                       checked={applySlopeMask}
                       onChange={(e) => setApplySlopeMask(e.target.checked)}
-                      className="rounded bg-slate-950 border-slate-700 text-cyan-500"
+                      className="rounded bg-hc-bg border-hc-border text-hc-active"
                     />
                     <span>Slope &gt;8°</span>
                   </label>
@@ -513,41 +513,41 @@ export default function ImpactExportScreen({
 
             {/* Results Display */}
             {satelliteData && (
-              <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4 mt-4">
+              <div className="bg-hc-bg p-4 rounded-xl border border-hc-border space-y-4 mt-4">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                  <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Observed Flood Area</span>
-                    <span className="text-xs font-bold text-emerald-400 font-mono">
+                  <div className="bg-hc-surface p-2.5 rounded-lg border border-hc-border">
+                    <span className="text-[10px] text-hc-textSecondary block">Observed Flood Area</span>
+                    <span className="text-xs font-bold text-hc-success font-mono">
                       {formatFinite(satelliteData.detected_water?.inundated_area_ha, 1)} ha
                     </span>
-                    <span className="text-[9px] text-slate-500 block">OBSERVED SATELLITE</span>
+                    <span className="text-[9px] text-hc-textSecondary block">OBSERVED SATELLITE</span>
                   </div>
-                  <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Modelled Simulation</span>
-                    <span className="text-xs font-bold text-cyan-400 font-mono">
+                  <div className="bg-hc-surface p-2.5 rounded-lg border border-hc-border">
+                    <span className="text-[10px] text-hc-textSecondary block">Modelled Simulation</span>
+                    <span className="text-xs font-bold text-hc-active font-mono">
                       {formatFinite((satelliteData.simulation_comparison?.modelled_area_km2 || 0) * 100, 1)} ha
                     </span>
-                    <span className="text-[9px] text-slate-500 block">MODELLED FORECAST</span>
+                    <span className="text-[9px] text-hc-textSecondary block">MODELLED FORECAST</span>
                   </div>
-                  <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Critical Success Index</span>
-                    <span className="text-xs font-bold text-purple-400 font-mono">
+                  <div className="bg-hc-surface p-2.5 rounded-lg border border-hc-border">
+                    <span className="text-[10px] text-hc-textSecondary block">Critical Success Index</span>
+                    <span className="text-xs font-bold text-hc-assumption font-mono">
                       CSI = {satelliteData.simulation_comparison?.critical_success_index_csi}
                     </span>
-                    <span className="text-[9px] text-slate-500 block">SPATIAL OVERLAP</span>
+                    <span className="text-[9px] text-hc-textSecondary block">SPATIAL OVERLAP</span>
                   </div>
-                  <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Benchmark Status</span>
-                    <span className="text-xs font-bold text-emerald-400 font-mono">
+                  <div className="bg-hc-surface p-2.5 rounded-lg border border-hc-border">
+                    <span className="text-[10px] text-hc-textSecondary block">Benchmark Status</span>
+                    <span className="text-xs font-bold text-hc-success font-mono">
                       {satelliteData.simulation_comparison?.benchmark_status || 'PASSED'}
                     </span>
-                    <span className="text-[9px] text-slate-500 block">VALIDATION</span>
+                    <span className="text-[9px] text-hc-textSecondary block">VALIDATION</span>
                   </div>
                 </div>
 
                 {/* Satellite Polygon Download */}
-                <div className="pt-2 flex items-center justify-between border-t border-slate-900 text-xs">
-                  <span className="text-slate-400">
+                <div className="pt-2 flex items-center justify-between border-t border-hc-border text-xs">
+                  <span className="text-hc-textSecondary">
                     Sensor: <strong>{satelliteData.sensor_metadata?.sensor}</strong> (Latency: {satelliteData.sensor_metadata?.data_latency_hrs})
                   </span>
                   <button
@@ -560,7 +560,7 @@ export default function ImpactExportScreen({
                       a.download = `observed_satellite_flood_${postDate}.geojson`;
                       a.click();
                     }}
-                    className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold flex items-center space-x-1.5"
+                    className="px-3 py-1.5 rounded-lg bg-hc-secondary hover:bg-hc-border text-hc-ink font-semibold flex items-center space-x-1.5"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>Export Detected Flood Polygon</span>

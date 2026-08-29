@@ -168,7 +168,7 @@ export default function SimulationLab({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsAuditModalOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 hover:border-cyan-500/40 text-xs font-semibold text-cyan-400 transition"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary hover:border-cyan-500/40 text-xs font-semibold text-hc-active transition"
               title="Open Scientific Run Provenance & Reproducibility Audit"
             >
               <ShieldCheck className="w-3.5 h-3.5" />
@@ -179,16 +179,16 @@ export default function SimulationLab({
                 if (onToggleFullScreen) onToggleFullScreen();
                 else setIsLocalFullScreen(true);
               }}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-xs font-semibold text-slate-200 transition"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary text-xs font-semibold text-hc-ink transition"
               title="Enter Fullscreen Simulation Mode"
             >
-              <Maximize2 className="w-3.5 h-3.5 text-cyan-400" />
+              <Maximize2 className="w-3.5 h-3.5 text-hc-active" />
               <span>Fullscreen Mode</span>
             </button>
             <button
               onClick={onRunSimulation}
               disabled={isSimulating}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20"
             >
               <Play className="w-3.5 h-3.5 fill-slate-950" />
               <span>{isSimulating ? 'Computing Solver...' : 'Run Simulation'}</span>
@@ -198,21 +198,21 @@ export default function SimulationLab({
       />
 
       {/* Scientific Run Audit Provenance Ribbon */}
-      <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div className="p-3.5 rounded-2xl bg-hc-surface/80 border border-hc-border flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex flex-wrap items-center gap-2 sm:gap-4 font-mono">
           <div className="flex items-center gap-1.5">
-            <span className="text-slate-500">ENGINE:</span>
-            <span className="text-slate-100 font-bold">{modelName}</span>
+            <span className="text-hc-textSecondary">ENGINE:</span>
+            <span className="text-hc-ink font-bold">{modelName}</span>
           </div>
           <span className="text-slate-700 hidden sm:inline">&bull;</span>
           <div className="flex items-center gap-1.5">
-            <span className="text-slate-500">DEM:</span>
-            <span className="text-emerald-400 font-medium">{demSource} ({demResolution}m)</span>
+            <span className="text-hc-textSecondary">DEM:</span>
+            <span className="text-hc-success font-medium">{demSource} ({demResolution}m)</span>
           </div>
           <span className="text-slate-700 hidden sm:inline">&bull;</span>
           <div className="flex items-center gap-1.5">
-            <span className="text-slate-500">CORRIDOR:</span>
-            <span className="text-cyan-400">100 km (Bhagirathi-Ganga)</span>
+            <span className="text-hc-textSecondary">CORRIDOR:</span>
+            <span className="text-hc-active">100 km (Bhagirathi-Ganga)</span>
           </div>
         </div>
 
@@ -220,7 +220,7 @@ export default function SimulationLab({
           <ValidationBadge status={validationStatus} />
           <button
             onClick={() => setIsAuditModalOpen(true)}
-            className="text-cyan-400 hover:text-cyan-300 underline font-mono text-[11px] font-semibold"
+            className="text-hc-active hover:text-cyan-300 underline font-mono text-[11px] font-semibold"
           >
             Audit Certificate &rarr;
           </button>
@@ -272,14 +272,14 @@ export default function SimulationLab({
       {/* 2. Station Probe Depth Time-Series & Infrastructure Exposure Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Station Depth Probe Chart */}
-        <div className="lg:col-span-2 p-5 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
+        <div className="lg:col-span-2 p-5 bg-hc-surface border border-hc-border rounded-2xl space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-cyan-400" />
+              <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                <Sliders className="w-4 h-4 text-hc-active" />
                 Station Flood Depth Time Series Probe
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-hc-textSecondary">
                 Continuous hydrodynamic wave stage hydrograph at selected river monitoring stations.
               </p>
             </div>
@@ -287,7 +287,7 @@ export default function SimulationLab({
             <select
               value={selectedProbeStation}
               onChange={(e) => setSelectedProbeStation(e.target.value)}
-              className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 font-mono"
+              className="bg-hc-bg border border-hc-border rounded-xl px-3 py-1.5 text-xs text-hc-ink focus:outline-none focus:border-cyan-500 font-mono"
             >
               {stationProbes.map((p) => (
                 <option key={p.station_id} value={p.station_id}>
@@ -297,23 +297,23 @@ export default function SimulationLab({
             </select>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800 text-xs">
+          <div className="grid grid-cols-3 gap-3 bg-hc-bg/60 p-3 rounded-xl border border-hc-border text-xs">
             <div>
-              <span className="text-slate-400 text-[11px]">Peak Flood Depth:</span>
-              <p className="font-bold text-cyan-400 font-mono text-sm">{activeProbe.peak_depth_m} m</p>
+              <span className="text-hc-textSecondary text-[11px]">Peak Flood Depth:</span>
+              <p className="font-bold text-hc-active font-mono text-sm">{activeProbe.peak_depth_m} m</p>
             </div>
             <div>
-              <span className="text-slate-400 text-[11px]">Wave Arrival Time:</span>
+              <span className="text-hc-textSecondary text-[11px]">Wave Arrival Time:</span>
               <p className="font-bold text-amber-400 font-mono text-sm">T+{activeProbe.arrival_time_min} min</p>
             </div>
             <div>
-              <span className="text-slate-400 text-[11px]">Peak Velocity:</span>
-              <p className="font-bold text-purple-400 font-mono text-sm">{activeProbe.peak_velocity_ms || 18.0} m/s</p>
+              <span className="text-hc-textSecondary text-[11px]">Peak Velocity:</span>
+              <p className="font-bold text-hc-assumption font-mono text-sm">{activeProbe.peak_velocity_ms || 18.0} m/s</p>
             </div>
           </div>
 
           {/* SVG Probe Hydrograph Chart */}
-          <div className="h-44 relative bg-slate-950 p-3 rounded-xl border border-slate-800/80">
+          <div className="h-44 relative bg-hc-bg p-3 rounded-xl border border-hc-border/80">
             <svg viewBox="0 0 500 140" className="w-full h-full overflow-visible">
               <line x1="40" y1="115" x2="480" y2="115" stroke="#334155" strokeWidth="1" />
               <line x1="40" y1="15" x2="40" y2="115" stroke="#334155" strokeWidth="1" />
@@ -360,43 +360,43 @@ export default function SimulationLab({
         </div>
 
         {/* Infrastructure & Land Use Exposure Card */}
-        <div className="p-5 bg-slate-900 border border-slate-800 rounded-2xl space-y-4">
-          <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-            <Building className="w-4 h-4 text-emerald-400" />
+        <div className="p-5 bg-hc-surface border border-hc-border rounded-2xl space-y-4">
+          <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+            <Building className="w-4 h-4 text-hc-success" />
             Infrastructure & Land-Use Impact
           </h3>
 
           <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <span className="text-slate-400 text-[11px]">Buildings Submerged:</span>
-              <p className="text-base font-bold text-slate-100 font-mono mt-0.5">2,140</p>
+            <div className="p-3 bg-hc-bg rounded-xl border border-hc-border">
+              <span className="text-hc-textSecondary text-[11px]">Buildings Submerged:</span>
+              <p className="text-base font-bold text-hc-ink font-mono mt-0.5">2,140</p>
             </div>
-            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <span className="text-slate-400 text-[11px]">Roads Impacted:</span>
-              <p className="text-base font-bold text-slate-100 font-mono mt-0.5">48.5 km</p>
+            <div className="p-3 bg-hc-bg rounded-xl border border-hc-border">
+              <span className="text-hc-textSecondary text-[11px]">Roads Impacted:</span>
+              <p className="text-base font-bold text-hc-ink font-mono mt-0.5">48.5 km</p>
             </div>
-            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <span className="text-slate-400 text-[11px]">Hospitals / Clinics:</span>
-              <p className="text-base font-bold text-red-400 font-mono mt-0.5">6 Facilities</p>
+            <div className="p-3 bg-hc-bg rounded-xl border border-hc-border">
+              <span className="text-hc-textSecondary text-[11px]">Hospitals / Clinics:</span>
+              <p className="text-base font-bold text-hc-critical font-mono mt-0.5">6 Facilities</p>
             </div>
-            <div className="p-3 bg-slate-950 rounded-xl border border-slate-800">
-              <span className="text-slate-400 text-[11px]">Schools & Colleges:</span>
+            <div className="p-3 bg-hc-bg rounded-xl border border-hc-border">
+              <span className="text-hc-textSecondary text-[11px]">Schools & Colleges:</span>
               <p className="text-base font-bold text-amber-400 font-mono mt-0.5">18 Institutions</p>
             </div>
           </div>
 
-          <div className="space-y-2 pt-1 border-t border-slate-800">
-            <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">Inundated Land Categories</span>
+          <div className="space-y-2 pt-1 border-t border-hc-border">
+            <span className="text-[11px] font-bold text-hc-textSecondary uppercase tracking-wider">Inundated Land Categories</span>
             <div className="space-y-1.5 text-xs font-mono">
-              <div className="flex justify-between text-slate-300">
+              <div className="flex justify-between text-hc-textSecondary">
                 <span>Agricultural Farmland</span>
-                <span className="text-emerald-400">1,450 ha (54.7%)</span>
+                <span className="text-hc-success">1,450 ha (54.7%)</span>
               </div>
-              <div className="flex justify-between text-slate-300">
+              <div className="flex justify-between text-hc-textSecondary">
                 <span>Dense Riverine Forest</span>
-                <span className="text-cyan-400">720 ha (27.2%)</span>
+                <span className="text-hc-active">720 ha (27.2%)</span>
               </div>
-              <div className="flex justify-between text-slate-300">
+              <div className="flex justify-between text-hc-textSecondary">
                 <span>Urban / Built-up Area</span>
                 <span className="text-amber-400">340 ha (12.8%)</span>
               </div>

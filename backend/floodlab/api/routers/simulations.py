@@ -333,12 +333,15 @@ async def run_simulation(req: RunSimulationRequest):
         if solver.lower() in ["sph", "dualsphysics"] and reach_km > 2.0:
             raise HTTPException(
                 status_code=400,
-                detail="SPH solver is restricted to the Near Field domain (<= 2km). Use Delft3D FM for far-field propagation."
+                detail=(
+                    "SPH solver is restricted to the Near Field domain (<= 2km). "
+                    "Use Delft3D FM for far-field propagation."
+                )
             )
         if solver.lower() == "coupled":
             # For coupled runs, SPH must hand off to Delft3D quickly
             pass
-        
+
     return execute_simulation_computation(
         params=params,
         solver_type=solver,

@@ -34,7 +34,7 @@ export default function Drawer({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs"
+            className="fixed inset-0 bg-hc-bg/70 backdrop-blur-xs"
           />
 
           {/* Drawer Slide-Over */}
@@ -43,17 +43,17 @@ export default function Drawer({
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-            className={`relative w-full ${width} bg-slate-900 border-l border-slate-800 shadow-2xl z-10 flex flex-col h-full overflow-hidden`}
+            className={`relative w-full ${width} bg-hc-surface border-l border-hc-border shadow-2xl z-10 flex flex-col h-full overflow-hidden`}
           >
             {/* Header */}
-            <div className="px-6 py-5 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
+            <div className="px-6 py-5 border-b border-hc-border flex items-center justify-between bg-hc-bg/50">
               <div>
-                {title && <h2 className="text-base sm:text-lg font-semibold text-slate-100">{title}</h2>}
-                {subtitle && <p className="text-xs text-slate-400 mt-0.5">{subtitle}</p>}
+                {title && <h2 className="text-base sm:text-lg font-semibold text-hc-ink">{title}</h2>}
+                {subtitle && <p className="text-xs text-hc-textSecondary mt-0.5">{subtitle}</p>}
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-slate-200 flex items-center justify-center transition"
+                className="w-8 h-8 rounded-lg bg-hc-secondary/80 hover:bg-hc-border text-hc-textSecondary hover:text-hc-ink flex items-center justify-center transition"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -64,7 +64,7 @@ export default function Drawer({
 
             {/* Optional Footer */}
             {footer && (
-              <div className="px-6 py-4 border-t border-slate-800 bg-slate-950/60 flex items-center justify-end gap-3">
+              <div className="px-6 py-4 border-t border-hc-border bg-hc-bg/60 flex items-center justify-end gap-3">
                 {footer}
               </div>
             )}

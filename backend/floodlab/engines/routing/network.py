@@ -1,6 +1,7 @@
 import networkx as nx
 from typing import Dict, Any, List, Tuple
 
+
 class EvacuationRouter:
     def __init__(self):
         self.graph = nx.Graph()
@@ -15,7 +16,12 @@ class EvacuationRouter:
         # Remove edges that are flooded at time_t
         pass
 
-    def find_shortest_safe_route(self, origin: str, destinations: List[str], time_constraint: float) -> Tuple[List[str], float]:
+    def find_shortest_safe_route(
+        self,
+        origin: str,
+        destinations: List[str],
+        time_constraint: float,
+    ) -> Tuple[List[str], float]:
         # Using Dijkstra's
         best_route = []
         best_time = float('inf')
@@ -29,3 +35,4 @@ class EvacuationRouter:
                 best_time = time
 
         return best_route, best_time
+

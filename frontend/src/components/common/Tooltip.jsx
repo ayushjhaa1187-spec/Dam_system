@@ -52,20 +52,20 @@ export default function Tooltip({ glossaryKey, customTitle, customText, children
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
         onClick={() => setIsOpen(!isOpen)}
-        className="cursor-help inline-flex items-center text-slate-400 hover:text-cyan-400 transition ml-1"
+        className="cursor-help inline-flex items-center text-hc-textSecondary hover:text-hc-active transition ml-1"
         aria-label={`Definition: ${title}`}
       >
         {children || <HelpCircle className="w-3.5 h-3.5" />}
       </span>
 
       {isOpen && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-slate-900 border border-cyan-500/40 rounded-xl shadow-2xl z-50 pointer-events-none text-left backdrop-blur-md">
-          <div className="flex items-center space-x-1.5 mb-1 text-cyan-400 font-bold text-xs">
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-hc-surface border border-cyan-500/40 rounded-xl shadow-2xl z-50 pointer-events-none text-left backdrop-blur-md">
+          <div className="flex items-center space-x-1.5 mb-1 text-hc-active font-bold text-xs">
             <Info className="w-3 h-3 shrink-0" />
             <span>{title}</span>
           </div>
-          <p className="text-[11px] text-slate-300 leading-relaxed font-sans">{text}</p>
-          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 border-r border-b border-cyan-500/40 rotate-45" />
+          <p className="text-[11px] text-hc-textSecondary leading-relaxed font-sans">{text}</p>
+          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-hc-surface border-r border-b border-cyan-500/40 rotate-45" />
         </div>
       )}
     </div>

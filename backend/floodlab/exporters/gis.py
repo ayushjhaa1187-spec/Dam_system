@@ -5,6 +5,7 @@ import zipfile
 import shapefile
 from typing import Any, Dict
 
+
 class GISExporter:
     def __init__(self, output_dir: str = "/tmp"):
         self.output_dir = output_dir
@@ -35,8 +36,13 @@ class GISExporter:
         w.close()
 
         # Write .prj
+        prj_content = (
+            'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",'
+            'SPHEROID["WGS_1984",6378137.0,298.257223563]],'
+            'PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]]'
+        )
         with open(filepath + ".prj", "w") as f:
-            f.write('GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137.0,298.257223563]],PRIMEM["Greenwich",0.0],UNIT["Degree",0.0174532925199433]]')
+            f.write(prj_content)
 
         # Zip them
         zip_path = filepath + ".zip"
@@ -47,7 +53,10 @@ class GISExporter:
 
     def export_kml(self, data: Dict[str, Any], filename: str) -> str:
         filepath = os.path.join(self.output_dir, filename + ".kml")
-        kml_content = "<?xml version='1.0' encoding='UTF-8'?><kml xmlns='http://www.opengis.net/kml/2.2'><Document></Document></kml>"
+        kml_content = (
+            "<?xml version='1.0' encoding='UTF-8'?>"
+            "<kml xmlns='http://www.opengis.net/kml/2.2'><Document></Document></kml>"
+        )
         with open(filepath, "w") as f:
             f.write(kml_content)
         return filepath
@@ -59,3 +68,4 @@ class GISExporter:
         c.drawString(100, 750, "HADR Situation Report with Scenario Assumptions")
         c.save()
         return filepath
+

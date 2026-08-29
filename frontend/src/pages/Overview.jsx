@@ -128,7 +128,7 @@ export default function Overview({
         actions={
           <button
             onClick={() => onNavigate('simulation')}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20"
           >
             <span>Launch Simulation Lab</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -175,10 +175,10 @@ export default function Overview({
       </div>
 
       {/* Main Geographic Leaflet Map */}
-      <div className="relative w-full h-[440px] rounded-2xl overflow-hidden border border-slate-800/80 bg-slate-950">
+      <div className="relative w-full h-[440px] rounded-2xl overflow-hidden border border-hc-border/80 bg-hc-bg">
         <div ref={mapContainerRef} className="absolute inset-0 w-full h-full z-0" />
 
-        <div className="absolute top-4 right-4 z-10 bg-slate-950/90 backdrop-blur border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono text-cyan-400 shadow-lg">
+        <div className="absolute top-4 right-4 z-10 bg-hc-bg/90 backdrop-blur border border-hc-border px-3 py-1.5 rounded-xl text-xs font-mono text-hc-active shadow-lg">
           MODELLED / DYNAMIC WAVE MESH
         </div>
       </div>

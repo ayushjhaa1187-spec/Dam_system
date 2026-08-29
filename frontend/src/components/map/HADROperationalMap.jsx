@@ -385,7 +385,7 @@ export default function HADROperationalMap({
 
   return (
     <div
-      className={`relative w-full rounded-2xl overflow-hidden border border-slate-800/80 bg-slate-950 flex flex-col justify-between ${
+      className={`relative w-full rounded-2xl overflow-hidden border border-hc-border/80 bg-hc-bg flex flex-col justify-between ${
         isFullScreen ? 'h-full flex-1' : 'h-[520px]'
       }`}
     >
@@ -394,13 +394,13 @@ export default function HADROperationalMap({
 
       {/* 2. Top Bar: Viewport Scopes & Target */}
       <div className="relative z-10 p-4 flex flex-wrap items-center justify-between pointer-events-none gap-2">
-        <div className="flex items-center gap-1.5 pointer-events-auto bg-slate-950/95 backdrop-blur border border-slate-800 p-1 rounded-xl shadow-lg">
+        <div className="flex items-center gap-1.5 pointer-events-auto bg-hc-bg/95 backdrop-blur border border-hc-border p-1 rounded-xl shadow-lg">
           <button
             onClick={() => setViewMode('immediate')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               viewMode === 'immediate'
-                ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-hc-active text-slate-950 shadow-sm'
+                : 'text-hc-textSecondary hover:text-hc-ink'
             }`}
           >
             IMMEDIATE IMPACT
@@ -409,8 +409,8 @@ export default function HADROperationalMap({
             onClick={() => setViewMode('corridor')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               viewMode === 'corridor'
-                ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-hc-active text-slate-950 shadow-sm'
+                : 'text-hc-textSecondary hover:text-hc-ink'
             }`}
           >
             DOWNSTREAM CORRIDOR
@@ -419,8 +419,8 @@ export default function HADROperationalMap({
             onClick={() => setViewMode('basin')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               viewMode === 'basin'
-                ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-hc-active text-slate-950 shadow-sm'
+                : 'text-hc-textSecondary hover:text-hc-ink'
             }`}
           >
             FULL BASIN
@@ -428,16 +428,16 @@ export default function HADROperationalMap({
         </div>
 
         <div className="flex items-center gap-2 pointer-events-auto">
-          <div className="bg-slate-950/95 backdrop-blur border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono flex items-center gap-2 shadow-lg">
+          <div className="bg-hc-bg/95 backdrop-blur border border-hc-border px-3 py-1.5 rounded-xl text-xs font-mono flex items-center gap-2 shadow-lg">
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span className="text-slate-300">Target:</span>
-            <span className="text-cyan-400 font-bold">{activeVillage.name}</span>
+            <span className="text-hc-textSecondary">Target:</span>
+            <span className="text-hc-active font-bold">{activeVillage.name}</span>
           </div>
 
           {onToggleFullScreen && (
             <button
               onClick={onToggleFullScreen}
-              className="p-2 rounded-xl bg-slate-950/95 border border-slate-800 text-slate-300 hover:text-white transition shadow-lg"
+              className="p-2 rounded-xl bg-hc-bg/95 border border-hc-border text-hc-textSecondary hover:text-white transition shadow-lg"
               title={isFullScreen ? 'Exit Fullscreen' : 'Enter Fullscreen Routing Mode'}
             >
               {isFullScreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -447,11 +447,11 @@ export default function HADROperationalMap({
       </div>
 
       {/* 3. Bottom Operational Route Comparison Strip */}
-      <div className="relative z-10 bg-slate-950/95 backdrop-blur border-t border-slate-800/90 px-5 py-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+      <div className="relative z-10 bg-hc-bg/95 backdrop-blur border-t border-hc-border/90 px-5 py-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         {/* Recommended Safe Route Strip */}
         <div className="flex-1 bg-emerald-950/40 border border-emerald-500/40 rounded-xl p-2.5 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-hc-success shrink-0" />
             <div>
               <span className="text-xs font-bold text-emerald-300 block uppercase tracking-wide">
                 RECOMMENDED SAFE ROUTE (Ridge Bypass)
@@ -462,7 +462,7 @@ export default function HADROperationalMap({
             </div>
           </div>
           <div className="text-right font-mono text-xs shrink-0">
-            <span className="text-emerald-400 font-bold block">
+            <span className="text-hc-success font-bold block">
               {activeVillage.safeRoute.etaMin} min &bull; {activeVillage.safeRoute.distKm} km
             </span>
             <span className="text-[10px] text-emerald-300">Margin: +{activeVillage.safeRoute.safetyMarginMin}m</span>
@@ -470,9 +470,9 @@ export default function HADROperationalMap({
         </div>
 
         {/* Rejected Unsafe Route Strip */}
-        <div className="flex-1 bg-red-950/40 border border-red-500/40 rounded-xl p-2.5 flex items-center justify-between gap-3">
+        <div className="flex-1 bg-red-950/40 border border-hc-critical/40 rounded-xl p-2.5 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <XCircle className="w-4 h-4 text-red-400 shrink-0" />
+            <XCircle className="w-4 h-4 text-hc-critical shrink-0" />
             <div>
               <span className="text-xs font-bold text-red-300 block uppercase tracking-wide">
                 REJECTED ROUTE (Valley Road)
@@ -483,7 +483,7 @@ export default function HADROperationalMap({
             </div>
           </div>
           <div className="text-right font-mono text-xs shrink-0">
-            <span className="text-red-400 font-bold block">
+            <span className="text-hc-critical font-bold block">
               {activeVillage.rejectedRoute.etaMin} min &bull; {activeVillage.rejectedRoute.distKm} km
             </span>
             <span className="text-[10px] text-red-300">Floods in {activeVillage.rejectedRoute.bridgeFloodMin}m</span>

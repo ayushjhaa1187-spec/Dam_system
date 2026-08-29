@@ -74,15 +74,15 @@ export default function HADRDashboard({
                 if (onToggleFullScreen) onToggleFullScreen();
                 else setIsLocalFullScreen(true);
               }}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-xs font-semibold text-slate-200 transition"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary text-xs font-semibold text-hc-ink transition"
               title="Enter Fullscreen Routing Mode"
             >
-              <Maximize2 className="w-3.5 h-3.5 text-cyan-400" />
+              <Maximize2 className="w-3.5 h-3.5 text-hc-active" />
               <span>Fullscreen Mode</span>
             </button>
             <button
               onClick={onOpenExport}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-xs font-semibold text-slate-200 transition"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary text-xs font-semibold text-hc-ink transition"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Export Mission Manifest</span>
@@ -101,9 +101,9 @@ export default function HADRDashboard({
           <ValidationBadge status="demo" compact />
         </div>
       ) : (
-        <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-300">
+        <div className="p-3 rounded-xl bg-hc-surface/60 border border-hc-border/80 flex items-center justify-between text-xs font-mono text-hc-textSecondary">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-hc-success shrink-0" />
             <span>OPERATIONAL BASELINE: {modelName} &bull; DEM: {meta.dem_source || 'Copernicus 30m'} &bull; Manning $n$: {meta.physical_conditions?.manning_n || 0.042}</span>
           </div>
           <ValidationBadge status={validationStatus} compact />
@@ -171,25 +171,25 @@ export default function HADRDashboard({
                     onClick={() => setSelectedVillageId(village.id)}
                     className={`p-3.5 rounded-xl border transition cursor-pointer flex flex-col gap-2 ${
                       isSelected
-                        ? 'bg-slate-900 border-cyan-500 shadow-md shadow-cyan-500/10 ring-1 ring-cyan-500/30'
-                        : 'bg-slate-950/80 border-slate-800/80 hover:bg-slate-900/60'
+                        ? 'bg-hc-surface border-cyan-500 shadow-md shadow-cyan-500/10 ring-1 ring-cyan-500/30'
+                        : 'bg-hc-bg/80 border-hc-border/80 hover:bg-hc-surface/60'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span
                           className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold font-mono ${
-                            isCritical ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/20 text-amber-400'
+                            isCritical ? 'bg-hc-critical/20 text-hc-critical' : 'bg-amber-500/20 text-amber-400'
                           }`}
                         >
                           #{idx + 1}
                         </span>
-                        <h4 className="text-xs font-bold text-slate-100">{village.name}</h4>
+                        <h4 className="text-xs font-bold text-hc-ink">{village.name}</h4>
                       </div>
                       <span
                         className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md ${
                           isCritical
-                            ? 'bg-red-500/20 text-red-300 border border-red-500/30'
+                            ? 'bg-hc-critical/20 text-red-300 border border-hc-critical/30'
                             : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
                         }`}
                       >
@@ -197,14 +197,14 @@ export default function HADRDashboard({
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 text-[11px] font-mono text-slate-400 pt-1 border-t border-slate-900">
+                    <div className="grid grid-cols-2 gap-2 text-[11px] font-mono text-hc-textSecondary pt-1 border-t border-hc-border">
                       <div>
-                        <span className="text-slate-400">Pop: </span>
-                        <span className="text-slate-200 font-bold">{village.population.toLocaleString()}</span>
+                        <span className="text-hc-textSecondary">Pop: </span>
+                        <span className="text-hc-ink font-bold">{village.population.toLocaleString()}</span>
                       </div>
                       <div>
-                        <span className="text-slate-400">Peak: </span>
-                        <span className="text-cyan-400 font-bold">{village.peakDepthM} m</span>
+                        <span className="text-hc-textSecondary">Peak: </span>
+                        <span className="text-hc-active font-bold">{village.peakDepthM} m</span>
                       </div>
                     </div>
 
@@ -215,8 +215,8 @@ export default function HADRDashboard({
                       }}
                       className={`mt-1 py-1.5 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
                         isSelected
-                          ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                          : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800'
+                          ? 'bg-hc-active text-slate-950 shadow-sm'
+                          : 'bg-hc-surface border border-hc-border text-hc-textSecondary hover:bg-hc-secondary'
                       }`}
                     >
                       <Navigation className="w-3 h-3" />
@@ -246,8 +246,8 @@ export default function HADRDashboard({
           <div className="flex-1 min-h-0 relative">
             {mapComponent}
           </div>
-          <div className="w-80 shrink-0 bg-slate-900/90 border border-slate-800 rounded-2xl p-4 overflow-y-auto space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 pb-2 border-b border-slate-800">
+          <div className="w-80 shrink-0 bg-hc-surface/90 border border-hc-border rounded-2xl p-4 overflow-y-auto space-y-3">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-hc-textSecondary pb-2 border-b border-hc-border">
               Target Settlement Priority
             </h3>
             {LOCAL_SETTLEMENTS.map((village, idx) => {
@@ -259,17 +259,17 @@ export default function HADRDashboard({
                   onClick={() => setSelectedVillageId(village.id)}
                   className={`p-3 rounded-xl border transition cursor-pointer ${
                     isSelected
-                      ? 'bg-slate-950 border-cyan-500 shadow-md ring-1 ring-cyan-500/30'
-                      : 'bg-slate-950/60 border-slate-800/80 hover:bg-slate-900'
+                      ? 'bg-hc-bg border-cyan-500 shadow-md ring-1 ring-cyan-500/30'
+                      : 'bg-hc-bg/60 border-hc-border/80 hover:bg-hc-surface'
                   }`}
                 >
-                  <div className="flex items-center justify-between text-xs font-bold text-slate-200">
+                  <div className="flex items-center justify-between text-xs font-bold text-hc-ink">
                     <span>#{idx + 1} {village.name}</span>
-                    <span className={`text-[10px] font-mono ${isCritical ? 'text-red-400' : 'text-amber-400'}`}>
+                    <span className={`text-[10px] font-mono ${isCritical ? 'text-hc-critical' : 'text-amber-400'}`}>
                       T+{village.floodArrivalMin}m
                     </span>
                   </div>
-                  <div className="text-[10px] font-mono text-slate-400 mt-1">
+                  <div className="text-[10px] font-mono text-hc-textSecondary mt-1">
                     Pop: {village.population.toLocaleString()} &bull; Peak: {village.peakDepthM}m
                   </div>
                 </div>

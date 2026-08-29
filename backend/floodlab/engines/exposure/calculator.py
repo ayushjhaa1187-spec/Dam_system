@@ -1,5 +1,5 @@
-import math
 from typing import List, Dict, Any
+
 
 class ExposureCalculator:
     def __init__(self):
@@ -9,7 +9,14 @@ class ExposureCalculator:
         self.w_pop = 0.25
         self.w_critical = 0.10
 
-    def calculate_priority_score(self, arrival_time_hr: float, depth_m: float, velocity_ms: float, pop_exposed: int, critical_assets: int) -> float:
+    def calculate_priority_score(
+        self,
+        arrival_time_hr: float,
+        depth_m: float,
+        velocity_ms: float,
+        pop_exposed: int,
+        critical_assets: int,
+    ) -> float:
         # Normalize variables roughly (this is a simple transparent implementation)
         # short arrival time (0-12 hrs, inverted so 0 is highest risk, 12 is lowest)
         norm_time = max(0, min(1, 1 - (arrival_time_hr / 12.0)))
@@ -25,10 +32,10 @@ class ExposureCalculator:
         norm_assets = max(0, min(1, critical_assets / 5.0))
 
         score = (
-            self.w_time * norm_time +
-            self.w_hazard * norm_hazard +
-            self.w_pop * norm_pop +
-            self.w_critical * norm_assets
+            self.w_time * norm_time
+            + self.w_hazard * norm_hazard
+            + self.w_pop * norm_pop
+            + self.w_critical * norm_assets
         )
         return score
 
@@ -53,8 +60,12 @@ class ExposureCalculator:
 
             s["priority_score"] = round(score, 3)
             s["priority_label"] = priority
-            s["formula"] = "0.35(short arrival time) + 0.30(depth/velocity hazard) + 0.25(population exposed) + 0.10(critical assets)"
+            s["formula"] = (
+                "0.35(short arrival time) + 0.30(depth/velocity hazard) "
+                "+ 0.25(population exposed) + 0.10(critical assets)"
+            )
             results.append(s)
 
         # Sort by priority
         return sorted(results, key=lambda x: x["priority_score"], reverse=True)
+

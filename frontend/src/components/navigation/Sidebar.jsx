@@ -35,13 +35,13 @@ export default function Sidebar({
     <motion.aside
       animate={{ width: isCollapsed ? 72 : 240 }}
       transition={{ duration: 0.2, ease: 'easeInOut' }}
-      className="h-screen bg-slate-950 border-r border-slate-800/80 flex flex-col justify-between shrink-0 select-none z-30 sticky top-0"
+      className="h-screen bg-hc-bg border-r border-hc-border/80 flex flex-col justify-between shrink-0 select-none z-30 sticky top-0"
     >
       {/* Brand Header */}
       <div>
-        <div className="h-16 px-4 flex items-center justify-between border-b border-slate-800/80">
+        <div className="h-16 px-4 flex items-center justify-between border-b border-hc-border/80">
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-hc-active/10 border border-cyan-500/30 flex items-center justify-center text-hc-active shrink-0">
               <Waves className="w-4 h-4" />
             </div>
             {!isCollapsed && (
@@ -51,10 +51,10 @@ export default function Sidebar({
                 exit={{ opacity: 0 }}
                 className="flex flex-col"
               >
-                <span className="font-bold text-sm tracking-wide text-slate-100 font-mono">
-                  FLOOD<span className="text-cyan-400">LAB</span>
+                <span className="font-bold text-sm tracking-wide text-hc-ink font-mono">
+                  FLOOD<span className="text-hc-active">LAB</span>
                 </span>
-                <span className="text-[10px] text-slate-400 tracking-wider uppercase font-medium">
+                <span className="text-[10px] text-hc-textSecondary tracking-wider uppercase font-medium">
                   Disaster Ops Center
                 </span>
               </motion.div>
@@ -64,7 +64,7 @@ export default function Sidebar({
 
         {/* 5 Product Screens Navigation List */}
         <div className="p-3 space-y-1">
-          <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+          <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-hc-textSecondary font-semibold">
             {!isCollapsed && 'Product Screens'}
           </div>
           {MAIN_NAV.map((item) => {
@@ -77,11 +77,11 @@ export default function Sidebar({
                 title={isCollapsed ? item.label : undefined}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors ${
                   isActive
-                    ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-semibold shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+                    ? 'bg-hc-active/10 text-hc-active border border-cyan-500/20 font-semibold shadow-sm'
+                    : 'text-hc-textSecondary hover:text-hc-ink hover:bg-hc-surface/60'
                 }`}
               >
-                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-cyan-400' : 'text-slate-400'}`} />
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-hc-active' : 'text-hc-textSecondary'}`} />
                 {!isCollapsed && <span className="truncate">{item.label}</span>}
               </button>
             );
@@ -89,33 +89,33 @@ export default function Sidebar({
         </div>
 
         {/* Secondary Utilities */}
-        <div className="p-3 space-y-1 border-t border-slate-900">
-          <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+        <div className="p-3 space-y-1 border-t border-hc-border">
+          <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-hc-textSecondary font-semibold">
             {!isCollapsed && 'System Utilities'}
           </div>
 
           <button
             onClick={onOpenTutorial}
             title={isCollapsed ? 'Tutorial Guide' : undefined}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-hc-textSecondary hover:text-hc-ink hover:bg-hc-surface/60 transition-colors"
           >
-            <Sparkles className="w-4 h-4 shrink-0 text-cyan-400" />
+            <Sparkles className="w-4 h-4 shrink-0 text-hc-active" />
             {!isCollapsed && <span className="truncate">Tutorial Guide</span>}
           </button>
 
           <button
             onClick={onOpenDem}
             title={isCollapsed ? 'Terrain & DEM' : undefined}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-hc-textSecondary hover:text-hc-ink hover:bg-hc-surface/60 transition-colors"
           >
-            <Layers className="w-4 h-4 shrink-0 text-purple-400" />
+            <Layers className="w-4 h-4 shrink-0 text-hc-assumption" />
             {!isCollapsed && <span className="truncate">Terrain Profile</span>}
           </button>
 
           <button
             onClick={onOpenShortcuts}
             title={isCollapsed ? 'Keyboard Shortcuts' : undefined}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-hc-textSecondary hover:text-hc-ink hover:bg-hc-surface/60 transition-colors"
           >
             <Keyboard className="w-4 h-4 shrink-0 text-amber-400" />
             {!isCollapsed && <span className="truncate">Keyboard Shortcuts</span>}
@@ -124,23 +124,23 @@ export default function Sidebar({
       </div>
 
       {/* Footer Collapse Toggle & Telemetry */}
-      <div className="p-3 border-t border-slate-800/80 bg-slate-950 space-y-2">
+      <div className="p-3 border-t border-hc-border/80 bg-hc-bg space-y-2">
         {!isCollapsed && (
-          <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80 space-y-1">
+          <div className="p-2.5 rounded-xl bg-hc-surface/60 border border-hc-border/80 space-y-1">
             <div className="flex items-center justify-between text-[10px]">
-              <span className="text-slate-400 font-mono">TELEMETRY LINK</span>
-              <span className="inline-flex items-center gap-1 text-emerald-400 font-mono">
+              <span className="text-hc-textSecondary font-mono">TELEMETRY LINK</span>
+              <span className="inline-flex items-center gap-1 text-hc-success font-mono">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 ACTIVE
               </span>
             </div>
-            <p className="text-[11px] text-slate-300 font-medium">Himalayan Reach PostGIS</p>
+            <p className="text-[11px] text-hc-textSecondary font-medium">Himalayan Reach PostGIS</p>
           </div>
         )}
 
         <button
           onClick={onToggleCollapse}
-          className="w-full flex items-center justify-center p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition text-xs"
+          className="w-full flex items-center justify-center p-2 rounded-xl bg-hc-surface hover:bg-hc-secondary text-hc-textSecondary hover:text-hc-ink transition text-xs"
           title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
         >
           {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}

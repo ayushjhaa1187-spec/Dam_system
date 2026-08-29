@@ -74,23 +74,23 @@ export default function ExportModal({ isOpen, onClose, simulationResult, selecte
   ];
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl space-y-4 p-6 animate-in fade-in zoom-in duration-200">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+    <div className="fixed inset-0 z-50 bg-hc-bg/80 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-hc-surface border border-hc-border rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl space-y-4 p-6 animate-in fade-in zoom-in duration-200">
+        <div className="flex items-center justify-between pb-3 border-b border-hc-border">
           <div className="flex items-center space-x-2">
-            <Download className="w-5 h-5 text-cyan-400" />
+            <Download className="w-5 h-5 text-hc-active" />
             <div>
-              <h3 className="text-base font-bold text-slate-100">
+              <h3 className="text-base font-bold text-hc-ink">
                 Export Geospatial Layers &amp; HADR Reports
               </h3>
-              <p className="text-[11px] text-slate-400">
-                Scenario: <strong>{payload.scenario_name}</strong> &bull; Run: <span className="font-mono text-cyan-400">{payload.run_id}</span>
+              <p className="text-[11px] text-hc-textSecondary">
+                Scenario: <strong>{payload.scenario_name}</strong> &bull; Run: <span className="font-mono text-hc-active">{payload.run_id}</span>
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+            className="p-1 rounded-lg text-hc-textSecondary hover:text-hc-ink hover:bg-hc-secondary"
           >
             <X className="w-5 h-5" />
           </button>
@@ -103,29 +103,29 @@ export default function ExportModal({ isOpen, onClose, simulationResult, selecte
               <div
                 key={idx}
                 onClick={item.action}
-                className="p-3 bg-slate-950 hover:bg-slate-800/80 border border-slate-800 hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group"
+                className="p-3 bg-hc-bg hover:bg-hc-secondary/80 border border-hc-border hover:border-cyan-500/40 rounded-xl cursor-pointer transition flex items-center justify-between group"
               >
                 <div className="flex items-center space-x-3 overflow-hidden">
-                  <div className="w-8 h-8 rounded-lg bg-slate-900 text-cyan-400 flex items-center justify-center border border-slate-800 shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-hc-surface text-hc-active flex items-center justify-center border border-hc-border shrink-0">
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="truncate">
-                    <h4 className="text-xs font-bold text-slate-100 group-hover:text-cyan-400 transition truncate">
+                    <h4 className="text-xs font-bold text-hc-ink group-hover:text-hc-active transition truncate">
                       {item.title}
                     </h4>
-                    <p className="text-[10px] text-slate-400 truncate">{item.desc}</p>
+                    <p className="text-[10px] text-hc-textSecondary truncate">{item.desc}</p>
                   </div>
                 </div>
-                <Download className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 shrink-0 ml-2" />
+                <Download className="w-4 h-4 text-hc-textSecondary group-hover:text-hc-active shrink-0 ml-2" />
               </div>
             );
           })}
         </div>
 
-        <div className="pt-2 text-right border-t border-slate-800">
+        <div className="pt-2 text-right border-t border-hc-border">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold"
+            className="px-4 py-2 rounded-xl bg-hc-secondary hover:bg-hc-border text-hc-ink text-xs font-semibold"
           >
             Done
           </button>

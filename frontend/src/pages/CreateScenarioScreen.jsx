@@ -240,7 +240,7 @@ export default function CreateScenarioScreen({
   };
 
   return (
-    <div className="p-6 sm:p-8 max-w-5xl mx-auto space-y-6 text-slate-100">
+    <div className="p-6 sm:p-8 max-w-5xl mx-auto space-y-6 text-hc-ink">
       {/* Header */}
       <PageHeader
         category="SCENARIO CONFIGURATION WIZARD &bull; SCREEN 2 OF 5"
@@ -249,16 +249,16 @@ export default function CreateScenarioScreen({
         status="CONFIGURING"
         statusLabel={`STEP ${currentStep} OF 4`}
         actions={
-          <div className="flex items-center space-x-2 text-xs font-mono text-slate-400">
+          <div className="flex items-center space-x-2 text-xs font-mono text-hc-textSecondary">
             {autosaveTime && (
-              <span className="flex items-center gap-1 text-emerald-400 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">
+              <span className="flex items-center gap-1 text-hc-success bg-hc-surface px-2.5 py-1 rounded-lg border border-hc-border">
                 <Save className="w-3 h-3" />
                 <span>Autosaved {autosaveTime}</span>
               </span>
             )}
             <button
               onClick={handleResetDraft}
-              className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition"
+              className="p-1.5 rounded-lg bg-hc-surface hover:bg-hc-secondary text-hc-textSecondary hover:text-hc-ink transition"
               title="Reset to default template"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -271,12 +271,12 @@ export default function CreateScenarioScreen({
       {isDraftRestored && (
         <div className="p-3 bg-cyan-950/60 border border-cyan-800/80 rounded-xl text-xs text-cyan-200 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-hc-active shrink-0" />
             <span>Restored your in-progress scenario draft from local session storage.</span>
           </div>
           <button
             onClick={() => setIsDraftRestored(false)}
-            className="text-[11px] text-cyan-400 hover:underline"
+            className="text-[11px] text-hc-active hover:underline"
           >
             Dismiss
           </button>
@@ -300,77 +300,77 @@ export default function CreateScenarioScreen({
             }}
             className={`p-3 rounded-xl border transition cursor-pointer ${
               currentStep === s.step
-                ? 'bg-slate-900 border-cyan-500 text-cyan-400 shadow-md ring-1 ring-cyan-500/30'
+                ? 'bg-hc-surface border-cyan-500 text-hc-active shadow-md ring-1 ring-cyan-500/30'
                 : currentStep > s.step
-                ? 'bg-slate-900/60 border-emerald-500/40 text-emerald-400'
-                : 'bg-slate-950/60 border-slate-800 text-slate-500'
+                ? 'bg-hc-surface/60 border-emerald-500/40 text-hc-success'
+                : 'bg-hc-bg/60 border-hc-border text-hc-textSecondary'
             }`}
           >
             <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase">
               <span>Step {s.step}</span>
               {currentStep > s.step && <CheckCircle2 className="w-3.5 h-3.5" />}
             </div>
-            <p className="text-xs font-bold text-slate-200 truncate mt-0.5">{s.title}</p>
+            <p className="text-xs font-bold text-hc-ink truncate mt-0.5">{s.title}</p>
           </div>
         ))}
       </div>
 
       {/* Form Container */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 space-y-6">
+      <div className="bg-hc-surface/80 border border-hc-border rounded-2xl p-6 space-y-6">
         {/* STEP 1: Dam Identity & Structural Parameters */}
         {currentStep === 1 && (
           <div className="space-y-4">
-            <div className="border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-                <Waves className="w-4 h-4 text-cyan-400" />
+            <div className="border-b border-hc-border pb-3">
+              <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                <Waves className="w-4 h-4 text-hc-active" />
                 <span>1. Dam Identity &amp; Structural Context</span>
               </h3>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-hc-textSecondary mt-1">
                 Provide scenario naming, structure type, and geographic basin parameters.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   Scenario Title *
                 </label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => handleChange('name', e.target.value)}
-                  className={`w-full bg-slate-950 border text-xs text-slate-100 rounded-xl px-3.5 py-2.5 focus:outline-none ${
-                    errors.name ? 'border-red-500' : 'border-slate-800 focus:border-cyan-500'
+                  className={`w-full bg-hc-bg border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none ${
+                    errors.name ? 'border-hc-critical' : 'border-hc-border focus:border-cyan-500'
                   }`}
                   placeholder="e.g., Tehri Dam PMF Outflow Scenario"
                 />
-                {errors.name && <p className="text-[11px] text-red-400 mt-1">{errors.name}</p>}
+                {errors.name && <p className="text-[11px] text-hc-critical mt-1">{errors.name}</p>}
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   Dam / Landslide Blockage Name *
                 </label>
                 <input
                   type="text"
                   value={formData.dam_name}
                   onChange={(e) => handleChange('dam_name', e.target.value)}
-                  className={`w-full bg-slate-950 border text-xs text-slate-100 rounded-xl px-3.5 py-2.5 focus:outline-none ${
-                    errors.dam_name ? 'border-red-500' : 'border-slate-800 focus:border-cyan-500'
+                  className={`w-full bg-hc-bg border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none ${
+                    errors.dam_name ? 'border-hc-critical' : 'border-hc-border focus:border-cyan-500'
                   }`}
                   placeholder="e.g., Tehri Rockfill Dam"
                 />
-                {errors.dam_name && <p className="text-[11px] text-red-400 mt-1">{errors.dam_name}</p>}
+                {errors.dam_name && <p className="text-[11px] text-hc-critical mt-1">{errors.dam_name}</p>}
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   Dam Embankment Type
                 </label>
                 <select
                   value={formData.dam_type}
                   onChange={(e) => handleChange('dam_type', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-xs text-slate-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-bg border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
                 >
                   <option value="rockfill">Earth &amp; Rockfill Embankment</option>
                   <option value="earthen">Homogeneous Earthen Embankment</option>
@@ -381,41 +381,41 @@ export default function CreateScenarioScreen({
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   Dam Crest Length (m) *
                 </label>
                 <input
                   type="number"
                   value={formData.crest_length_m}
                   onChange={(e) => handleChange('crest_length_m', e.target.value)}
-                  className={`w-full bg-slate-950 border text-xs text-slate-100 rounded-xl px-3.5 py-2.5 focus:outline-none ${
-                    errors.crest_length_m ? 'border-red-500' : 'border-slate-800 focus:border-cyan-500'
+                  className={`w-full bg-hc-bg border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none ${
+                    errors.crest_length_m ? 'border-hc-critical' : 'border-hc-border focus:border-cyan-500'
                   }`}
                 />
-                {errors.crest_length_m && <p className="text-[11px] text-red-400 mt-1">{errors.crest_length_m}</p>}
+                {errors.crest_length_m && <p className="text-[11px] text-hc-critical mt-1">{errors.crest_length_m}</p>}
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   River Basin / Stream Name
                 </label>
                 <input
                   type="text"
                   value={formData.river}
                   onChange={(e) => handleChange('river', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-xs text-slate-100 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-bg border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   State / Region Context
                 </label>
                 <input
                   type="text"
                   value={formData.state}
                   onChange={(e) => handleChange('state', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-xs text-slate-100 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-bg border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
                 />
               </div>
             </div>
@@ -425,19 +425,19 @@ export default function CreateScenarioScreen({
         {/* STEP 2: Hydraulics & Storage */}
         {currentStep === 2 && (
           <div className="space-y-4">
-            <div className="border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
+            <div className="border-b border-hc-border pb-3">
+              <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
                 <Database className="w-4 h-4 text-amber-400" />
                 <span>2. Reservoir Storage &amp; Hydraulic Head</span>
               </h3>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-hc-textSecondary mt-1">
                 Define the potential energy driving breach outflow discharge.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-slate-300 flex items-center mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary flex items-center mb-1">
                   <span>Dam Height Above Riverbed (m) *</span>
                   <Tooltip glossaryKey="inundation_depth" />
                 </label>
@@ -446,15 +446,15 @@ export default function CreateScenarioScreen({
                   step="0.5"
                   value={formData.dam_height_m}
                   onChange={(e) => handleChange('dam_height_m', e.target.value)}
-                  className={`w-full bg-slate-950 border text-xs text-slate-100 rounded-xl px-3.5 py-2.5 focus:outline-none ${
-                    errors.dam_height_m ? 'border-red-500' : 'border-slate-800 focus:border-cyan-500'
+                  className={`w-full bg-hc-bg border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none ${
+                    errors.dam_height_m ? 'border-hc-critical' : 'border-hc-border focus:border-cyan-500'
                   }`}
                 />
-                {errors.dam_height_m && <p className="text-[11px] text-red-400 mt-1">{errors.dam_height_m}</p>}
+                {errors.dam_height_m && <p className="text-[11px] text-hc-critical mt-1">{errors.dam_height_m}</p>}
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 flex items-center mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary flex items-center mb-1">
                   <span>Hydraulic Head at Failure Hw (m) *</span>
                   <Tooltip glossaryKey="hydraulic_head" />
                 </label>
@@ -463,39 +463,39 @@ export default function CreateScenarioScreen({
                   step="0.5"
                   value={formData.hydraulic_head_m}
                   onChange={(e) => handleChange('hydraulic_head_m', e.target.value)}
-                  className={`w-full bg-slate-950 border text-xs text-slate-100 rounded-xl px-3.5 py-2.5 focus:outline-none ${
-                    errors.hydraulic_head_m ? 'border-red-500' : 'border-slate-800 focus:border-cyan-500'
+                  className={`w-full bg-hc-bg border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none ${
+                    errors.hydraulic_head_m ? 'border-hc-critical' : 'border-hc-border focus:border-cyan-500'
                   }`}
                 />
-                {errors.hydraulic_head_m && <p className="text-[11px] text-red-400 mt-1">{errors.hydraulic_head_m}</p>}
+                {errors.hydraulic_head_m && <p className="text-[11px] text-hc-critical mt-1">{errors.hydraulic_head_m}</p>}
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   Reservoir Volume at Failure (m³) *
                 </label>
                 <input
                   type="number"
                   value={formData.reservoir_volume_m3}
                   onChange={(e) => handleChange('reservoir_volume_m3', e.target.value)}
-                  className={`w-full bg-slate-950 border text-xs text-slate-100 rounded-xl px-3.5 py-2.5 focus:outline-none ${
-                    errors.reservoir_volume_m3 ? 'border-red-500' : 'border-slate-800 focus:border-cyan-500'
+                  className={`w-full bg-hc-bg border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none ${
+                    errors.reservoir_volume_m3 ? 'border-hc-critical' : 'border-hc-border focus:border-cyan-500'
                   }`}
                 />
-                <span className="text-[11px] font-mono text-cyan-400 mt-1 block">
+                <span className="text-[11px] font-mono text-hc-active mt-1 block">
                   = {(Number(formData.reservoir_volume_m3) / 1e6).toFixed(2)} Million m³ ({(Number(formData.reservoir_volume_m3) / 1e9).toFixed(3)} BCM)
                 </span>
-                {errors.reservoir_volume_m3 && <p className="text-[11px] text-red-400 mt-1">{errors.reservoir_volume_m3}</p>}
+                {errors.reservoir_volume_m3 && <p className="text-[11px] text-hc-critical mt-1">{errors.reservoir_volume_m3}</p>}
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   Breach Trigger Initiation Mode
                 </label>
                 <select
                   value={formData.breach_mode}
                   onChange={(e) => handleChange('breach_mode', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-xs text-slate-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-bg border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
                 >
                   <option value="overtopping">Overtopping Surge (Inflow PMF / Spillway Inadequacy)</option>
                   <option value="piping">Internal Piping &amp; Seepage Erosion</option>
@@ -510,49 +510,49 @@ export default function CreateScenarioScreen({
         {/* STEP 3: Valley Topography & Friction */}
         {currentStep === 3 && (
           <div className="space-y-4">
-            <div className="border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-                <Layers className="w-4 h-4 text-purple-400" />
+            <div className="border-b border-hc-border pb-3">
+              <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                <Layers className="w-4 h-4 text-hc-assumption" />
                 <span>3. Downstream Reach &amp; Topographic Friction</span>
               </h3>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-hc-textSecondary mt-1">
                 Configure river routing reach geometry, valley cross-section, and roughness.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   Downstream Reach Length (km) *
                 </label>
                 <input
                   type="number"
                   value={formData.reach_length_km}
                   onChange={(e) => handleChange('reach_length_km', e.target.value)}
-                  className={`w-full bg-slate-950 border text-xs text-slate-100 rounded-xl px-3.5 py-2.5 focus:outline-none ${
-                    errors.reach_length_km ? 'border-red-500' : 'border-slate-800 focus:border-cyan-500'
+                  className={`w-full bg-hc-bg border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none ${
+                    errors.reach_length_km ? 'border-hc-critical' : 'border-hc-border focus:border-cyan-500'
                   }`}
                 />
-                {errors.reach_length_km && <p className="text-[11px] text-red-400 mt-1">{errors.reach_length_km}</p>}
+                {errors.reach_length_km && <p className="text-[11px] text-hc-critical mt-1">{errors.reach_length_km}</p>}
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   Average Valley Width (m) *
                 </label>
                 <input
                   type="number"
                   value={formData.valley_width_m}
                   onChange={(e) => handleChange('valley_width_m', e.target.value)}
-                  className={`w-full bg-slate-950 border text-xs text-slate-100 rounded-xl px-3.5 py-2.5 focus:outline-none ${
-                    errors.valley_width_m ? 'border-red-500' : 'border-slate-800 focus:border-cyan-500'
+                  className={`w-full bg-hc-bg border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none ${
+                    errors.valley_width_m ? 'border-hc-critical' : 'border-hc-border focus:border-cyan-500'
                   }`}
                 />
-                {errors.valley_width_m && <p className="text-[11px] text-red-400 mt-1">{errors.valley_width_m}</p>}
+                {errors.valley_width_m && <p className="text-[11px] text-hc-critical mt-1">{errors.valley_width_m}</p>}
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 flex items-center mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary flex items-center mb-1">
                   <span>Manning’s Roughness Coefficient (n) *</span>
                   <Tooltip glossaryKey="manning_n" />
                 </label>
@@ -561,18 +561,18 @@ export default function CreateScenarioScreen({
                   step="0.002"
                   value={formData.manning_n}
                   onChange={(e) => handleChange('manning_n', e.target.value)}
-                  className={`w-full bg-slate-950 border text-xs text-slate-100 rounded-xl px-3.5 py-2.5 focus:outline-none ${
-                    errors.manning_n ? 'border-red-500' : 'border-slate-800 focus:border-cyan-500'
+                  className={`w-full bg-hc-bg border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none ${
+                    errors.manning_n ? 'border-hc-critical' : 'border-hc-border focus:border-cyan-500'
                   }`}
                 />
-                <span className="text-[11px] text-slate-400 mt-1 block">
+                <span className="text-[11px] text-hc-textSecondary mt-1 block">
                   Typical: 0.035 (alluvial), 0.042 (rocky gorge), 0.055 (boulder rapids)
                 </span>
-                {errors.manning_n && <p className="text-[11px] text-red-400 mt-1">{errors.manning_n}</p>}
+                {errors.manning_n && <p className="text-[11px] text-hc-critical mt-1">{errors.manning_n}</p>}
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   Bed Longitudinal Slope S0 (m/m) *
                 </label>
                 <input
@@ -580,52 +580,52 @@ export default function CreateScenarioScreen({
                   step="0.001"
                   value={formData.bed_slope}
                   onChange={(e) => handleChange('bed_slope', e.target.value)}
-                  className={`w-full bg-slate-950 border text-xs text-slate-100 rounded-xl px-3.5 py-2.5 focus:outline-none ${
-                    errors.bed_slope ? 'border-red-500' : 'border-slate-800 focus:border-cyan-500'
+                  className={`w-full bg-hc-bg border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none ${
+                    errors.bed_slope ? 'border-hc-critical' : 'border-hc-border focus:border-cyan-500'
                   }`}
                 />
-                {errors.bed_slope && <p className="text-[11px] text-red-400 mt-1">{errors.bed_slope}</p>}
+                {errors.bed_slope && <p className="text-[11px] text-hc-critical mt-1">{errors.bed_slope}</p>}
               </div>
             </div>
 
             {/* Custom GIS File Upload Box */}
-            <div className="pt-3 border-t border-slate-800 space-y-2">
-              <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
-                <Upload className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="pt-3 border-t border-hc-border space-y-2">
+              <label className="text-xs font-semibold text-hc-textSecondary flex items-center gap-1.5">
+                <Upload className="w-3.5 h-3.5 text-hc-active" />
                 <span>Optional: Ingest Custom Digital Elevation Model (DEM) or Shapefile</span>
                 <Tooltip glossaryKey="dem" />
               </label>
 
-              <div className="border border-dashed border-slate-800 hover:border-cyan-500/60 rounded-xl p-4 bg-slate-950/60 text-center transition cursor-pointer relative">
+              <div className="border border-dashed border-hc-border hover:border-cyan-500/60 rounded-xl p-4 bg-hc-bg/60 text-center transition cursor-pointer relative">
                 <input
                   type="file"
                   onChange={handleFileUpload}
                   accept=".tif,.tiff,.kml,.geojson,.json,.zip"
                   className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                 />
-                <FileCode className="w-6 h-6 mx-auto text-slate-500 mb-1" />
-                <p className="text-xs font-bold text-slate-200">
+                <FileCode className="w-6 h-6 mx-auto text-hc-textSecondary mb-1" />
+                <p className="text-xs font-bold text-hc-ink">
                   Drop custom GeoTIFF (.tif), Google Earth (.kml), GeoJSON, or Shapefile (.zip) here
                 </p>
-                <p className="text-[11px] text-slate-500 mt-0.5">
+                <p className="text-[11px] text-hc-textSecondary mt-0.5">
                   Automatic coordinate system verification (EPSG:4326 / UTM WGS84 supported)
                 </p>
               </div>
 
               {uploadedFile && (
-                <div className="p-3 bg-slate-950 rounded-xl border border-emerald-500/40 text-xs flex items-center justify-between">
+                <div className="p-3 bg-hc-bg rounded-xl border border-emerald-500/40 text-xs flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <CheckCircle2 className="w-4 h-4 text-hc-success" />
                     <div>
-                      <span className="font-bold text-slate-200">{uploadedFile.name}</span>
-                      <span className="text-[11px] text-slate-400 font-mono block">
+                      <span className="font-bold text-hc-ink">{uploadedFile.name}</span>
+                      <span className="text-[11px] text-hc-textSecondary font-mono block">
                         {uploadedFile.type} &bull; {uploadedFile.size} MB &bull; {uploadedFile.status}
                       </span>
                     </div>
                   </div>
                   <button
                     onClick={() => setUploadedFile(null)}
-                    className="text-slate-400 hover:text-red-400 text-xs"
+                    className="text-hc-textSecondary hover:text-hc-critical text-xs"
                   >
                     Remove
                   </button>
@@ -633,7 +633,7 @@ export default function CreateScenarioScreen({
               )}
 
               {uploadError && (
-                <p className="text-xs text-red-400 flex items-center gap-1">
+                <p className="text-xs text-hc-critical flex items-center gap-1">
                   <AlertTriangle className="w-3.5 h-3.5" />
                   <span>{uploadError}</span>
                 </p>
@@ -645,31 +645,31 @@ export default function CreateScenarioScreen({
         {/* STEP 4: Inflow Hydrology & Review */}
         {currentStep === 4 && (
           <div className="space-y-4">
-            <div className="border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-                <Calculator className="w-4 h-4 text-emerald-400" />
+            <div className="border-b border-hc-border pb-3">
+              <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                <Calculator className="w-4 h-4 text-hc-success" />
                 <span>4. Inflow Hydrology &amp; Breach Calculation Preview</span>
               </h3>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-hc-textSecondary mt-1">
                 Configure SCS-CN catchment inflow and review empirical breach mechanics.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   Catchment Area (km²) *
                 </label>
                 <input
                   type="number"
                   value={formData.catchment_area_km2}
                   onChange={(e) => handleChange('catchment_area_km2', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-xs text-slate-100 rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-bg border border-hc-border text-xs text-hc-ink rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 flex items-center mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary flex items-center mb-1">
                   <span>24h Rainfall PMP (mm) *</span>
                   <Tooltip glossaryKey="return_period" />
                 </label>
@@ -677,32 +677,32 @@ export default function CreateScenarioScreen({
                   type="number"
                   value={formData.rainfall_24h_mm}
                   onChange={(e) => handleChange('rainfall_24h_mm', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-xs text-slate-100 rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-bg border border-hc-border text-xs text-hc-ink rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
                   SCS Curve Number (CN)
                 </label>
                 <input
                   type="number"
                   value={formData.curve_number_cn}
                   onChange={(e) => handleChange('curve_number_cn', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 text-xs text-slate-100 rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-bg border border-hc-border text-xs text-hc-ink rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
                 />
               </div>
             </div>
 
             <div className="pt-2">
-              <label className="text-xs font-semibold text-slate-300 flex items-center mb-1">
+              <label className="text-xs font-semibold text-hc-textSecondary flex items-center mb-1">
                 <span>Breach Formation Model</span>
                 <Tooltip glossaryKey="breach_time" />
               </label>
               <select
                 value={formData.model_override}
                 onChange={(e) => handleChange('model_override', e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 text-xs text-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-hc-bg border border-hc-border text-xs text-hc-ink rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
               >
                 <option value="froehlich_2008">Froehlich (2008) Embankment Regression (Standard)</option>
                 <option value="macdonald_1984">MacDonald &amp; Langridge-Monopolis (1984)</option>
@@ -713,36 +713,36 @@ export default function CreateScenarioScreen({
 
             {/* Live Calculated Breach Output */}
             {calculatedBreach && (
-              <div className="bg-slate-950 p-4 rounded-xl border border-cyan-500/40 space-y-3 mt-4">
+              <div className="bg-hc-bg p-4 rounded-xl border border-cyan-500/40 space-y-3 mt-4">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-slate-200">
+                  <span className="font-bold text-hc-ink">
                     Empirical Breach Calculations ({calculatedBreach.model_used || formData.model_override})
                   </span>
-                  <span className="text-[10px] font-mono text-cyan-400">STATUS: VERIFIED</span>
+                  <span className="text-[10px] font-mono text-hc-active">STATUS: VERIFIED</span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                  <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Peak Discharge (Qp)</span>
-                    <span className="text-xs font-bold text-red-400 font-mono">
+                  <div className="bg-hc-surface p-2.5 rounded-lg border border-hc-border">
+                    <span className="text-[10px] text-hc-textSecondary block">Peak Discharge (Qp)</span>
+                    <span className="text-xs font-bold text-hc-critical font-mono">
                       {calculatedBreach.peak_discharge_m3s?.toLocaleString()} m³/s
                     </span>
                   </div>
-                  <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Formation Time (tf)</span>
+                  <div className="bg-hc-surface p-2.5 rounded-lg border border-hc-border">
+                    <span className="text-[10px] text-hc-textSecondary block">Formation Time (tf)</span>
                     <span className="text-xs font-bold text-amber-400 font-mono">
                       {calculatedBreach.breach_formation_time_hrs || calculatedBreach.formation_time_hrs} hrs
                     </span>
                   </div>
-                  <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Average Width (Bavg)</span>
-                    <span className="text-xs font-bold text-slate-100 font-mono">
+                  <div className="bg-hc-surface p-2.5 rounded-lg border border-hc-border">
+                    <span className="text-[10px] text-hc-textSecondary block">Average Width (Bavg)</span>
+                    <span className="text-xs font-bold text-hc-ink font-mono">
                       {calculatedBreach.avg_breach_width_m} m
                     </span>
                   </div>
-                  <div className="bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Time to Peak</span>
-                    <span className="text-xs font-bold text-cyan-400 font-mono">
+                  <div className="bg-hc-surface p-2.5 rounded-lg border border-hc-border">
+                    <span className="text-[10px] text-hc-textSecondary block">Time to Peak</span>
+                    <span className="text-xs font-bold text-hc-active font-mono">
                       {calculatedBreach.time_to_peak_hrs} hrs
                     </span>
                   </div>
@@ -753,12 +753,12 @@ export default function CreateScenarioScreen({
         )}
 
         {/* Navigation & Action Footer */}
-        <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
+        <div className="pt-4 border-t border-hc-border flex items-center justify-between">
           <div>
             {currentStep > 1 && (
               <button
                 onClick={handleBack}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center space-x-1.5 transition"
+                className="px-4 py-2 rounded-xl bg-hc-secondary hover:bg-hc-border text-hc-ink text-xs font-semibold flex items-center space-x-1.5 transition"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back</span>
@@ -770,7 +770,7 @@ export default function CreateScenarioScreen({
             {currentStep < 4 ? (
               <button
                 onClick={handleNext}
-                className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center space-x-1.5 transition shadow-md shadow-cyan-500/20"
+                className="px-5 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs flex items-center space-x-1.5 transition shadow-md shadow-cyan-500/20"
               >
                 <span>Continue</span>
                 <ArrowRight className="w-3.5 h-3.5" />

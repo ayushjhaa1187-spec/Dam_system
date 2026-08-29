@@ -15,16 +15,16 @@ export default function PageHeader({
       <div className="space-y-1.5 max-w-3xl">
         <div className="flex flex-wrap items-center gap-2.5">
           {category && (
-            <span className="text-[11px] font-mono font-semibold tracking-wider text-cyan-400 uppercase">
+            <span className="text-[11px] font-mono font-semibold tracking-wider text-hc-active uppercase">
               {category}
             </span>
           )}
           {status && <StatusBadge status={status} label={statusLabel} />}
         </div>
-        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-100">
+        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-hc-ink">
           {title}
         </h1>
-        {subtitle && <p className="text-sm text-slate-400 leading-relaxed">{subtitle}</p>}
+        {subtitle && <p className="text-sm text-hc-textSecondary leading-relaxed">{subtitle}</p>}
         {metadata && <div className="pt-1 flex flex-wrap items-center gap-3">{metadata}</div>}
       </div>
 
