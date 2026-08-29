@@ -40,6 +40,21 @@ class SolverType(str, Enum):
     COUPLED = "coupled"
 
 
+class SimulationEngine(str, Enum):
+    RAPID_SCREENING = "rapid_screening"
+    SPH = "sph"
+    DELFT3D = "delft3d"
+    IMPORTED = "imported"
+    DEMO = "demo"
+
+
+class ValidationStatus(str, Enum):
+    DEMO = "demo"
+    SCREENING = "screening"
+    CALIBRATED = "calibrated"
+    VALIDATED = "validated"
+
+
 class HazardLevel(str, Enum):
     LOW = "LOW"
     MODERATE = "MODERATE"

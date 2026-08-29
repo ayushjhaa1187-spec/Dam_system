@@ -47,3 +47,16 @@ def test_run_simulation():
     run_id = data["run_id"]
     status_res = client.get(f"/api/simulations/{run_id}/status")
     assert status_res.status_code == 200
+
+
+def test_chat_endpoint():
+    res = client.post("/api/chat", json={
+        "message": "Explain the 2021 Rishi Ganga disaster benchmark",
+        "history": [],
+        "context": {"name": "Rishi Ganga"}
+    })
+    assert res.status_code == 200
+    data = res.json()
+    assert "reply" in data
+    assert len(data["reply"]) > 20
+    assert data["status"] == "success"

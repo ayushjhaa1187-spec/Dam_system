@@ -18,6 +18,7 @@ import MetricCard from '../components/common/MetricCard';
 import Panel from '../components/common/Panel';
 import StatusBadge from '../components/common/StatusBadge';
 import ProvenanceBadge from '../components/common/ProvenanceBadge';
+import ValidationBadge from '../components/common/ValidationBadge';
 import FullScreenVisualization from '../components/common/FullScreenVisualization';
 import HADROperationalMap, { LOCAL_SETTLEMENTS, NDRF_BASE } from '../components/map/HADROperationalMap';
 import { formatFinite } from '../utils/units';
@@ -39,6 +40,10 @@ export default function HADRDashboard({
 
   const totalPop = LOCAL_SETTLEMENTS.reduce((acc, v) => acc + v.population, 0);
   const runId = simulationResult?.run_id || 'sim_latest';
+  const meta = simulationResult?.scientific_metadata || {};
+  const validationStatus = meta.validation_status || simulationResult?.validation_status || 'screening';
+  const modelName = meta.model_name || 'Rapid Screening SWE Model';
+  const isDemo = validationStatus === 'demo';
 
   const mapComponent = (
     <HADROperationalMap
@@ -63,6 +68,7 @@ export default function HADRDashboard({
         statusLabel="EVACUATION DIRECTIVES ACTIVE"
         actions={
           <div className="flex items-center gap-2">
+            <ValidationBadge status={validationStatus} />
             <button
               onClick={() => {
                 if (onToggleFullScreen) onToggleFullScreen();
@@ -84,6 +90,25 @@ export default function HADRDashboard({
           </div>
         }
       />
+
+      {/* Operational Disclaimer Banner */}
+      {isDemo ? (
+        <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-800 flex items-center justify-between text-xs text-rose-300 font-mono">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+            <span>DEMO SIMULATION DATA — Evacuation routes and arrival timings are illustrative and non-operational.</span>
+          </div>
+          <ValidationBadge status="demo" compact />
+        </div>
+      ) : (
+        <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-300">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>OPERATIONAL BASELINE: {modelName} &bull; DEM: {meta.dem_source || 'Copernicus 30m'} &bull; Manning $n$: {meta.physical_conditions?.manning_n || 0.042}</span>
+          </div>
+          <ValidationBadge status={validationStatus} compact />
+        </div>
+      )}
 
       {/* Top 4 Operational Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

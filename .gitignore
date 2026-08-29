@@ -23,6 +23,7 @@ htmlcov/
 # Data and Simulation Storage
 storage/simulations/*
 !storage/simulations/.gitkeep
+backend/storage/
 data/cache/*
 !data/cache/.gitkeep
 

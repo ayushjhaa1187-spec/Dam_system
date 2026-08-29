@@ -2,31 +2,24 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import {
   LayoutDashboard,
-  Waves,
-  FlaskConical,
-  ShieldAlert,
-  Satellite,
-  GitCompare,
-  Database,
-  SlidersHorizontal,
+  PlusCircle,
+  Activity,
+  Map,
+  Download,
+  Layers,
+  Sparkles,
+  Keyboard,
   ChevronLeft,
   ChevronRight,
-  Activity,
-  Layers,
+  Waves,
 } from 'lucide-react';
 
 const MAIN_NAV = [
-  { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-  { id: 'operations', label: 'Dam Operations', icon: Waves },
-  { id: 'simulation', label: 'Simulation Lab', icon: FlaskConical },
-  { id: 'hadr', label: 'HADR Response', icon: ShieldAlert },
-  { id: 'satellite', label: 'Satellite', icon: Satellite },
-  { id: 'comparison', label: 'Comparison', icon: GitCompare },
-];
-
-const SECONDARY_NAV = [
-  { id: 'elevation', label: 'Terrain & DEM', icon: Layers },
-  { id: 'data_status', label: 'Data Provenance', icon: Database },
+  { id: 'home', label: '1. Home / Case Studies', icon: LayoutDashboard },
+  { id: 'create', label: '2. Create Scenario', icon: PlusCircle },
+  { id: 'monitor', label: '3. Run Monitor', icon: Activity },
+  { id: 'results', label: '4. Results Map', icon: Map },
+  { id: 'impact', label: '5. Impact & Export', icon: Download },
 ];
 
 export default function Sidebar({
@@ -35,7 +28,8 @@ export default function Sidebar({
   isCollapsed,
   onToggleCollapse,
   onOpenDem,
-  onOpenExport,
+  onOpenTutorial,
+  onOpenShortcuts,
 }) {
   return (
     <motion.aside
@@ -68,10 +62,10 @@ export default function Sidebar({
           </div>
         </div>
 
-        {/* Main Navigation List */}
+        {/* 5 Product Screens Navigation List */}
         <div className="p-3 space-y-1">
           <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
-            {!isCollapsed && 'Operational Modules'}
+            {!isCollapsed && 'Product Screens'}
           </div>
           {MAIN_NAV.map((item) => {
             const Icon = item.icon;
@@ -83,7 +77,7 @@ export default function Sidebar({
                 title={isCollapsed ? item.label : undefined}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors ${
                   isActive
-                    ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-semibold'
+                    ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-semibold shadow-sm'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
                 }`}
               >
@@ -94,32 +88,42 @@ export default function Sidebar({
           })}
         </div>
 
-        {/* Secondary Navigation */}
+        {/* Secondary Utilities */}
         <div className="p-3 space-y-1 border-t border-slate-900">
           <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
             {!isCollapsed && 'System Utilities'}
           </div>
-          {SECONDARY_NAV.map((item) => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.id}
-                onClick={() => {
-                  if (item.id === 'elevation') onOpenDem();
-                  if (item.id === 'data_status') onOpenExport();
-                }}
-                title={isCollapsed ? item.label : undefined}
-                className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 transition-colors"
-              >
-                <Icon className="w-4 h-4 shrink-0 text-slate-400" />
-                {!isCollapsed && <span className="truncate">{item.label}</span>}
-              </button>
-            );
-          })}
+
+          <button
+            onClick={onOpenTutorial}
+            title={isCollapsed ? 'Tutorial Guide' : undefined}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 transition-colors"
+          >
+            <Sparkles className="w-4 h-4 shrink-0 text-cyan-400" />
+            {!isCollapsed && <span className="truncate">Tutorial Guide</span>}
+          </button>
+
+          <button
+            onClick={onOpenDem}
+            title={isCollapsed ? 'Terrain & DEM' : undefined}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 transition-colors"
+          >
+            <Layers className="w-4 h-4 shrink-0 text-purple-400" />
+            {!isCollapsed && <span className="truncate">Terrain Profile</span>}
+          </button>
+
+          <button
+            onClick={onOpenShortcuts}
+            title={isCollapsed ? 'Keyboard Shortcuts' : undefined}
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 transition-colors"
+          >
+            <Keyboard className="w-4 h-4 shrink-0 text-amber-400" />
+            {!isCollapsed && <span className="truncate">Keyboard Shortcuts</span>}
+          </button>
         </div>
       </div>
 
-      {/* Footer Collapse Toggle & Operational Status */}
+      {/* Footer Collapse Toggle & Telemetry */}
       <div className="p-3 border-t border-slate-800/80 bg-slate-950 space-y-2">
         {!isCollapsed && (
           <div className="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800/80 space-y-1">

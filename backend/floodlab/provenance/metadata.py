@@ -42,9 +42,14 @@ class RunManifest:
     scenario_id: str
     solver_type: str
     breach_model: str
+    engine_type: str = "rapid_screening"
+    validation_status: str = "screening"
+    model_name: str = "Rapid Screening SWE Model"
+    model_version: str = "1.0.0"
     execution_status: str = ExecutionStatus.PENDING.value
     created_at: str = field(default_factory=_now_iso)
     completed_at: Optional[str] = None
+    compute_duration_s: float = 0.0
 
     # Software environment — versions discovered at runtime
     software: Dict[str, Any] = field(default_factory=dict)
@@ -52,7 +57,13 @@ class RunManifest:
     # DEM provenance
     dem: Dict[str, Any] = field(default_factory=dict)
 
-    # Physical assumptions with provenance
+    # Hydrological forcing provenance
+    hydrology: Dict[str, Any] = field(default_factory=dict)
+
+    # Mesh / Particle discretization
+    discretization: Dict[str, Any] = field(default_factory=dict)
+
+    # Physical assumptions & boundary conditions
     physical_assumptions: Dict[str, Any] = field(default_factory=dict)
 
     # Input data snapshots
@@ -64,8 +75,10 @@ class RunManifest:
     # Output artifact URIs (relative to run_dir)
     artifact_uris: Dict[str, str] = field(default_factory=dict)
 
-    # Input file hashes for reproducibility
+    # Input file hashes & reproducibility ID
     input_file_hashes: Dict[str, str] = field(default_factory=dict)
+    input_hash: str = ""
+    reproducibility_id: str = ""
 
     def record_software(
         self,
@@ -105,9 +118,10 @@ class RunManifest:
     def hash_input_file(self, key: str, path: Path) -> None:
         self.input_file_hashes[key] = _hash_file(path)
 
-    def mark_complete(self, status: ExecutionStatus) -> None:
+    def mark_complete(self, status: ExecutionStatus, compute_duration_s: float = 0.0) -> None:
         self.execution_status = status.value
         self.completed_at = _now_iso()
+        self.compute_duration_s = round(compute_duration_s, 3)
 
     def to_dict(self) -> dict:
         return {
@@ -115,16 +129,25 @@ class RunManifest:
             "scenario_id": self.scenario_id,
             "solver_type": self.solver_type,
             "breach_model": self.breach_model,
+            "engine_type": self.engine_type,
+            "validation_status": self.validation_status,
+            "model_name": self.model_name,
+            "model_version": self.model_version,
             "execution_status": self.execution_status,
             "created_at": self.created_at,
             "completed_at": self.completed_at,
+            "compute_duration_s": self.compute_duration_s,
             "software": self.software,
             "dem": self.dem,
+            "hydrology": self.hydrology,
+            "discretization": self.discretization,
             "physical_assumptions": self.physical_assumptions,
             "input_data": self.input_data,
             "provenance_map": self.provenance_map,
             "artifact_uris": self.artifact_uris,
             "input_file_hashes": self.input_file_hashes,
+            "input_hash": self.input_hash,
+            "reproducibility_id": self.reproducibility_id,
         }
 
     def to_json(self) -> str:
@@ -139,19 +162,28 @@ class RunManifest:
         m = cls(
             run_id=d["run_id"],
             scenario_id=d["scenario_id"],
-            solver_type=d["solver_type"],
-            breach_model=d["breach_model"],
+            solver_type=d.get("solver_type", "coupled"),
+            breach_model=d.get("breach_model", "froehlich_2008"),
+            engine_type=d.get("engine_type", "rapid_screening"),
+            validation_status=d.get("validation_status", "screening"),
+            model_name=d.get("model_name", "Rapid Screening SWE Model"),
+            model_version=d.get("model_version", "1.0.0"),
             execution_status=d.get("execution_status", ExecutionStatus.PENDING.value),
             created_at=d.get("created_at", _now_iso()),
             completed_at=d.get("completed_at"),
+            compute_duration_s=d.get("compute_duration_s", 0.0),
         )
         m.software = d.get("software", {})
         m.dem = d.get("dem", {})
+        m.hydrology = d.get("hydrology", {})
+        m.discretization = d.get("discretization", {})
         m.physical_assumptions = d.get("physical_assumptions", {})
         m.input_data = d.get("input_data", {})
         m.provenance_map = d.get("provenance_map", {})
         m.artifact_uris = d.get("artifact_uris", {})
         m.input_file_hashes = d.get("input_file_hashes", {})
+        m.input_hash = d.get("input_hash", "")
+        m.reproducibility_id = d.get("reproducibility_id", "")
         return m
 
     @classmethod

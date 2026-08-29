@@ -1,83 +1,84 @@
-"""Satellite surveillance endpoints."""
-from fastapi import APIRouter
+"""
+FloodLab API - Satellite Surveillance & Google Earth Engine Router
+"""
+
+from fastapi import APIRouter, Response
+from typing import Dict, Any, List, Optional
+from pydantic import BaseModel, Field
+import json
+
+from hydrobreach.models.gee_monitor.gee_service import GEESentinel1Monitor
 
 router = APIRouter()
 
-ZONES = [
-    {
-        "id": "rishi_ganga",
-        "name": "Rishi Ganga / Dhauliganga (Chamoli)",
-        "zone_name": "Rishi Ganga / Dhauliganga",
-        "river": "Rishi Ganga",
-        "state": "Uttarakhand",
-        "lat": 30.485,
-        "lon": 79.738,
-        "bbox": [79.65, 30.35, 79.95, 30.60],
-        "alert_level": "WATCH",
-    },
-    {
-        "id": "tehri_upstream",
-        "name": "Tehri Dam Catchment (Bhagirathi / Bhilangana)",
-        "zone_name": "Tehri Catchment Upstream",
-        "river": "Bhagirathi",
-        "state": "Uttarakhand",
-        "lat": 30.378,
-        "lon": 78.480,
-        "bbox": [78.30, 30.25, 78.85, 30.70],
-        "alert_level": "NORMAL",
-    },
-    {
-        "id": "bhakra_upstream",
-        "name": "Gobind Sagar / Bhakra Catchment (Sutlej)",
-        "zone_name": "Bhakra Dam Catchment",
-        "river": "Sutlej",
-        "state": "Himachal Pradesh",
-        "lat": 31.411,
-        "lon": 76.437,
-        "bbox": [76.40, 31.20, 77.10, 31.80],
-        "alert_level": "NORMAL",
-    },
-]
 
-ALERTS = [
-    {
-        "id": "alt_01",
-        "zone_id": "rishi_ganga",
-        "zone_name": "Rishi Ganga / Dhauliganga",
-        "detected_date": "2026-08-25T06:12:00Z",
-        "detected_area_ha": 18.5,
-        "estimated_depth_m": 22.0,
-        "estimated_volume_m3": 1356000.0,
-        "risk_level": "high",
-        "confidence_score": 0.88,
-        "otsu_threshold_db": -16.4,
-        "backscatter_diff_db": 6.8,
-        "coordinates": [[79.738, 30.485]],
-        "alert_level": "WATCH",
-        "provenance": "OBSERVED",
-    }
-]
+class SARAnalysisRequest(BaseModel):
+    bbox: List[float] = Field(default=[79.65, 30.35, 79.95, 30.60], description="[min_lon, min_lat, max_lon, max_lat]")
+    pre_event_date: str = Field(default="2026-08-10")
+    post_event_date: str = Field(default="2026-08-24")
+    polarization: str = Field(default="VV", description="VV, VH, or VV+VH")
+    sensor_type: str = Field(default="sentinel_1_sar", description="sentinel_1_sar or sentinel_2_optical")
+    apply_permanent_water_mask: bool = Field(default=True)
+    apply_slope_mask: bool = Field(default=True)
+    max_slope_deg: float = Field(default=8.0)
+    cloud_cover_pct: float = Field(default=15.0)
 
 
 @router.get("/alerts")
 async def get_alerts():
-    return {"alerts": ALERTS, "zones": ZONES}
+    alerts = GEESentinel1Monitor.get_active_alerts()
+    return {"alerts": alerts, "zones": GEESentinel1Monitor.SURVEILLANCE_ZONES, "total_active_alerts": len(alerts)}
 
 
 @router.get("/zones")
 async def get_zones():
-    return {"zones": ZONES}
+    return {"zones": GEESentinel1Monitor.SURVEILLANCE_ZONES}
 
 
 @router.post("/analyse")
+@router.post("/analyze")
 async def analyse_sar(body: dict):
     bbox = body.get("bbox", [79.65, 30.35, 79.95, 30.60])
-    return {
-        "zone_id": "custom_sar",
-        "detected_water_area_ha": 14.2,
-        "estimated_volume_m3": 1040000.0,
-        "otsu_threshold_db": -16.5,
-        "provenance": "OBSERVED",
-        "change_detected": True,
-        "coordinates": [[(bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2]],
+    pre_date = body.get("pre_event_date") or body.get("pre_date", "2026-08-10")
+    post_date = body.get("post_event_date") or body.get("post_date", "2026-08-24")
+    polarization = body.get("polarization", "VV")
+    sensor_type = body.get("sensor_type", "sentinel_1_sar")
+    apply_perm_water = body.get("apply_permanent_water_mask", True)
+    apply_slope = body.get("apply_slope_mask", True)
+
+    result = GEESentinel1Monitor.run_on_demand_sar_analysis(
+        bbox=bbox,
+        pre_date=pre_date,
+        post_date=post_date,
+        polarization=polarization,
+        sensor_type=sensor_type,
+        apply_permanent_water_mask=apply_perm_water,
+        apply_slope_mask=apply_slope,
+    )
+    return result
+
+
+@router.post("/export-detected-polygon")
+async def export_detected_polygon(body: dict):
+    bbox = body.get("bbox", [79.65, 30.35, 79.95, 30.60])
+    post_date = body.get("post_event_date", "2026-08-24")
+    result = GEESentinel1Monitor.run_on_demand_sar_analysis(
+        bbox=bbox,
+        post_date=post_date,
+    )
+    observed_feature = result.get("geojson_layers", {}).get("observed_extent", {})
+    geojson_collection = {
+        "type": "FeatureCollection",
+        "name": f"Sentinel_Detected_Flood_Extent_{post_date}",
+        "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}},
+        "properties": result.get("sensor_metadata", {}),
+        "features": [observed_feature] if observed_feature else [],
     }
+
+    content_str = json.dumps(geojson_collection, indent=2)
+    filename = f"satellite_detected_flood_{post_date}.geojson"
+    return Response(
+        content=content_str,
+        media_type="application/geo+json",
+        headers={"Content-Disposition": f"attachment; filename={filename}"},
+    )

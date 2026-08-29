@@ -1,14 +1,15 @@
 import React from 'react';
 import {
   Play,
-  SlidersHorizontal,
   Download,
-  Activity,
-  Layers,
   ChevronDown,
-  RefreshCw,
+  Layers,
+  Sparkles,
+  Keyboard,
+  Waves,
+  ShieldCheck,
+  CheckCircle2,
 } from 'lucide-react';
-import StatusBadge from '../common/StatusBadge';
 
 export default function Topbar({
   selectedPreset,
@@ -17,93 +18,89 @@ export default function Topbar({
   simulationResult,
   isSimulating,
   onRunSimulation,
-  onOpenScenarioDrawer,
-  onOpenDem,
+  onOpenTutorial,
+  onOpenShortcuts,
   onOpenExport,
 }) {
-  const runId = simulationResult?.run_id ? simulationResult.run_id.slice(0, 10) : 'NOT RUN';
-  const solverStatus = isSimulating
-    ? 'RUNNING'
-    : simulationResult
-    ? 'COMPLETED'
-    : 'NOT_RUN';
+  const isDemo = Boolean(selectedPreset?.is_hypothetical !== false);
+  const runId = simulationResult?.run_id || 'sim_tehri_coupled';
 
   return (
-    <header className="h-16 px-6 bg-slate-950/90 border-b border-slate-800/80 backdrop-blur-md flex items-center justify-between gap-4 sticky top-0 z-20 select-none">
-      {/* Left: Active Scenario Picker & Run State */}
-      <div className="flex items-center gap-3 overflow-hidden">
-        {/* Scenario Dropdown */}
-        <div className="relative flex items-center">
+    <header className="h-16 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-6 flex items-center justify-between z-20 sticky top-0">
+      {/* Left: Active Scenario Preset Selector */}
+      <div className="flex items-center space-x-3">
+        <div className="relative">
           <select
             value={selectedPreset?.id || ''}
-            onChange={(e) => onSelectPreset(e.target.value)}
-            disabled={isSimulating}
-            className="appearance-none bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-1.5 pr-8 text-xs font-semibold text-slate-100 hover:border-slate-700 focus:outline-none focus:border-cyan-500 transition cursor-pointer max-w-xs sm:max-w-md truncate"
+            onChange={(e) => onSelectPreset && onSelectPreset(e.target.value)}
+            className="bg-slate-900 border border-slate-800 text-xs font-bold text-slate-100 rounded-xl pl-3.5 pr-8 py-2 appearance-none focus:outline-none focus:border-cyan-500 cursor-pointer shadow-sm"
           >
-            {presets.map((preset) => (
-              <option key={preset.id} value={preset.id}>
-                {preset.name}
+            {presets.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
               </option>
             ))}
           </select>
-          <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 pointer-events-none" />
+          <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
         </div>
 
-        {/* Scenario Config Drawer Trigger */}
-        <button
-          onClick={onOpenScenarioDrawer}
-          title="Configure Scenario Parameters"
-          className="p-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-cyan-400 transition"
-        >
-          <SlidersHorizontal className="w-3.5 h-3.5" />
-        </button>
-
-        {/* Global Run ID Badge */}
-        <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-xl bg-slate-900/60 border border-slate-800/80 text-[11px] font-mono text-slate-400">
-          <span className="text-slate-400">RUN:</span>
-          <span className="text-cyan-400 font-semibold">{runId}</span>
-        </div>
-
-        <StatusBadge status={solverStatus} />
+        {/* Demo Data Badge */}
+        {isDemo ? (
+          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+            DEMO DATA ACTIVE
+          </span>
+        ) : (
+          <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-red-500/20 text-red-300 border border-red-500/40">
+            HISTORICAL BENCHMARK
+          </span>
+        )}
       </div>
 
-      {/* Right: Quick Actions & Primary CTA */}
-      <div className="flex items-center gap-2.5">
-        {/* Elevation Profile Trigger */}
+      {/* Right: Quick Action Controls */}
+      <div className="flex items-center space-x-2.5">
+        {/* Run ID Pill */}
+        <span className="hidden md:inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+          <span>{runId.slice(0, 14)}</span>
+        </span>
+
+        {/* Keyboard Shortcuts Trigger */}
         <button
-          onClick={onOpenDem}
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-xs font-medium text-slate-300 hover:text-slate-100 transition"
+          onClick={onOpenShortcuts}
+          className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-200 transition"
+          title="Open Accessible Keyboard Shortcuts (Press ?)"
+          aria-label="Keyboard shortcuts"
         >
-          <Layers className="w-3.5 h-3.5 text-slate-400" />
-          <span>Cross-Section</span>
+          <Keyboard className="w-4 h-4 text-amber-400" />
         </button>
 
-        {/* Export Modal Trigger */}
+        {/* Tutorial Trigger */}
+        <button
+          onClick={onOpenTutorial}
+          className="hidden sm:flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-cyan-400 transition"
+          title="Open Guided Tutorial"
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Tutorial</span>
+        </button>
+
+        {/* Export Button */}
         <button
           onClick={onOpenExport}
-          className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-xs font-medium text-slate-300 hover:text-slate-100 transition"
+          className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-200 transition"
         >
-          <Download className="w-3.5 h-3.5 text-slate-400" />
-          <span>Export Manifest</span>
+          <Download className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Export Center</span>
         </button>
 
-        {/* Primary CTA: Run Simulation */}
+        {/* Run Simulation Button */}
         <button
           onClick={onRunSimulation}
           disabled={isSimulating}
-          className="flex items-center gap-2 px-4 py-1.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-700 text-slate-950 font-semibold text-xs transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20 disabled:opacity-50"
         >
-          {isSimulating ? (
-            <>
-              <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-              <span>Simulating...</span>
-            </>
-          ) : (
-            <>
-              <Play className="w-3.5 h-3.5 fill-slate-950" />
-              <span>Run Simulation</span>
-            </>
-          )}
+          <Play className={`w-3.5 h-3.5 fill-slate-950 ${isSimulating ? 'animate-pulse' : ''}`} />
+          <span>{isSimulating ? 'Computing...' : 'Run Simulation'}</span>
         </button>
       </div>
     </header>

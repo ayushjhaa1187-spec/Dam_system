@@ -5,7 +5,7 @@ Entry point for hydrodynamic simulations, satellite surveillance, damage estimat
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from hydrobreach.api.routers import scenarios, simulation, comparison, damage, gee, export, hydrology, uncertainty
+from hydrobreach.api.routers import scenarios, simulation, comparison, damage, gee, export, hydrology, uncertainty, chat
 
 app = FastAPI(
     title="FLOODLAB - Tehri Dam Break & Flash Flood Decision-Support Platform",
@@ -31,6 +31,7 @@ app.include_router(gee.router)
 app.include_router(export.router)
 app.include_router(hydrology.router)
 app.include_router(uncertainty.router)
+app.include_router(chat.router, prefix="/api/chat", tags=["chat"])
 
 
 @app.get("/")

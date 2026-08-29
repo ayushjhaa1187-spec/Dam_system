@@ -14,6 +14,8 @@ import {
   Sliders,
   Eye,
   EyeOff,
+  Navigation,
+  Globe,
 } from 'lucide-react';
 import { createBasemapLayer } from '../../utils/mapTiles';
 import { formatMinutes } from '../../utils/formatters';
@@ -58,6 +60,7 @@ export default function GeospatialSimulationMap({
   scenarioParams = {},
   isFullScreen = false,
   onToggleFullScreen,
+  onSelectStation,
 }) {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
@@ -73,6 +76,7 @@ export default function GeospatialSimulationMap({
   const [viewMode, setViewMode] = useState('immediate'); // 'immediate' | 'corridor' | 'basin'
   const [followWavefront, setFollowWavefront] = useState(false);
   const [showLayerDrawer, setShowLayerDrawer] = useState(false);
+  const [cursorCoords, setCursorCoords] = useState({ lat: 30.378, lon: 78.481, elev: 570 });
 
   // Toggleable Layers
   const [layerVisibility, setLayerVisibility] = useState({
@@ -103,6 +107,18 @@ export default function GeospatialSimulationMap({
 
     // Add Robust Basemap Layer with Fallback
     createBasemapLayer(map).addTo(map);
+
+    // Add Leaflet Scale Bar Control
+    L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map);
+
+    // Mouse movement coordinate tracking
+    map.on('mousemove', (e) => {
+      const lat = e.latlng.lat;
+      const lon = e.latlng.lng;
+      // Approximate Himalayan elevation estimate from lat gradient
+      const approxElev = Math.max(280, Math.min(2600, Math.round(570 + (lat - 30.378) * 1500 - (lon - 78.481) * 800)));
+      setCursorCoords({ lat: parseFloat(lat.toFixed(4)), lon: parseFloat(lon.toFixed(4)), elev: approxElev });
+    });
 
     mapInstanceRef.current = map;
 
@@ -138,11 +154,39 @@ export default function GeospatialSimulationMap({
         dashArray: '5,5',
       }
     ).addTo(map);
-    couplingLine.bindTooltip('Coupling Transect Q(t) [x = 2.0 km]', {
-      permanent: false,
-      direction: 'top',
-    });
     layersRef.current.couplingLine = couplingLine;
+
+    // Add Settlement Markers
+    CORRIDOR_STATIONS.forEach((st) => {
+      const isDam = st.type === 'dam';
+      const iconHtml = `
+        <div class="flex items-center justify-center w-6 h-6 rounded-full border-2 ${
+          isDam ? 'bg-cyan-500 border-white shadow-cyan-500/50' : 'bg-slate-900 border-cyan-400'
+        } shadow-lg text-[10px] font-bold text-white">
+          ${isDam ? '⚡' : '📍'}
+        </div>
+      `;
+      const customIcon = L.divIcon({
+        html: iconHtml,
+        className: 'custom-station-marker',
+        iconSize: [24, 24],
+        iconAnchor: [12, 12],
+      });
+
+      const m = L.marker([st.lat, st.lon], { icon: customIcon }).addTo(map);
+      m.bindPopup(`
+        <div style="font-family: sans-serif; font-size: 12px; color: #0f172a; padding: 4px;">
+          <strong>${st.name}</strong><br/>
+          Chainage: <b>${st.km} km</b><br/>
+          Wave Arrival: <b>${st.arrivalMin} min</b><br/>
+          Peak Depth: <b>${st.depth} m</b>
+        </div>
+      `);
+      if (onSelectStation) {
+        m.on('click', () => onSelectStation(st));
+      }
+      layersRef.current.markers.push(m);
+    });
 
     return () => {
       map.remove();
@@ -150,39 +194,12 @@ export default function GeospatialSimulationMap({
     };
   }, []);
 
-  // 2. View Mode Zoom Updates
+  // Update dynamic flood polygons as currentTimeMin changes
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map) return;
 
-    if (viewMode === 'immediate') {
-      // Focus on Immediate Impact Zone (0–25 km: Tehri Dam, Sirain, Tipri, Koteshwar)
-      map.flyTo([30.335, 78.495], 12, { duration: 0.8 });
-    } else if (viewMode === 'corridor') {
-      // Focus on Downstream Reach Corridor to Rishikesh/Haridwar
-      map.flyTo([30.160, 78.380], 10, { duration: 0.8 });
-    } else if (viewMode === 'basin') {
-      // Full Himalayan Basin strategic overview
-      map.flyTo([30.250, 78.400], 9, { duration: 0.8 });
-    }
-  }, [viewMode]);
-
-  // 3. Dynamic Inundation Wave, Graduated Depth, and Wavefront Marker
-  useEffect(() => {
-    const map = mapInstanceRef.current;
-    if (!map) return;
-
-    // Layer visibility sync
-    if (layersRef.current.sphCircle) {
-      if (layerVisibility.sph_nearfield) map.addLayer(layersRef.current.sphCircle);
-      else map.removeLayer(layersRef.current.sphCircle);
-    }
-    if (layersRef.current.couplingLine) {
-      if (layerVisibility.coupling_transect) map.addLayer(layersRef.current.couplingLine);
-      else map.removeLayer(layersRef.current.couplingLine);
-    }
-
-    // Clear old flood polygons & wavefront marker
+    // Clear previous flood polygons
     layersRef.current.floodPolys.forEach((p) => map.removeLayer(p));
     layersRef.current.floodPolys = [];
 
@@ -191,171 +208,83 @@ export default function GeospatialSimulationMap({
       layersRef.current.wavefrontMarker = null;
     }
 
-    const maxTime = 180;
-    const progressFrac = Math.min(currentTimeMin / maxTime, 1.0);
-    const activeCoordCount = Math.max(
-      2,
-      Math.floor(progressFrac * RIVER_CORRIDOR_COORDS.length) + 1
+    if (!layerVisibility.depth && !layerVisibility.delft3d_farfield) return;
+
+    // Calculate flood front progression
+    const totalKm = 100.0;
+    const progressKm = Math.min(totalKm, (currentTimeMin / 175.0) * totalKm);
+
+    // Build inundated polygon corridor up to progressKm
+    const coordsCount = RIVER_CORRIDOR_COORDS.length;
+    const currentCoordIdx = Math.min(
+      coordsCount - 1,
+      Math.floor((progressKm / totalKm) * (coordsCount - 1))
     );
 
-    const activeRiverCoords = RIVER_CORRIDOR_COORDS.slice(0, activeCoordCount);
-    const leadingCoord = activeRiverCoords[activeRiverCoords.length - 1];
+    const activeReachCoords = RIVER_CORRIDOR_COORDS.slice(0, currentCoordIdx + 1);
 
-    if (currentTimeMin > 0 && activeRiverCoords.length >= 2 && layerVisibility.delft3d_farfield) {
-      // 1. Deep Core Flood Channel (> 3m)
-      const leftDeep = activeRiverCoords.map(([lat, lon], idx) => {
-        const offset = 0.003 + (idx / activeRiverCoords.length) * 0.004;
-        return [lat + offset, lon - offset];
-      });
-      const rightDeep = activeRiverCoords.slice().reverse().map(([lat, lon], idx) => {
-        const offset = 0.003 + (idx / activeRiverCoords.length) * 0.004;
-        return [lat - offset, lon + offset];
+    if (activeReachCoords.length >= 2) {
+      // Left bank and right bank polygon offsets
+      const leftBank = [];
+      const rightBank = [];
+      const bufferDeg = 0.006; // ~600m width
+
+      activeReachCoords.forEach(([lat, lon], idx) => {
+        const factor = 1.0 + (idx / coordsCount) * 1.5;
+        leftBank.push([lat + bufferDeg * factor, lon - bufferDeg * factor]);
+        rightBank.unshift([lat - bufferDeg * factor, lon + bufferDeg * factor]);
       });
 
-      const deepPoly = L.polygon([...leftDeep, ...rightDeep], {
+      const poly = L.polygon([...leftBank, ...rightBank], {
         color: '#0284c7',
-        fillColor: '#0369a1',
-        fillOpacity: 0.75,
+        fillColor: '#38bdf8',
+        fillOpacity: 0.55,
         weight: 1.5,
       }).addTo(map);
-      layersRef.current.floodPolys.push(deepPoly);
 
-      // 2. Moderate Inundation Envelope (0.5m – 3m)
-      const leftMod = activeRiverCoords.map(([lat, lon], idx) => {
-        const offset = 0.007 + (idx / activeRiverCoords.length) * 0.007;
-        return [lat + offset, lon - offset];
-      });
-      const rightMod = activeRiverCoords.slice().reverse().map(([lat, lon], idx) => {
-        const offset = 0.007 + (idx / activeRiverCoords.length) * 0.007;
-        return [lat - offset, lon + offset];
-      });
+      layersRef.current.floodPolys.push(poly);
 
-      const modPoly = L.polygon([...leftMod, ...rightMod], {
-        color: '#38bdf8',
-        fillColor: '#0ea5e9',
-        fillOpacity: 0.45,
-        weight: 1,
-      }).addTo(map);
-      layersRef.current.floodPolys.push(modPoly);
-
-      // 3. Leading Wavefront Marker (Glowing advancing front)
-      if (layerVisibility.wavefront && leadingCoord) {
+      // Add Wavefront Marker
+      if (layerVisibility.wavefront && currentCoordIdx > 0) {
+        const [wLat, wLon] = RIVER_CORRIDOR_COORDS[currentCoordIdx];
         const wfIcon = L.divIcon({
-          className: 'custom-wavefront-icon',
-          html: `
-            <div style="
-              background: #f59e0b;
-              color: #020617;
-              font-size: 10px;
-              font-weight: 800;
-              font-family: monospace;
-              border-radius: 9999px;
-              padding: 2px 8px;
-              box-shadow: 0 0 14px #f59e0b;
-              border: 1.5px solid #ffffff;
-              display: flex;
-              align-items: center;
-              gap: 4px;
-              white-space: nowrap;
-            ">
-              <span style="width: 6px; height: 6px; border-radius: 50%; background: #ffffff; display: inline-block;"></span>
-              <span>WAVE FRONT (T+${currentTimeMin}m)</span>
-            </div>
-          `,
-          iconSize: [140, 24],
-          iconAnchor: [70, 12],
+          html: `<div class="w-4 h-4 rounded-full bg-red-500 border-2 border-white animate-ping"></div>`,
+          className: 'wavefront-marker',
+          iconSize: [16, 16],
+          iconAnchor: [8, 8],
         });
-
-        const wfMarker = L.marker(leadingCoord, { icon: wfIcon }).addTo(map);
-        layersRef.current.wavefrontMarker = wfMarker;
+        const wf = L.marker([wLat, wLon], { icon: wfIcon }).addTo(map);
+        layersRef.current.wavefrontMarker = wf;
 
         if (followWavefront) {
-          map.panTo(leadingCoord, { animate: true });
+          map.panTo([wLat, wLon]);
         }
       }
     }
-
-    // Update Station Markers
-    layersRef.current.markers.forEach((m) => map.removeLayer(m));
-    layersRef.current.markers = [];
-
-    if (layerVisibility.settlements) {
-      CORRIDOR_STATIONS.forEach((st) => {
-        const isFlooded = currentTimeMin >= st.arrivalMin;
-        const isImminent = !isFlooded && st.arrivalMin - currentTimeMin <= 30;
-
-        let markerColor = '#64748b';
-        let statusText = `Safe (ETA: ${st.arrivalMin}m)`;
-
-        if (isFlooded) {
-          markerColor = '#ef4444';
-          statusText = `INUNDATED (${st.depth}m depth)`;
-        } else if (isImminent) {
-          markerColor = '#f59e0b';
-          statusText = `THREATENED (${st.arrivalMin - currentTimeMin}m margin)`;
-        }
-
-        const customIcon = L.divIcon({
-          className: 'custom-station-icon',
-          html: `
-            <div style="
-              display: flex;
-              align-items: center;
-              gap: 6px;
-              background: rgba(15, 23, 42, 0.95);
-              border: 1.5px solid ${markerColor};
-              border-radius: 9999px;
-              padding: 3px 8px;
-              box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-            ">
-              <span style="
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: ${markerColor};
-                display: inline-block;
-              "></span>
-              <span style="
-                color: #f8fafc;
-                font-size: 10px;
-                font-weight: 700;
-                font-family: monospace;
-                white-space: nowrap;
-              ">${st.name}</span>
-            </div>
-          `,
-          iconSize: [120, 24],
-          iconAnchor: [60, 12],
-        });
-
-        const marker = L.marker([st.lat, st.lon], { icon: customIcon }).addTo(map);
-        marker.bindPopup(`
-          <div style="font-family: sans-serif; font-size: 12px; color: #0f172a; line-height: 1.4;">
-            <strong>${st.name} (${st.km} km)</strong><br/>
-            Status: <strong>${statusText}</strong><br/>
-            Peak Depth: <strong>${st.depth} m</strong><br/>
-            ${st.pop ? `Population: <strong>${st.pop.toLocaleString()}</strong><br/>` : ''}
-            Arrival Time: <strong>T+${st.arrivalMin} min</strong>
-          </div>
-        `);
-
-        layersRef.current.markers.push(marker);
-      });
-    }
   }, [currentTimeMin, layerVisibility, followWavefront]);
 
-  return (
-    <div
-      className={`relative w-full rounded-2xl overflow-hidden border border-slate-800/80 bg-slate-950 flex flex-col justify-between ${
-        isFullScreen ? 'h-full flex-1' : 'h-[520px]'
-      }`}
-    >
-      {/* 1. Leaflet Map Container */}
-      <div ref={mapContainerRef} className="absolute inset-0 w-full h-full z-0" />
+  // Adjust map viewport on viewMode switch
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+    if (viewMode === 'immediate') {
+      map.flyTo([30.365, 78.485], 13);
+    } else if (viewMode === 'corridor') {
+      map.flyTo([30.150, 78.400], 10);
+    } else if (viewMode === 'basin') {
+      map.flyTo([30.150, 78.350], 9);
+    }
+  }, [viewMode]);
 
-      {/* 2. Top-Left: Operational Scope Selector & Wavefront State */}
-      <div className="relative z-10 p-4 flex flex-wrap items-center justify-between pointer-events-none gap-2">
-        <div className="flex items-center gap-1.5 pointer-events-auto bg-slate-950/95 backdrop-blur border border-slate-800 p-1 rounded-xl shadow-lg">
+  return (
+    <div className="relative w-full h-[580px] bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 flex flex-col">
+      {/* 1. Map Leaflet Container */}
+      <div ref={mapContainerRef} className="w-full flex-1 z-0 relative" />
+
+      {/* 2. Top Header Overlays (Camera controls & Layers) */}
+      <div className="absolute top-4 left-4 right-4 z-10 flex items-center justify-between pointer-events-none">
+        {/* View Mode Toggle Buttons */}
+        <div className="flex items-center gap-1 bg-slate-950/90 backdrop-blur border border-slate-800 p-1 rounded-xl shadow-lg pointer-events-auto">
           <button
             onClick={() => setViewMode('immediate')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
@@ -364,7 +293,7 @@ export default function GeospatialSimulationMap({
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            IMMEDIATE IMPACT
+            0–2 KM SPH
           </button>
           <button
             onClick={() => setViewMode('corridor')}
@@ -374,7 +303,7 @@ export default function GeospatialSimulationMap({
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
-            DOWNSTREAM CORRIDOR
+            100 KM CORRIDOR
           </button>
           <button
             onClick={() => setViewMode('basin')}
@@ -388,8 +317,21 @@ export default function GeospatialSimulationMap({
           </button>
         </div>
 
-        {/* Right Tools: Follow Wavefront, Layers, and Fullscreen */}
+        {/* Right Tools: North Arrow, Coordinates, Layers & Fullscreen */}
         <div className="flex items-center gap-2 pointer-events-auto">
+          {/* North Arrow Widget */}
+          <div className="p-2 rounded-xl bg-slate-950/95 border border-slate-800 text-cyan-400 flex items-center justify-center shadow-lg" title="North Reference">
+            <Navigation className="w-4 h-4 transform -rotate-45" />
+          </div>
+
+          {/* Real-time Coordinate Readout */}
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950/95 border border-slate-800 text-[11px] font-mono text-slate-300 shadow-lg">
+            <Globe className="w-3.5 h-3.5 text-cyan-400" />
+            <span>{cursorCoords.lat}°N, {cursorCoords.lon}°E</span>
+            <span className="text-slate-500">|</span>
+            <span className="text-emerald-400">{cursorCoords.elev}m MSL</span>
+          </div>
+
           <button
             onClick={() => setFollowWavefront(!followWavefront)}
             className={`px-3 py-1.5 rounded-xl border text-xs font-mono transition flex items-center gap-1.5 shadow-lg ${
@@ -449,12 +391,15 @@ export default function GeospatialSimulationMap({
         </div>
       )}
 
-      {/* 3. Floating Bottom-Left: Map Legend Overlay */}
-      <div className="relative z-10 px-4 pb-20 pointer-events-none">
+      {/* 3. Floating Bottom-Left: Map Legend Overlay & Attribution */}
+      <div className="relative z-10 px-4 pb-3 pointer-events-none flex items-end justify-between">
         <div className="pointer-events-auto inline-flex flex-col gap-1.5 bg-slate-950/90 backdrop-blur border border-slate-800 p-3 rounded-xl shadow-lg text-[11px] font-mono">
-          <span className="text-slate-300 font-bold uppercase tracking-wider text-[10px]">
-            Inundation Depth Legend
-          </span>
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-slate-200 font-bold uppercase tracking-wider text-[10px]">
+              Inundation Depth & Velocity Legend
+            </span>
+            <span className="text-[9px] text-slate-400">CRS: EPSG:4326</span>
+          </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-1">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded bg-sky-400/80 inline-block" />
@@ -462,17 +407,22 @@ export default function GeospatialSimulationMap({
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded bg-sky-800 inline-block" />
-              <span className="text-slate-300">&gt; 3.0 m (Deep Channel)</span>
+              <span className="text-slate-300">&gt; 3.0 m (High Depth)</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block" />
-              <span className="text-cyan-300">SPH Near-Field (0–2km)</span>
+              <span className="text-cyan-300">SPH Domain (0–2km)</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block" />
-              <span className="text-red-300">Inundated Settlement</span>
+              <span className="text-red-300">Monitored Station</span>
             </div>
           </div>
+        </div>
+
+        {/* Cartographic Attribution Badge */}
+        <div className="pointer-events-auto hidden md:block bg-slate-950/90 backdrop-blur border border-slate-800 px-2.5 py-1 rounded-lg text-[10px] text-slate-400 font-mono">
+          DEM: Copernicus GLO-30 | Survey: THDC Tehri | Hydrology: CWC
         </div>
       </div>
 

@@ -1,0 +1,60 @@
+{
+  "run_id": "sim_c235812f93",
+  "scenario_id": "tehri_base",
+  "solver_type": "coupled",
+  "breach_model": "froehlich_2008",
+  "engine_type": "rapid_screening",
+  "validation_status": "screening",
+  "model_name": "Rapid Screening SWE Model (Empirical Kinematic Routing)",
+  "model_version": "1.2.4-fast",
+  "execution_status": "COMPLETED_ADAPTER",
+  "created_at": "2026-08-29T07:36:49.361490+00:00",
+  "completed_at": "2026-08-29T07:36:49.361490+00:00",
+  "compute_duration_s": 1.871,
+  "software": {
+    "python_version": "3.11.9",
+    "dualsphysics_version": null,
+    "dflowfm_version": null,
+    "git_commit": null
+  },
+  "dem": {
+    "source": "Copernicus GLO-30 DSM",
+    "version": "2026.1",
+    "resolution_m": 30.0,
+    "provenance": "REPORTED",
+    "file_hash": ""
+  },
+  "hydrology": {
+    "source": "CWC Gauge Records / IMD 24h PMP",
+    "peak_discharge_m3s": 14116207.139516246,
+    "time_to_peak_hrs": 1847.016813910973
+  },
+  "discretization": {
+    "grid_or_particle_resolution": "Structured Grid (Cell dx=30m, 14,200 cells)",
+    "time_step_s": 5.0
+  },
+  "physical_assumptions": {
+    "manning_n": {
+      "value": 0.042,
+      "provenance": "ASSUMED"
+    },
+    "downstream_boundary": "Free Outflow / Stage-Discharge Rating Curve",
+    "breach_geometry": {
+      "breach_mode": "overtopping",
+      "breach_model": "froehlich_2008",
+      "top_width_m": 268.3748297506434,
+      "bottom_width_m": 134.2,
+      "breach_depth_m": 234.0,
+      "side_slope_z": 1.4,
+      "formation_time_hrs": 4617.5420347774325
+    }
+  },
+  "input_data": {},
+  "provenance_map": {},
+  "artifact_uris": {
+    "breach_hydrograph": "hydrology/breach_hydrograph.json"
+  },
+  "input_file_hashes": {},
+  "input_hash": "acff3056e2053eea9c57ce8a860dcd41a8b0b34288568a7f4bfb943ca1ecf540",
+  "reproducibility_id": "REP-RAP-ACFF3056"
+}

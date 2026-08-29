@@ -8,9 +8,16 @@ import {
   Play,
   RefreshCw,
   Info,
+  Zap,
+  Waves,
+  Globe,
+  Upload,
+  FlaskConical,
+  Compass,
 } from 'lucide-react';
 import Drawer from '../common/Drawer';
 import ProvenanceBadge from '../common/ProvenanceBadge';
+import ValidationBadge from '../common/ValidationBadge';
 import { api } from '../../services/api';
 import { formatFinite } from '../../utils/units';
 
@@ -20,10 +27,12 @@ export default function ScenarioDrawer({
   selectedPreset,
   presets = [],
   onSelectPreset,
+  simulationEngine = 'rapid_screening',
+  onSelectEngine,
   onRunSimulation,
   isSimulating,
 }) {
-  const [activeTab, setActiveTab] = useState('geometry');
+  const [activeTab, setActiveTab] = useState('engine');
   const [formData, setFormData] = useState({
     dam_name: 'Tehri Dam (Bhagirathi River)',
     dam_type: 'rockfill',
@@ -39,6 +48,13 @@ export default function ScenarioDrawer({
     valley_type: 'mountain_gorge',
     solver_type: 'coupled',
     breach_model: 'auto',
+    simulation_engine: 'rapid_screening',
+    dem_source: 'Copernicus GLO-30 DSM',
+    dem_resolution_m: 30.0,
+    hydrology_source: 'CWC Gauge Records / IMD 24h PMP',
+    time_step_s: 1.0,
+    grid_or_particle_resolution: 'Cell dx = 30m',
+    downstream_boundary: 'Free Outflow / Stage-Discharge Rating Curve',
   });
 
   const [breachResult, setBreachResult] = useState(null);
@@ -61,11 +77,18 @@ export default function ScenarioDrawer({
         valley_type: selectedPreset.valley_type || 'mountain_gorge',
         solver_type: 'coupled',
         breach_model: 'auto',
+        simulation_engine: simulationEngine || 'rapid_screening',
+        dem_source: selectedPreset.dem_source || 'Copernicus GLO-30 DSM',
+        dem_resolution_m: selectedPreset.dem_resolution_m || 30.0,
+        hydrology_source: selectedPreset.hydrology_source || 'CWC Gauge Records / IMD 24h PMP',
+        time_step_s: simulationEngine === 'sph' ? 0.025 : simulationEngine === 'delft3d' ? 1.0 : 5.0,
+        grid_or_particle_resolution: simulationEngine === 'sph' ? 'Particle Spacing dx = 2.5m' : 'Grid dx = 30m',
+        downstream_boundary: 'Free Outflow / Stage-Discharge Rating Curve',
       };
       setFormData(updated);
       recalcBreach(updated);
     }
-  }, [selectedPreset]);
+  }, [selectedPreset, simulationEngine]);
 
   const recalcBreach = async (data) => {
     setIsCalculatingBreach(true);
@@ -107,12 +130,22 @@ export default function ScenarioDrawer({
   };
 
   const handleRun = () => {
+    if (onSelectEngine && formData.simulation_engine) {
+      onSelectEngine(formData.simulation_engine);
+    }
     onRunSimulation({
       scenario_id: selectedPreset?.id,
       preset_id: selectedPreset?.id,
+      simulation_engine: formData.simulation_engine,
       custom_params: formData,
       solver_type: formData.solver_type,
       breach_model: formData.breach_model,
+      dem_source: formData.dem_source,
+      dem_resolution_m: formData.dem_resolution_m,
+      hydrology_source: formData.hydrology_source,
+      time_step_s: formData.time_step_s,
+      grid_or_particle_resolution: formData.grid_or_particle_resolution,
+      downstream_boundary: formData.downstream_boundary,
     });
     onClose();
   };
@@ -121,8 +154,8 @@ export default function ScenarioDrawer({
     <Drawer
       isOpen={isOpen}
       onClose={onClose}
-      title="Scenario & Solver Configuration"
-      subtitle="Configure physical dam parameters, empirical breach formulations, and solver parameters."
+      title="Scenario &amp; Scientific Physics Configuration"
+      subtitle="Configure hydrodynamic simulation engine, DEM topography, discretization, and breach mechanics."
       width="max-w-2xl"
       footer={
         <>
@@ -135,7 +168,7 @@ export default function ScenarioDrawer({
           <button
             onClick={handleRun}
             disabled={isSimulating}
-            className="px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-semibold text-xs flex items-center gap-2 transition disabled:opacity-50"
+            className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition disabled:opacity-50"
           >
             {isSimulating ? (
               <>
@@ -172,12 +205,12 @@ export default function ScenarioDrawer({
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-slate-800 gap-2">
+        <div className="flex border-b border-slate-800 gap-1">
           {[
-            { id: 'geometry', label: 'Dam & Reservoir', icon: Mountain },
+            { id: 'engine', label: 'Engine & Discretization', icon: Cpu },
+            { id: 'geometry', label: 'Dam Structure', icon: Mountain },
             { id: 'hydraulics', label: 'Valley & Friction', icon: Layers },
             { id: 'breach', label: 'Breach Mechanics', icon: Gauge },
-            { id: 'solver', label: 'Solvers & Coupling', icon: Cpu },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -185,9 +218,9 @@ export default function ScenarioDrawer({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-3.5 py-2.5 text-xs font-medium border-b-2 transition ${
+                className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 transition ${
                   isActive
-                    ? 'border-cyan-400 text-cyan-400 font-semibold'
+                    ? 'border-cyan-400 text-cyan-400 font-bold'
                     : 'border-transparent text-slate-400 hover:text-slate-200'
                 }`}
               >
@@ -197,6 +230,140 @@ export default function ScenarioDrawer({
             );
           })}
         </div>
+
+        {/* Tab 0: Simulation Engine & Scientific Discretization */}
+        {activeTab === 'engine' && (
+          <div className="space-y-4">
+            <div>
+              <label className="text-xs font-bold text-slate-200 block mb-1.5">
+                Simulation Engine Selection
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {[
+                  {
+                    id: 'rapid_screening',
+                    name: 'Rapid Screening Model',
+                    desc: 'Simplified SWE / empirical kinematic estimate for fast scenario exploration',
+                    tier: 'screening',
+                    icon: Zap,
+                  },
+                  {
+                    id: 'sph',
+                    name: 'SPH Lagrangian Model',
+                    desc: 'DualSPHysics 3D/2D particle solver capturing near-field wave fronts',
+                    tier: 'calibrated',
+                    icon: Waves,
+                  },
+                  {
+                    id: 'delft3d',
+                    name: 'Delft3D / D-Flow FM',
+                    desc: 'Eulerian flexible-mesh 2D shallow water hydrodynamic propagation',
+                    tier: 'validated',
+                    icon: Globe,
+                  },
+                  {
+                    id: 'imported',
+                    name: 'Imported Result Grid',
+                    desc: 'Pre-computed external GeoTIFF, NetCDF, or Shapefile dataset',
+                    tier: 'validated',
+                    icon: Upload,
+                  },
+                  {
+                    id: 'demo',
+                    name: 'Demo Mode (Illustrative)',
+                    desc: 'Fast synthetic demo preview — strictly non-operational',
+                    tier: 'demo',
+                    icon: FlaskConical,
+                  },
+                ].map((eng) => {
+                  const isSelected = formData.simulation_engine === eng.id;
+                  const Icon = eng.icon;
+                  return (
+                    <button
+                      key={eng.id}
+                      type="button"
+                      onClick={() => handleInputChange('simulation_engine', eng.id)}
+                      className={`p-3 rounded-xl text-left border transition flex flex-col justify-between ${
+                        isSelected
+                          ? 'bg-cyan-950/40 border-cyan-500 text-slate-100 shadow-md shadow-cyan-500/10'
+                          : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-1.5 font-bold text-xs text-slate-100">
+                          <Icon className="w-3.5 h-3.5 text-cyan-400" />
+                          <span>{eng.name}</span>
+                        </div>
+                        <ValidationBadge status={eng.tier} compact showIcon={false} />
+                      </div>
+                      <p className="text-[10px] text-slate-400 leading-snug">{eng.desc}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* DEM Topography & Hydrology Source */}
+            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-800/80">
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">DEM Topography Source</label>
+                <select
+                  value={formData.dem_source}
+                  onChange={(e) => {
+                    const src = e.target.value;
+                    const res = src.includes('10m') ? 10.0 : src.includes('1m') ? 1.0 : 30.0;
+                    setFormData({ ...formData, dem_source: src, dem_resolution_m: res });
+                  }}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200"
+                >
+                  <option value="Copernicus GLO-30 DSM">Copernicus GLO-30 DSM (30m)</option>
+                  <option value="SRTM 1 Arc-Sec (30m)">NASA SRTM 1-ArcSec (30m)</option>
+                  <option value="ALOS World 3D (AW3D30)">JAXA ALOS AW3D30 (30m)</option>
+                  <option value="CartoDEM v3R1 (10m)">ISRO CartoDEM v3R1 (10m)</option>
+                  <option value="Drone LiDAR DEM (1m)">Custom Drone LiDAR DEM (1m)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Hydrological Data Source</label>
+                <select
+                  value={formData.hydrology_source}
+                  onChange={(e) => handleInputChange('hydrology_source', e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200"
+                >
+                  <option value="CWC Gauge Records / IMD 24h PMP">CWC Gauge Records / IMD 24h PMP</option>
+                  <option value="SCS Curve Number &amp; Snyder UH">SCS Curve Number &amp; Snyder UH</option>
+                  <option value="ERA5-Land Hourly Hydrograph">ERA5-Land Hourly Hydrograph</option>
+                  <option value="Observed High-Water Marks">Observed High-Water Marks (Benchmark)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Integration Time Step ($\Delta t$) [s]</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={formData.time_step_s}
+                  onChange={(e) => handleInputChange('time_step_s', parseFloat(e.target.value) || 1.0)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-cyan-400"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Downstream Boundary Condition</label>
+                <select
+                  value={formData.downstream_boundary}
+                  onChange={(e) => handleInputChange('downstream_boundary', e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200"
+                >
+                  <option value="Free Outflow / Stage-Discharge Rating Curve">Free Outflow / Rating Curve</option>
+                  <option value="Normal Depth (Bed Slope S0 = 0.0055)">Normal Depth (Bed Slope S0)</option>
+                  <option value="Sommerfeld Open Radiation Condition">Sommerfeld Open Radiation</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Tab 1: Dam & Reservoir Geometry */}
         {activeTab === 'geometry' && (
@@ -383,7 +550,7 @@ export default function ScenarioDrawer({
                   <div className="p-2 rounded-lg bg-slate-900 border border-slate-800">
                     <span className="text-[10px] text-slate-400 block">Formation Time</span>
                     <span className="text-xs font-mono font-bold text-cyan-400">
-                      {formatFinite(breachResult.breach_formation_time_hrs, 2)} hrs
+                      {formatFinite(breachResult.formation_time_hrs || breachResult.breach_formation_time_hrs, 2)} hrs
                     </span>
                   </div>
                   <div className="p-2 rounded-lg bg-slate-900 border border-slate-800">
@@ -395,34 +562,6 @@ export default function ScenarioDrawer({
                 </div>
               </div>
             )}
-          </div>
-        )}
-
-        {/* Tab 4: Solver & Coupling */}
-        {activeTab === 'solver' && (
-          <div className="space-y-4">
-            <div>
-              <label className="text-xs text-slate-400 block mb-1">Hydrodynamic Solver Architecture</label>
-              <select
-                value={formData.solver_type}
-                onChange={(e) => handleInputChange('solver_type', e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200"
-              >
-                <option value="coupled">Coupled: DualSPHysics (Near) → Q(t) → Delft3D FM (Far)</option>
-                <option value="sph">DualSPHysics 3D Particle Solver Only</option>
-                <option value="delft3d">Delft3D Flexible Mesh SWE Solver Only</option>
-              </select>
-            </div>
-
-            <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 text-xs text-slate-400 space-y-1.5">
-              <span className="font-semibold text-slate-300 block">Coupling Transect Interface:</span>
-              <p className="font-mono text-[11px] text-cyan-400">
-                Q(t) = ∫ v·n dA (x = 2.0 km)
-              </p>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
-                Volumetric mass flux extracted from Lagrangian SPH particle transects is resampled into uniform D-Flow FM boundary conditions (.ext / .tim) with strict mass conservation checks.
-              </p>
-            </div>
           </div>
         )}
       </div>
