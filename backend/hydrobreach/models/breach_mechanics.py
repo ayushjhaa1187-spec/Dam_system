@@ -35,6 +35,9 @@ class BreachResult(BaseModel):
     breach_hydrograph_time_hrs: List[float]
     breach_hydrograph_discharge_m3s: List[float]
     eroded_volume_m3: Optional[float] = None
+    reservoir_volume_released_m3: float = 0.0
+    mass_balance_check_m3: float = 0.0
+    breach_width_through_time_m: List[float] = []
     model_used: str
     summary: Dict[str, Any]
 
@@ -332,29 +335,72 @@ class BreachMechanicsEngine:
         )
 
     @classmethod
+    def calculate_controlled_release(cls, inp: DamBreachInput) -> BreachResult:
+        """
+        Controlled emergency release without dam breach.
+        Uses spillway capacity to release volume over a longer duration.
+        """
+        V_w = max(inp.reservoir_volume_m3, 100.0)
+        h_w = max(inp.hydraulic_head_m, 1.0)
+        
+        # Assume peak is limited by some safe channel capacity or spillway capacity
+        # We'll just assume a conservative peak flow of 5000 m3/s or lower based on head
+        q_p = min(2000.0 * math.sqrt(h_w), 10000.0)
+        
+        t_f_hrs = V_w / (q_p * 3600.0 * 0.5)  # triangular hydrograph approximation
+        t_f_hrs = max(t_f_hrs, 24.0) # Release over at least 24 hours
+        
+        t_peak_hrs = t_f_hrs * 0.1
+        
+        time_series, flow_series = cls._synthesize_breach_hydrograph(
+            V_w=V_w, Q_p=q_p, t_peak_hrs=t_peak_hrs, t_f_hrs=t_f_hrs
+        )
+
+        return BreachResult(
+            avg_breach_width_m=0.0,
+            breach_bottom_width_m=0.0,
+            breach_top_width_m=0.0,
+            side_slope_z=0.0,
+            breach_formation_time_hrs=round(t_f_hrs, 3),
+            peak_discharge_m3s=round(q_p, 2),
+            time_to_peak_hrs=round(t_peak_hrs, 3),
+            breach_hydrograph_time_hrs=time_series,
+            breach_hydrograph_discharge_m3s=flow_series,
+            model_used="Controlled Emergency Release",
+            summary={"event_type": "Controlled Release"}
+        )
+
+    @classmethod
     def evaluate(cls, inp: DamBreachInput, model_type: str = "auto") -> BreachResult:
         """Route to appropriate model based on dam type or user override."""
         model = model_type.lower()
+        res = None
         if model == "froehlich":
-            return cls.calculate_froehlich_2008(inp)
+            res = cls.calculate_froehlich_2008(inp)
         elif model in ("macdonald", "macdonald_1984"):
-            return cls.calculate_macdonald_1984(inp)
+            res = cls.calculate_macdonald_1984(inp)
         elif model in ("von_thun", "von_thun_1990"):
-            return cls.calculate_von_thun_1990(inp)
+            res = cls.calculate_von_thun_1990(inp)
         elif model in ("ritter", "instantaneous"):
-            return cls.calculate_instantaneous_ritter(inp)
+            res = cls.calculate_instantaneous_ritter(inp)
         elif model in ("landslide", "ldof", "costa_schuster"):
-            return cls.calculate_landslide_dam_outburst(inp)
-
-        # Automatic detection based on input
-        if inp.breach_mode.lower() == "instantaneous" or inp.dam_type.lower() in ("concrete_gravity", "arch"):
-            return cls.calculate_instantaneous_ritter(inp)
-        elif inp.breach_mode.lower() == "landslide_outburst" or inp.dam_type.lower() == "landslide_dam":
-            return cls.calculate_landslide_dam_outburst(inp)
-        elif inp.dam_type.lower() == "rockfill":
-            return cls.calculate_macdonald_1984(inp)
+            res = cls.calculate_landslide_dam_outburst(inp)
+        elif model in ("controlled", "controlled_release"):
+            res = cls.calculate_controlled_release(inp)
         else:
-            return cls.calculate_froehlich_2008(inp)
+            # Automatic detection based on input
+            if inp.breach_mode.lower() == "instantaneous" or inp.dam_type.lower() in ("concrete_gravity", "arch"):
+                res = cls.calculate_instantaneous_ritter(inp)
+            elif inp.breach_mode.lower() == "landslide_outburst" or inp.dam_type.lower() == "landslide_dam":
+                res = cls.calculate_landslide_dam_outburst(inp)
+            elif inp.dam_type.lower() == "rockfill":
+                res = cls.calculate_macdonald_1984(inp)
+            elif inp.breach_mode.lower() == "controlled_release":
+                res = cls.calculate_controlled_release(inp)
+            else:
+                res = cls.calculate_froehlich_2008(inp)
+        
+        return cls._post_process_result(res, inp.reservoir_volume_m3)
 
     @classmethod
     def _synthesize_breach_hydrograph(
@@ -402,3 +448,28 @@ class BreachMechanicsEngine:
             flow_series = [round(q, 2) for q in raw_flows]
 
         return time_series, flow_series
+
+    @classmethod
+    def _post_process_result(cls, res: BreachResult, V_w: float) -> BreachResult:
+        # Calculate volume released from hydrograph
+        area_m3 = 0.0
+        for i in range(len(res.breach_hydrograph_time_hrs) - 1):
+            dt_sec = (res.breach_hydrograph_time_hrs[i + 1] - res.breach_hydrograph_time_hrs[i]) * 3600.0
+            area_m3 += 0.5 * (res.breach_hydrograph_discharge_m3s[i] + res.breach_hydrograph_discharge_m3s[i + 1]) * dt_sec
+        
+        res.reservoir_volume_released_m3 = area_m3
+        res.mass_balance_check_m3 = area_m3 - V_w
+
+        # Synthesize breach width through time
+        width_series = []
+        for t in res.breach_hydrograph_time_hrs:
+            if t <= 0:
+                w = 0.0
+            elif t >= res.breach_formation_time_hrs:
+                w = res.avg_breach_width_m
+            else:
+                w = res.avg_breach_width_m * (t / res.breach_formation_time_hrs)
+            width_series.append(round(w, 2))
+        res.breach_width_through_time_m = width_series
+
+        return res

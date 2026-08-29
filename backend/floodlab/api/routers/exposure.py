@@ -1,11 +1,12 @@
-"""Exposure assessment endpoints."""
 from fastapi import APIRouter
+from floodlab.engines.loss_damage.damage_estimator import DamageEstimator
+from floodlab.engines.exposure.calculator import ExposureCalculator
+
 router = APIRouter()
 
 
 @router.post("/evaluate")
 async def evaluate_exposure(body: dict):
-    from floodlab.engines.loss_damage.damage_estimator import DamageEstimator
     engine = DamageEstimator()
     result = engine.estimate(
         inundated_area_km2=body.get("inundated_area_km2", 10.0),
@@ -15,3 +16,11 @@ async def evaluate_exposure(body: dict):
         scenario_params=body,
     )
     return result
+
+
+@router.post("/settlements")
+async def evaluate_settlements(body: dict):
+    calc = ExposureCalculator()
+    settlements = body.get("settlements", [])
+    results = calc.evaluate_settlements(settlements)
+    return {"results": results}

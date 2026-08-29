@@ -19,17 +19,17 @@ export class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6">
-          <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl text-center space-y-4">
-            <div className="w-12 h-12 rounded-xl bg-red-950 text-red-400 border border-red-800 flex items-center justify-center mx-auto">
+        <div className="min-h-screen bg-hc-bg text-hc-ink flex items-center justify-center p-6">
+          <div className="max-w-md w-full bg-hc-surface border border-hc-border rounded-2xl p-6 shadow-2xl text-center space-y-4">
+            <div className="w-12 h-12 rounded-xl bg-red-950 text-hc-critical border border-red-800 flex items-center justify-center mx-auto">
               <AlertTriangle className="w-6 h-6" />
             </div>
-            <h2 className="text-lg font-bold text-slate-100">Application Error Recovered</h2>
-            <p className="text-xs text-slate-400">
+            <h2 className="text-lg font-bold text-hc-ink">Application Error Recovered</h2>
+            <p className="text-xs text-hc-textSecondary">
               A runtime component error occurred. Click below to reload and restore normal operation.
             </p>
             {this.state.error && (
-              <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 text-left overflow-x-auto text-[11px] font-mono text-red-400">
+              <div className="bg-hc-bg p-3 rounded-lg border border-hc-border text-left overflow-x-auto text-[11px] font-mono text-hc-critical">
                 {this.state.error.toString()}
               </div>
             )}
@@ -38,7 +38,7 @@ export class ErrorBoundary extends React.Component {
                 this.setState({ hasError: false, error: null });
                 window.location.reload();
               }}
-              className="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition flex items-center justify-center space-x-2"
+              className="w-full py-2.5 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink text-xs font-bold transition flex items-center justify-center space-x-2"
             >
               <RefreshCw className="w-4 h-4" />
               <span>Reload Application</span>

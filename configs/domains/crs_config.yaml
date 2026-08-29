@@ -1,0 +1,10 @@
+crs_standards:
+  computational_working_crs:
+    code: "EPSG:32644"
+    name: "WGS 84 / UTM zone 44N"
+    usage: "Distance, area, flow-grid, mesh generation, and hydrodynamic computation."
+    
+  web_presentation_crs:
+    code: "EPSG:4326"
+    name: "WGS 84"
+    usage: "GeoJSON exports, KML generation, and web map layer display."

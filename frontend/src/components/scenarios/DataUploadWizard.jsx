@@ -231,36 +231,36 @@ export default function DataUploadWizard({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6">
-      <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+    <div className="fixed inset-0 z-50 bg-hc-bg/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6">
+      <div className="bg-hc-surface border border-hc-border rounded-3xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
+        <div className="px-6 py-4 border-b border-hc-border flex items-center justify-between bg-hc-bg/50">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <div className="w-9 h-9 rounded-xl bg-hc-active/10 border border-cyan-500/30 flex items-center justify-center text-hc-active">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-100 flex items-center gap-2">
+              <h2 className="text-base font-bold text-hc-ink flex items-center gap-2">
                 Guided Scenario Builder & Data Upload
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-800/60">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-cyan-950 text-hc-active border border-cyan-800/60">
                   Step {currentStep} of 10
                 </span>
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-hc-textSecondary">
                 10-step verified workflow for physical dam breach modeling & HADR zoning
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition"
+            className="p-1.5 rounded-xl text-hc-textSecondary hover:text-hc-ink hover:bg-hc-secondary transition"
           >
             ✕
           </button>
         </div>
 
         {/* Stepper Progress Bar */}
-        <div className="px-6 pt-3 pb-2 border-b border-slate-800/60 bg-slate-950/20 overflow-x-auto">
+        <div className="px-6 pt-3 pb-2 border-b border-hc-border/60 bg-hc-bg/20 overflow-x-auto">
           <div className="flex items-center justify-between min-w-[650px] gap-1">
             {steps.map((s) => {
               const isActive = s.num === currentStep;
@@ -271,19 +271,19 @@ export default function DataUploadWizard({
                   onClick={() => setCurrentStep(s.num)}
                   className={`flex items-center gap-1.5 px-2 py-1 rounded-lg cursor-pointer transition text-xs ${
                     isActive
-                      ? 'bg-cyan-500/20 text-cyan-400 font-bold border border-cyan-500/30'
+                      ? 'bg-hc-active/20 text-hc-active font-bold border border-cyan-500/30'
                       : isPast
-                      ? 'text-slate-300 hover:text-slate-100'
-                      : 'text-slate-600 hover:text-slate-400'
+                      ? 'text-hc-textSecondary hover:text-hc-ink'
+                      : 'text-hc-textSecondary hover:text-hc-textSecondary'
                   }`}
                 >
                   <span
                     className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
                       isActive
-                        ? 'bg-cyan-500 text-slate-950'
+                        ? 'bg-hc-active text-hc-ink'
                         : isPast
-                        ? 'bg-emerald-950 text-emerald-400 border border-emerald-800/60'
-                        : 'bg-slate-800 text-slate-400'
+                        ? 'bg-emerald-950 text-hc-success border border-emerald-800/60'
+                        : 'bg-hc-secondary text-hc-textSecondary'
                     }`}
                   >
                     {isPast ? '✓' : s.num}
@@ -300,12 +300,12 @@ export default function DataUploadWizard({
           {/* STEP 1: Case Study Selection */}
           {currentStep === 1 && (
             <div className="space-y-4">
-              <div className="border border-slate-800 bg-slate-950/50 rounded-2xl p-4">
-                <h3 className="text-sm font-bold text-slate-200 mb-1 flex items-center gap-2">
-                  <Mountain className="w-4 h-4 text-cyan-400" />
+              <div className="border border-hc-border bg-hc-bg/50 rounded-2xl p-4">
+                <h3 className="text-sm font-bold text-hc-ink mb-1 flex items-center gap-2">
+                  <Mountain className="w-4 h-4 text-hc-active" />
                   Select Pre-Packaged Indian Benchmark Case Study
                 </h3>
-                <p className="text-xs text-slate-400 mb-4">
+                <p className="text-xs text-hc-textSecondary mb-4">
                   Fully bundled with verified terrain, river network, and infrastructure datasets. No external API key required.
                 </p>
 
@@ -319,18 +319,18 @@ export default function DataUploadWizard({
                         className={`p-3.5 rounded-xl border cursor-pointer transition ${
                           isSelected
                             ? 'bg-cyan-950/30 border-cyan-500 shadow-md shadow-cyan-500/10'
-                            : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+                            : 'bg-hc-surface border-hc-border hover:border-hc-border'
                         }`}
                       >
                         <div className="flex items-center justify-between mb-1">
-                          <h4 className="text-xs font-bold text-slate-100">{p.name || p.dam_name}</h4>
-                          {isSelected && <CheckCircle2 className="w-4 h-4 text-cyan-400" />}
+                          <h4 className="text-xs font-bold text-hc-ink">{p.name || p.dam_name}</h4>
+                          {isSelected && <CheckCircle2 className="w-4 h-4 text-hc-active" />}
                         </div>
-                        <p className="text-[11px] text-slate-400 line-clamp-2">{p.description || p.river}</p>
-                        <div className="flex gap-2 mt-2 text-[10px] text-slate-300">
-                          <span className="px-1.5 py-0.5 rounded bg-slate-800">Height: {p.dam_height_m}m</span>
-                          <span className="px-1.5 py-0.5 rounded bg-slate-800">Reach: {p.reach_length_km}km</span>
-                          <span className="px-1.5 py-0.5 rounded bg-slate-800">{p.dam_type}</span>
+                        <p className="text-[11px] text-hc-textSecondary line-clamp-2">{p.description || p.river}</p>
+                        <div className="flex gap-2 mt-2 text-[10px] text-hc-textSecondary">
+                          <span className="px-1.5 py-0.5 rounded bg-hc-secondary">Height: {p.dam_height_m}m</span>
+                          <span className="px-1.5 py-0.5 rounded bg-hc-secondary">Reach: {p.reach_length_km}km</span>
+                          <span className="px-1.5 py-0.5 rounded bg-hc-secondary">{p.dam_type}</span>
                         </div>
                       </div>
                     );
@@ -343,40 +343,40 @@ export default function DataUploadWizard({
           {/* STEP 2: Dam Location */}
           {currentStep === 2 && (
             <div className="space-y-4">
-              <div className="border border-slate-800 bg-slate-950/50 rounded-2xl p-4 space-y-4">
-                <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-cyan-400" />
+              <div className="border border-hc-border bg-hc-bg/50 rounded-2xl p-4 space-y-4">
+                <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-hc-active" />
                   Dam Location & Spatial Coordinates
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-hc-textSecondary">
                   Specify coordinates of the dam crest axis in decimal degrees (WGS84 EPSG:4326).
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Latitude (°N)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Latitude (°N)</label>
                     <input
                       type="number"
                       step="0.0001"
                       value={formData.lat}
                       onChange={(e) => handleInputChange('lat', parseFloat(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none focus:border-cyan-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Longitude (°E)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Longitude (°E)</label>
                     <input
                       type="number"
                       step="0.0001"
                       value={formData.lon}
                       onChange={(e) => handleInputChange('lon', parseFloat(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none focus:border-cyan-500"
                     />
                   </div>
                 </div>
 
                 <div className="p-3 bg-cyan-950/20 border border-cyan-800/40 rounded-xl text-xs text-cyan-300 flex items-start gap-2">
-                  <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                  <Info className="w-4 h-4 text-hc-active shrink-0 mt-0.5" />
                   <span>
                     Selected Origin: <strong>{formData.dam_name}</strong> at [{formData.lat.toFixed(4)}°N, {formData.lon.toFixed(4)}°E].
                     Coordinates anchor both the 0–2km SPH particle near-field and downstream Delft3D 100km corridor.
@@ -389,54 +389,54 @@ export default function DataUploadWizard({
           {/* STEP 3: DEM & Terrain */}
           {currentStep === 3 && (
             <div className="space-y-4">
-              <div className="border border-slate-800 bg-slate-950/50 rounded-2xl p-4 space-y-4">
-                <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                  <FileUp className="w-4 h-4 text-cyan-400" />
+              <div className="border border-hc-border bg-hc-bg/50 rounded-2xl p-4 space-y-4">
+                <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                  <FileUp className="w-4 h-4 text-hc-active" />
                   Digital Elevation Model (DEM) & Grid System
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">DEM Source</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">DEM Source</label>
                     <input
                       type="text"
                       value={formData.dem_source}
                       onChange={(e) => handleInputChange('dem_source', e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Coordinate Reference System (CRS)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Coordinate Reference System (CRS)</label>
                     <input
                       type="text"
                       value={formData.dem_crs}
                       onChange={(e) => handleInputChange('dem_crs', e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Spatial Resolution (m)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Spatial Resolution (m)</label>
                     <input
                       type="number"
                       value={formData.dem_resolution_m}
                       onChange={(e) => handleInputChange('dem_resolution_m', parseFloat(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Elevation Range (Min / Max MSL)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Elevation Range (Min / Max MSL)</label>
                     <div className="flex gap-2">
                       <input
                         type="number"
                         value={formData.elevation_min_m}
                         onChange={(e) => handleInputChange('elevation_min_m', parseFloat(e.target.value))}
-                        className="w-1/2 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                        className="w-1/2 bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                         placeholder="Min (m)"
                       />
                       <input
                         type="number"
                         value={formData.elevation_max_m}
                         onChange={(e) => handleInputChange('elevation_max_m', parseFloat(e.target.value))}
-                        className="w-1/2 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                        className="w-1/2 bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                         placeholder="Max (m)"
                       />
                     </div>
@@ -449,82 +449,82 @@ export default function DataUploadWizard({
           {/* STEP 4: Embankment Geometry & Physical Validation */}
           {currentStep === 4 && (
             <div className="space-y-4">
-              <div className="border border-slate-800 bg-slate-950/50 rounded-2xl p-4 space-y-4">
-                <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                  <Sliders className="w-4 h-4 text-cyan-400" />
+              <div className="border border-hc-border bg-hc-bg/50 rounded-2xl p-4 space-y-4">
+                <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                  <Sliders className="w-4 h-4 text-hc-active" />
                   Dam Structure & Reservoir Parameters
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Dam Height ($h_d$, m)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Dam Height ($h_d$, m)</label>
                     <input
                       type="number"
                       step="0.5"
                       value={formData.dam_height_m}
                       onChange={(e) => handleInputChange('dam_height_m', parseFloat(e.target.value))}
-                      className={`w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none ${
-                        fieldErrors.dam_height_m ? 'border-red-500 bg-red-950/10' : 'border-slate-800'
+                      className={`w-full bg-hc-surface border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none ${
+                        fieldErrors.dam_height_m ? 'border-hc-critical bg-red-950/10' : 'border-hc-border'
                       }`}
                     />
                     {fieldErrors.dam_height_m && (
-                      <p className="text-[10px] text-red-400 mt-1 flex items-center gap-1">
+                      <p className="text-[10px] text-hc-critical mt-1 flex items-center gap-1">
                         <AlertTriangle className="w-3 h-3" /> {fieldErrors.dam_height_m}
                       </p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Hydraulic Head ($h_w$, m)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Hydraulic Head ($h_w$, m)</label>
                     <input
                       type="number"
                       step="0.5"
                       value={formData.hydraulic_head_m}
                       onChange={(e) => handleInputChange('hydraulic_head_m', parseFloat(e.target.value))}
-                      className={`w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none ${
-                        fieldErrors.hydraulic_head_m ? 'border-red-500 bg-red-950/10' : 'border-slate-800'
+                      className={`w-full bg-hc-surface border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none ${
+                        fieldErrors.hydraulic_head_m ? 'border-hc-critical bg-red-950/10' : 'border-hc-border'
                       }`}
                     />
                     {fieldErrors.hydraulic_head_m && (
-                      <p className="text-[10px] text-red-400 mt-1 flex items-center gap-1">
+                      <p className="text-[10px] text-hc-critical mt-1 flex items-center gap-1">
                         <AlertTriangle className="w-3 h-3" /> {fieldErrors.hydraulic_head_m}
                       </p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Reservoir Volume ($V_w$, m³)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Reservoir Volume ($V_w$, m³)</label>
                     <input
                       type="number"
                       value={formData.reservoir_volume_m3}
                       onChange={(e) => handleInputChange('reservoir_volume_m3', parseFloat(e.target.value))}
-                      className={`w-full bg-slate-900 border rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none ${
-                        fieldErrors.reservoir_volume_m3 ? 'border-red-500 bg-red-950/10' : 'border-slate-800'
+                      className={`w-full bg-hc-surface border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none ${
+                        fieldErrors.reservoir_volume_m3 ? 'border-hc-critical bg-red-950/10' : 'border-hc-border'
                       }`}
                     />
                     {fieldErrors.reservoir_volume_m3 && (
-                      <p className="text-[10px] text-red-400 mt-1 flex items-center gap-1">
+                      <p className="text-[10px] text-hc-critical mt-1 flex items-center gap-1">
                         <AlertTriangle className="w-3 h-3" /> {fieldErrors.reservoir_volume_m3}
                       </p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Crest Length ($L_c$, m)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Crest Length ($L_c$, m)</label>
                     <input
                       type="number"
                       value={formData.crest_length_m}
                       onChange={(e) => handleInputChange('crest_length_m', parseFloat(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Dam Type</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Dam Type</label>
                     <select
                       value={formData.dam_type}
                       onChange={(e) => handleInputChange('dam_type', e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     >
                       <option value="rockfill">Zoned Earth & Rockfill</option>
                       <option value="earthen">Homogeneous Earthen Embankment</option>
@@ -534,11 +534,11 @@ export default function DataUploadWizard({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Breach Mode</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Breach Mode</label>
                     <select
                       value={formData.breach_mode}
                       onChange={(e) => handleInputChange('breach_mode', e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     >
                       <option value="overtopping">Overtopping Failure</option>
                       <option value="piping">Internal Piping / Seepage Erosion</option>
@@ -553,57 +553,57 @@ export default function DataUploadWizard({
           {/* STEP 5: River Valley & Downstream Path */}
           {currentStep === 5 && (
             <div className="space-y-4">
-              <div className="border border-slate-800 bg-slate-950/50 rounded-2xl p-4 space-y-4">
-                <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                  <Waves className="w-4 h-4 text-cyan-400" />
+              <div className="border border-hc-border bg-hc-bg/50 rounded-2xl p-4 space-y-4">
+                <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                  <Waves className="w-4 h-4 text-hc-active" />
                   River Centerline & Downstream Corridor Reach
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Reach Length (km)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Reach Length (km)</label>
                     <input
                       type="number"
                       value={formData.reach_length_km}
                       onChange={(e) => handleInputChange('reach_length_km', parseFloat(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Average Valley Width (m)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Average Valley Width (m)</label>
                     <input
                       type="number"
                       value={formData.valley_width_m}
                       onChange={(e) => handleInputChange('valley_width_m', parseFloat(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Bed Slope ($S_0$)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Bed Slope ($S_0$)</label>
                     <input
                       type="number"
                       step="0.0005"
                       value={formData.bed_slope}
                       onChange={(e) => handleInputChange('bed_slope', parseFloat(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Manning's Roughness ($n$)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Manning's Roughness ($n$)</label>
                     <input
                       type="number"
                       step="0.001"
                       value={formData.manning_n}
                       onChange={(e) => handleInputChange('manning_n', parseFloat(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Valley Type</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Valley Type</label>
                     <select
                       value={formData.valley_type}
                       onChange={(e) => handleInputChange('valley_type', e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     >
                       <option value="mountain_gorge">Mountain Gorge (Steep V-Valley)</option>
                       <option value="semi_urban">Semi-Urban Foothill Valley</option>
@@ -618,19 +618,19 @@ export default function DataUploadWizard({
           {/* STEP 6: Breach Hydrograph */}
           {currentStep === 6 && (
             <div className="space-y-4">
-              <div className="border border-slate-800 bg-slate-950/50 rounded-2xl p-4 space-y-4">
-                <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-cyan-400" />
+              <div className="border border-hc-border bg-hc-bg/50 rounded-2xl p-4 space-y-4">
+                <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-hc-active" />
                   Breach Mechanics Formulation & Outflow Hydrograph
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Empirical Breach Model</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Empirical Breach Model</label>
                     <select
                       value={formData.breach_model}
                       onChange={(e) => handleInputChange('breach_model', e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     >
                       <option value="froehlich_2008">Froehlich (2008) - Recommended for Embankment Dams</option>
                       <option value="macdonald_1984">MacDonald & Langridge-Monopolis (1984)</option>
@@ -641,31 +641,31 @@ export default function DataUploadWizard({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">Baseflow / Inflow ($Q_0$, m³/s)</label>
+                    <label className="block text-xs font-semibold text-hc-textSecondary mb-1">Baseflow / Inflow ($Q_0$, m³/s)</label>
                     <input
                       type="number"
                       value={formData.inflow_discharge_m3s}
                       onChange={(e) => handleInputChange('inflow_discharge_m3s', parseFloat(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"
+                      className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-xs text-hc-ink focus:outline-none"
                     />
                   </div>
                 </div>
 
                 {breachResult && (
-                  <div className="p-3.5 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between text-xs">
+                  <div className="p-3.5 bg-hc-bg border border-hc-border rounded-xl flex items-center justify-between text-xs">
                     <div>
-                      <span className="text-slate-400">Peak Outflow ($Q_p$): </span>
-                      <strong className="text-cyan-400 text-sm font-mono">
+                      <span className="text-hc-textSecondary">Peak Outflow ($Q_p$): </span>
+                      <strong className="text-hc-active text-sm font-mono">
                         {breachResult.peak_discharge_m3s?.toLocaleString()} m³/s
                       </strong>
                     </div>
                     <div>
-                      <span className="text-slate-400">Formation Time ($t_f$): </span>
-                      <strong className="text-slate-200 font-mono">{breachResult.breach_formation_time_hrs || 1.85} hrs</strong>
+                      <span className="text-hc-textSecondary">Formation Time ($t_f$): </span>
+                      <strong className="text-hc-ink font-mono">{breachResult.breach_formation_time_hrs || 1.85} hrs</strong>
                     </div>
                     <div>
-                      <span className="text-slate-400">Breach Width ($B_{{avg}}$): </span>
-                      <strong className="text-slate-200 font-mono">{breachResult.avg_breach_width_m || 248.5} m</strong>
+                      <span className="text-hc-textSecondary">Breach Width ($B_{{avg}}$): </span>
+                      <strong className="text-hc-ink font-mono">{breachResult.avg_breach_width_m || 248.5} m</strong>
                     </div>
                   </div>
                 )}
@@ -676,42 +676,42 @@ export default function DataUploadWizard({
           {/* STEP 7: Exposure & Infrastructure Layers */}
           {currentStep === 7 && (
             <div className="space-y-4">
-              <div className="border border-slate-800 bg-slate-950/50 rounded-2xl p-4 space-y-3">
-                <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                  <Building className="w-4 h-4 text-cyan-400" />
+              <div className="border border-hc-border bg-hc-bg/50 rounded-2xl p-4 space-y-3">
+                <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                  <Building className="w-4 h-4 text-hc-active" />
                   Exposure Layers & Critical Infrastructure Catalog
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-hc-textSecondary">
                   Select geospatial datasets to overlay and intersect during flood wave routing.
                 </p>
 
                 <div className="space-y-2 text-xs">
-                  <label className="flex items-center gap-2 p-2.5 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer">
+                  <label className="flex items-center gap-2 p-2.5 bg-hc-surface border border-hc-border rounded-xl cursor-pointer">
                     <input
                       type="checkbox"
                       checked={formData.include_landuse}
                       onChange={(e) => handleInputChange('include_landuse', e.target.checked)}
                       className="rounded accent-cyan-500"
                     />
-                    <span className="text-slate-200">Land Cover / Crop Inundation Layer (Forest, Agriculture, Urban Built-up)</span>
+                    <span className="text-hc-ink">Land Cover / Crop Inundation Layer (Forest, Agriculture, Urban Built-up)</span>
                   </label>
-                  <label className="flex items-center gap-2 p-2.5 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer">
+                  <label className="flex items-center gap-2 p-2.5 bg-hc-surface border border-hc-border rounded-xl cursor-pointer">
                     <input
                       type="checkbox"
                       checked={formData.include_buildings}
                       onChange={(e) => handleInputChange('include_buildings', e.target.checked)}
                       className="rounded accent-cyan-500"
                     />
-                    <span className="text-slate-200">OSM Settlement & Building Footprints (Residential, Commercial, Religious)</span>
+                    <span className="text-hc-ink">OSM Settlement & Building Footprints (Residential, Commercial, Religious)</span>
                   </label>
-                  <label className="flex items-center gap-2 p-2.5 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer">
+                  <label className="flex items-center gap-2 p-2.5 bg-hc-surface border border-hc-border rounded-xl cursor-pointer">
                     <input
                       type="checkbox"
                       checked={formData.include_infrastructure}
                       onChange={(e) => handleInputChange('include_infrastructure', e.target.checked)}
                       className="rounded accent-cyan-500"
                     />
-                    <span className="text-slate-200">Critical Infrastructure (Bridges, Hospitals, Powerhouses, NH-58 Highway)</span>
+                    <span className="text-hc-ink">Critical Infrastructure (Bridges, Hospitals, Powerhouses, NH-58 Highway)</span>
                   </label>
                 </div>
               </div>
@@ -721,21 +721,21 @@ export default function DataUploadWizard({
           {/* STEP 8: Multi-Layer Physical & Spatial Validation */}
           {currentStep === 8 && (
             <div className="space-y-4">
-              <div className="border border-slate-800 bg-slate-950/50 rounded-2xl p-4 space-y-4">
+              <div className="border border-hc-border bg-hc-bg/50 rounded-2xl p-4 space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                      <ShieldCheck className="w-4 h-4 text-cyan-400" />
+                    <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-hc-active" />
                       Multi-Layer Physical & Spatial Consistency Validation
                     </h3>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-hc-textSecondary">
                       Evaluates hydrodynamic equations, structural dimensions, CRS alignments, and DEM integrity.
                     </p>
                   </div>
                   <button
                     onClick={runFullValidation}
                     disabled={isValidating}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/20 text-xs font-semibold"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-hc-active/10 text-hc-active border border-cyan-500/30 hover:bg-hc-active/20 text-xs font-semibold"
                   >
                     <RefreshCw className={`w-3.5 h-3.5 ${isValidating ? 'animate-spin' : ''}`} />
                     <span>{isValidating ? 'Checking...' : 'Re-verify'}</span>
@@ -744,42 +744,42 @@ export default function DataUploadWizard({
 
                 {/* Validation Status Cards */}
                 <div className="space-y-2">
-                  <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
+                  <div className="p-3 rounded-xl bg-hc-surface border border-hc-border flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <CheckCircle2 className="w-4 h-4 text-hc-success" />
                       <span>Dam Crest vs Base Foundation (Height &gt; 0 &amp; Crest MSL &gt; Bed MSL)</span>
                     </div>
-                    <span className="text-emerald-400 font-bold">PASSED</span>
+                    <span className="text-hc-success font-bold">PASSED</span>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
+                  <div className="p-3 rounded-xl bg-hc-surface border border-hc-border flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
                       {fieldErrors.hydraulic_head_m ? (
-                        <XCircle className="w-4 h-4 text-red-400" />
+                        <XCircle className="w-4 h-4 text-hc-critical" />
                       ) : (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                        <CheckCircle2 className="w-4 h-4 text-hc-success" />
                       )}
                       <span>Reservoir Head vs Crest Level (Head &le; Crest or Overtopping)</span>
                     </div>
-                    <span className={fieldErrors.hydraulic_head_m ? 'text-red-400 font-bold' : 'text-emerald-400 font-bold'}>
+                    <span className={fieldErrors.hydraulic_head_m ? 'text-hc-critical font-bold' : 'text-hc-success font-bold'}>
                       {fieldErrors.hydraulic_head_m ? 'FAILED' : 'PASSED'}
                     </span>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
+                  <div className="p-3 rounded-xl bg-hc-surface border border-hc-border flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <CheckCircle2 className="w-4 h-4 text-hc-success" />
                       <span>DEM Coordinate Reference System & Elevation Bounds</span>
                     </div>
-                    <span className="text-emerald-400 font-bold">EPSG:32644 (VALID)</span>
+                    <span className="text-hc-success font-bold">EPSG:32644 (VALID)</span>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
+                  <div className="p-3 rounded-xl bg-hc-surface border border-hc-border flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <CheckCircle2 className="w-4 h-4 text-hc-success" />
                       <span>River Flowpath & Catchment Spatial Intersection</span>
                     </div>
-                    <span className="text-emerald-400 font-bold">INTERSECTED</span>
+                    <span className="text-hc-success font-bold">INTERSECTED</span>
                   </div>
                 </div>
               </div>
@@ -789,9 +789,9 @@ export default function DataUploadWizard({
           {/* STEP 9: Solver Level */}
           {currentStep === 9 && (
             <div className="space-y-4">
-              <div className="border border-slate-800 bg-slate-950/50 rounded-2xl p-4 space-y-4">
-                <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                  <Cpu className="w-4 h-4 text-cyan-400" />
+              <div className="border border-hc-border bg-hc-bg/50 rounded-2xl p-4 space-y-4">
+                <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                  <Cpu className="w-4 h-4 text-hc-active" />
                   Select Simulation Physics Solver Tier
                 </h3>
 
@@ -834,15 +834,15 @@ export default function DataUploadWizard({
                         className={`p-4 rounded-xl border cursor-pointer transition ${
                           isSelected
                             ? 'bg-cyan-950/30 border-cyan-500 shadow-md shadow-cyan-500/10'
-                            : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+                            : 'bg-hc-surface border-hc-border hover:border-hc-border'
                         }`}
                       >
                         <div className="flex items-center justify-between mb-1">
-                          <h4 className="text-xs font-bold text-slate-100">{lvl.title}</h4>
-                          {isSelected && <CheckCircle2 className="w-4 h-4 text-cyan-400" />}
+                          <h4 className="text-xs font-bold text-hc-ink">{lvl.title}</h4>
+                          {isSelected && <CheckCircle2 className="w-4 h-4 text-hc-active" />}
                         </div>
-                        <p className="text-[11px] text-slate-400">{lvl.desc}</p>
-                        <span className="inline-block mt-2 text-[9px] font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300">
+                        <p className="text-[11px] text-hc-textSecondary">{lvl.desc}</p>
+                        <span className="inline-block mt-2 text-[9px] font-bold px-2 py-0.5 rounded bg-hc-secondary text-hc-textSecondary">
                           {lvl.tag}
                         </span>
                       </div>
@@ -856,34 +856,34 @@ export default function DataUploadWizard({
           {/* STEP 10: Review & Dispatch */}
           {currentStep === 10 && (
             <div className="space-y-4">
-              <div className="border border-slate-800 bg-slate-950/50 rounded-2xl p-4 space-y-4">
-                <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <div className="border border-hc-border bg-hc-bg/50 rounded-2xl p-4 space-y-4">
+                <h3 className="text-sm font-bold text-hc-ink flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-hc-success" />
                   Scenario Ready for Worker Job Submission
                 </h3>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                  <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                    <span className="text-slate-400 text-[11px]">Dam:</span>
-                    <p className="font-bold text-slate-200 truncate">{formData.dam_name}</p>
+                  <div className="p-3 bg-hc-surface rounded-xl border border-hc-border">
+                    <span className="text-hc-textSecondary text-[11px]">Dam:</span>
+                    <p className="font-bold text-hc-ink truncate">{formData.dam_name}</p>
                   </div>
-                  <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                    <span className="text-slate-400 text-[11px]">Peak Discharge ($Q_p$):</span>
-                    <p className="font-bold text-cyan-400 font-mono">
+                  <div className="p-3 bg-hc-surface rounded-xl border border-hc-border">
+                    <span className="text-hc-textSecondary text-[11px]">Peak Discharge ($Q_p$):</span>
+                    <p className="font-bold text-hc-active font-mono">
                       {breachResult?.peak_discharge_m3s ? `${breachResult.peak_discharge_m3s.toLocaleString()} m³/s` : '84,200 m³/s'}
                     </p>
                   </div>
-                  <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                    <span className="text-slate-400 text-[11px]">Reach Corridor:</span>
-                    <p className="font-bold text-slate-200">{formData.reach_length_km} km</p>
+                  <div className="p-3 bg-hc-surface rounded-xl border border-hc-border">
+                    <span className="text-hc-textSecondary text-[11px]">Reach Corridor:</span>
+                    <p className="font-bold text-hc-ink">{formData.reach_length_km} km</p>
                   </div>
-                  <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                    <span className="text-slate-400 text-[11px]">Solver Level:</span>
-                    <p className="font-bold text-emerald-400 uppercase">{formData.solver_type}</p>
+                  <div className="p-3 bg-hc-surface rounded-xl border border-hc-border">
+                    <span className="text-hc-textSecondary text-[11px]">Solver Level:</span>
+                    <p className="font-bold text-hc-success uppercase">{formData.solver_type}</p>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-hc-textSecondary">
                   Click <strong>Dispatch Simulation Job</strong> to send the scenario to the background worker. The job tracker will stream real-time logs and progress stages.
                 </p>
               </div>
@@ -892,11 +892,11 @@ export default function DataUploadWizard({
         </div>
 
         {/* Footer Navigation */}
-        <div className="px-6 py-4 border-t border-slate-800 flex items-center justify-between bg-slate-950/60">
+        <div className="px-6 py-4 border-t border-hc-border flex items-center justify-between bg-hc-bg/60">
           <button
             onClick={() => setCurrentStep((prev) => Math.max(1, prev - 1))}
             disabled={currentStep === 1}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 text-xs font-semibold disabled:opacity-30 disabled:cursor-not-allowed transition"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-secondary text-hc-textSecondary hover:bg-hc-border text-xs font-semibold disabled:opacity-30 disabled:cursor-not-allowed transition"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Previous</span>
@@ -911,7 +911,7 @@ export default function DataUploadWizard({
                   }
                   setCurrentStep((prev) => Math.min(10, prev + 1));
                 }}
-                className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition shadow-md shadow-cyan-500/20"
+                className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink text-xs font-bold transition shadow-md shadow-cyan-500/20"
               >
                 <span>Next Step</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -919,9 +919,9 @@ export default function DataUploadWizard({
             ) : (
               <button
                 onClick={handleExecute}
-                className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-400 hover:from-cyan-400 hover:to-emerald-300 text-slate-950 text-xs font-bold transition shadow-lg shadow-cyan-500/30"
+                className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-400 hover:from-cyan-400 hover:to-emerald-300 text-hc-ink text-xs font-bold transition shadow-lg shadow-cyan-500/30"
               >
-                <Play className="w-4 h-4 fill-slate-950" />
+                <Play className="w-4 h-4 fill-hc-ink" />
                 <span>Dispatch Simulation Job</span>
               </button>
             )}

@@ -1,0 +1,12 @@
+dataset: copernicus_dem_glo30
+source_url: https://spacedata.copernicus.eu/collections/copernicus-dem
+download_date: 2026-08-29
+license: Copernicus Open Access
+original_crs: EPSG:4326
+working_crs: EPSG:32644
+resolution_m: 30
+processing_steps:
+  - clip_to_tehri_domain
+  - fill_sinks
+  - derive_slope
+quality_notes: DEM-derived river bathymetry is approximate and requires thalweg deepening.

@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "floodlab"
@@ -27,6 +27,8 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "pyyaml>=6.0.0",
     "shapely>=2.0.0",
+    "rasterio>=1.3.0",
+    "reportlab>=4.0.0",
 ]
 
 [project.optional-dependencies]
@@ -40,7 +42,7 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["floodlab*"]
+include = ["floodlab*", "hydrobreach*"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

@@ -13,24 +13,24 @@ export default function MetricCard({
   className = '',
 }) {
   const accentTextColors = {
-    cyan: 'text-cyan-400',
-    emerald: 'text-emerald-400',
-    red: 'text-red-400',
+    cyan: 'text-hc-active',
+    emerald: 'text-hc-success',
+    red: 'text-hc-critical',
     amber: 'text-amber-400',
-    purple: 'text-purple-400',
-    slate: 'text-slate-100',
+    purple: 'text-hc-assumption',
+    slate: 'text-hc-ink',
   };
 
   return (
     <div
-      className={`bg-slate-900/70 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700/80 transition-all ${className}`}
+      className={`bg-hc-surface/70 border border-hc-border/80 rounded-2xl p-5 flex flex-col justify-between hover:border-hc-border/80 transition-all ${className}`}
     >
       <div className="flex items-center justify-between gap-2 mb-2">
-        <span className="text-xs font-medium text-slate-400 tracking-wide">{title}</span>
+        <span className="text-xs font-medium text-hc-textSecondary tracking-wide">{title}</span>
         <div className="flex items-center gap-1.5">
           {provenance && <ProvenanceBadge level={provenance} />}
           {Icon && (
-            <div className="w-7 h-7 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-400">
+            <div className="w-7 h-7 rounded-lg bg-hc-bg border border-hc-border flex items-center justify-center text-hc-textSecondary">
               <Icon className="w-3.5 h-3.5" />
             </div>
           )}
@@ -39,24 +39,24 @@ export default function MetricCard({
 
       <div className="my-1">
         <div className="flex items-baseline gap-1.5">
-          <span className={`text-2xl sm:text-3xl font-semibold tracking-tight ${accentTextColors[accentColor] || 'text-slate-100'}`}>
+          <span className={`text-2xl sm:text-3xl font-semibold tracking-tight ${accentTextColors[accentColor] || 'text-hc-ink'}`}>
             {value}
           </span>
-          {unit && <span className="text-xs font-mono text-slate-400">{unit}</span>}
+          {unit && <span className="text-xs font-mono text-hc-textSecondary">{unit}</span>}
         </div>
       </div>
 
       {(subtitle || trend) && (
-        <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/50 mt-2">
+        <div className="flex items-center justify-between text-[11px] text-hc-textSecondary pt-1 border-t border-hc-border/50 mt-2">
           <span>{subtitle}</span>
           {trend && (
             <span
               className={`font-mono font-medium ${
                 trend.direction === 'up'
-                  ? 'text-red-400'
+                  ? 'text-hc-critical'
                   : trend.direction === 'down'
-                  ? 'text-emerald-400'
-                  : 'text-slate-400'
+                  ? 'text-hc-success'
+                  : 'text-hc-textSecondary'
               }`}
             >
               {trend.label}

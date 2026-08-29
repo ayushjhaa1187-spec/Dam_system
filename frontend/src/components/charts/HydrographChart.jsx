@@ -47,18 +47,18 @@ export default function HydrographChart({
   const currentY = scaleY(currentQ);
 
   return (
-    <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between h-full">
+    <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-4 flex flex-col justify-between h-full">
       {/* Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
+      <div className="flex items-center justify-between pb-2 border-b border-hc-border/80">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-cyan-400" />
-          <span className="text-xs font-semibold text-slate-200 uppercase tracking-wide">
+          <TrendingUp className="w-4 h-4 text-hc-active" />
+          <span className="text-xs font-semibold text-hc-ink uppercase tracking-wide">
             Breach Outflow Q(t)
           </span>
         </div>
         <div className="flex items-center gap-2 text-[11px] font-mono">
-          <span className="text-slate-400">Peak:</span>
-          <span className="text-red-400 font-bold">{formatFinite(peakDischarge, 0)} m³/s</span>
+          <span className="text-hc-textSecondary">Peak:</span>
+          <span className="text-hc-critical font-bold">{formatFinite(peakDischarge, 0)} m³/s</span>
         </div>
       </div>
 
@@ -121,8 +121,8 @@ export default function HydrographChart({
       </div>
 
       {/* Bottom Live Metric */}
-      <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-[11px] font-mono">
-        <span className="text-slate-400">At T+{currentTimeHrs.toFixed(2)}h:</span>
+      <div className="flex items-center justify-between pt-2 border-t border-hc-border/80 text-[11px] font-mono">
+        <span className="text-hc-textSecondary">At T+{currentTimeHrs.toFixed(2)}h:</span>
         <span className="text-cyan-300 font-bold">{formatFinite(currentQ, 0)} m³/s</span>
       </div>
     </div>

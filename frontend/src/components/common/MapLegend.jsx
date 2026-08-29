@@ -9,9 +9,9 @@ export default function MapLegend({
 
   return (
     <div
-      className={`bg-slate-950/90 border border-slate-800/90 rounded-xl p-3.5 backdrop-blur-md text-xs shadow-lg space-y-2 ${className}`}
+      className={`bg-hc-bg/90 border border-hc-border/90 rounded-xl p-3.5 backdrop-blur-md text-xs shadow-lg space-y-2 ${className}`}
     >
-      <div className="font-semibold text-slate-300 text-[11px] uppercase tracking-wider">
+      <div className="font-semibold text-hc-textSecondary text-[11px] uppercase tracking-wider">
         {title}
       </div>
       <div className="space-y-1.5 font-mono text-[11px]">
@@ -19,13 +19,13 @@ export default function MapLegend({
           <div key={idx} className="flex items-center gap-2">
             {item.color ? (
               <span
-                className="w-3 h-3 rounded-xs shrink-0 border border-slate-700"
+                className="w-3 h-3 rounded-xs shrink-0 border border-hc-border"
                 style={{ backgroundColor: item.color }}
               />
             ) : item.icon ? (
               <span className="shrink-0">{item.icon}</span>
             ) : null}
-            <span className="text-slate-300 font-sans text-xs">{item.label}</span>
+            <span className="text-hc-textSecondary font-sans text-xs">{item.label}</span>
           </div>
         ))}
       </div>

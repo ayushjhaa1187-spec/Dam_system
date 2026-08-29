@@ -161,7 +161,7 @@ export default function GeospatialSimulationMap({
       const isDam = st.type === 'dam';
       const iconHtml = `
         <div class="flex items-center justify-center w-6 h-6 rounded-full border-2 ${
-          isDam ? 'bg-cyan-500 border-white shadow-cyan-500/50' : 'bg-slate-900 border-cyan-400'
+          isDam ? 'bg-hc-active border-white shadow-cyan-500/50' : 'bg-hc-surface border-cyan-400'
         } shadow-lg text-[10px] font-bold text-white">
           ${isDam ? '⚡' : '📍'}
         </div>
@@ -248,7 +248,7 @@ export default function GeospatialSimulationMap({
       if (layerVisibility.wavefront && currentCoordIdx > 0) {
         const [wLat, wLon] = RIVER_CORRIDOR_COORDS[currentCoordIdx];
         const wfIcon = L.divIcon({
-          html: `<div class="w-4 h-4 rounded-full bg-red-500 border-2 border-white animate-ping"></div>`,
+          html: `<div class="w-4 h-4 rounded-full bg-hc-critical border-2 border-white animate-ping"></div>`,
           className: 'wavefront-marker',
           iconSize: [16, 16],
           iconAnchor: [8, 8],
@@ -277,20 +277,20 @@ export default function GeospatialSimulationMap({
   }, [viewMode]);
 
   return (
-    <div className="relative w-full h-[580px] bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 flex flex-col">
+    <div className="relative w-full h-[580px] bg-hc-bg rounded-2xl overflow-hidden border border-hc-border flex flex-col">
       {/* 1. Map Leaflet Container */}
       <div ref={mapContainerRef} className="w-full flex-1 z-0 relative" />
 
       {/* 2. Top Header Overlays (Camera controls & Layers) */}
       <div className="absolute top-4 left-4 right-4 z-10 flex items-center justify-between pointer-events-none">
         {/* View Mode Toggle Buttons */}
-        <div className="flex items-center gap-1 bg-slate-950/90 backdrop-blur border border-slate-800 p-1 rounded-xl shadow-lg pointer-events-auto">
+        <div className="flex items-center gap-1 bg-hc-bg/90 backdrop-blur border border-hc-border p-1 rounded-xl shadow-lg pointer-events-auto">
           <button
             onClick={() => setViewMode('immediate')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               viewMode === 'immediate'
-                ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-hc-active text-hc-ink shadow-sm'
+                : 'text-hc-textSecondary hover:text-hc-ink'
             }`}
           >
             0–2 KM SPH
@@ -299,8 +299,8 @@ export default function GeospatialSimulationMap({
             onClick={() => setViewMode('corridor')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               viewMode === 'corridor'
-                ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-hc-active text-hc-ink shadow-sm'
+                : 'text-hc-textSecondary hover:text-hc-ink'
             }`}
           >
             100 KM CORRIDOR
@@ -309,8 +309,8 @@ export default function GeospatialSimulationMap({
             onClick={() => setViewMode('basin')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               viewMode === 'basin'
-                ? 'bg-cyan-500 text-slate-950 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-hc-active text-hc-ink shadow-sm'
+                : 'text-hc-textSecondary hover:text-hc-ink'
             }`}
           >
             FULL BASIN
@@ -320,16 +320,16 @@ export default function GeospatialSimulationMap({
         {/* Right Tools: North Arrow, Coordinates, Layers & Fullscreen */}
         <div className="flex items-center gap-2 pointer-events-auto">
           {/* North Arrow Widget */}
-          <div className="p-2 rounded-xl bg-slate-950/95 border border-slate-800 text-cyan-400 flex items-center justify-center shadow-lg" title="North Reference">
+          <div className="p-2 rounded-xl bg-hc-bg/95 border border-hc-border text-hc-active flex items-center justify-center shadow-lg" title="North Reference">
             <Navigation className="w-4 h-4 transform -rotate-45" />
           </div>
 
           {/* Real-time Coordinate Readout */}
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950/95 border border-slate-800 text-[11px] font-mono text-slate-300 shadow-lg">
-            <Globe className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-hc-bg/95 border border-hc-border text-[11px] font-mono text-hc-textSecondary shadow-lg">
+            <Globe className="w-3.5 h-3.5 text-hc-active" />
             <span>{cursorCoords.lat}°N, {cursorCoords.lon}°E</span>
-            <span className="text-slate-500">|</span>
-            <span className="text-emerald-400">{cursorCoords.elev}m MSL</span>
+            <span className="text-hc-textSecondary">|</span>
+            <span className="text-hc-success">{cursorCoords.elev}m MSL</span>
           </div>
 
           <button
@@ -337,7 +337,7 @@ export default function GeospatialSimulationMap({
             className={`px-3 py-1.5 rounded-xl border text-xs font-mono transition flex items-center gap-1.5 shadow-lg ${
               followWavefront
                 ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
-                : 'bg-slate-950/95 border-slate-800 text-slate-400 hover:text-slate-200'
+                : 'bg-hc-bg/95 border-hc-border text-hc-textSecondary hover:text-hc-ink'
             }`}
           >
             <Compass className="w-3.5 h-3.5" />
@@ -346,16 +346,16 @@ export default function GeospatialSimulationMap({
 
           <button
             onClick={() => setShowLayerDrawer(!showLayerDrawer)}
-            className="px-3 py-1.5 rounded-xl bg-slate-950/95 border border-slate-800 text-slate-300 hover:text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-lg"
+            className="px-3 py-1.5 rounded-xl bg-hc-bg/95 border border-hc-border text-hc-textSecondary hover:text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-lg"
           >
-            <Layers className="w-3.5 h-3.5 text-cyan-400" />
+            <Layers className="w-3.5 h-3.5 text-hc-active" />
             <span>Layers</span>
           </button>
 
           {onToggleFullScreen && (
             <button
               onClick={onToggleFullScreen}
-              className="p-2 rounded-xl bg-slate-950/95 border border-slate-800 text-slate-300 hover:text-white transition shadow-lg"
+              className="p-2 rounded-xl bg-hc-bg/95 border border-hc-border text-hc-textSecondary hover:text-white transition shadow-lg"
               title={isFullScreen ? 'Exit Fullscreen' : 'Enter Fullscreen Simulation Mode'}
             >
               {isFullScreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -366,10 +366,10 @@ export default function GeospatialSimulationMap({
 
       {/* Layer Control Dropdown Popover */}
       {showLayerDrawer && (
-        <div className="absolute top-16 right-4 z-20 bg-slate-950/95 backdrop-blur border border-slate-800 p-3.5 rounded-2xl shadow-2xl text-xs space-y-2.5 w-60 font-mono">
-          <div className="flex items-center justify-between pb-1.5 border-b border-slate-800 text-slate-300 font-bold">
+        <div className="absolute top-16 right-4 z-20 bg-hc-bg/95 backdrop-blur border border-hc-border p-3.5 rounded-2xl shadow-2xl text-xs space-y-2.5 w-60 font-mono">
+          <div className="flex items-center justify-between pb-1.5 border-b border-hc-border text-hc-textSecondary font-bold">
             <span>MAP LAYERS</span>
-            <button onClick={() => setShowLayerDrawer(false)} className="text-slate-400 hover:text-white">✕</button>
+            <button onClick={() => setShowLayerDrawer(false)} className="text-hc-textSecondary hover:text-white">✕</button>
           </div>
           {[
             { id: 'sph_nearfield', label: 'SPH Near-Field (0–2km)' },
@@ -378,7 +378,7 @@ export default function GeospatialSimulationMap({
             { id: 'wavefront', label: 'Advancing Wave Front' },
             { id: 'settlements', label: 'Settlements & Checkpoints' },
           ].map((l) => (
-            <label key={l.id} className="flex items-center justify-between cursor-pointer text-slate-300 hover:text-white">
+            <label key={l.id} className="flex items-center justify-between cursor-pointer text-hc-textSecondary hover:text-white">
               <span>{l.label}</span>
               <input
                 type="checkbox"
@@ -393,62 +393,62 @@ export default function GeospatialSimulationMap({
 
       {/* 3. Floating Bottom-Left: Map Legend Overlay & Attribution */}
       <div className="relative z-10 px-4 pb-3 pointer-events-none flex items-end justify-between">
-        <div className="pointer-events-auto inline-flex flex-col gap-1.5 bg-slate-950/90 backdrop-blur border border-slate-800 p-3 rounded-xl shadow-lg text-[11px] font-mono">
+        <div className="pointer-events-auto inline-flex flex-col gap-1.5 bg-hc-bg/90 backdrop-blur border border-hc-border p-3 rounded-xl shadow-lg text-[11px] font-mono">
           <div className="flex items-center justify-between gap-4">
-            <span className="text-slate-200 font-bold uppercase tracking-wider text-[10px]">
+            <span className="text-hc-ink font-bold uppercase tracking-wider text-[10px]">
               Inundation Depth & Velocity Legend
             </span>
-            <span className="text-[9px] text-slate-400">CRS: EPSG:4326</span>
+            <span className="text-[9px] text-hc-textSecondary">CRS: EPSG:4326</span>
           </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-1">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded bg-sky-400/80 inline-block" />
-              <span className="text-slate-300">0.5 – 3.0 m (Moderate)</span>
+              <span className="text-hc-textSecondary">0.5 – 3.0 m (Moderate)</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded bg-sky-800 inline-block" />
-              <span className="text-slate-300">&gt; 3.0 m (High Depth)</span>
+              <span className="text-hc-textSecondary">&gt; 3.0 m (High Depth)</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-hc-active inline-block" />
               <span className="text-cyan-300">SPH Domain (0–2km)</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-hc-critical inline-block" />
               <span className="text-red-300">Monitored Station</span>
             </div>
           </div>
         </div>
 
         {/* Cartographic Attribution Badge */}
-        <div className="pointer-events-auto hidden md:block bg-slate-950/90 backdrop-blur border border-slate-800 px-2.5 py-1 rounded-lg text-[10px] text-slate-400 font-mono">
+        <div className="pointer-events-auto hidden md:block bg-hc-bg/90 backdrop-blur border border-hc-border px-2.5 py-1 rounded-lg text-[10px] text-hc-textSecondary font-mono">
           DEM: Copernicus GLO-30 | Survey: THDC Tehri | Hydrology: CWC
         </div>
       </div>
 
       {/* 4. Bottom Scrubber & Playback Control Bar */}
-      <div className="relative z-10 bg-slate-950/95 backdrop-blur border-t border-slate-800/90 px-5 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div className="relative z-10 bg-hc-bg/95 backdrop-blur border-t border-hc-border/90 px-5 py-3.5 flex flex-wrap items-center justify-between gap-4">
         {/* Play/Pause & Reset */}
         <div className="flex items-center gap-2">
           <button
             onClick={onTogglePlay}
-            className="p-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition shadow-md shadow-cyan-500/20"
+            className="p-2.5 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold transition shadow-md shadow-cyan-500/20"
             title={isPlaying ? 'Pause Simulation' : 'Play Simulation'}
           >
-            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-slate-950" />}
+            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-hc-ink" />}
           </button>
           <button
             onClick={onReset}
-            className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 transition"
+            className="p-2.5 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary text-hc-textSecondary transition"
             title="Reset to T+0h"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
 
           {/* Time Display */}
-          <div className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-xl text-xs font-mono flex items-center gap-2">
-            <Clock className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="text-slate-300">
+          <div className="px-3 py-1.5 bg-hc-surface border border-hc-border rounded-xl text-xs font-mono flex items-center gap-2">
+            <Clock className="w-3.5 h-3.5 text-hc-active" />
+            <span className="text-hc-textSecondary">
               T+{formatMinutes(currentTimeMin)} ({(currentTimeMin / 60).toFixed(2)}h)
             </span>
           </div>
@@ -456,7 +456,7 @@ export default function GeospatialSimulationMap({
 
         {/* Scrubbing Slider (0h to 3h / 180 min) */}
         <div className="flex-1 min-w-[240px] flex items-center gap-3">
-          <span className="text-[11px] font-mono text-slate-400">0h</span>
+          <span className="text-[11px] font-mono text-hc-textSecondary">0h</span>
           <input
             type="range"
             min="0"
@@ -464,21 +464,21 @@ export default function GeospatialSimulationMap({
             step="1"
             value={currentTimeMin}
             onChange={(e) => onTimeChange(parseInt(e.target.value))}
-            className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+            className="w-full accent-cyan-400 h-1.5 bg-hc-secondary rounded-lg cursor-pointer"
           />
-          <span className="text-[11px] font-mono text-slate-400">3h</span>
+          <span className="text-[11px] font-mono text-hc-textSecondary">3h</span>
         </div>
 
         {/* Playback Speed Toggles */}
-        <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 p-1 rounded-xl text-xs font-mono">
+        <div className="flex items-center gap-1 bg-hc-surface border border-hc-border p-1 rounded-xl text-xs font-mono">
           {[1, 2, 4].map((speed) => (
             <button
               key={speed}
               onClick={() => onSpeedChange(speed)}
               className={`px-2.5 py-1 rounded-lg transition ${
                 playbackSpeed === speed
-                  ? 'bg-cyan-500 text-slate-950 font-bold'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-hc-active text-hc-ink font-bold'
+                  : 'text-hc-textSecondary hover:text-hc-ink'
               }`}
             >
               {speed}x

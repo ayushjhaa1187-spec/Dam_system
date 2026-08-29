@@ -8,10 +8,10 @@ export function createBasemapLayer(mapInstance) {
   const cartoKey = import.meta.env.VITE_CARTO_BASEMAP_KEY;
   const subdomains = 'abcd';
 
-  // 1. Primary: CartoDB Dark Matter (public free CDN or authenticated key)
+  // 1. Primary: CartoDB Positron (public free CDN or authenticated key)
   const cartoUrl = cartoKey
-    ? `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?api_key=${cartoKey}`
-    : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+    ? `https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?api_key=${cartoKey}`
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
 
   const primaryLayer = L.tileLayer(cartoUrl, {
     maxZoom: 19,

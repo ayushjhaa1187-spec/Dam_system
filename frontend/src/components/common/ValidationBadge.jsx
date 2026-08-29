@@ -25,8 +25,8 @@ export const VALIDATION_CONFIGS = {
   calibrated: {
     label: 'CALIBRATED BENCHMARK',
     shortLabel: 'CALIBRATED',
-    bg: 'bg-purple-500/10',
-    text: 'text-purple-400',
+    bg: 'bg-hc-assumption/10',
+    text: 'text-hc-assumption',
     border: 'border-purple-500/30',
     dot: 'bg-purple-400',
     icon: Microscope,
@@ -35,9 +35,9 @@ export const VALIDATION_CONFIGS = {
   validated: {
     label: 'VALIDATED OPERATIONAL',
     shortLabel: 'VALIDATED',
-    bg: 'bg-emerald-500/10',
-    text: 'text-emerald-400',
-    border: 'border-emerald-500/30',
+    bg: 'bg-hc-success/10',
+    text: 'text-hc-success',
+    border: 'border-hc-success/30',
     dot: 'bg-emerald-400',
     icon: CheckCircle2,
     description: 'Rigorous hydrodynamic simulation compliant with CWC / NDMA operational guidelines.',

@@ -21,12 +21,12 @@ export default function ArrivalTimelineChart({
   const sorted = [...stations].sort((a, b) => a.arrivalMin - b.arrivalMin);
 
   return (
-    <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between h-full">
+    <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-4 flex flex-col justify-between h-full">
       {/* Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
+      <div className="flex items-center justify-between pb-2 border-b border-hc-border/80">
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-cyan-400" />
-          <span className="text-xs font-semibold text-slate-200 uppercase tracking-wide">
+          <Clock className="w-4 h-4 text-hc-active" />
+          <span className="text-xs font-semibold text-hc-ink uppercase tracking-wide">
             Settlement Arrival Timeline
           </span>
         </div>
@@ -46,10 +46,10 @@ export default function ArrivalTimelineChart({
               key={i}
               className={`px-2.5 py-1.5 rounded-xl border flex items-center justify-between transition-colors ${
                 isFlooded
-                  ? 'bg-red-950/40 border-red-500/40 text-red-200'
+                  ? 'bg-red-950/40 border-hc-critical/40 text-red-200'
                   : isImminent
                   ? 'bg-amber-950/40 border-amber-500/40 text-amber-200 animate-pulse'
-                  : 'bg-slate-950/60 border-slate-800/80 text-slate-400'
+                  : 'bg-hc-bg/60 border-hc-border/80 text-hc-textSecondary'
               }`}
             >
               {/* Left: Time & Name */}
@@ -57,17 +57,17 @@ export default function ArrivalTimelineChart({
                 <span
                   className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
                     isFlooded
-                      ? 'bg-red-500/20 text-red-300'
+                      ? 'bg-hc-critical/20 text-red-300'
                       : isImminent
                       ? 'bg-amber-500/20 text-amber-300'
-                      : 'bg-slate-800 text-slate-400'
+                      : 'bg-hc-secondary text-hc-textSecondary'
                   }`}
                 >
                   T+{s.arrivalMin.toString().padStart(2, '0')}m
                 </span>
                 <span
                   className={`text-xs truncate ${
-                    isFlooded ? 'font-bold text-red-100' : isImminent ? 'font-semibold text-amber-100' : 'text-slate-300'
+                    isFlooded ? 'font-bold text-red-100' : isImminent ? 'font-semibold text-amber-100' : 'text-hc-textSecondary'
                   }`}
                 >
                   {s.name}
@@ -77,13 +77,13 @@ export default function ArrivalTimelineChart({
               {/* Right: Status Pill & Depth */}
               <div className="flex items-center gap-2 text-[10px] shrink-0">
                 {isFlooded ? (
-                  <span className="text-red-400 font-bold">INUNDATED ({s.depth}m)</span>
+                  <span className="text-hc-critical font-bold">INUNDATED ({s.depth}m)</span>
                 ) : isImminent ? (
                   <span className="text-amber-300 font-semibold">
                     +{s.arrivalMin - currentTimeMin}m margin
                   </span>
                 ) : (
-                  <span className="text-slate-400">Safe (+{s.arrivalMin - currentTimeMin}m)</span>
+                  <span className="text-hc-textSecondary">Safe (+{s.arrivalMin - currentTimeMin}m)</span>
                 )}
               </div>
             </div>
@@ -92,8 +92,8 @@ export default function ArrivalTimelineChart({
       </div>
 
       {/* Bottom Footer Status */}
-      <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-[11px] font-mono">
-        <span className="text-slate-400">Immediate Threat:</span>
+      <div className="flex items-center justify-between pt-2 border-t border-hc-border/80 text-[11px] font-mono">
+        <span className="text-hc-textSecondary">Immediate Threat:</span>
         <span className="text-amber-300 font-semibold">
           {sorted.find((s) => s.arrivalMin > currentTimeMin)?.name || 'All Tracked Stations Inundated'}
         </span>

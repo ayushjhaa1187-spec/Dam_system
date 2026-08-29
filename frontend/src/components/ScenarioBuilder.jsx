@@ -111,10 +111,10 @@ export default function ScenarioBuilder({
     }).join(' ');
 
     return (
-      <div className="relative bg-slate-950 p-3 rounded-lg border border-slate-800">
-        <div className="flex justify-between text-xs text-slate-400 mb-1">
-          <span>Peak Outflow: <strong className="text-cyan-400">{breachResult.peak_discharge_m3s?.toLocaleString()} m³/s</strong></span>
-          <span>Time to Peak: <strong className="text-cyan-400">{breachResult.time_to_peak_hrs} hrs</strong></span>
+      <div className="relative bg-hc-bg p-3 rounded-lg border border-hc-border">
+        <div className="flex justify-between text-xs text-hc-textSecondary mb-1">
+          <span>Peak Outflow: <strong className="text-hc-active">{breachResult.peak_discharge_m3s?.toLocaleString()} m³/s</strong></span>
+          <span>Time to Peak: <strong className="text-hc-active">{breachResult.time_to_peak_hrs} hrs</strong></span>
         </div>
         <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-32 overflow-visible">
           {/* Grid lines */}
@@ -146,7 +146,7 @@ export default function ScenarioBuilder({
             </linearGradient>
           </defs>
         </svg>
-        <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+        <div className="flex justify-between text-[10px] text-hc-textSecondary mt-1">
           <span>0 hrs</span>
           <span>Formation Time: {breachResult.breach_formation_time_hrs} hrs</span>
           <span>{maxTime.toFixed(1)} hrs</span>
@@ -161,11 +161,11 @@ export default function ScenarioBuilder({
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h2 className="text-lg font-bold text-slate-100 flex items-center space-x-2">
-              <Mountain className="w-5 h-5 text-cyan-400" />
+            <h2 className="text-lg font-bold text-hc-ink flex items-center space-x-2">
+              <Mountain className="w-5 h-5 text-hc-active" />
               <span>Indian Dam & River Reach Benchmarks</span>
             </h2>
-            <p className="text-xs text-slate-400">Select a real historical or hypothetical scenario or customize parameters below.</p>
+            <p className="text-xs text-hc-textSecondary">Select a real historical or hypothetical scenario or customize parameters below.</p>
           </div>
         </div>
 
@@ -180,29 +180,29 @@ export default function ScenarioBuilder({
                 onClick={() => preset?.id && onSelectPreset(preset.id)}
                 className={`cursor-pointer p-3.5 rounded-xl border transition-all relative overflow-hidden ${
                   isSelected
-                    ? 'bg-slate-900 border-cyan-500 ring-2 ring-cyan-500/20 shadow-lg shadow-cyan-950'
-                    : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
+                    ? 'bg-hc-surface border-cyan-500 ring-2 ring-cyan-500/20 shadow-lg shadow-cyan-950'
+                    : 'bg-hc-surface/60 border-hc-border hover:border-hc-border hover:bg-hc-surface'
                 }`}
               >
                 {isSelected && (
                   <div className="absolute top-2 right-2">
-                    <CheckCircle2 className="w-4 h-4 text-cyan-400" />
+                    <CheckCircle2 className="w-4 h-4 text-hc-active" />
                   </div>
                 )}
-                <div className="text-[11px] font-semibold text-cyan-400 uppercase tracking-wider mb-1">
+                <div className="text-[11px] font-semibold text-hc-active uppercase tracking-wider mb-1">
                   {preset?.state || 'Uttarakhand / Himalaya'}
                 </div>
-                <h3 className="text-sm font-bold text-slate-100 mb-1 leading-snug">
+                <h3 className="text-sm font-bold text-hc-ink mb-1 leading-snug">
                   {preset?.name || preset?.id || 'Tehri Dam'}
                 </h3>
-                <p className="text-xs text-slate-400 line-clamp-2 mb-2">
+                <p className="text-xs text-hc-textSecondary line-clamp-2 mb-2">
                   {preset?.description || 'Himalayan dam breach hydrodynamic benchmark'}
                 </p>
-                <div className="flex items-center space-x-2 text-[10px] text-slate-400">
-                  <span className="bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">
+                <div className="flex items-center space-x-2 text-[10px] text-hc-textSecondary">
+                  <span className="bg-hc-secondary px-1.5 py-0.5 rounded border border-hc-border">
                     Height: {height}m
                   </span>
-                  <span className="bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">
+                  <span className="bg-hc-secondary px-1.5 py-0.5 rounded border border-hc-border">
                     Vol: {volumeMm3} Mm³
                   </span>
                 </div>
@@ -215,29 +215,29 @@ export default function ScenarioBuilder({
       {/* Main Form & Configuration */}
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Dam Geometry & Reservoir */}
-        <div className="bg-slate-900/70 border border-slate-800 rounded-xl p-5 space-y-4">
-          <h3 className="text-sm font-bold text-slate-200 flex items-center space-x-2 pb-2 border-b border-slate-800">
-            <Sliders className="w-4 h-4 text-cyan-400" />
+        <div className="bg-hc-surface/70 border border-hc-border rounded-xl p-5 space-y-4">
+          <h3 className="text-sm font-bold text-hc-ink flex items-center space-x-2 pb-2 border-b border-hc-border">
+            <Sliders className="w-4 h-4 text-hc-active" />
             <span>Dam & Reservoir Parameters</span>
           </h3>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">Scenario / Dam Name</label>
+            <label className="block text-xs font-medium text-hc-textSecondary mb-1">Scenario / Dam Name</label>
             <input
               type="text"
               value={formData.dam_name}
               onChange={(e) => handleInputChange('dam_name', e.target.value)}
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:border-cyan-500 focus:outline-none"
+              className="w-full bg-hc-bg border border-hc-border rounded-lg px-3 py-1.5 text-xs text-hc-ink focus:border-cyan-500 focus:outline-none"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Dam Structure Type</label>
+              <label className="block text-xs font-medium text-hc-textSecondary mb-1">Dam Structure Type</label>
               <select
                 value={formData.dam_type}
                 onChange={(e) => handleInputChange('dam_type', e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:border-cyan-500 focus:outline-none"
+                className="w-full bg-hc-bg border border-hc-border rounded-lg px-2.5 py-1.5 text-xs text-hc-ink focus:border-cyan-500 focus:outline-none"
               >
                 <option value="earthen">Earthen Embankment</option>
                 <option value="rockfill">Rockfill Dam</option>
@@ -248,11 +248,11 @@ export default function ScenarioBuilder({
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Breach Mode</label>
+              <label className="block text-xs font-medium text-hc-textSecondary mb-1">Breach Mode</label>
               <select
                 value={formData.breach_mode}
                 onChange={(e) => handleInputChange('breach_mode', e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:border-cyan-500 focus:outline-none"
+                className="w-full bg-hc-bg border border-hc-border rounded-lg px-2.5 py-1.5 text-xs text-hc-ink focus:border-cyan-500 focus:outline-none"
               >
                 <option value="overtopping">Overtopping Failure</option>
                 <option value="piping">Internal Piping Erosion</option>
@@ -264,76 +264,76 @@ export default function ScenarioBuilder({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Dam Height (m)</label>
+              <label className="block text-xs font-medium text-hc-textSecondary mb-1">Dam Height (m)</label>
               <input
                 type="number"
                 step="0.5"
                 value={formData.dam_height_m}
                 onChange={(e) => handleInputChange('dam_height_m', parseFloat(e.target.value))}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:border-cyan-500 focus:outline-none"
+                className="w-full bg-hc-bg border border-hc-border rounded-lg px-3 py-1.5 text-xs text-hc-ink focus:border-cyan-500 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Hydraulic Head (m)</label>
+              <label className="block text-xs font-medium text-hc-textSecondary mb-1">Hydraulic Head (m)</label>
               <input
                 type="number"
                 step="0.5"
                 value={formData.hydraulic_head_m}
                 onChange={(e) => handleInputChange('hydraulic_head_m', parseFloat(e.target.value))}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:border-cyan-500 focus:outline-none"
+                className="w-full bg-hc-bg border border-hc-border rounded-lg px-3 py-1.5 text-xs text-hc-ink focus:border-cyan-500 focus:outline-none"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Reservoir Storage (m³)</label>
+              <label className="block text-xs font-medium text-hc-textSecondary mb-1">Reservoir Storage (m³)</label>
               <input
                 type="number"
                 step="100000"
                 value={formData.reservoir_volume_m3}
                 onChange={(e) => handleInputChange('reservoir_volume_m3', parseFloat(e.target.value))}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:border-cyan-500 focus:outline-none"
+                className="w-full bg-hc-bg border border-hc-border rounded-lg px-3 py-1.5 text-xs text-hc-ink focus:border-cyan-500 focus:outline-none"
               />
-              <span className="text-[10px] text-slate-500">{(formData.reservoir_volume_m3 / 1e6).toFixed(2)} Million m³</span>
+              <span className="text-[10px] text-hc-textSecondary">{(formData.reservoir_volume_m3 / 1e6).toFixed(2)} Million m³</span>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Crest Length (m)</label>
+              <label className="block text-xs font-medium text-hc-textSecondary mb-1">Crest Length (m)</label>
               <input
                 type="number"
                 step="10"
                 value={formData.crest_length_m}
                 onChange={(e) => handleInputChange('crest_length_m', parseFloat(e.target.value))}
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:border-cyan-500 focus:outline-none"
+                className="w-full bg-hc-bg border border-hc-border rounded-lg px-3 py-1.5 text-xs text-hc-ink focus:border-cyan-500 focus:outline-none"
               />
             </div>
           </div>
 
           {/* Valley / River Reach Settings */}
-          <div className="pt-2 border-t border-slate-800 space-y-3">
-            <h4 className="text-xs font-bold text-slate-300">Downstream Reach Setup</h4>
+          <div className="pt-2 border-t border-hc-border space-y-3">
+            <h4 className="text-xs font-bold text-hc-textSecondary">Downstream Reach Setup</h4>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs text-slate-400 mb-1">Reach Length (km)</label>
+                <label className="block text-xs text-hc-textSecondary mb-1">Reach Length (km)</label>
                 <input
                   type="number"
                   step="1"
                   value={formData.reach_length_km}
                   onChange={(e) => handleInputChange('reach_length_km', parseFloat(e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:border-cyan-500 focus:outline-none"
+                  className="w-full bg-hc-bg border border-hc-border rounded-lg px-3 py-1.5 text-xs text-hc-ink focus:border-cyan-500 focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-xs text-slate-400 mb-1">Bed Slope (m/m)</label>
+                <label className="block text-xs text-hc-textSecondary mb-1">Bed Slope (m/m)</label>
                 <input
                   type="number"
                   step="0.001"
                   value={formData.bed_slope}
                   onChange={(e) => handleInputChange('bed_slope', parseFloat(e.target.value))}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 focus:border-cyan-500 focus:outline-none"
+                  className="w-full bg-hc-bg border border-hc-border rounded-lg px-3 py-1.5 text-xs text-hc-ink focus:border-cyan-500 focus:outline-none"
                 />
               </div>
             </div>
@@ -341,23 +341,23 @@ export default function ScenarioBuilder({
         </div>
 
         {/* Middle Column: Empirical Breach Mechanics & Hydrograph */}
-        <div className="bg-slate-900/70 border border-slate-800 rounded-xl p-5 space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <h3 className="text-sm font-bold text-slate-200 flex items-center space-x-2">
-              <Gauge className="w-4 h-4 text-cyan-400" />
+        <div className="bg-hc-surface/70 border border-hc-border rounded-xl p-5 space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-hc-border">
+            <h3 className="text-sm font-bold text-hc-ink flex items-center space-x-2">
+              <Gauge className="w-4 h-4 text-hc-active" />
               <span>Breach Mechanics & Outflow</span>
             </h3>
-            <span className="text-[11px] text-cyan-400 font-mono">
+            <span className="text-[11px] text-hc-active font-mono">
               {breachResult?.model_used || 'Computing...'}
             </span>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">Breach Model Formulation</label>
+            <label className="block text-xs font-medium text-hc-textSecondary mb-1">Breach Model Formulation</label>
             <select
               value={formData.breach_model}
               onChange={(e) => handleInputChange('breach_model', e.target.value)}
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:border-cyan-500 focus:outline-none"
+              className="w-full bg-hc-bg border border-hc-border rounded-lg px-2.5 py-1.5 text-xs text-hc-ink focus:border-cyan-500 focus:outline-none"
             >
               <option value="auto">Auto Select (Recommended)</option>
               <option value="froehlich">Froehlich (2008)</option>
@@ -371,37 +371,37 @@ export default function ScenarioBuilder({
           {/* Breach Metrics Grid */}
           {breachResult && (
             <div className="grid grid-cols-2 gap-2">
-              <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
-                <span className="text-[10px] text-slate-400 block">Avg Breach Width</span>
-                <span className="text-sm font-bold text-slate-100">{breachResult.avg_breach_width_m} m</span>
+              <div className="bg-hc-bg p-2.5 rounded-lg border border-hc-border">
+                <span className="text-[10px] text-hc-textSecondary block">Avg Breach Width</span>
+                <span className="text-sm font-bold text-hc-ink">{breachResult.avg_breach_width_m} m</span>
               </div>
-              <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
-                <span className="text-[10px] text-slate-400 block">Formation Time</span>
-                <span className="text-sm font-bold text-slate-100">{breachResult.breach_formation_time_hrs} hrs</span>
+              <div className="bg-hc-bg p-2.5 rounded-lg border border-hc-border">
+                <span className="text-[10px] text-hc-textSecondary block">Formation Time</span>
+                <span className="text-sm font-bold text-hc-ink">{breachResult.breach_formation_time_hrs} hrs</span>
               </div>
-              <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
-                <span className="text-[10px] text-slate-400 block">Peak Discharge (Qp)</span>
-                <span className="text-sm font-bold text-cyan-400">{breachResult.peak_discharge_m3s?.toLocaleString()} m³/s</span>
+              <div className="bg-hc-bg p-2.5 rounded-lg border border-hc-border">
+                <span className="text-[10px] text-hc-textSecondary block">Peak Discharge (Qp)</span>
+                <span className="text-sm font-bold text-hc-active">{breachResult.peak_discharge_m3s?.toLocaleString()} m³/s</span>
               </div>
-              <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
-                <span className="text-[10px] text-slate-400 block">Side Slope (z:1)</span>
-                <span className="text-sm font-bold text-slate-100">{breachResult.side_slope_z} : 1</span>
+              <div className="bg-hc-bg p-2.5 rounded-lg border border-hc-border">
+                <span className="text-[10px] text-hc-textSecondary block">Side Slope (z:1)</span>
+                <span className="text-sm font-bold text-hc-ink">{breachResult.side_slope_z} : 1</span>
               </div>
             </div>
           )}
 
           {/* Hydrograph Chart */}
           <div>
-            <span className="text-xs font-semibold text-slate-300 block mb-1">Synthesized Inflow Hydrograph</span>
+            <span className="text-xs font-semibold text-hc-textSecondary block mb-1">Synthesized Inflow Hydrograph</span>
             {renderHydrographSVG()}
           </div>
         </div>
 
         {/* Right Column: Hydrodynamic Engine Selection & Launch */}
-        <div className="bg-slate-900/70 border border-slate-800 rounded-xl p-5 flex flex-col justify-between space-y-4">
+        <div className="bg-hc-surface/70 border border-hc-border rounded-xl p-5 flex flex-col justify-between space-y-4">
           <div className="space-y-4">
-            <h3 className="text-sm font-bold text-slate-200 flex items-center space-x-2 pb-2 border-b border-slate-800">
-              <Cpu className="w-4 h-4 text-cyan-400" />
+            <h3 className="text-sm font-bold text-hc-ink flex items-center space-x-2 pb-2 border-b border-hc-border">
+              <Cpu className="w-4 h-4 text-hc-active" />
               <span>Simulation Engine Mode</span>
             </h3>
 
@@ -412,19 +412,19 @@ export default function ScenarioBuilder({
                 className={`cursor-pointer p-3 rounded-xl border transition-all ${
                   formData.solver_type === 'coupled'
                     ? 'bg-purple-950/40 border-purple-500 ring-1 ring-purple-500/30'
-                    : 'bg-slate-950 border-slate-800 hover:border-slate-700'
+                    : 'bg-hc-bg border-hc-border hover:border-hc-border'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-bold text-purple-300 flex items-center space-x-1.5">
-                    <Zap className="w-3.5 h-3.5 text-purple-400" />
+                    <Zap className="w-3.5 h-3.5 text-hc-assumption" />
                     <span>SPH → Delft3D Coupled Solver</span>
                   </span>
                   <span className="text-[10px] bg-purple-900/60 text-purple-300 px-1.5 py-0.5 rounded">
                     Coupled Hydrograph
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-hc-textSecondary">
                   SPH resolves violent near-field breach hydraulics (0–2 km), extracting Q(t) at coupling boundary to feed directly into Delft3D FM far-field propagation.
                 </p>
               </div>
@@ -435,7 +435,7 @@ export default function ScenarioBuilder({
                 className={`cursor-pointer p-3 rounded-xl border transition-all ${
                   formData.solver_type === 'dual'
                     ? 'bg-cyan-950/40 border-cyan-500 ring-1 ring-cyan-500/30'
-                    : 'bg-slate-950 border-slate-800 hover:border-slate-700'
+                    : 'bg-hc-bg border-hc-border hover:border-hc-border'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
@@ -447,7 +447,7 @@ export default function ScenarioBuilder({
                     SPH + Delft3D
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-hc-textSecondary">
                   Executes both particle WCSPH and flexible mesh 2D SWE solvers concurrently to generate CSI co-registration and difference heatmaps.
                 </p>
               </div>
@@ -458,14 +458,14 @@ export default function ScenarioBuilder({
                 className={`cursor-pointer p-3 rounded-xl border transition-all ${
                   formData.solver_type === 'sph'
                     ? 'bg-cyan-950/40 border-cyan-500 ring-1 ring-cyan-500/30'
-                    : 'bg-slate-950 border-slate-800 hover:border-slate-700'
+                    : 'bg-hc-bg border-hc-border hover:border-hc-border'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-bold text-slate-200">Smoothed Particle Hydrodynamics (SPH)</span>
-                  <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">Lagrangian</span>
+                  <span className="text-xs font-bold text-hc-ink">Smoothed Particle Hydrodynamics (SPH)</span>
+                  <span className="text-[10px] bg-hc-secondary text-hc-textSecondary px-1.5 py-0.5 rounded">Lagrangian</span>
                 </div>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-hc-textSecondary">
                   Mesh-free WCSPH for high-velocity surge fronts, steep Himalayan debris avalanches, and shockwaves.
                 </p>
               </div>
@@ -476,14 +476,14 @@ export default function ScenarioBuilder({
                 className={`cursor-pointer p-3 rounded-xl border transition-all ${
                   formData.solver_type === 'delft3d'
                     ? 'bg-cyan-950/40 border-cyan-500 ring-1 ring-cyan-500/30'
-                    : 'bg-slate-950 border-slate-800 hover:border-slate-700'
+                    : 'bg-hc-bg border-hc-border hover:border-hc-border'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-bold text-slate-200">Delft3D Flexible Mesh / 2D SWE</span>
-                  <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">Eulerian Mesh</span>
+                  <span className="text-xs font-bold text-hc-ink">Delft3D Flexible Mesh / 2D SWE</span>
+                  <span className="text-[10px] bg-hc-secondary text-hc-textSecondary px-1.5 py-0.5 rounded">Eulerian Mesh</span>
                 </div>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-hc-textSecondary">
                   Conservative Finite Volume Shallow Water Equations with wet/dry front tracking and Manning roughness.
                 </p>
               </div>
@@ -491,17 +491,17 @@ export default function ScenarioBuilder({
           </div>
 
           {/* Launch Button */}
-          <div className="pt-4 border-t border-slate-800">
+          <div className="pt-4 border-t border-hc-border">
             <button
               type="submit"
               disabled={isSimulating}
               className={`w-full py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-lg transition-all ${
                 isSimulating
-                  ? 'bg-slate-800 text-slate-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 glow-cyan'
+                  ? 'bg-hc-secondary text-hc-textSecondary cursor-not-allowed'
+                  : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-hc-ink glow-cyan'
               }`}
             >
-              <Play className={`w-4 h-4 ${isSimulating ? 'animate-spin' : 'fill-slate-950'}`} />
+              <Play className={`w-4 h-4 ${isSimulating ? 'animate-spin' : 'fill-hc-ink'}`} />
               <span>{isSimulating ? 'Running Hydrodynamic Physics...' : 'Launch Simulation Run'}</span>
             </button>
           </div>

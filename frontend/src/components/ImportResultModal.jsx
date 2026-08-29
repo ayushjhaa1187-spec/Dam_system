@@ -122,26 +122,26 @@ export default function ImportResultModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-hc-bg/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="bg-hc-surface border border-hc-border rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+        <div className="px-6 py-4 border-b border-hc-border flex items-center justify-between bg-hc-bg/60">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+            <div className="p-2 rounded-xl bg-hc-success/10 border border-hc-success/30 text-hc-success">
               <Upload className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-100">
+              <h2 className="text-sm font-bold text-hc-ink">
                 Import Hydrodynamic Simulation Result (GeoTIFF / NetCDF / Shapefile)
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-hc-textSecondary mt-0.5">
                 Ingest pre-computed hydraulic model outputs with scientific metadata &amp; spatial referencing.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition"
+            className="p-1.5 rounded-lg text-hc-textSecondary hover:text-hc-ink hover:bg-hc-secondary transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -151,7 +151,7 @@ export default function ImportResultModal({
         <div className="flex-1 overflow-y-auto p-6 space-y-5">
           {/* File Selection / Upload Area */}
           <div className="space-y-3">
-            <label className="text-xs font-bold text-slate-200 block">
+            <label className="text-xs font-bold text-hc-ink block">
               1. Select Pre-Computed Scientific Dataset or Upload External File
             </label>
 
@@ -165,21 +165,21 @@ export default function ImportResultModal({
                     className={`p-3 rounded-xl text-left border transition flex flex-col justify-between ${
                       isSelected
                         ? 'bg-cyan-950/50 border-cyan-500/80 shadow-md shadow-cyan-500/10'
-                        : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
+                        : 'bg-hc-bg/60 border-hc-border hover:border-hc-border'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono text-cyan-400 font-bold">{b.format}</span>
-                        <span className="text-[10px] font-mono text-slate-500">{b.fileSize}</span>
+                        <span className="text-[10px] font-mono text-hc-active font-bold">{b.format}</span>
+                        <span className="text-[10px] font-mono text-hc-textSecondary">{b.fileSize}</span>
                       </div>
-                      <span className="text-xs font-bold text-slate-200 block mt-1 leading-snug line-clamp-2">
+                      <span className="text-xs font-bold text-hc-ink block mt-1 leading-snug line-clamp-2">
                         {b.name}
                       </span>
                     </div>
                     <div className="mt-3 flex items-center justify-between">
                       <ValidationBadge status={b.validationStatus} compact showIcon={false} />
-                      <span className="text-[10px] font-mono text-slate-400">{b.demResolution}m</span>
+                      <span className="text-[10px] font-mono text-hc-textSecondary">{b.demResolution}m</span>
                     </div>
                   </button>
                 );
@@ -188,7 +188,7 @@ export default function ImportResultModal({
 
             {/* Drag and drop upload box */}
             <div className={`mt-2 border-2 border-dashed rounded-xl p-4 text-center transition ${
-              isCustomUpload ? 'border-cyan-500 bg-cyan-950/20' : 'border-slate-800 hover:border-slate-700 bg-slate-950/30'
+              isCustomUpload ? 'border-cyan-500 bg-cyan-950/20' : 'border-hc-border hover:border-hc-border bg-hc-bg/30'
             }`}>
               <input
                 type="file"
@@ -201,11 +201,11 @@ export default function ImportResultModal({
                 htmlFor="hydro-file-upload"
                 className="cursor-pointer flex flex-col items-center justify-center gap-1.5"
               >
-                <Upload className="w-5 h-5 text-cyan-400" />
-                <span className="text-xs font-bold text-slate-200">
+                <Upload className="w-5 h-5 text-hc-active" />
+                <span className="text-xs font-bold text-hc-ink">
                   {isCustomUpload ? `Selected: ${formData.fileName}` : 'Or click to upload custom GeoTIFF / NetCDF / Shapefile (.zip)'}
                 </span>
-                <span className="text-[11px] text-slate-400">
+                <span className="text-[11px] text-hc-textSecondary">
                   Supports EPSG:4326 / UTM GeoTIFFs, Delft3D NetCDF maps, and zipped ESRI Shapefiles
                 </span>
               </label>
@@ -213,10 +213,10 @@ export default function ImportResultModal({
           </div>
 
           {/* Scientific Metadata Verification */}
-          <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-4">
+          <div className="p-4 rounded-xl bg-hc-bg/80 border border-hc-border space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold text-slate-200 flex items-center gap-2">
-                <Database className="w-4 h-4 text-cyan-400" />
+              <label className="text-xs font-bold text-hc-ink flex items-center gap-2">
+                <Database className="w-4 h-4 text-hc-active" />
                 <span>2. Dataset Provenance &amp; Discretization Metadata</span>
               </label>
               <ValidationBadge status={formData.validationStatus} />
@@ -224,43 +224,43 @@ export default function ImportResultModal({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div>
-                <label className="text-[11px] text-slate-400 block mb-1">Authoritative Model / Engine Name</label>
+                <label className="text-[11px] text-hc-textSecondary block mb-1">Authoritative Model / Engine Name</label>
                 <input
                   type="text"
                   value={formData.modelName}
                   onChange={(e) => setFormData({ ...formData, modelName: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 font-medium focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-hc-ink font-medium focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] text-slate-400 block mb-1">DEM Topography Source</label>
+                <label className="text-[11px] text-hc-textSecondary block mb-1">DEM Topography Source</label>
                 <input
                   type="text"
                   value={formData.demSource}
                   onChange={(e) => setFormData({ ...formData, demSource: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 font-medium focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-hc-ink font-medium focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] text-slate-400 block mb-1">DEM Grid Resolution (meters)</label>
+                <label className="text-[11px] text-hc-textSecondary block mb-1">DEM Grid Resolution (meters)</label>
                 <input
                   type="number"
                   step="1"
                   value={formData.demResolution}
                   onChange={(e) => setFormData({ ...formData, demResolution: parseFloat(e.target.value) || 30.0 })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 font-mono text-cyan-400 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-hc-ink font-mono text-hc-active focus:outline-none focus:border-cyan-500"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] text-slate-400 block mb-1">Hydrological Calibration Source</label>
+                <label className="text-[11px] text-hc-textSecondary block mb-1">Hydrological Calibration Source</label>
                 <input
                   type="text"
                   value={formData.hydrologySource}
                   onChange={(e) => setFormData({ ...formData, hydrologySource: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 font-medium focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-hc-surface border border-hc-border rounded-xl px-3 py-2 text-hc-ink font-medium focus:outline-none focus:border-cyan-500"
                 />
               </div>
             </div>
@@ -268,19 +268,19 @@ export default function ImportResultModal({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-slate-800 flex items-center justify-between bg-slate-950/80">
+        <div className="px-6 py-4 border-t border-hc-border flex items-center justify-between bg-hc-bg/80">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition"
+            className="px-4 py-2 rounded-xl bg-hc-secondary hover:bg-hc-border text-xs font-semibold text-hc-textSecondary transition"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs flex items-center gap-2 transition disabled:opacity-50"
+            className="px-5 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs flex items-center gap-2 transition disabled:opacity-50"
           >
-            <Play className="w-3.5 h-3.5 fill-slate-950" />
+            <Play className="w-3.5 h-3.5 fill-hc-ink" />
             <span>{isSubmitting ? 'Ingesting Dataset...' : 'Ingest & Render Imported Simulation'}</span>
           </button>
         </div>

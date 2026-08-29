@@ -54,14 +54,14 @@ export default function DamOperations({
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowTechDetails(!showTechDetails)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-xs font-semibold text-slate-200 transition"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary text-xs font-semibold text-hc-ink transition"
             >
-              <FileText className="w-3.5 h-3.5 text-cyan-400" />
+              <FileText className="w-3.5 h-3.5 text-hc-active" />
               <span>{showTechDetails ? 'Hide Technical Details' : 'View Technical Details'}</span>
             </button>
             <button
               onClick={onOpenScenarioDrawer}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition shadow-md shadow-cyan-500/20"
             >
               <Sliders className="w-3.5 h-3.5" />
               <span>Configure Scenario</span>
@@ -118,21 +118,21 @@ export default function DamOperations({
           icon={FileText}
         >
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
-            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">Crest Elevation</span>
-              <span className="text-slate-100 font-bold">839.5 m MSL</span>
+            <div className="p-3 rounded-xl bg-hc-bg border border-hc-border">
+              <span className="text-hc-textSecondary block text-[10px]">Crest Elevation</span>
+              <span className="text-hc-ink font-bold">839.5 m MSL</span>
             </div>
-            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">Crest Length</span>
-              <span className="text-slate-100 font-bold">{crestLength} m</span>
+            <div className="p-3 rounded-xl bg-hc-bg border border-hc-border">
+              <span className="text-hc-textSecondary block text-[10px]">Crest Length</span>
+              <span className="text-hc-ink font-bold">{crestLength} m</span>
             </div>
-            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">River Bed MSL</span>
-              <span className="text-slate-100 font-bold">570.0 m MSL</span>
+            <div className="p-3 rounded-xl bg-hc-bg border border-hc-border">
+              <span className="text-hc-textSecondary block text-[10px]">River Bed MSL</span>
+              <span className="text-hc-ink font-bold">570.0 m MSL</span>
             </div>
-            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-              <span className="text-slate-400 block text-[10px]">Hydropower Capacity</span>
-              <span className="text-cyan-400 font-bold">2,400 MW</span>
+            <div className="p-3 rounded-xl bg-hc-bg border border-hc-border">
+              <span className="text-hc-textSecondary block text-[10px]">Hydropower Capacity</span>
+              <span className="text-hc-active font-bold">2,400 MW</span>
             </div>
           </div>
         </Panel>
@@ -148,7 +148,7 @@ export default function DamOperations({
             icon={Layers}
             noPadding
           >
-            <div className="relative w-full h-80 bg-slate-950 p-4 flex flex-col justify-between overflow-hidden">
+            <div className="relative w-full h-80 bg-hc-bg p-4 flex flex-col justify-between overflow-hidden">
               <svg viewBox="0 0 700 260" className="w-full h-full">
                 {/* Reservoir Water Body */}
                 <polygon points="20,70 240,70 240,210 20,210" fill="#0284c7" fillOpacity="0.3" />
@@ -176,7 +176,7 @@ export default function DamOperations({
                 </text>
               </svg>
 
-              <div className="flex items-center justify-between text-xs font-mono text-slate-400 border-t border-slate-900 pt-2">
+              <div className="flex items-center justify-between text-xs font-mono text-hc-textSecondary border-t border-hc-border pt-2">
                 <span>Core: Impervious Clay</span>
                 <span>Shell: Compacted Rockfill</span>
                 <span>Foundation: Bedrock</span>

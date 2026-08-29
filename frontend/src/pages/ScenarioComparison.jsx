@@ -43,9 +43,9 @@ export default function ScenarioComparison({
             <button
               onClick={onRunSimulation}
               disabled={isSimulating}
-              className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition flex items-center gap-2"
             >
-              <Play className="w-3.5 h-3.5 fill-slate-950" />
+              <Play className="w-3.5 h-3.5 fill-hc-ink" />
               <span>Run Simulation &amp; Compare</span>
             </button>
           }
@@ -117,7 +117,7 @@ export default function ScenarioComparison({
           icon={Layers}
           noPadding
         >
-          <div className="relative w-full h-64 bg-slate-950 p-4 flex flex-col justify-between overflow-hidden">
+          <div className="relative w-full h-64 bg-hc-bg p-4 flex flex-col justify-between overflow-hidden">
             <svg viewBox="0 0 400 180" className="w-full h-full">
               <path d="M 10,40 Q 200,45 390,40" stroke="#334155" strokeWidth="2" fill="none" />
               <path d="M 10,140 Q 200,135 390,140" stroke="#334155" strokeWidth="2" fill="none" />
@@ -138,8 +138,8 @@ export default function ScenarioComparison({
                 Transect (x = 2.0 km)
               </text>
             </svg>
-            <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 border-t border-slate-900 pt-2">
-              <span className="text-cyan-400">Lagrangian Fluid Particles</span>
+            <div className="flex items-center justify-between text-[11px] font-mono text-hc-textSecondary border-t border-hc-border pt-2">
+              <span className="text-hc-active">Lagrangian Fluid Particles</span>
               <span>Near-Field Dam Axis</span>
             </div>
           </div>
@@ -152,7 +152,7 @@ export default function ScenarioComparison({
           icon={Activity}
           noPadding
         >
-          <div className="relative w-full h-64 bg-slate-950 p-4 flex flex-col justify-between overflow-hidden">
+          <div className="relative w-full h-64 bg-hc-bg p-4 flex flex-col justify-between overflow-hidden">
             <svg viewBox="0 0 400 180" className="w-full h-full">
               <path d="M 10,40 Q 200,45 390,40" stroke="#334155" strokeWidth="2" fill="none" />
               <path d="M 10,140 Q 200,135 390,140" stroke="#334155" strokeWidth="2" fill="none" />
@@ -168,8 +168,8 @@ export default function ScenarioComparison({
                 Inflow Boundary (.ext)
               </text>
             </svg>
-            <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 border-t border-slate-900 pt-2">
-              <span className="text-emerald-400">Eulerian D-Flow FM Mesh</span>
+            <div className="flex items-center justify-between text-[11px] font-mono text-hc-textSecondary border-t border-hc-border pt-2">
+              <span className="text-hc-success">Eulerian D-Flow FM Mesh</span>
               <span>Far-Field Reach Corridor</span>
             </div>
           </div>
@@ -177,13 +177,13 @@ export default function ScenarioComparison({
       </div>
 
       {/* Observation Validation Scope Note */}
-      <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-start gap-3.5">
+      <div className="p-4 rounded-2xl bg-hc-surface/80 border border-hc-border flex items-start gap-3.5">
         <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-        <div className="text-xs text-slate-300 space-y-1">
+        <div className="text-xs text-hc-textSecondary space-y-1">
           <span className="font-semibold text-amber-300 block">
             Observation Validation Scope: {selectedPreset?.name}
           </span>
-          <p className="leading-relaxed text-slate-400">
+          <p className="leading-relaxed text-hc-textSecondary">
             Tehri Dam catastrophic breach is a hypothetical emergency planning scenario (observation validation status: <strong>NOT_AVAILABLE</strong>). Solver accuracy is verified against analytical benchmarks (Ritter dam-break wave) and historical event workflows (e.g. Rishi Ganga 2021 disaster reconstruction).
           </p>
         </div>

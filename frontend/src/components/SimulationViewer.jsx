@@ -321,7 +321,7 @@ export default function SimulationViewer({
         zoomControl: false,
       });
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; CartoDB & OpenStreetMap',
         maxZoom: 18,
       }).addTo(map);
@@ -401,17 +401,17 @@ export default function SimulationViewer({
       .join(' ');
 
     return (
-      <div className="bg-slate-950 p-3 rounded-lg border border-slate-800 space-y-2">
-        <div className="flex justify-between text-[11px] text-slate-400">
-          <span>Max Depth: <strong className="text-cyan-400">{formatFinite(Math.max(...depths), 1)} m</strong></span>
-          <span>Peak Flow: <strong className="text-red-400">{formatFinite(Math.max(...flows), 0)} m³/s</strong></span>
+      <div className="bg-hc-bg p-3 rounded-lg border border-hc-border space-y-2">
+        <div className="flex justify-between text-[11px] text-hc-textSecondary">
+          <span>Max Depth: <strong className="text-hc-active">{formatFinite(Math.max(...depths), 1)} m</strong></span>
+          <span>Peak Flow: <strong className="text-hc-critical">{formatFinite(Math.max(...flows), 0)} m³/s</strong></span>
         </div>
         <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-24">
           <line x1={padding} y1={h - padding} x2={w - padding} y2={h - padding} stroke="#334155" strokeWidth="1" />
           <line x1={padding} y1={padding} x2={padding} y2={h - padding} stroke="#334155" strokeWidth="1" />
           <polyline fill="none" stroke="#38bdf8" strokeWidth="2.5" points={pointsDepth} />
         </svg>
-        <div className="flex justify-between text-[10px] text-slate-500">
+        <div className="flex justify-between text-[10px] text-hc-textSecondary">
           <span>0 min</span>
           <span>Peak: ~{times[depths.indexOf(Math.max(...depths))] || 0} min</span>
           <span>{maxT} min</span>
@@ -423,21 +423,21 @@ export default function SimulationViewer({
   if (!simulationResult) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center max-w-2xl mx-auto space-y-4 shadow-2xl">
-          <div className="w-14 h-14 rounded-2xl bg-cyan-950 text-cyan-400 border border-cyan-800 flex items-center justify-center mx-auto">
+        <div className="bg-hc-surface border border-hc-border rounded-2xl p-8 text-center max-w-2xl mx-auto space-y-4 shadow-2xl">
+          <div className="w-14 h-14 rounded-2xl bg-cyan-950 text-hc-active border border-cyan-800 flex items-center justify-center mx-auto">
             <Waves className="w-7 h-7" />
           </div>
-          <h2 className="text-lg font-bold text-slate-100">
+          <h2 className="text-lg font-bold text-hc-ink">
             Simulation Status: NOT RUN
           </h2>
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <p className="text-xs text-hc-textSecondary leading-relaxed">
             No hydrodynamic simulation has been run for <strong>{params.dam_name || params.name || 'this scenario'}</strong>.
             Click below to execute the coupled SPH & Delft3D solver pipeline.
           </p>
           <div className="pt-2">
             <button
               onClick={onRunSimulation}
-              className="py-2.5 px-6 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 text-xs font-bold transition flex items-center justify-center space-x-2 mx-auto shadow-lg shadow-cyan-500/20"
+              className="py-2.5 px-6 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink text-xs font-bold transition flex items-center justify-center space-x-2 mx-auto shadow-lg shadow-cyan-500/20"
             >
               <PlayCircle className="w-4 h-4" />
               <span>Run Coupled Simulation</span>
@@ -455,34 +455,34 @@ export default function SimulationViewer({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Top Banner: Mission Control */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
+      <div className="bg-hc-surface/80 border border-hc-border rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2 mb-1">
-            <ShieldAlert className="w-5 h-5 text-red-500" />
-            <h2 className="text-base font-bold text-slate-100">
+            <ShieldAlert className="w-5 h-5 text-hc-critical" />
+            <h2 className="text-base font-bold text-hc-ink">
               {params.dam_name || params.name || 'Dam'} Breach Simulation (Mission Control)
             </h2>
-            <span className="text-[10px] bg-red-950 text-red-400 border border-red-800 px-2 py-0.5 rounded-full font-mono font-bold">
+            <span className="text-[10px] bg-red-950 text-hc-critical border border-red-800 px-2 py-0.5 rounded-full font-mono font-bold">
               {params.dam_height_m || 0}m {params.dam_type || 'Dam'}
             </span>
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-hc-textSecondary">
             {params.river || 'River Basin'} &bull; Reach: {params.reach_length_km || 100} km Corridor
           </p>
         </div>
 
         {/* Real Peak Telemetry */}
         <div className="flex items-center space-x-3">
-          <div className="bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 text-center">
-            <span className="text-[10px] text-slate-400 block">Peak Discharge (Qp)</span>
-            <span className="text-xs font-bold text-red-400">{formatFinite(peakQ, 0)} m³/s</span>
+          <div className="bg-hc-bg px-3 py-1.5 rounded-lg border border-hc-border text-center">
+            <span className="text-[10px] text-hc-textSecondary block">Peak Discharge (Qp)</span>
+            <span className="text-xs font-bold text-hc-critical">{formatFinite(peakQ, 0)} m³/s</span>
           </div>
-          <div className="bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 text-center">
-            <span className="text-[10px] text-slate-400 block">Peak Surge Velocity</span>
-            <span className="text-xs font-bold text-cyan-400">{formatFinite(peakSpeed, 1)} m/s</span>
+          <div className="bg-hc-bg px-3 py-1.5 rounded-lg border border-hc-border text-center">
+            <span className="text-[10px] text-hc-textSecondary block">Peak Surge Velocity</span>
+            <span className="text-xs font-bold text-hc-active">{formatFinite(peakSpeed, 1)} m/s</span>
           </div>
-          <div className="bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 text-center">
-            <span className="text-[10px] text-slate-400 block">Reservoir Storage</span>
+          <div className="bg-hc-bg px-3 py-1.5 rounded-lg border border-hc-border text-center">
+            <span className="text-[10px] text-hc-textSecondary block">Reservoir Storage</span>
             <span className="text-xs font-bold text-sky-400">{formatFinite(resStorageBcm, 2)} BCM</span>
           </div>
         </div>
@@ -492,19 +492,19 @@ export default function SimulationViewer({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left 2 Cols: Hydrodynamic Particle Canvas & Time Scrubber */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-slate-900/80 border border-slate-800 rounded-xl overflow-hidden shadow-2xl">
+          <div className="bg-hc-surface/80 border border-hc-border rounded-xl overflow-hidden shadow-2xl">
             {/* Canvas Header */}
-            <div className="bg-slate-950 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
-              <div className="flex items-center space-x-2 text-xs font-semibold text-slate-200">
-                <Waves className="w-4 h-4 text-cyan-400" />
+            <div className="bg-hc-bg px-4 py-2.5 border-b border-hc-border flex items-center justify-between">
+              <div className="flex items-center space-x-2 text-xs font-semibold text-hc-ink">
+                <Waves className="w-4 h-4 text-hc-active" />
                 <span>SPH Near-Field (0–2km) → Delft3D FM Far-Field Hydrodynamics</span>
               </div>
 
-              <div className="flex items-center space-x-1 bg-slate-900 p-0.5 rounded-lg border border-slate-800">
+              <div className="flex items-center space-x-1 bg-hc-surface p-0.5 rounded-lg border border-hc-border">
                 <button
                   onClick={() => setViewMode('sph_particles')}
                   className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${
-                    viewMode === 'sph_particles' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-slate-400 hover:text-slate-200'
+                    viewMode === 'sph_particles' ? 'bg-hc-active/20 text-hc-active border border-cyan-500/30' : 'text-hc-textSecondary hover:text-hc-ink'
                   }`}
                 >
                   SPH Near-Field
@@ -512,7 +512,7 @@ export default function SimulationViewer({
                 <button
                   onClick={() => setViewMode('swe_raster')}
                   className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${
-                    viewMode === 'swe_raster' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-slate-400 hover:text-slate-200'
+                    viewMode === 'swe_raster' ? 'bg-hc-active/20 text-hc-active border border-cyan-500/30' : 'text-hc-textSecondary hover:text-hc-ink'
                   }`}
                 >
                   Delft3D Contours
@@ -520,7 +520,7 @@ export default function SimulationViewer({
                 <button
                   onClick={() => setViewMode('hybrid')}
                   className={`px-2.5 py-1 rounded text-[11px] font-medium transition ${
-                    viewMode === 'hybrid' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-slate-400 hover:text-slate-200'
+                    viewMode === 'hybrid' ? 'bg-hc-active/20 text-hc-active border border-cyan-500/30' : 'text-hc-textSecondary hover:text-hc-ink'
                   }`}
                 >
                   Coupled View
@@ -529,7 +529,7 @@ export default function SimulationViewer({
             </div>
 
             {/* Canvas Area */}
-            <div className="relative bg-slate-950">
+            <div className="relative bg-hc-bg">
               <canvas
                 ref={canvasRef}
                 width={850}
@@ -538,39 +538,39 @@ export default function SimulationViewer({
               />
 
               {/* Legend */}
-              <div className="absolute bottom-2 left-2 bg-slate-950/85 backdrop-blur-sm border border-slate-800 px-3 py-1.5 rounded-lg text-[10px] space-y-1">
+              <div className="absolute bottom-2 left-2 bg-hc-bg/85 backdrop-blur-sm border border-hc-border px-3 py-1.5 rounded-lg text-[10px] space-y-1">
                 <div className="flex items-center space-x-2">
-                  <span className="text-slate-400 font-semibold">Surge Velocity:</span>
+                  <span className="text-hc-textSecondary font-semibold">Surge Velocity:</span>
                   <span className="inline-block w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
-                  <span className="text-slate-300">&lt;6 m/s</span>
+                  <span className="text-hc-textSecondary">&lt;6 m/s</span>
                   <span className="inline-block w-2.5 h-2.5 rounded-full bg-orange-500"></span>
-                  <span className="text-slate-300">12 m/s</span>
-                  <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-500"></span>
-                  <span className="text-slate-300">&gt;20 m/s (Gorge)</span>
+                  <span className="text-hc-textSecondary">12 m/s</span>
+                  <span className="inline-block w-2.5 h-2.5 rounded-full bg-hc-critical"></span>
+                  <span className="text-hc-textSecondary">&gt;20 m/s (Gorge)</span>
                 </div>
               </div>
             </div>
 
             {/* Playback Controls Bar */}
-            <div className="bg-slate-950/90 px-4 py-3 border-t border-slate-800 flex items-center justify-between gap-4">
+            <div className="bg-hc-bg/90 px-4 py-3 border-t border-hc-border flex items-center justify-between gap-4">
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setIsPlaying(!isPlaying)}
-                  className="w-8 h-8 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 flex items-center justify-center font-bold shadow-md transition"
+                  className="w-8 h-8 rounded-lg bg-hc-active hover:bg-hc-active text-hc-ink flex items-center justify-center font-bold shadow-md transition"
                 >
-                  {isPlaying ? <Pause className="w-4 h-4 fill-slate-950" /> : <Play className="w-4 h-4 fill-slate-950" />}
+                  {isPlaying ? <Pause className="w-4 h-4 fill-hc-ink" /> : <Play className="w-4 h-4 fill-hc-ink" />}
                 </button>
 
                 <button
                   onClick={() => setCurrentFrameIdx(0)}
                   title="Reset to T=0 min"
-                  className="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-slate-100 hover:bg-slate-700 transition"
+                  className="p-1.5 rounded-lg bg-hc-secondary text-hc-textSecondary hover:text-hc-ink hover:bg-hc-border transition"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                 </button>
 
-                <div className="flex items-center space-x-1 bg-slate-900 px-2 py-1 rounded-lg border border-slate-800 text-[11px] text-slate-300">
-                  <Clock className="w-3 h-3 text-cyan-400" />
+                <div className="flex items-center space-x-1 bg-hc-surface px-2 py-1 rounded-lg border border-hc-border text-[11px] text-hc-textSecondary">
+                  <Clock className="w-3 h-3 text-hc-active" />
                   <span>{currentFrame?.time_minutes || 0} min ({((currentFrame?.time_minutes || 0) / 60).toFixed(1)} hrs)</span>
                 </div>
               </div>
@@ -586,7 +586,7 @@ export default function SimulationViewer({
                     setCurrentFrameIdx(parseInt(e.target.value));
                     setIsPlaying(false);
                   }}
-                  className="w-full accent-cyan-400 bg-slate-800 h-1.5 rounded-lg cursor-pointer"
+                  className="w-full accent-cyan-400 bg-hc-secondary h-1.5 rounded-lg cursor-pointer"
                 />
               </div>
 
@@ -597,7 +597,7 @@ export default function SimulationViewer({
                     key={speed}
                     onClick={() => setPlaybackSpeed(speed)}
                     className={`px-1.5 py-0.5 rounded text-[10px] font-semibold transition ${
-                      playbackSpeed === speed ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                      playbackSpeed === speed ? 'bg-hc-active text-hc-ink' : 'bg-hc-secondary text-hc-textSecondary hover:text-hc-ink'
                     }`}
                   >
                     {speed}x
@@ -611,17 +611,17 @@ export default function SimulationViewer({
           <div className="grid grid-cols-2 gap-4">
             <button
               onClick={onOpenComparison}
-              className="py-3 px-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-800/80 transition flex items-center justify-center space-x-2 text-xs font-semibold text-slate-200"
+              className="py-3 px-4 rounded-xl bg-hc-surface border border-hc-border hover:border-cyan-500/50 hover:bg-hc-secondary/80 transition flex items-center justify-center space-x-2 text-xs font-semibold text-hc-ink"
             >
-              <Activity className="w-4 h-4 text-cyan-400" />
+              <Activity className="w-4 h-4 text-hc-active" />
               <span>SPH vs Delft3D Comparison (CSI Verification)</span>
             </button>
 
             <button
               onClick={onOpenDamage}
-              className="py-3 px-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-red-500/50 hover:bg-slate-800/80 transition flex items-center justify-center space-x-2 text-xs font-semibold text-red-300"
+              className="py-3 px-4 rounded-xl bg-hc-surface border border-hc-border hover:border-hc-critical/50 hover:bg-hc-secondary/80 transition flex items-center justify-center space-x-2 text-xs font-semibold text-red-300"
             >
-              <ShieldAlert className="w-4 h-4 text-red-400" />
+              <ShieldAlert className="w-4 h-4 text-hc-critical" />
               <span>HADR Exposure & Zoning Plan</span>
             </button>
           </div>
@@ -630,33 +630,33 @@ export default function SimulationViewer({
         {/* Right Column: GIS Leaflet Map & Hydrodynamic Gauges */}
         <div className="space-y-4">
           {/* Interactive GIS Map */}
-          <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-3 shadow-lg">
+          <div className="bg-hc-surface/80 border border-hc-border rounded-xl p-4 space-y-3 shadow-lg">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-slate-200 flex items-center space-x-1.5">
-                <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+              <h3 className="text-xs font-bold text-hc-ink flex items-center space-x-1.5">
+                <MapPin className="w-3.5 h-3.5 text-hc-active" />
                 <span>River Reach Corridor GIS Map</span>
               </h3>
-              <span className="text-[10px] text-cyan-400 font-mono">{params.state || 'India'}</span>
+              <span className="text-[10px] text-hc-active font-mono">{params.state || 'India'}</span>
             </div>
 
             <div
               ref={mapContainerRef}
-              className="w-full h-48 rounded-lg border border-slate-800 overflow-hidden"
+              className="w-full h-48 rounded-lg border border-hc-border overflow-hidden"
             />
           </div>
 
           {/* Real Hydrograph Telemetry Gauges */}
-          <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-3 shadow-lg">
+          <div className="bg-hc-surface/80 border border-hc-border rounded-xl p-4 space-y-3 shadow-lg">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-slate-200 flex items-center space-x-1.5">
-                <Gauge className="w-3.5 h-3.5 text-cyan-400" />
+              <h3 className="text-xs font-bold text-hc-ink flex items-center space-x-1.5">
+                <Gauge className="w-3.5 h-3.5 text-hc-active" />
                 <span>Station Hydrographs (h & Q vs t)</span>
               </h3>
 
               <select
                 value={selectedGauge}
                 onChange={(e) => setSelectedGauge(e.target.value)}
-                className="bg-slate-950 border border-slate-700 text-slate-200 text-[11px] rounded px-2 py-0.5 focus:outline-none focus:border-cyan-500"
+                className="bg-hc-bg border border-hc-border text-hc-ink text-[11px] rounded px-2 py-0.5 focus:outline-none focus:border-cyan-500"
               >
                 {Object.keys(gauges).length > 0 ? (
                   Object.keys(gauges).map((gk) => (

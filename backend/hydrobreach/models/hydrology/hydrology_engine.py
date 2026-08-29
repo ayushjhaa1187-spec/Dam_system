@@ -14,12 +14,13 @@ from pydantic import BaseModel, Field
 class HydrologyInput(BaseModel):
     catchment_area_km2: float = Field(default=7500.0, description="Bhagirathi upper catchment area up to Tehri Dam (km²)")
     curve_number_cn: float = Field(default=78.0, description="SCS Curve Number (50-98, forested mountain/rocky terrain)")
+    antecedent_moisture_condition: int = Field(default=2, description="AMC condition: 1 (Dry), 2 (Normal), 3 (Wet)")
     rainfall_24h_mm: float = Field(default=180.0, description="24-hour design or observed rainfall depth (mm)")
     time_of_concentration_hrs: float = Field(default=6.5, description="Catchment time of concentration Tc (hours)")
     initial_reservoir_level_m: float = Field(default=825.0, description="Initial Tehri reservoir water surface level (m MSL)")
     frl_m: float = Field(default=830.0, description="Full Reservoir Level (FRL) m MSL")
     max_spillway_capacity_m3s: float = Field(default=15500.0, description="Tehri chute spillway maximum discharge capacity (m³/s)")
-
+    release_spillway_condition: str = Field(default="normal", description="Condition of spillway: normal, blocked, fully_open")
 
 class HydrologyResult(BaseModel):
     curve_number: float
@@ -52,7 +53,15 @@ class HydrologyEngine:
         I_a = 0.2 * S
         P_e = (P - I_a)^2 / (P - I_a + S) if P > I_a else 0
         """
-        cn = np_clip_cn(inp.curve_number_cn)
+        cn_base = np_clip_cn(inp.curve_number_cn)
+        if inp.antecedent_moisture_condition == 1:
+            cn = (4.2 * cn_base) / (10.0 - 0.058 * cn_base)
+        elif inp.antecedent_moisture_condition == 3:
+            cn = (23.0 * cn_base) / (10.0 + 0.13 * cn_base)
+        else:
+            cn = cn_base
+        cn = np_clip_cn(cn)
+
         p = max(inp.rainfall_24h_mm, 0.0)
 
         # Potential maximum retention after runoff begins (mm)
@@ -110,9 +119,15 @@ class HydrologyEngine:
             # Approximate reservoir water level rise due to inflow
             # dH = (Q_in - Q_spill) * dt / Surface_Area
             q_spill = 0.0
-            if curr_res_level > inp.frl_m:
-                excess_h = curr_res_level - inp.frl_m
-                q_spill = min(1500.0 * (excess_h ** 1.5), inp.max_spillway_capacity_m3s)
+            
+            if inp.release_spillway_condition == "fully_open":
+                q_spill = min(q_in, inp.max_spillway_capacity_m3s)
+            elif inp.release_spillway_condition == "blocked":
+                q_spill = 0.0
+            else: # normal
+                if curr_res_level > inp.frl_m:
+                    excess_h = curr_res_level - inp.frl_m
+                    q_spill = min(1500.0 * (excess_h ** 1.5), inp.max_spillway_capacity_m3s)
 
             dh = ((q_in - q_spill) * (dt_hrs * 3600.0)) / (cls.TEHRI_RESERVOIR_SURFACE_AREA_KM2 * 1e6)
             curr_res_level = min(curr_res_level + dh, 839.5) # Dam crest MSL 839.5m

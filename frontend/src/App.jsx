@@ -167,7 +167,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-row font-sans selection:bg-cyan-500 selection:text-slate-950 antialiased">
+    <div className="min-h-screen bg-hc-bg text-hc-ink flex flex-row font-sans selection:bg-hc-active selection:text-white antialiased">
       {/* 1. Left Fixed Navigation Sidebar */}
       <Sidebar
         activeTab={activeTab}
@@ -279,7 +279,7 @@ export default function App() {
         </main>
 
         {/* Persistent Prototype Disclaimer Footer */}
-        <footer className="mt-auto border-t border-slate-900 bg-slate-950/80 px-6 py-3 text-center text-[11px] text-slate-500 font-sans">
+        <footer className="mt-auto border-t border-hc-border bg-hc-bg/80 px-6 py-3 text-center text-[11px] text-hc-textSecondary font-sans">
           <span>
             <strong>Official Notice:</strong> Decision-support prototype; not a replacement for official flood-warning or emergency-management systems. Refer exclusively to NDMA, CWC &amp; SEOC directives.
           </span>

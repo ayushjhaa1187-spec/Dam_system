@@ -1,0 +1,30 @@
+# Tehri Dam Simulation Domains
+# Defines explicit coordinate bounds and solver assignments to prevent full-scale 100km SPH runs.
+
+domains:
+  near_field:
+    name: "Tehri Dam Near Field (0-2km)"
+    description: "High-resolution breach zone flow and initial shockwave tracking."
+    intended_solver: "DualSPHysics"
+    extent:
+      bbox: [78.47, 30.37, 78.50, 30.39] # approx long, lat bounds
+      reach_km: 2.0
+    resolution_m: 5.0
+    
+  core_corridor:
+    name: "Tehri to Devprayag (Core Corridor)"
+    description: "Primary HADR assessment and Delft3D model calibration."
+    intended_solver: "Delft3D FM"
+    extent:
+      bbox: [78.47, 30.14, 78.60, 30.39]
+      reach_km: 42.0
+    resolution_m: 30.0
+
+  demonstration_corridor:
+    name: "Tehri to Rishikesh (Demonstration Corridor)"
+    description: "Full visual showcase."
+    intended_solver: "Delft3D FM"
+    extent:
+      bbox: [78.29, 30.08, 78.60, 30.39]
+      reach_km: 78.0
+    resolution_m: 90.0

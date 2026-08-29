@@ -96,7 +96,7 @@ export default function RunMonitorScreen({
   };
 
   return (
-    <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 text-slate-100">
+    <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 text-hc-ink">
       {/* Header */}
       <PageHeader
         category="COMPUTATIONAL RUN MONITOR &bull; SCREEN 3 OF 5"
@@ -109,14 +109,14 @@ export default function RunMonitorScreen({
             <button
               onClick={() => onRunSimulation && onRunSimulation({ scenario_id: selectedPreset?.id })}
               disabled={isSimulating}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 font-semibold text-xs transition"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary text-hc-textSecondary font-semibold text-xs transition"
             >
               <RotateCcw className={`w-3.5 h-3.5 ${isSimulating ? 'animate-spin' : ''}`} />
               <span>{isSimulating ? 'Computing...' : 'Re-run Solver'}</span>
             </button>
             <button
               onClick={() => onNavigate('results')}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition shadow-md shadow-cyan-500/20"
             >
               <span>View Results Map</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -129,7 +129,7 @@ export default function RunMonitorScreen({
       {networkError && (
         <div className="p-3 bg-red-950/80 border border-red-800 rounded-xl text-xs text-red-200 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <WifiOff className="w-4 h-4 text-red-400 shrink-0" />
+            <WifiOff className="w-4 h-4 text-hc-critical shrink-0" />
             <span>Connection to simulation backend interrupted. Auto-reconnecting state...</span>
           </div>
           <button
@@ -142,28 +142,28 @@ export default function RunMonitorScreen({
       )}
 
       {/* 1. Overall Progress Bar Card */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
+      <div className="bg-hc-surface/80 border border-hc-border rounded-2xl p-5 space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-xs font-bold text-slate-200">
+              <span className="text-xs font-bold text-hc-ink">
                 Coupled Multi-Scale Simulation Progress: {selectedPreset?.name || 'Tehri Dam Flash Flood'}
               </span>
-              <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800/40">
+              <span className="text-[10px] font-mono text-hc-active bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800/40">
                 {runId}
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 font-mono mt-0.5">
+            <p className="text-[11px] text-hc-textSecondary font-mono mt-0.5">
               DualSPHysics 3D (0-2 km) + Delft3D-FM 2D SWE (2-100 km)
             </p>
           </div>
-          <span className="text-lg font-bold font-mono text-cyan-400">
+          <span className="text-lg font-bold font-mono text-hc-active">
             {progressPct}%
           </span>
         </div>
 
         {/* Animated Progress Bar */}
-        <div className="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+        <div className="w-full h-2.5 bg-hc-bg rounded-full overflow-hidden border border-hc-border">
           <div
             className={`h-full bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all duration-500 ${
               isSimulating ? 'animate-pulse' : ''
@@ -183,24 +183,24 @@ export default function RunMonitorScreen({
                 key={p.id}
                 className={`p-3 rounded-xl border transition ${
                   isPhaseDone
-                    ? 'bg-slate-950/80 border-emerald-500/40 text-emerald-400'
+                    ? 'bg-hc-bg/80 border-emerald-500/40 text-hc-success'
                     : isPhaseActive
-                    ? 'bg-slate-900 border-cyan-500 text-cyan-400 animate-pulse'
-                    : 'bg-slate-950/40 border-slate-800 text-slate-600'
+                    ? 'bg-hc-surface border-cyan-500 text-hc-active animate-pulse'
+                    : 'bg-hc-bg/40 border-hc-border text-hc-textSecondary'
                 }`}
               >
                 <div className="flex items-center justify-between text-[10px] font-mono font-bold">
                   <span>Phase {idx + 1}</span>
                   {isPhaseDone ? (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-hc-success" />
                   ) : isPhaseActive ? (
-                    <Activity className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
+                    <Activity className="w-3.5 h-3.5 text-hc-active animate-spin" />
                   ) : (
                     <Clock className="w-3.5 h-3.5" />
                   )}
                 </div>
-                <h4 className="text-xs font-bold text-slate-200 mt-1 truncate">{p.title}</h4>
-                <p className="text-[10px] text-slate-400 truncate mt-0.5">{p.subtitle}</p>
+                <h4 className="text-xs font-bold text-hc-ink mt-1 truncate">{p.title}</h4>
+                <p className="text-[10px] text-hc-textSecondary truncate mt-0.5">{p.subtitle}</p>
               </div>
             );
           })}
@@ -246,23 +246,23 @@ export default function RunMonitorScreen({
       {/* 3. Live Streaming Console Logs & Execution Metadata (70/30) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left 8 cols: Streaming Terminal Logs */}
-        <div className="lg:col-span-8 bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col h-[420px]">
+        <div className="lg:col-span-8 bg-hc-surface/90 border border-hc-border rounded-2xl overflow-hidden shadow-2xl flex flex-col h-[420px]">
           {/* Console Header */}
-          <div className="bg-slate-950 px-4 py-3 border-b border-slate-800 flex items-center justify-between gap-3">
+          <div className="bg-hc-bg px-4 py-3 border-b border-hc-border flex items-center justify-between gap-3">
             <div className="flex items-center space-x-2">
-              <Terminal className="w-4 h-4 text-cyan-400" />
-              <span className="text-xs font-bold font-mono text-slate-200">Execution Log Stream</span>
+              <Terminal className="w-4 h-4 text-hc-active" />
+              <span className="text-xs font-bold font-mono text-hc-ink">Execution Log Stream</span>
             </div>
 
             <div className="flex items-center space-x-2">
               {/* Level Filter */}
-              <div className="flex space-x-1 bg-slate-900 p-0.5 rounded-lg border border-slate-800 text-[10px] font-mono">
+              <div className="flex space-x-1 bg-hc-surface p-0.5 rounded-lg border border-hc-border text-[10px] font-mono">
                 {['ALL', 'INFO', 'WARN', 'ERROR'].map((lvl) => (
                   <button
                     key={lvl}
                     onClick={() => setLogFilter(lvl)}
                     className={`px-2 py-0.5 rounded ${
-                      logFilter === lvl ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-slate-200'
+                      logFilter === lvl ? 'bg-hc-active text-hc-ink font-bold' : 'text-hc-textSecondary hover:text-hc-ink'
                     }`}
                   >
                     {lvl}
@@ -273,10 +273,10 @@ export default function RunMonitorScreen({
               {/* Copy Logs Button */}
               <button
                 onClick={handleCopyLogs}
-                className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition"
+                className="p-1.5 rounded-lg bg-hc-surface hover:bg-hc-secondary text-hc-textSecondary hover:text-hc-ink transition"
                 title="Copy logs to clipboard"
               >
-                {copiedLogs ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedLogs ? <CheckCircle2 className="w-3.5 h-3.5 text-hc-success" /> : <Copy className="w-3.5 h-3.5" />}
               </button>
             </div>
           </div>
@@ -284,7 +284,7 @@ export default function RunMonitorScreen({
           {/* Console Body */}
           <div
             ref={logContainerRef}
-            className="flex-1 p-4 overflow-y-auto font-mono text-xs space-y-1.5 bg-slate-950/90 selection:bg-cyan-500 selection:text-slate-950"
+            className="flex-1 p-4 overflow-y-auto font-mono text-xs space-y-1.5 bg-hc-bg/90 selection:bg-hc-active selection:text-hc-ink"
           >
             {filteredLogs.map((l) => {
               const isWarn = l.level === 'WARN';
@@ -292,19 +292,19 @@ export default function RunMonitorScreen({
 
               return (
                 <div key={l.id} className="flex items-start space-x-2 leading-relaxed">
-                  <span className="text-slate-600 shrink-0 select-none">[{l.time}]</span>
+                  <span className="text-hc-textSecondary shrink-0 select-none">[{l.time}]</span>
                   <span
                     className={`px-1.5 py-0.2 rounded text-[10px] font-bold shrink-0 ${
                       isErr
-                        ? 'bg-red-950 text-red-400 border border-red-800'
+                        ? 'bg-red-950 text-hc-critical border border-red-800'
                         : isWarn
                         ? 'bg-amber-950 text-amber-400 border border-amber-800'
-                        : 'bg-cyan-950 text-cyan-400 border border-cyan-800'
+                        : 'bg-cyan-950 text-hc-active border border-cyan-800'
                     }`}
                   >
                     {l.level}
                   </span>
-                  <span className={isErr ? 'text-red-300' : isWarn ? 'text-amber-300' : 'text-slate-300'}>
+                  <span className={isErr ? 'text-red-300' : isWarn ? 'text-amber-300' : 'text-hc-textSecondary'}>
                     {l.text}
                   </span>
                 </div>
@@ -313,14 +313,14 @@ export default function RunMonitorScreen({
           </div>
 
           {/* Console Footer */}
-          <div className="bg-slate-950 px-4 py-2 border-t border-slate-800 text-[11px] font-mono text-slate-500 flex items-center justify-between">
+          <div className="bg-hc-bg px-4 py-2 border-t border-hc-border text-[11px] font-mono text-hc-textSecondary flex items-center justify-between">
             <span>{filteredLogs.length} events logged</span>
-            <label className="flex items-center space-x-1.5 cursor-pointer text-slate-400">
+            <label className="flex items-center space-x-1.5 cursor-pointer text-hc-textSecondary">
               <input
                 type="checkbox"
                 checked={autoScroll}
                 onChange={(e) => setAutoScroll(e.target.checked)}
-                className="rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-0"
+                className="rounded bg-hc-surface border-hc-border text-hc-active focus:ring-0"
               />
               <span>Auto-scroll to bottom</span>
             </label>
@@ -328,49 +328,49 @@ export default function RunMonitorScreen({
         </div>
 
         {/* Right 4 cols: Scientific Reproducibility & Audit Bundle */}
-        <div className="lg:col-span-4 bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4">
-          <div className="flex items-center space-x-2 pb-3 border-b border-slate-800">
-            <Database className="w-4 h-4 text-cyan-400" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-200">
+        <div className="lg:col-span-4 bg-hc-surface/80 border border-hc-border rounded-2xl p-5 space-y-4">
+          <div className="flex items-center space-x-2 pb-3 border-b border-hc-border">
+            <Database className="w-4 h-4 text-hc-active" />
+            <h3 className="text-xs font-bold uppercase tracking-wider text-hc-ink">
               Scientific Audit &amp; Provenance
             </h3>
           </div>
 
           <div className="space-y-3 text-xs">
-            <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
-              <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-mono">
+            <div className="bg-hc-bg p-3 rounded-xl border border-hc-border space-y-1">
+              <span className="text-[10px] text-hc-textSecondary uppercase tracking-wider block font-mono">
                 Reproducibility Identifier
               </span>
-              <span className="text-xs font-bold text-cyan-400 font-mono block select-all">
+              <span className="text-xs font-bold text-hc-active font-mono block select-all">
                 {meta.reproducibility_id || 'REP-COU-E8B1A42F'}
               </span>
             </div>
 
-            <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
-              <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-mono">
+            <div className="bg-hc-bg p-3 rounded-xl border border-hc-border space-y-1">
+              <span className="text-[10px] text-hc-textSecondary uppercase tracking-wider block font-mono">
                 SHA-256 Input Fingerprint
               </span>
-              <span className="text-[11px] font-mono text-slate-300 truncate block select-all">
+              <span className="text-[11px] font-mono text-hc-textSecondary truncate block select-all">
                 {meta.input_hash || '7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069'}
               </span>
             </div>
 
-            <div className="space-y-2 pt-1 font-mono text-[11px] text-slate-400">
+            <div className="space-y-2 pt-1 font-mono text-[11px] text-hc-textSecondary">
               <div className="flex justify-between">
                 <span>Model Solver:</span>
-                <span className="text-slate-200 font-bold">DualSPHysics + Delft3D-FM</span>
+                <span className="text-hc-ink font-bold">DualSPHysics + Delft3D-FM</span>
               </div>
               <div className="flex justify-between">
                 <span>Elevation Model:</span>
-                <span className="text-slate-200 font-bold">Copernicus GLO-30 (30m)</span>
+                <span className="text-hc-ink font-bold">Copernicus GLO-30 (30m)</span>
               </div>
               <div className="flex justify-between">
                 <span>Hydrology Source:</span>
-                <span className="text-slate-200 font-bold">CWC / IMD 24h PMP</span>
+                <span className="text-hc-ink font-bold">CWC / IMD 24h PMP</span>
               </div>
               <div className="flex justify-between">
                 <span>Validation Status:</span>
-                <span className="text-emerald-400 font-bold">VALIDATED (CSI 0.865)</span>
+                <span className="text-hc-success font-bold">VALIDATED (CSI 0.865)</span>
               </div>
             </div>
           </div>

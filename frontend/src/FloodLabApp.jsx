@@ -31,7 +31,7 @@ export default function FloodLabApp() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col">
+    <div className="min-h-screen bg-hc-bg text-hc-ink font-sans flex flex-col">
       <Navbar activePage={activePage} onNavigate={setActivePage} />
       <main className="flex-1">
         {activePage === 'overview' && (

@@ -77,8 +77,8 @@ export default function LayerDrawer({
               onClick={() => onToggleLayer(layer.id)}
               className={`p-3.5 rounded-xl border cursor-pointer transition flex items-start justify-between gap-3 ${
                 isVisible
-                  ? 'bg-slate-950 border-slate-700/80 shadow-xs'
-                  : 'bg-slate-950/40 border-slate-800/50 opacity-60'
+                  ? 'bg-hc-bg border-hc-border/80 shadow-xs'
+                  : 'bg-hc-bg/40 border-hc-border/50 opacity-60'
               }`}
             >
               <div className="space-y-1">
@@ -87,17 +87,17 @@ export default function LayerDrawer({
                     className="w-2.5 h-2.5 rounded-full shrink-0"
                     style={{ backgroundColor: layer.color }}
                   />
-                  <span className="text-xs font-semibold text-slate-100">{layer.name}</span>
+                  <span className="text-xs font-semibold text-hc-ink">{layer.name}</span>
                 </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">{layer.desc}</p>
-                <span className="text-[10px] font-mono text-cyan-400 block pt-0.5">
+                <p className="text-[11px] text-hc-textSecondary leading-relaxed">{layer.desc}</p>
+                <span className="text-[10px] font-mono text-hc-active block pt-0.5">
                   {layer.category}
                 </span>
               </div>
 
               <button
                 className={`p-1.5 rounded-lg transition shrink-0 ${
-                  isVisible ? 'text-cyan-400 bg-cyan-950/60' : 'text-slate-500 bg-slate-900'
+                  isVisible ? 'text-hc-active bg-cyan-950/60' : 'text-hc-textSecondary bg-hc-surface'
                 }`}
               >
                 {isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}

@@ -95,29 +95,29 @@ export default function ScientificRunAuditModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-hc-bg/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="bg-hc-surface border border-hc-border rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+        <div className="px-6 py-4 border-b border-hc-border flex items-center justify-between bg-hc-bg/60">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+            <div className="p-2 rounded-xl bg-hc-active/10 border border-cyan-500/30 text-hc-active">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-sm font-bold text-slate-100">
+                <h2 className="text-sm font-bold text-hc-ink">
                   Scientific Run Provenance &amp; Reproducibility Audit
                 </h2>
                 <ValidationBadge status={validationStatus} />
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Scenario: <span className="text-slate-200 font-semibold">{scenarioName}</span> &bull; Run ID: <span className="font-mono text-cyan-400">{runId}</span>
+              <p className="text-xs text-hc-textSecondary mt-0.5">
+                Scenario: <span className="text-hc-ink font-semibold">{scenarioName}</span> &bull; Run ID: <span className="font-mono text-hc-active">{runId}</span>
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition"
+            className="p-1.5 rounded-lg text-hc-textSecondary hover:text-hc-ink hover:bg-hc-secondary transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -136,7 +136,7 @@ export default function ScientificRunAuditModal({
         )}
 
         {/* Navigation Tabs */}
-        <div className="flex border-b border-slate-800 px-6 bg-slate-950/30 gap-2">
+        <div className="flex border-b border-hc-border px-6 bg-hc-bg/30 gap-2">
           {[
             { id: 'summary', label: 'Executive Summary', icon: Activity },
             { id: 'solver', label: 'Solver & Discretization', icon: Cpu },
@@ -152,8 +152,8 @@ export default function ScientificRunAuditModal({
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-3.5 py-3 text-xs font-medium border-b-2 transition ${
                   isActive
-                    ? 'border-cyan-400 text-cyan-400 font-bold'
-                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                    ? 'border-cyan-400 text-hc-active font-bold'
+                    : 'border-transparent text-hc-textSecondary hover:text-hc-ink'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -169,78 +169,78 @@ export default function ScientificRunAuditModal({
           {activeTab === 'summary' && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
-                  <span className="text-[10px] font-mono text-slate-400 uppercase block">Engine Model</span>
-                  <span className="text-xs font-bold text-slate-100 block mt-1 truncate">{modelName}</span>
-                  <span className="text-[10px] text-cyan-400 font-mono">v{modelVersion}</span>
+                <div className="p-3.5 rounded-xl bg-hc-bg/80 border border-hc-border">
+                  <span className="text-[10px] font-mono text-hc-textSecondary uppercase block">Engine Model</span>
+                  <span className="text-xs font-bold text-hc-ink block mt-1 truncate">{modelName}</span>
+                  <span className="text-[10px] text-hc-active font-mono">v{modelVersion}</span>
                 </div>
-                <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
-                  <span className="text-[10px] font-mono text-slate-400 uppercase block">Validation Tier</span>
+                <div className="p-3.5 rounded-xl bg-hc-bg/80 border border-hc-border">
+                  <span className="text-[10px] font-mono text-hc-textSecondary uppercase block">Validation Tier</span>
                   <div className="mt-1">
                     <ValidationBadge status={validationStatus} compact />
                   </div>
-                  <span className="text-[10px] text-slate-400 font-mono block mt-1">Tier Level</span>
+                  <span className="text-[10px] text-hc-textSecondary font-mono block mt-1">Tier Level</span>
                 </div>
-                <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
-                  <span className="text-[10px] font-mono text-slate-400 uppercase block">DEM Topography</span>
-                  <span className="text-xs font-bold text-slate-100 block mt-1 truncate">{demSource}</span>
-                  <span className="text-[10px] text-emerald-400 font-mono">{demResolution}m Resolution</span>
+                <div className="p-3.5 rounded-xl bg-hc-bg/80 border border-hc-border">
+                  <span className="text-[10px] font-mono text-hc-textSecondary uppercase block">DEM Topography</span>
+                  <span className="text-xs font-bold text-hc-ink block mt-1 truncate">{demSource}</span>
+                  <span className="text-[10px] text-hc-success font-mono">{demResolution}m Resolution</span>
                 </div>
-                <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800">
-                  <span className="text-[10px] font-mono text-slate-400 uppercase block">Compute Duration</span>
-                  <span className="text-xs font-bold text-cyan-400 font-mono block mt-1">{computeDuration}s</span>
-                  <span className="text-[10px] text-slate-400 font-mono">Completed</span>
+                <div className="p-3.5 rounded-xl bg-hc-bg/80 border border-hc-border">
+                  <span className="text-[10px] font-mono text-hc-textSecondary uppercase block">Compute Duration</span>
+                  <span className="text-xs font-bold text-hc-active font-mono block mt-1">{computeDuration}s</span>
+                  <span className="text-[10px] text-hc-textSecondary font-mono">Completed</span>
                 </div>
               </div>
 
               {/* Physical Setup Highlights */}
-              <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 space-y-3">
-                <h3 className="text-xs font-bold text-slate-200 flex items-center gap-2">
-                  <Info className="w-3.5 h-3.5 text-cyan-400" />
+              <div className="p-4 rounded-xl bg-hc-bg/60 border border-hc-border space-y-3">
+                <h3 className="text-xs font-bold text-hc-ink flex items-center gap-2">
+                  <Info className="w-3.5 h-3.5 text-hc-active" />
                   <span>Physical Parameter Snapshot</span>
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                   <div>
-                    <span className="text-slate-400 text-[11px] block">Manning Roughness ($n$):</span>
-                    <span className="font-mono font-bold text-slate-200">{phys.manning_n || selectedPreset?.manning_n || 0.042}</span>
+                    <span className="text-hc-textSecondary text-[11px] block">Manning Roughness ($n$):</span>
+                    <span className="font-mono font-bold text-hc-ink">{phys.manning_n || selectedPreset?.manning_n || 0.042}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 text-[11px] block">Breach Peak Outflow ($Q_p$):</span>
+                    <span className="text-hc-textSecondary text-[11px] block">Breach Peak Outflow ($Q_p$):</span>
                     <span className="font-mono font-bold text-rose-400">{formatFinite(breach.peak_discharge_m3s || 84200, 0)} m³/s</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 text-[11px] block">Breach Top Width ($B_{top}$):</span>
-                    <span className="font-mono font-bold text-slate-200">{formatFinite(breach.top_width_m || breach.avg_breach_width_m || 248.5, 1)} m</span>
+                    <span className="text-hc-textSecondary text-[11px] block">Breach Top Width ($B_{top}$):</span>
+                    <span className="font-mono font-bold text-hc-ink">{formatFinite(breach.top_width_m || breach.avg_breach_width_m || 248.5, 1)} m</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 text-[11px] block">Formation Time ($t_f$):</span>
-                    <span className="font-mono font-bold text-slate-200">{formatFinite(breach.formation_time_hrs || 1.85, 2)} hrs</span>
+                    <span className="text-hc-textSecondary text-[11px] block">Formation Time ($t_f$):</span>
+                    <span className="font-mono font-bold text-hc-ink">{formatFinite(breach.formation_time_hrs || 1.85, 2)} hrs</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 text-[11px] block">Discretization Resolution:</span>
-                    <span className="font-mono font-bold text-slate-200 truncate block">{gridResolution}</span>
+                    <span className="text-hc-textSecondary text-[11px] block">Discretization Resolution:</span>
+                    <span className="font-mono font-bold text-hc-ink truncate block">{gridResolution}</span>
                   </div>
                   <div>
-                    <span className="text-slate-400 text-[11px] block">Integration Time Step ($\Delta t$):</span>
-                    <span className="font-mono font-bold text-cyan-400">{timeStep}s</span>
+                    <span className="text-hc-textSecondary text-[11px] block">Integration Time Step ($\Delta t$):</span>
+                    <span className="font-mono font-bold text-hc-active">{timeStep}s</span>
                   </div>
                 </div>
               </div>
 
               {/* Reproducibility Hash Bar */}
-              <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between gap-3">
+              <div className="p-3.5 rounded-xl bg-hc-bg border border-hc-border flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2 min-w-0">
-                  <Fingerprint className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <Fingerprint className="w-4 h-4 text-hc-active shrink-0" />
                   <div className="min-w-0">
-                    <span className="text-[10px] text-slate-400 block font-mono">REPRODUCIBILITY FINGERPRINT (SHA-256):</span>
-                    <span className="text-xs font-mono text-cyan-400 truncate block">{inputHash}</span>
+                    <span className="text-[10px] text-hc-textSecondary block font-mono">REPRODUCIBILITY FINGERPRINT (SHA-256):</span>
+                    <span className="text-xs font-mono text-hc-active truncate block">{inputHash}</span>
                   </div>
                 </div>
                 <button
                   onClick={handleCopyHash}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 flex items-center gap-1.5 transition shrink-0"
+                  className="px-3 py-1.5 rounded-lg bg-hc-secondary hover:bg-hc-border text-xs font-medium text-hc-ink flex items-center gap-1.5 transition shrink-0"
                 >
-                  {copiedHash ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedHash ? <Check className="w-3.5 h-3.5 text-hc-success" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{copiedHash ? 'Copied' : 'Copy Hash'}</span>
                 </button>
               </div>
@@ -251,60 +251,60 @@ export default function ScientificRunAuditModal({
           {activeTab === 'solver' && (
             <div className="space-y-4 text-xs">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-                  <h4 className="font-bold text-slate-200 flex items-center gap-2">
-                    <Cpu className="w-4 h-4 text-cyan-400" />
+                <div className="p-4 rounded-xl bg-hc-bg/80 border border-hc-border space-y-3">
+                  <h4 className="font-bold text-hc-ink flex items-center gap-2">
+                    <Cpu className="w-4 h-4 text-hc-active" />
                     <span>Hydraulic Solver Specifications</span>
                   </h4>
                   <dl className="space-y-2 font-mono">
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Primary Engine:</dt>
-                      <dd className="text-slate-100 font-bold">{modelName}</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Primary Engine:</dt>
+                      <dd className="text-hc-ink font-bold">{modelName}</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Software Build / Version:</dt>
-                      <dd className="text-cyan-400 font-bold">{modelVersion}</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Software Build / Version:</dt>
+                      <dd className="text-hc-active font-bold">{modelVersion}</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Engine Type Class:</dt>
-                      <dd className="text-slate-100">{engineType.toUpperCase()}</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Engine Type Class:</dt>
+                      <dd className="text-hc-ink">{engineType.toUpperCase()}</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Validation Status:</dt>
-                      <dd className="text-emerald-400 font-bold">{validationStatus.toUpperCase()}</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Validation Status:</dt>
+                      <dd className="text-hc-success font-bold">{validationStatus.toUpperCase()}</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Compute Wall Time:</dt>
-                      <dd className="text-slate-100">{computeDuration} seconds</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Compute Wall Time:</dt>
+                      <dd className="text-hc-ink">{computeDuration} seconds</dd>
                     </div>
                   </dl>
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-                  <h4 className="font-bold text-slate-200 flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-purple-400" />
+                <div className="p-4 rounded-xl bg-hc-bg/80 border border-hc-border space-y-3">
+                  <h4 className="font-bold text-hc-ink flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-hc-assumption" />
                     <span>Discretization &amp; Time Integration</span>
                   </h4>
                   <dl className="space-y-2 font-mono">
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Spatial Discretization:</dt>
-                      <dd className="text-slate-100 font-bold">{gridResolution}</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Spatial Discretization:</dt>
+                      <dd className="text-hc-ink font-bold">{gridResolution}</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Integration Step ($\Delta t$):</dt>
-                      <dd className="text-cyan-400">{timeStep} s</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Integration Step ($\Delta t$):</dt>
+                      <dd className="text-hc-active">{timeStep} s</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">CFL Stability Limit:</dt>
-                      <dd className="text-slate-100">CFL $\le$ 0.45</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">CFL Stability Limit:</dt>
+                      <dd className="text-hc-ink">CFL $\le$ 0.45</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Simulation Horizon:</dt>
-                      <dd className="text-slate-100">0.0h to 3.0h (180 min)</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Simulation Horizon:</dt>
+                      <dd className="text-hc-ink">0.0h to 3.0h (180 min)</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Coupling Interface:</dt>
-                      <dd className="text-slate-100">Lagrangian $\rightarrow$ Eulerian Flux (x=2.0km)</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Coupling Interface:</dt>
+                      <dd className="text-hc-ink">Lagrangian $\rightarrow$ Eulerian Flux (x=2.0km)</dd>
                     </div>
                   </dl>
                 </div>
@@ -316,60 +316,60 @@ export default function ScientificRunAuditModal({
           {activeTab === 'terrain' && (
             <div className="space-y-4 text-xs">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-                  <h4 className="font-bold text-slate-200 flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-emerald-400" />
+                <div className="p-4 rounded-xl bg-hc-bg/80 border border-hc-border space-y-3">
+                  <h4 className="font-bold text-hc-ink flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-hc-success" />
                     <span>Digital Elevation Model (DEM) Provenance</span>
                   </h4>
                   <dl className="space-y-2 font-mono">
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">DEM Source Provider:</dt>
-                      <dd className="text-slate-100 font-bold">{demSource}</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">DEM Source Provider:</dt>
+                      <dd className="text-hc-ink font-bold">{demSource}</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Spatial Resolution:</dt>
-                      <dd className="text-emerald-400">{demResolution} meters / pixel</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Spatial Resolution:</dt>
+                      <dd className="text-hc-success">{demResolution} meters / pixel</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Vertical Datum:</dt>
-                      <dd className="text-slate-100">EGM2008 / MSL</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Vertical Datum:</dt>
+                      <dd className="text-hc-ink">EGM2008 / MSL</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Horizontal CRS:</dt>
-                      <dd className="text-slate-100">WGS 84 / UTM Zone 44N</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Horizontal CRS:</dt>
+                      <dd className="text-hc-ink">WGS 84 / UTM Zone 44N</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Channel Bathymetry Infill:</dt>
-                      <dd className="text-slate-100">Hydro-enforced Synthetic Thalweg</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Channel Bathymetry Infill:</dt>
+                      <dd className="text-hc-ink">Hydro-enforced Synthetic Thalweg</dd>
                     </div>
                   </dl>
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-                  <h4 className="font-bold text-slate-200 flex items-center gap-2">
+                <div className="p-4 rounded-xl bg-hc-bg/80 border border-hc-border space-y-3">
+                  <h4 className="font-bold text-hc-ink flex items-center gap-2">
                     <Waves className="w-4 h-4 text-sky-400" />
                     <span>Hydrological Forcing &amp; Inflow Data</span>
                   </h4>
                   <dl className="space-y-2 font-mono">
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Hydrological Data Source:</dt>
-                      <dd className="text-slate-100 font-bold truncate max-w-[200px]">{hydroSource}</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Hydrological Data Source:</dt>
+                      <dd className="text-hc-ink font-bold truncate max-w-[200px]">{hydroSource}</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Precipitation / Inflow Regime:</dt>
-                      <dd className="text-slate-100">Probable Maximum Flood (PMF)</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Precipitation / Inflow Regime:</dt>
+                      <dd className="text-hc-ink">Probable Maximum Flood (PMF)</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Baseflow Prior to Breach:</dt>
-                      <dd className="text-slate-100">250.0 m³/s</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Baseflow Prior to Breach:</dt>
+                      <dd className="text-hc-ink">250.0 m³/s</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Reservoir Water Level at Breach:</dt>
-                      <dd className="text-cyan-400">{selectedPreset?.hydraulic_head_m || 260.0} m</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Reservoir Water Level at Breach:</dt>
+                      <dd className="text-hc-active">{selectedPreset?.hydraulic_head_m || 260.0} m</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Runoff Transformation Method:</dt>
-                      <dd className="text-slate-100">SCS Curve Number &amp; Snyder UH</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Runoff Transformation Method:</dt>
+                      <dd className="text-hc-ink">SCS Curve Number &amp; Snyder UH</dd>
                     </div>
                   </dl>
                 </div>
@@ -381,60 +381,60 @@ export default function ScientificRunAuditModal({
           {activeTab === 'physics' && (
             <div className="space-y-4 text-xs">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-                  <h4 className="font-bold text-slate-200 flex items-center gap-2">
-                    <Waves className="w-4 h-4 text-red-400" />
+                <div className="p-4 rounded-xl bg-hc-bg/80 border border-hc-border space-y-3">
+                  <h4 className="font-bold text-hc-ink flex items-center gap-2">
+                    <Waves className="w-4 h-4 text-hc-critical" />
                     <span>Breach Parameterization (Froehlich 2008)</span>
                   </h4>
                   <dl className="space-y-2 font-mono">
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Breach Mode:</dt>
-                      <dd className="text-slate-100 uppercase">{breach.breach_mode || 'OVERTOPPING'}</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Breach Mode:</dt>
+                      <dd className="text-hc-ink uppercase">{breach.breach_mode || 'OVERTOPPING'}</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Top Breach Width ($B_{top}$):</dt>
-                      <dd className="text-slate-100 font-bold">{formatFinite(breach.top_width_m || breach.avg_breach_width_m || 248.5, 1)} m</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Top Breach Width ($B_{top}$):</dt>
+                      <dd className="text-hc-ink font-bold">{formatFinite(breach.top_width_m || breach.avg_breach_width_m || 248.5, 1)} m</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Bottom Breach Width ($B_b$):</dt>
-                      <dd className="text-slate-100">{formatFinite(breach.bottom_width_m || 124.0, 1)} m</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Bottom Breach Width ($B_b$):</dt>
+                      <dd className="text-hc-ink">{formatFinite(breach.bottom_width_m || 124.0, 1)} m</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Breach Side Slope ($z$):</dt>
-                      <dd className="text-slate-100">{breach.side_slope_z || 1.4} (H:1V)</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Breach Side Slope ($z$):</dt>
+                      <dd className="text-hc-ink">{breach.side_slope_z || 1.4} (H:1V)</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Formation Time ($t_f$):</dt>
-                      <dd className="text-cyan-400">{formatFinite(breach.formation_time_hrs || 1.85, 2)} hours</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Formation Time ($t_f$):</dt>
+                      <dd className="text-hc-active">{formatFinite(breach.formation_time_hrs || 1.85, 2)} hours</dd>
                     </div>
                   </dl>
                 </div>
 
-                <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
-                  <h4 className="font-bold text-slate-200 flex items-center gap-2">
+                <div className="p-4 rounded-xl bg-hc-bg/80 border border-hc-border space-y-3">
+                  <h4 className="font-bold text-hc-ink flex items-center gap-2">
                     <Layers className="w-4 h-4 text-amber-400" />
                     <span>Hydraulic &amp; Boundary Assumptions</span>
                   </h4>
                   <dl className="space-y-2 font-mono">
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Manning's Roughness Coefficient ($n$):</dt>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Manning's Roughness Coefficient ($n$):</dt>
                       <dd className="text-amber-400 font-bold">{phys.manning_n || selectedPreset?.manning_n || 0.042}</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Downstream Boundary Condition:</dt>
-                      <dd className="text-slate-100">{downstream.type || 'Free Outflow / Sommeville Radiation'}</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Downstream Boundary Condition:</dt>
+                      <dd className="text-hc-ink">{downstream.type || 'Free Outflow / Sommeville Radiation'}</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Downstream Station Limit:</dt>
-                      <dd className="text-slate-100">Haridwar Barrage (km 100.0)</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Downstream Station Limit:</dt>
+                      <dd className="text-hc-ink">Haridwar Barrage (km 100.0)</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Radiation Condition:</dt>
-                      <dd className="text-slate-100">Sommerfeld Open Boundary</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Radiation Condition:</dt>
+                      <dd className="text-hc-ink">Sommerfeld Open Boundary</dd>
                     </div>
-                    <div className="flex justify-between border-b border-slate-900 pb-1.5">
-                      <dt className="text-slate-400">Tailwater Elevation Datum:</dt>
-                      <dd className="text-slate-100">290.0 m MSL</dd>
+                    <div className="flex justify-between border-b border-hc-border pb-1.5">
+                      <dt className="text-hc-textSecondary">Tailwater Elevation Datum:</dt>
+                      <dd className="text-hc-ink">290.0 m MSL</dd>
                     </div>
                   </dl>
                 </div>
@@ -445,26 +445,26 @@ export default function ScientificRunAuditModal({
           {/* Tab 5: Reproducibility & Audit JSON */}
           {activeTab === 'reproducibility' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+              <div className="p-4 rounded-xl bg-hc-bg border border-hc-border space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Fingerprint className="w-4 h-4 text-cyan-400" />
-                    <span className="text-xs font-bold text-slate-200">Reproducibility Certificate ID:</span>
-                    <span className="font-mono text-xs font-bold text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800">
+                    <Fingerprint className="w-4 h-4 text-hc-active" />
+                    <span className="text-xs font-bold text-hc-ink">Reproducibility Certificate ID:</span>
+                    <span className="font-mono text-xs font-bold text-hc-active bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800">
                       {reproducibilityId}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handleCopyBundle}
-                      className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 flex items-center gap-1.5 transition"
+                      className="px-3 py-1.5 rounded-lg bg-hc-secondary hover:bg-hc-border text-xs font-medium text-hc-ink flex items-center gap-1.5 transition"
                     >
-                      {copiedBundle ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copiedBundle ? <Check className="w-3.5 h-3.5 text-hc-success" /> : <Copy className="w-3.5 h-3.5" />}
                       <span>{copiedBundle ? 'JSON Copied' : 'Copy JSON'}</span>
                     </button>
                     <button
                       onClick={handleDownloadJson}
-                      className="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition"
+                      className="px-3 py-1.5 rounded-lg bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs flex items-center gap-1.5 transition"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>Download JSON</span>
@@ -473,7 +473,7 @@ export default function ScientificRunAuditModal({
                 </div>
 
                 <div className="relative">
-                  <pre className="p-3 bg-slate-900 rounded-lg text-[11px] font-mono text-slate-300 max-h-56 overflow-y-auto border border-slate-800">
+                  <pre className="p-3 bg-hc-surface rounded-lg text-[11px] font-mono text-hc-textSecondary max-h-56 overflow-y-auto border border-hc-border">
                     {JSON.stringify(
                       {
                         reproducibility_id: reproducibilityId,
@@ -519,22 +519,22 @@ export default function ScientificRunAuditModal({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3.5 border-t border-slate-800 flex items-center justify-between bg-slate-950/80">
-          <div className="flex items-center gap-2 text-xs text-slate-400 font-mono">
+        <div className="px-6 py-3.5 border-t border-hc-border flex items-center justify-between bg-hc-bg/80">
+          <div className="flex items-center gap-2 text-xs text-hc-textSecondary font-mono">
             <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
             <span>AUDIT LOG SIGNED BY HYDROBREACH KERNEL</span>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={handleDownloadJson}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl bg-hc-secondary hover:bg-hc-border text-xs font-semibold text-hc-ink transition flex items-center gap-1.5"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Export Audit Certificate</span>
             </button>
             <button
               onClick={onClose}
-              className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition"
+              className="px-5 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition"
             >
               Close
             </button>

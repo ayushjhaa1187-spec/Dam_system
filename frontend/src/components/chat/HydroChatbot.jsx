@@ -157,19 +157,19 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
   const renderFormattedContent = (content) => {
     const lines = content.split('\n');
     return (
-      <div className="space-y-1.5 text-xs sm:text-sm leading-relaxed text-slate-200">
+      <div className="space-y-1.5 text-xs sm:text-sm leading-relaxed text-hc-ink">
         {lines.map((line, idx) => {
           // Headers
           if (line.startsWith('### ')) {
             return (
-              <h4 key={idx} className="font-bold text-cyan-400 text-sm mt-2 mb-1 flex items-center gap-1.5">
+              <h4 key={idx} className="font-bold text-hc-active text-sm mt-2 mb-1 flex items-center gap-1.5">
                 {line.replace('### ', '')}
               </h4>
             );
           }
           if (line.startsWith('#### ')) {
             return (
-              <h5 key={idx} className="font-semibold text-slate-100 text-xs mt-1.5 mb-0.5">
+              <h5 key={idx} className="font-semibold text-hc-ink text-xs mt-1.5 mb-0.5">
                 {line.replace('#### ', '')}
               </h5>
             );
@@ -177,8 +177,8 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
           // Bullet points
           if (line.startsWith('- ') || line.startsWith('* ')) {
             return (
-              <div key={idx} className="flex items-start gap-2 pl-1.5 text-slate-300">
-                <span className="text-cyan-400 select-none">•</span>
+              <div key={idx} className="flex items-start gap-2 pl-1.5 text-hc-textSecondary">
+                <span className="text-hc-active select-none">•</span>
                 <span dangerouslySetInnerHTML={{ __html: formatInline(line.substring(2)) }} />
               </div>
             );
@@ -199,8 +199,8 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
   const formatInline = (text) => {
     let formatted = text
       .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em class="text-slate-300">$1</em>')
-      .replace(/`([^`]+)`/g, '<code class="bg-slate-800/80 px-1.5 py-0.5 rounded text-cyan-300 font-mono text-[11px]">$1</code>')
+      .replace(/\*(.*?)\*/g, '<em class="text-hc-textSecondary">$1</em>')
+      .replace(/`([^`]+)`/g, '<code class="bg-hc-secondary/80 px-1.5 py-0.5 rounded text-cyan-300 font-mono text-[11px]">$1</code>')
       .replace(/\$([^\$]+)\$/g, '<span class="font-mono text-cyan-300 font-medium px-1 bg-cyan-950/40 rounded">$1</span>');
     return formatted;
   };
@@ -223,9 +223,9 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
                 title="Open HydroBot AI Assistant"
               >
                 {/* Glowing Radar Pulse */}
-                <span className="absolute -inset-0.5 rounded-2xl bg-cyan-400/30 blur-sm group-hover:bg-cyan-400/50 animate-pulse pointer-events-none" />
+                <span className="absolute -inset-0.5 rounded-2xl bg-hc-active/30 blur-sm group-hover:bg-hc-active/50 animate-pulse pointer-events-none" />
 
-                <div className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-slate-950/40 border border-white/20">
+                <div className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-hc-bg/40 border border-white/20">
                   <Bot className="w-5 h-5 text-cyan-300 group-hover:rotate-12 transition-transform" />
                 </div>
 
@@ -254,30 +254,30 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 30, scale: 0.95 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className={`fixed z-50 bg-slate-950/95 backdrop-blur-xl border border-cyan-500/30 rounded-2xl shadow-2xl shadow-cyan-950/80 flex flex-col overflow-hidden font-sans ${
+            className={`fixed z-50 bg-hc-bg/95 backdrop-blur-xl border border-cyan-500/30 rounded-2xl shadow-2xl shadow-cyan-950/80 flex flex-col overflow-hidden font-sans ${
               isExpanded
                 ? 'bottom-4 right-4 left-4 top-4 md:left-auto md:w-[720px] md:h-[88vh]'
                 : 'bottom-6 right-6 w-[94vw] sm:w-[420px] md:w-[460px] h-[600px] max-h-[85vh]'
             }`}
           >
             {/* Header */}
-            <div className="p-3.5 bg-gradient-to-r from-slate-900 via-cyan-950/40 to-slate-900 border-b border-slate-800 flex items-center justify-between select-none">
+            <div className="p-3.5 bg-gradient-to-r from-slate-900 via-cyan-950/40 to-slate-900 border-b border-hc-border flex items-center justify-between select-none">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-400">
+                <div className="w-8 h-8 rounded-xl bg-hc-active/20 border border-cyan-400/40 flex items-center justify-center text-hc-active">
                   <Bot className="w-4 h-4" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-xs font-mono text-slate-100 tracking-wide">HYDROBOT AI</span>
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    <span className="font-bold text-xs font-mono text-hc-ink tracking-wide">HYDROBOT AI</span>
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-semibold bg-emerald-500/20 text-emerald-300 border border-hc-success/30">
                       LIVE
                     </span>
                   </div>
-                  <div className="text-[10px] text-slate-400 flex items-center gap-1.5 font-mono">
-                    <Cpu className="w-3 h-3 text-cyan-400" />
+                  <div className="text-[10px] text-hc-textSecondary flex items-center gap-1.5 font-mono">
+                    <Cpu className="w-3 h-3 text-hc-active" />
                     <span>Gemini 3.6 Flash</span>
                     {currentPreset && (
-                      <span className="text-cyan-400/80 truncate max-w-[140px]">
+                      <span className="text-hc-active/80 truncate max-w-[140px]">
                         • {currentPreset.dam_name || currentPreset.name}
                       </span>
                     )}
@@ -290,21 +290,21 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
                 <button
                   onClick={handleClearChat}
                   title="Clear conversation"
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 transition"
+                  className="p-1.5 rounded-lg text-hc-textSecondary hover:text-hc-ink hover:bg-hc-secondary/80 transition"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
                   title={isExpanded ? 'Restore size' : 'Expand window'}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 transition hidden sm:block"
+                  className="p-1.5 rounded-lg text-hc-textSecondary hover:text-hc-ink hover:bg-hc-secondary/80 transition hidden sm:block"
                 >
                   {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
                   title="Close Assistant"
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-300 hover:bg-rose-950/40 transition"
+                  className="p-1.5 rounded-lg text-hc-textSecondary hover:text-rose-300 hover:bg-rose-950/40 transition"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -313,13 +313,13 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
 
             {/* Live Context Banner */}
             {currentPreset && (
-              <div className="px-3 py-1.5 bg-cyan-950/40 border-b border-cyan-900/40 flex items-center justify-between text-[10px] font-mono text-slate-400">
+              <div className="px-3 py-1.5 bg-cyan-950/40 border-b border-cyan-900/40 flex items-center justify-between text-[10px] font-mono text-hc-textSecondary">
                 <span className="flex items-center gap-1 text-cyan-300 truncate">
-                  <Waves className="w-3 h-3 text-cyan-400" />
+                  <Waves className="w-3 h-3 text-hc-active" />
                   Active: {currentPreset.name}
                 </span>
                 {simulationResult && (
-                  <span className="text-emerald-400 font-semibold shrink-0">
+                  <span className="text-hc-success font-semibold shrink-0">
                     CSI: {simulationResult.comparison_result?.overall_metrics?.critical_success_index_csi || '0.865'}
                   </span>
                 )}
@@ -337,7 +337,7 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
                     className={`relative max-w-[88%] rounded-2xl p-3.5 shadow-md ${
                       msg.role === 'user'
                         ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-br-sm'
-                        : 'bg-slate-900/90 border border-slate-800 text-slate-200 rounded-bl-sm'
+                        : 'bg-hc-surface/90 border border-hc-border text-hc-ink rounded-bl-sm'
                     }`}
                   >
                     {msg.role === 'assistant' ? (
@@ -348,18 +348,18 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
 
                     {/* Footer / Copy Button for Assistant */}
                     {msg.role === 'assistant' && (
-                      <div className="mt-2.5 pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-slate-500 font-mono">
-                        <span className="flex items-center gap-1 text-cyan-400/80">
+                      <div className="mt-2.5 pt-1.5 border-t border-hc-border/80 flex items-center justify-between text-[10px] text-hc-textSecondary font-mono">
+                        <span className="flex items-center gap-1 text-hc-active/80">
                           <Sparkles className="w-3 h-3" /> HydroBreach Knowledge
                         </span>
                         <button
                           onClick={() => handleCopyMessage(msg.id, msg.content)}
-                          className="flex items-center gap-1 text-slate-400 hover:text-slate-200 transition"
+                          className="flex items-center gap-1 text-hc-textSecondary hover:text-hc-ink transition"
                         >
                           {copiedId === msg.id ? (
                             <>
-                              <Check className="w-3 h-3 text-emerald-400" />
-                              <span className="text-emerald-400">Copied</span>
+                              <Check className="w-3 h-3 text-hc-success" />
+                              <span className="text-hc-success">Copied</span>
                             </>
                           ) : (
                             <>
@@ -371,7 +371,7 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
                       </div>
                     )}
                   </div>
-                  <span className="text-[9px] text-slate-500 px-1 mt-1 font-mono">
+                  <span className="text-[9px] text-hc-textSecondary px-1 mt-1 font-mono">
                     {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
@@ -380,11 +380,11 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
               {/* Typing Loader */}
               {isLoading && (
                 <div className="flex items-start gap-2">
-                  <div className="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 rounded-bl-sm flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '300ms' }} />
-                    <span className="text-xs text-slate-400 font-mono ml-2">Reasoning with Gemini...</span>
+                  <div className="bg-hc-surface border border-hc-border rounded-2xl p-3.5 rounded-bl-sm flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-hc-active animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-2 h-2 rounded-full bg-hc-active animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-2 h-2 rounded-full bg-hc-active animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="text-xs text-hc-textSecondary font-mono ml-2">Reasoning with Gemini...</span>
                   </div>
                 </div>
               )}
@@ -394,15 +394,15 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
 
             {/* Quick Suggestion Chips */}
             {messages.length < 5 && !isLoading && (
-              <div className="px-3.5 py-2 bg-slate-900/60 border-t border-slate-900 flex items-center gap-1.5 overflow-x-auto no-scrollbar select-none">
-                <span className="text-[10px] font-mono uppercase text-slate-500 shrink-0 flex items-center gap-1">
-                  <HelpCircle className="w-3 h-3 text-cyan-400" /> Prompts:
+              <div className="px-3.5 py-2 bg-hc-surface/60 border-t border-hc-border flex items-center gap-1.5 overflow-x-auto no-scrollbar select-none">
+                <span className="text-[10px] font-mono uppercase text-hc-textSecondary shrink-0 flex items-center gap-1">
+                  <HelpCircle className="w-3 h-3 text-hc-active" /> Prompts:
                 </span>
                 {SUGGESTED_PROMPTS.map((chip, idx) => (
                   <button
                     key={idx}
                     onClick={() => handleSendMessage(chip.query)}
-                    className="shrink-0 px-2.5 py-1 rounded-full text-[11px] bg-slate-800/80 hover:bg-cyan-950 hover:text-cyan-300 hover:border-cyan-500/40 text-slate-300 border border-slate-700/60 transition whitespace-nowrap"
+                    className="shrink-0 px-2.5 py-1 rounded-full text-[11px] bg-hc-secondary/80 hover:bg-cyan-950 hover:text-cyan-300 hover:border-cyan-500/40 text-hc-textSecondary border border-hc-border/60 transition whitespace-nowrap"
                   >
                     {chip.label}
                   </button>
@@ -416,7 +416,7 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
                 e.preventDefault();
                 handleSendMessage();
               }}
-              className="p-3 bg-slate-900 border-t border-slate-800/80 flex items-center gap-2"
+              className="p-3 bg-hc-surface border-t border-hc-border/80 flex items-center gap-2"
             >
               <input
                 ref={inputRef}
@@ -425,12 +425,12 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Ask HydroBot about dam failure, SPH, HADR..."
                 disabled={isLoading}
-                className="flex-1 bg-slate-950 border border-slate-800 focus:border-cyan-500/80 focus:ring-1 focus:ring-cyan-500/50 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 outline-none transition disabled:opacity-50"
+                className="flex-1 bg-hc-bg border border-hc-border focus:border-cyan-500/80 focus:ring-1 focus:ring-cyan-500/50 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-hc-ink placeholder-slate-500 outline-none transition disabled:opacity-50"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim() || isLoading}
-                className="flex items-center justify-center p-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold shadow-lg shadow-cyan-950 transition disabled:opacity-40 disabled:cursor-not-allowed transform active:scale-95"
+                className="flex items-center justify-center p-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-hc-ink font-bold shadow-lg shadow-cyan-950 transition disabled:opacity-40 disabled:cursor-not-allowed transform active:scale-95"
               >
                 <Send className="w-4 h-4" />
               </button>

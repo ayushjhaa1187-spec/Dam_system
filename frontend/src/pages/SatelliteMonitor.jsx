@@ -56,9 +56,9 @@ export default function SatelliteMonitor({ onTriggerScenarioFromLake }) {
   const activeAlert = alerts.length > 0 ? alerts[0] : null;
 
   const comparisonViewer = (
-    <div className="relative w-full h-full min-h-[320px] bg-slate-950 rounded-2xl overflow-hidden select-none border border-slate-800/80 flex flex-col justify-between">
+    <div className="relative w-full h-full min-h-[320px] bg-hc-bg rounded-2xl overflow-hidden select-none border border-hc-border/80 flex flex-col justify-between">
       {/* Post-Event (Right / Full Background) */}
-      <div className="absolute inset-0 bg-slate-950 flex items-center justify-center p-6">
+      <div className="absolute inset-0 bg-hc-bg flex items-center justify-center p-6">
         <svg viewBox="0 0 600 240" className="w-full h-full">
           <path d="M 0,40 Q 200,80 300,120 T 600,160" fill="none" stroke="#1e293b" strokeWidth="2" />
           <path d="M 0,180 Q 200,140 300,150 T 600,210" fill="none" stroke="#1e293b" strokeWidth="2" />
@@ -68,14 +68,14 @@ export default function SatelliteMonitor({ onTriggerScenarioFromLake }) {
             Detected Impoundment: 18.5 ha
           </text>
         </svg>
-        <div className="absolute top-4 right-4 bg-slate-950/90 px-3 py-1 rounded-lg border border-slate-800 text-xs font-mono text-cyan-400">
+        <div className="absolute top-4 right-4 bg-hc-bg/90 px-3 py-1 rounded-lg border border-hc-border text-xs font-mono text-hc-active">
           POST-PASS: 2026-08-24 (VV) &bull; UI PREVIEW / TEST FIXTURE
         </div>
       </div>
 
       {/* Pre-Event (Left Overlay clipped by slider) */}
       <div
-        className="absolute inset-y-0 left-0 bg-slate-950 border-r-2 border-cyan-400 overflow-hidden flex items-center p-6"
+        className="absolute inset-y-0 left-0 bg-hc-bg border-r-2 border-cyan-400 overflow-hidden flex items-center p-6"
         style={{ width: `${sliderPosition}%` }}
       >
         <svg viewBox="0 0 600 240" className="w-full h-full" style={{ width: '600px', minWidth: '600px' }}>
@@ -86,7 +86,7 @@ export default function SatelliteMonitor({ onTriggerScenarioFromLake }) {
             Pre-Event Normal Stream Bed
           </text>
         </svg>
-        <div className="absolute top-4 left-4 bg-slate-950/90 px-3 py-1 rounded-lg border border-slate-800 text-xs font-mono text-slate-400">
+        <div className="absolute top-4 left-4 bg-hc-bg/90 px-3 py-1 rounded-lg border border-hc-border text-xs font-mono text-hc-textSecondary">
           PRE-PASS: 2026-08-10 (VV)
         </div>
       </div>
@@ -99,7 +99,7 @@ export default function SatelliteMonitor({ onTriggerScenarioFromLake }) {
           max="100"
           value={sliderPosition}
           onChange={(e) => setSliderPosition(parseInt(e.target.value))}
-          className="w-full accent-cyan-400 cursor-ew-resize opacity-90 hover:opacity-100 h-2 bg-slate-800 rounded-lg"
+          className="w-full accent-cyan-400 cursor-ew-resize opacity-90 hover:opacity-100 h-2 bg-hc-secondary rounded-lg"
         />
       </div>
     </div>
@@ -118,15 +118,15 @@ export default function SatelliteMonitor({ onTriggerScenarioFromLake }) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsFullScreen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-xs font-semibold text-slate-200 transition"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary text-xs font-semibold text-hc-ink transition"
             >
-              <Maximize2 className="w-3.5 h-3.5 text-cyan-400" />
+              <Maximize2 className="w-3.5 h-3.5 text-hc-active" />
               <span>Compare Passes</span>
             </button>
             <button
               onClick={loadData}
               disabled={isLoading}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-xs font-semibold text-slate-200 transition"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary text-xs font-semibold text-hc-ink transition"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
               <span>Refresh Orbit Pass</span>
@@ -186,23 +186,23 @@ export default function SatelliteMonitor({ onTriggerScenarioFromLake }) {
             icon={Satellite}
           >
             <div className="space-y-3 text-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-                <span className="text-slate-400">River Basin</span>
-                <span className="font-semibold text-slate-200">Rishi Ganga / Dhauliganga</span>
+              <div className="flex items-center justify-between pb-2 border-b border-hc-border">
+                <span className="text-hc-textSecondary">River Basin</span>
+                <span className="font-semibold text-hc-ink">Rishi Ganga / Dhauliganga</span>
               </div>
-              <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-                <span className="text-slate-400">Water Extent</span>
-                <span className="font-mono text-cyan-400 font-bold">18.5 ha</span>
+              <div className="flex items-center justify-between pb-2 border-b border-hc-border">
+                <span className="text-hc-textSecondary">Water Extent</span>
+                <span className="font-mono text-hc-active font-bold">18.5 ha</span>
               </div>
-              <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-                <span className="text-slate-400">Estimated Depth</span>
-                <span className="font-mono text-slate-200">
-                  28.0 m <span className="text-[10px] text-slate-400">(DERIVED)</span>
+              <div className="flex items-center justify-between pb-2 border-b border-hc-border">
+                <span className="text-hc-textSecondary">Estimated Depth</span>
+                <span className="font-mono text-hc-ink">
+                  28.0 m <span className="text-[10px] text-hc-textSecondary">(DERIVED)</span>
                 </span>
               </div>
-              <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-                <span className="text-slate-400">Impounded Volume</span>
-                <span className="font-mono text-purple-400 font-bold">1.85 Mm³</span>
+              <div className="flex items-center justify-between pb-2 border-b border-hc-border">
+                <span className="text-hc-textSecondary">Impounded Volume</span>
+                <span className="font-mono text-hc-assumption font-bold">1.85 Mm³</span>
               </div>
 
               {onTriggerScenarioFromLake && (
@@ -216,9 +216,9 @@ export default function SatelliteMonitor({ onTriggerScenarioFromLake }) {
                         estimated_volume_m3: 1850000.0,
                       })
                     }
-                    className="w-full py-2.5 px-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition flex items-center justify-center gap-2"
+                    className="w-full py-2.5 px-3 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition flex items-center justify-center gap-2"
                   >
-                    <Play className="w-3.5 h-3.5 fill-slate-950" />
+                    <Play className="w-3.5 h-3.5 fill-hc-ink" />
                     <span>Simulate Outburst Hydrodynamics</span>
                   </button>
                 </div>

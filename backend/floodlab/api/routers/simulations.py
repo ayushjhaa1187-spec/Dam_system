@@ -326,6 +326,22 @@ async def run_simulation(req: RunSimulationRequest):
         params = _default_tehri_params()
 
     solver = req.solver_type or req.simulation_engine or "coupled"
+    reach_km = params.get("reach_length_km", 100.0)
+
+    # Phase 2: Enforce Domain Constraints
+    if "tehri" in lookup_id.lower():
+        if solver.lower() in ["sph", "dualsphysics"] and reach_km > 2.0:
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    "SPH solver is restricted to the Near Field domain (<= 2km). "
+                    "Use Delft3D FM for far-field propagation."
+                )
+            )
+        if solver.lower() == "coupled":
+            # For coupled runs, SPH must hand off to Delft3D quickly
+            pass
+
     return execute_simulation_computation(
         params=params,
         solver_type=solver,

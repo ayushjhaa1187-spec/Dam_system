@@ -7,6 +7,20 @@ export default {
   theme: {
     extend: {
       colors: {
+        hc: {
+          ink: '#12304A',
+          primary: '#1479C9',
+          active: '#00A9C6',
+          bg: '#F4F9FC',
+          surface: '#FFFFFF',
+          secondary: '#EAF4FA',
+          border: '#D7E4EC',
+          textSecondary: '#5F7180',
+          success: '#178A72',
+          watch: '#D98A11',
+          critical: '#D94242',
+          assumption: '#7667D8',
+        },
         hazard: {
           red: '#ef4444',
           orange: '#f97316',

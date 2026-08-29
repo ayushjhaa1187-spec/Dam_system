@@ -3,49 +3,49 @@ import React from 'react';
 const STATUS_CONFIGS = {
   COMPLETED: {
     bg: 'bg-emerald-950/60',
-    text: 'text-emerald-400',
+    text: 'text-hc-success',
     border: 'border-emerald-800/60',
     dot: 'bg-emerald-400',
     label: 'COMPLETED',
   },
   COMPLETED_ADAPTER: {
     bg: 'bg-emerald-950/60',
-    text: 'text-emerald-400',
+    text: 'text-hc-success',
     border: 'border-emerald-800/60',
     dot: 'bg-emerald-400',
     label: 'COMPLETED',
   },
   RUNNING: {
     bg: 'bg-cyan-950/60',
-    text: 'text-cyan-400',
+    text: 'text-hc-active',
     border: 'border-cyan-800/60',
-    dot: 'bg-cyan-400 animate-pulse',
+    dot: 'bg-hc-active animate-pulse',
     label: 'RUNNING',
   },
   NOT_STARTED: {
-    bg: 'bg-slate-900',
-    text: 'text-slate-400',
-    border: 'border-slate-800',
-    dot: 'bg-slate-500',
+    bg: 'bg-hc-surface',
+    text: 'text-hc-textSecondary',
+    border: 'border-hc-border',
+    dot: 'bg-hc-secondary',
     label: 'NOT STARTED',
   },
   NOT_RUN: {
-    bg: 'bg-slate-900',
-    text: 'text-slate-400',
-    border: 'border-slate-800',
-    dot: 'bg-slate-500',
+    bg: 'bg-hc-surface',
+    text: 'text-hc-textSecondary',
+    border: 'border-hc-border',
+    dot: 'bg-hc-secondary',
     label: 'NOT RUN',
   },
   DATA_UNAVAILABLE: {
-    bg: 'bg-slate-900',
-    text: 'text-slate-500',
-    border: 'border-slate-800',
-    dot: 'bg-slate-600',
+    bg: 'bg-hc-surface',
+    text: 'text-hc-textSecondary',
+    border: 'border-hc-border',
+    dot: 'bg-hc-secondary',
     label: 'DATA UNAVAILABLE',
   },
   FAILED: {
     bg: 'bg-red-950/60',
-    text: 'text-red-400',
+    text: 'text-hc-critical',
     border: 'border-red-800/60',
     dot: 'bg-red-400',
     label: 'FAILED',
@@ -66,23 +66,68 @@ const STATUS_CONFIGS = {
   },
   HIGH: {
     bg: 'bg-red-950/60',
-    text: 'text-red-400',
+    text: 'text-hc-critical',
     border: 'border-red-800/60',
     dot: 'bg-red-400 animate-pulse',
     label: 'HIGH ALERT',
   },
   NORMAL: {
     bg: 'bg-emerald-950/60',
-    text: 'text-emerald-400',
+    text: 'text-hc-success',
     border: 'border-emerald-800/60',
     dot: 'bg-emerald-400',
     label: 'NORMAL',
+  },
+  // Phase 1: Explicit Provenance Labels
+  'DEMO / FIXTURE': {
+    bg: 'bg-hc-secondary/80',
+    text: 'text-hc-textSecondary',
+    border: 'border-hc-border',
+    dot: 'bg-hc-secondary',
+    label: 'DEMO / FIXTURE',
+  },
+  'SCREENING MODEL': {
+    bg: 'bg-amber-950/80',
+    text: 'text-amber-400',
+    border: 'border-amber-700/80',
+    dot: 'bg-amber-400',
+    label: 'SCREENING MODEL',
+  },
+  'REAL SPH RUN': {
+    bg: 'bg-purple-950/80',
+    text: 'text-hc-assumption',
+    border: 'border-purple-700/80',
+    dot: 'bg-purple-400 animate-pulse',
+    label: 'REAL SPH RUN',
+  },
+  'REAL DELFT3D RUN': {
+    bg: 'bg-indigo-950/80',
+    text: 'text-indigo-400',
+    border: 'border-indigo-700/80',
+    dot: 'bg-indigo-400 animate-pulse',
+    label: 'REAL DELFT3D RUN',
+  },
+  'OBSERVED SATELLITE': {
+    bg: 'bg-sky-950/80',
+    text: 'text-sky-400',
+    border: 'border-sky-700/80',
+    dot: 'bg-sky-400',
+    label: 'OBSERVED SATELLITE',
+  },
+  'WHAT-IF SCENARIO': {
+    bg: 'bg-rose-950/80',
+    text: 'text-rose-400',
+    border: 'border-rose-700/80',
+    dot: 'bg-rose-400',
+    label: 'WHAT-IF SCENARIO',
   },
 };
 
 export default function StatusBadge({ status = 'NOT_RUN', label, className = '' }) {
   const norm = (status || 'NOT_RUN').toUpperCase();
-  const cfg = STATUS_CONFIGS[norm] || STATUS_CONFIGS.NOT_RUN;
+  // Try exact match first, then uppercase match
+  const cfg = STATUS_CONFIGS[status] || STATUS_CONFIGS[norm] || STATUS_CONFIGS.NOT_RUN;
+
   const displayLabel = label || cfg.label;
 
   return (
