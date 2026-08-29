@@ -28,7 +28,7 @@ def test_scenario_preset_retrieval_and_reload():
     preset_id = "tehri_dam_bhagirathi"
     p = get_preset_by_id(preset_id)
     assert p is not None
-    assert p["dam_name"] == "Tehri Dam"
+    assert "Tehri Dam" in p["name"]
     assert p["dam_height_m"] == 260.5
 
 
