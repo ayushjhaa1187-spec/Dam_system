@@ -243,6 +243,27 @@ class Delft3DHydroSolver:
         d_hu_dx[:, 1:-1] = (hu[:, 2:] - hu[:, :-2]) / (2.0 * dx)
         d_hv_dy[1:-1, :] = (hv[2:, :] - hv[:-2, :]) / (2.0 * dy)
 
+        # Advection gradients for momentum equations
+        du_dx = np.zeros_like(u)
+        du_dy = np.zeros_like(u)
+        dv_dx = np.zeros_like(v)
+        dv_dy = np.zeros_like(v)
+        
+        du_dx[:, 1:-1] = (u[:, 2:] - u[:, :-2]) / (2.0 * dx)
+        du_dy[1:-1, :] = (u[2:, :] - u[:-2, :]) / (2.0 * dy)
+        dv_dx[:, 1:-1] = (v[:, 2:] - v[:, :-2]) / (2.0 * dx)
+        dv_dy[1:-1, :] = (v[2:, :] - v[:-2, :]) / (2.0 * dy)
+
+        # Lax-Friedrichs spatial smoothing (creates numerical diffusion for shock stability)
+        h_sm = h.copy()
+        u_sm = u.copy()
+        v_sm = v.copy()
+        
+        # 4-point average for inner cells
+        h_sm[1:-1, 1:-1] = 0.25 * (h[:-2, 1:-1] + h[2:, 1:-1] + h[1:-1, :-2] + h[1:-1, 2:])
+        u_sm[1:-1, 1:-1] = 0.25 * (u[:-2, 1:-1] + u[2:, 1:-1] + u[1:-1, :-2] + u[1:-1, 2:])
+        v_sm[1:-1, 1:-1] = 0.25 * (v[:-2, 1:-1] + v[2:, 1:-1] + v[1:-1, :-2] + v[1:-1, 2:])
+
         # Manning friction deceleration
         vel_mag = np.sqrt(u ** 2 + v ** 2)
         r_hyd = np.maximum(h, 0.1)
@@ -251,7 +272,7 @@ class Delft3DHydroSolver:
 
         # Continuity update: dh/dt = - d(hu)/dx - d(hv)/dy
         dh_dt = -d_hu_dx - d_hv_dy
-        h_new = np.maximum(h + dh_dt * dt, 0.0)
+        h_new = np.maximum(h_sm + dh_dt * dt, 0.0)
 
         # Physical upper bound to prevent unphysical numerical blow-up
         h_new = np.minimum(h_new, 300.0)
@@ -263,15 +284,15 @@ class Delft3DHydroSolver:
         # Momentum updates:
         wet_mask = h_new > self.config.h_dry
 
-        du_dt = -self.G * d_eta_dx - friction_coeff * u
-        dv_dt = -self.G * d_eta_dy - friction_coeff * v
+        du_dt = -u * du_dx - v * du_dy - self.G * d_eta_dx - friction_coeff * u
+        dv_dt = -u * dv_dx - v * dv_dy - self.G * d_eta_dy - friction_coeff * v
 
         # Limit acceleration bounds
         du_dt = np.clip(du_dt, -50.0, 50.0)
         dv_dt = np.clip(dv_dt, -50.0, 50.0)
 
-        u_new[wet_mask] = u[wet_mask] + du_dt[wet_mask] * dt
-        v_new[wet_mask] = v[wet_mask] + dv_dt[wet_mask] * dt
+        u_new[wet_mask] = u_sm[wet_mask] + du_dt[wet_mask] * dt
+        v_new[wet_mask] = v_sm[wet_mask] + dv_dt[wet_mask] * dt
 
         # Dry cells zeroed
         u_new[~wet_mask] = 0.0

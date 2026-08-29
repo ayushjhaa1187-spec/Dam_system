@@ -6,6 +6,7 @@ steep mountain river channels, and sudden wave propagation.
 
 import math
 import numpy as np
+from scipy.spatial import cKDTree
 from typing import Dict, Any, List, Optional, Tuple
 
 
@@ -28,9 +29,23 @@ class SPHKernel:
         w = alpha_d * ((1.0 - 0.5 * q) ** 4) * (2.0 * q + 1.0)
 
         # Derivative: dW/dr = -alpha_d * (5/h) * q * (1 - q/2)^3
-        dw_dr = -alpha_d * (5.0 / h) * q * ((1.0 - 0.5 * q) ** 3)
-        grad_w_over_r = dw_dr / r
+        # grad_w_over_r = dW/dr / r
+        grad_w_over_r = -alpha_d * (5.0 / (h ** 2)) * ((1.0 - 0.5 * q) ** 3)
 
+        return w, grad_w_over_r
+
+    @staticmethod
+    def wendland_c2_2d_vec(r: np.ndarray, h: float) -> Tuple[np.ndarray, np.ndarray]:
+        """Vectorized Wendland C2 kernel in 2D."""
+        q = r / h
+        mask = q <= 2.0
+        alpha_d = 7.0 / (4.0 * math.pi * (h ** 2))
+        w = np.zeros_like(r)
+        grad_w_over_r = np.zeros_like(r)
+        
+        q_mask = q[mask]
+        w[mask] = alpha_d * ((1.0 - 0.5 * q_mask) ** 4) * (2.0 * q_mask + 1.0)
+        grad_w_over_r[mask] = -alpha_d * (5.0 / (h ** 2)) * ((1.0 - 0.5 * q_mask) ** 3)
         return w, grad_w_over_r
 
     @staticmethod
@@ -341,22 +356,77 @@ class SPHHydroSolver:
         # Limit max friction to prevent numerical oscillation
         fric_factor = np.minimum(fric_factor, 5.0)
 
-        # Hydrostatic pressure gradient spreading force
-        # SPH particle dispersion along x and y gradients
-        grad_p_x = -g * np.gradient(depth) * 0.1
-        grad_p_y = -g * np.clip(y / 150.0, -1.0, 1.0) * 0.05
-
+        # Base acceleration (gravity slope and friction)
+        a_x = f_x - fric_factor * u
+        a_y = -fric_factor * v - 0.05 * y  # Centering force
+        
+        # SPH particle dispersion along x and y gradients using KDTree
+        tree = cKDTree(ps.pos)
+        h_sm = self.config.h
+        pairs = tree.query_pairs(r=h_sm, output_type='ndarray')
+        
+        V_0 = self.config.dx ** 2
+        new_depth = np.full_like(depth, 0.1)  # base minimum depth
+        
+        # Self-contribution to depth
+        w_self, _ = SPHKernel.wendland_c2_2d_vec(np.array([0.0]), h_sm)
+        new_depth += V_0 * w_self[0]
+        
+        if len(pairs) > 0:
+            i = pairs[:, 0]
+            j = pairs[:, 1]
+            dx_arr = x[i] - x[j]
+            dy_arr = y[i] - y[j]
+            dist = np.sqrt(dx_arr**2 + dy_arr**2) + 1e-6
+            
+            # Kernel and gradient
+            w, gw_r = SPHKernel.wendland_c2_2d_vec(dist, h_sm)
+            
+            # Density (Depth) Summation: h_i = sum_j V_0 W_ij
+            w_contrib = V_0 * w
+            np.add.at(new_depth, i, w_contrib)
+            np.add.at(new_depth, j, w_contrib)
+            
+            # SPH Momentum eq (pressure gradient) for shallow water:
+            F_ij_x = -g * V_0 * gw_r * dx_arr
+            F_ij_y = -g * V_0 * gw_r * dy_arr
+            
+            np.add.at(a_x, i, F_ij_x)
+            np.add.at(a_x, j, -F_ij_x)
+            np.add.at(a_y, i, F_ij_y)
+            np.add.at(a_y, j, -F_ij_y)
+            
+            # SPH Artificial Viscosity for stability
+            dvx = u[i] - u[j]
+            dvy = v[i] - v[j]
+            v_dot_r = dvx * dx_arr + dvy * dy_arr
+            visc_mask = v_dot_r < 0
+            if np.any(visc_mask):
+                vi = i[visc_mask]
+                vj = j[visc_mask]
+                vd = v_dot_r[visc_mask]
+                dd = dist[visc_mask]
+                gw = gw_r[visc_mask]
+                
+                mu = h_sm * vd / (dd**2 + 0.01 * h_sm**2)
+                c_bar = np.sqrt(g * depth[vi]) + np.sqrt(g * depth[vj])
+                rho_bar = 0.5 * (depth[vi] + depth[vj])
+                Pi_ij = (-self.config.alpha_visc * c_bar * mu + self.config.beta_visc * mu**2) / rho_bar
+                
+                visc_F_x = -V_0 * Pi_ij * gw * dx_arr[visc_mask]
+                visc_F_y = -V_0 * Pi_ij * gw * dy_arr[visc_mask]
+                
+                np.add.at(a_x, vi, visc_F_x)
+                np.add.at(a_x, vj, -visc_F_x)
+                np.add.at(a_y, vi, visc_F_y)
+                np.add.at(a_y, vj, -visc_F_y)
+                
         # Surge acceleration downstream of dam
         # Particles near dam breach get accelerated proportional to breach hydrograph
         near_breach_mask = (x >= dam_x - 200.0) & (x <= dam_x + 800.0)
-        surge_accel = np.zeros_like(x)
         if np.any(near_breach_mask):
             surge_boost = min(current_q / 5000.0, 4.0) * 2.0
-            surge_accel[near_breach_mask] = surge_boost
-
-        # Acceleration summation
-        a_x = f_x - fric_factor * u + grad_p_x + surge_accel
-        a_y = -fric_factor * v + grad_p_y - 0.05 * y  # Centering channel restoring force
+            a_x[near_breach_mask] += surge_boost
 
         # Symplectic Verlet velocity update
         u_new = u + a_x * dt
@@ -370,11 +440,8 @@ class SPHHydroSolver:
         x_new = x + u_new * dt
         y_new = y + v_new * dt
 
-        # Water depth attenuation downstream as wave spreads
-        # Continuous mass conservation update
-        dist_downstream = np.maximum(x_new - dam_x, 0.0)
-        depth_attenuation = np.exp(-dist_downstream / 35000.0)
-        depth_new = np.maximum(depth * 0.9998 + (u_new * 0.02) * depth_attenuation, 0.1)
+        # Apply computed depth
+        depth_new = np.maximum(new_depth, 0.1)
 
         # Mark arrival times for newly flooded particles
         flooded_now = (x_new > dam_x) & (depth_new > 0.3) & (ps.arrival_time < 0.0)
