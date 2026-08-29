@@ -120,7 +120,7 @@ export default function ElevationProfileModal({ isOpen, onClose, selectedPreset 
                   key={idx}
                   onClick={() => setSelectedSectionIdx(idx)}
                   className={`px-2 py-1 rounded text-xs font-medium transition ${
-                    selectedSectionIdx === idx ? 'bg-hc-active text-slate-950 font-bold' : 'bg-hc-secondary text-hc-textSecondary'
+                    selectedSectionIdx === idx ? 'bg-hc-active text-hc-ink font-bold' : 'bg-hc-secondary text-hc-textSecondary'
                   }`}
                 >
                   {sec.chainage_km} km

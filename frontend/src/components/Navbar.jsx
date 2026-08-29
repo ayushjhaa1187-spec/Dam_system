@@ -32,7 +32,7 @@ export default function Navbar({
             <div>
               <div className="flex items-center space-x-2">
                 <span className="font-extrabold text-lg tracking-tight bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-400 bg-clip-text text-transparent">
-                  FLOODLAB
+                  HYDRO COMMAND
                 </span>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-950 text-hc-active border border-cyan-800/50">
                   SIH 2026 PS 26161
@@ -175,10 +175,10 @@ export default function Navbar({
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 shadow-md transition ${
                 isSimulating
                   ? 'bg-hc-border text-hc-textSecondary cursor-not-allowed'
-                  : 'bg-hc-active hover:bg-hc-active text-slate-950 font-bold glow-cyan'
+                  : 'bg-hc-active hover:bg-hc-active text-hc-ink font-bold glow-cyan'
               }`}
             >
-              <Play className={`w-3.5 h-3.5 ${isSimulating ? 'animate-spin' : 'fill-slate-950'}`} />
+              <Play className={`w-3.5 h-3.5 ${isSimulating ? 'animate-spin' : 'fill-hc-ink'}`} />
               <span>{isSimulating ? 'Simulating...' : 'Run Scenario'}</span>
             </button>
           </div>

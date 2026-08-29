@@ -430,7 +430,7 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
               <button
                 type="submit"
                 disabled={!inputValue.trim() || isLoading}
-                className="flex items-center justify-center p-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold shadow-lg shadow-cyan-950 transition disabled:opacity-40 disabled:cursor-not-allowed transform active:scale-95"
+                className="flex items-center justify-center p-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-hc-ink font-bold shadow-lg shadow-cyan-950 transition disabled:opacity-40 disabled:cursor-not-allowed transform active:scale-95"
               >
                 <Send className="w-4 h-4" />
               </button>

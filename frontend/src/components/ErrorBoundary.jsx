@@ -38,7 +38,7 @@ export class ErrorBoundary extends React.Component {
                 this.setState({ hasError: false, error: null });
                 window.location.reload();
               }}
-              className="w-full py-2.5 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 text-xs font-bold transition flex items-center justify-center space-x-2"
+              className="w-full py-2.5 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink text-xs font-bold transition flex items-center justify-center space-x-2"
             >
               <RefreshCw className="w-4 h-4" />
               <span>Reload Application</span>

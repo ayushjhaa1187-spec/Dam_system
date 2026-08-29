@@ -321,7 +321,7 @@ export default function SimulationViewer({
         zoomControl: false,
       });
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; CartoDB & OpenStreetMap',
         maxZoom: 18,
       }).addTo(map);
@@ -437,7 +437,7 @@ export default function SimulationViewer({
           <div className="pt-2">
             <button
               onClick={onRunSimulation}
-              className="py-2.5 px-6 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 text-xs font-bold transition flex items-center justify-center space-x-2 mx-auto shadow-lg shadow-cyan-500/20"
+              className="py-2.5 px-6 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink text-xs font-bold transition flex items-center justify-center space-x-2 mx-auto shadow-lg shadow-cyan-500/20"
             >
               <PlayCircle className="w-4 h-4" />
               <span>Run Coupled Simulation</span>
@@ -556,9 +556,9 @@ export default function SimulationViewer({
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setIsPlaying(!isPlaying)}
-                  className="w-8 h-8 rounded-lg bg-hc-active hover:bg-hc-active text-slate-950 flex items-center justify-center font-bold shadow-md transition"
+                  className="w-8 h-8 rounded-lg bg-hc-active hover:bg-hc-active text-hc-ink flex items-center justify-center font-bold shadow-md transition"
                 >
-                  {isPlaying ? <Pause className="w-4 h-4 fill-slate-950" /> : <Play className="w-4 h-4 fill-slate-950" />}
+                  {isPlaying ? <Pause className="w-4 h-4 fill-hc-ink" /> : <Play className="w-4 h-4 fill-hc-ink" />}
                 </button>
 
                 <button
@@ -597,7 +597,7 @@ export default function SimulationViewer({
                     key={speed}
                     onClick={() => setPlaybackSpeed(speed)}
                     className={`px-1.5 py-0.5 rounded text-[10px] font-semibold transition ${
-                      playbackSpeed === speed ? 'bg-hc-active text-slate-950' : 'bg-hc-secondary text-hc-textSecondary hover:text-hc-ink'
+                      playbackSpeed === speed ? 'bg-hc-active text-hc-ink' : 'bg-hc-secondary text-hc-textSecondary hover:text-hc-ink'
                     }`}
                   >
                     {speed}x

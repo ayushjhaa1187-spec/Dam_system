@@ -24,4 +24,3 @@ async def evaluate_settlements(body: dict):
     settlements = body.get("settlements", [])
     results = calc.evaluate_settlements(settlements)
     return {"results": results}
-

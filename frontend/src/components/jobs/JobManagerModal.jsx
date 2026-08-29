@@ -149,7 +149,7 @@ export default function JobManagerModal({
               onClick={() => setActiveTab('current')}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                 activeTab === 'current'
-                  ? 'bg-hc-active text-slate-950 shadow-md shadow-cyan-500/20'
+                  ? 'bg-hc-active text-hc-ink shadow-md shadow-cyan-500/20'
                   : 'text-hc-textSecondary hover:text-hc-ink hover:bg-hc-secondary/60'
               }`}
             >
@@ -160,7 +160,7 @@ export default function JobManagerModal({
               onClick={() => setActiveTab('history')}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                 activeTab === 'history'
-                  ? 'bg-hc-active text-slate-950 shadow-md shadow-cyan-500/20'
+                  ? 'bg-hc-active text-hc-ink shadow-md shadow-cyan-500/20'
                   : 'text-hc-textSecondary hover:text-hc-ink hover:bg-hc-secondary/60'
               }`}
             >
@@ -244,7 +244,7 @@ export default function JobManagerModal({
 
                 <div
                   ref={logContainerRef}
-                  className="bg-hc-bg border border-hc-border rounded-2xl p-4 font-mono text-xs text-hc-textSecondary h-52 overflow-y-auto space-y-1.5 selection:bg-hc-active selection:text-slate-950"
+                  className="bg-hc-bg border border-hc-border rounded-2xl p-4 font-mono text-xs text-hc-textSecondary h-52 overflow-y-auto space-y-1.5 selection:bg-hc-active selection:text-hc-ink"
                 >
                   {(jobState.logs && jobState.logs.length > 0) ? (
                     jobState.logs.map((l, i) => (
@@ -313,7 +313,7 @@ export default function JobManagerModal({
                         }
                         onClose();
                       }}
-                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 text-xs font-bold transition shadow-md shadow-cyan-500/20"
+                      className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink text-xs font-bold transition shadow-md shadow-cyan-500/20"
                     >
                       <Eye className="w-3.5 h-3.5" />
                       <span>View Results in Simulation Lab</span>
@@ -387,7 +387,7 @@ export default function JobManagerModal({
                               if (onSelectJobResult) onSelectJobResult(j.result);
                               onClose();
                             }}
-                            className="px-2.5 py-1 bg-hc-secondary hover:bg-hc-active hover:text-slate-950 text-hc-ink text-xs font-semibold rounded-lg transition"
+                            className="px-2.5 py-1 bg-hc-secondary hover:bg-hc-active hover:text-hc-ink text-hc-ink text-xs font-semibold rounded-lg transition"
                           >
                             Load
                           </button>

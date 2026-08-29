@@ -43,7 +43,7 @@ export default function HomeScreen({
     <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 text-hc-ink">
       {/* 1. Page Header */}
       <PageHeader
-        category="FLOODLAB DISASTER OPERATIONS &bull; SCREEN 1 OF 5"
+        category="HYDRO COMMAND OPERATIONS &bull; SCREEN 1 OF 5"
         title="Home &amp; Indian River Case Studies"
         subtitle="Operational hydrodynamic breach modeling, historical disaster benchmarks, recent simulation runs, and data telemetry status."
         status="OPERATIONAL"
@@ -60,7 +60,7 @@ export default function HomeScreen({
             </button>
             <button
               onClick={() => onNavigate('create')}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition shadow-md shadow-cyan-500/20"
             >
               <span>Create Scenario</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -197,9 +197,9 @@ export default function HomeScreen({
                         onRunSimulation({ scenario_id: preset.id, preset_id: preset.id });
                       }}
                       disabled={isSimulating}
-                      className="px-3 py-1.5 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 text-xs font-bold flex items-center space-x-1 transition shadow"
+                      className="px-3 py-1.5 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink text-xs font-bold flex items-center space-x-1 transition shadow"
                     >
-                      <Play className="w-3 h-3 fill-slate-950" />
+                      <Play className="w-3 h-3 fill-hc-ink" />
                       <span>{isSelected && isSimulating ? 'Running...' : 'Run Scenario'}</span>
                     </button>
                   </div>

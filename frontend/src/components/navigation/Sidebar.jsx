@@ -52,10 +52,10 @@ export default function Sidebar({
                 className="flex flex-col"
               >
                 <span className="font-bold text-sm tracking-wide text-hc-ink font-mono">
-                  FLOOD<span className="text-hc-active">LAB</span>
+                  HYDRO<span className="text-hc-active">COMMAND</span>
                 </span>
                 <span className="text-[10px] text-hc-textSecondary tracking-wider uppercase font-medium">
-                  Disaster Ops Center
+                  Gov / HADR Dashboard
                 </span>
               </motion.div>
             )}

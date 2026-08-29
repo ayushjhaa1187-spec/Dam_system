@@ -289,7 +289,7 @@ export default function GeospatialSimulationMap({
             onClick={() => setViewMode('immediate')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               viewMode === 'immediate'
-                ? 'bg-hc-active text-slate-950 shadow-sm'
+                ? 'bg-hc-active text-hc-ink shadow-sm'
                 : 'text-hc-textSecondary hover:text-hc-ink'
             }`}
           >
@@ -299,7 +299,7 @@ export default function GeospatialSimulationMap({
             onClick={() => setViewMode('corridor')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               viewMode === 'corridor'
-                ? 'bg-hc-active text-slate-950 shadow-sm'
+                ? 'bg-hc-active text-hc-ink shadow-sm'
                 : 'text-hc-textSecondary hover:text-hc-ink'
             }`}
           >
@@ -309,7 +309,7 @@ export default function GeospatialSimulationMap({
             onClick={() => setViewMode('basin')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               viewMode === 'basin'
-                ? 'bg-hc-active text-slate-950 shadow-sm'
+                ? 'bg-hc-active text-hc-ink shadow-sm'
                 : 'text-hc-textSecondary hover:text-hc-ink'
             }`}
           >
@@ -432,10 +432,10 @@ export default function GeospatialSimulationMap({
         <div className="flex items-center gap-2">
           <button
             onClick={onTogglePlay}
-            className="p-2.5 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold transition shadow-md shadow-cyan-500/20"
+            className="p-2.5 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold transition shadow-md shadow-cyan-500/20"
             title={isPlaying ? 'Pause Simulation' : 'Play Simulation'}
           >
-            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-slate-950" />}
+            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-hc-ink" />}
           </button>
           <button
             onClick={onReset}
@@ -477,7 +477,7 @@ export default function GeospatialSimulationMap({
               onClick={() => onSpeedChange(speed)}
               className={`px-2.5 py-1 rounded-lg transition ${
                 playbackSpeed === speed
-                  ? 'bg-hc-active text-slate-950 font-bold'
+                  ? 'bg-hc-active text-hc-ink font-bold'
                   : 'text-hc-textSecondary hover:text-hc-ink'
               }`}
             >

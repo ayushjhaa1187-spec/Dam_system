@@ -291,7 +291,7 @@ export default function DualComparisonView({ simulationResult, selectedPreset })
                   <th className="py-2 px-3">Arrival Lag (Δt)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 font-mono">
+              <tbody className="divide-y divide-hc-border/60 font-mono">
                 {Object.entries(gaugeComp).map(([gKey, gVal]) => (
                   <tr key={gKey} className="hover:bg-hc-secondary/30">
                     <td className="py-2 px-3 text-hc-ink font-sans font-medium">{gKey}</td>

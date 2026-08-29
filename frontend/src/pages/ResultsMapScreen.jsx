@@ -35,7 +35,7 @@ import { formatMinutes } from '../utils/formatters';
 const COLORBLIND_PALETTES = [
   { id: 'cividis', name: 'Cividis (Colorblind-Safe)', gradient: 'from-blue-900 via-yellow-600 to-yellow-200' },
   { id: 'viridis', name: 'Viridis (Perceptual)', gradient: 'from-purple-900 via-emerald-600 to-yellow-300' },
-  { id: 'magma', name: 'Magma (High Contrast)', gradient: 'from-slate-950 via-red-800 to-orange-300' },
+  { id: 'magma', name: 'Magma (High Contrast)', gradient: 'from-hc-bg via-red-800 to-orange-300' },
   { id: 'plasma', name: 'Plasma (Vibrant)', gradient: 'from-indigo-900 via-pink-600 to-yellow-400' },
 ];
 
@@ -106,7 +106,7 @@ export default function ResultsMapScreen({
             </button>
             <button
               onClick={() => onNavigate('impact')}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition shadow-md shadow-cyan-500/20"
             >
               <span>Impact &amp; Export</span>
               <ChevronRight className="w-3.5 h-3.5" />

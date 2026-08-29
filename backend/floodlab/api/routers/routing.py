@@ -16,4 +16,3 @@ async def create_evacuation_plan(body: dict):
         "travel_time": time,
         "margin_of_safety": time_limit - time,
     }
-

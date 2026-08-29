@@ -186,7 +186,7 @@ export default function UncertaintyPanel({ selectedPreset }) {
                       <th className="p-2.5 text-hc-assumption">Depth Range</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800 font-mono">
+                  <tbody className="divide-y divide-hc-border font-mono">
                     {(result.station_uncertainties || []).map((st) => (
                       <tr key={st.station_id || st.station_name} className="hover:bg-hc-secondary/40">
                         <td className="p-2.5 font-sans font-medium text-hc-ink">{st.station_name}</td>

@@ -8,4 +8,3 @@ router = APIRouter()
 async def run_uncertainty_ensemble(body: dict):
     engine = UncertaintyEnsemble()
     return engine.run_ensemble(body, body.get("num_runs", 20))
-

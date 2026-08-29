@@ -1,8 +1,8 @@
 """
 Scenario schemas.
 """
-from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, Field
+from typing import Optional
+from pydantic import BaseModel
 
 
 class DownstreamStationSchema(BaseModel):
@@ -18,23 +18,28 @@ class DamConfig(BaseModel):
     reservoir_level_m: float
     storage_m3: float
 
+
 class BreachConfig(BaseModel):
     model: str
     width_min_m: float
     width_max_m: float
     formation_time_min: float
 
+
 class HydraulicsConfig(BaseModel):
     manning_n_source: str
     downstream_boundary: str
+
 
 class SolverConfig(BaseModel):
     mode: str
     mesh_resolution_m: float
 
+
 class ProvenanceConfig(BaseModel):
     scenario_type: str
     created_by: str
+
 
 class ScenarioConfig(BaseModel):
     scenario_id: str
@@ -45,8 +50,10 @@ class ScenarioConfig(BaseModel):
     solver: SolverConfig
     provenance: ProvenanceConfig
 
+
 class ScenarioCreate(ScenarioConfig):
     pass
+
 
 class ScenarioUpdate(BaseModel):
     mode: Optional[str] = None
@@ -55,6 +62,7 @@ class ScenarioUpdate(BaseModel):
     hydraulics: Optional[HydraulicsConfig] = None
     solver: Optional[SolverConfig] = None
     provenance: Optional[ProvenanceConfig] = None
+
 
 class ScenarioRead(ScenarioConfig):
     id: Optional[str] = None

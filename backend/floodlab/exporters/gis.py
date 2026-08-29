@@ -68,4 +68,3 @@ class GISExporter:
         c.drawString(100, 750, "HADR Situation Report with Scenario Assumptions")
         c.save()
         return filepath
-

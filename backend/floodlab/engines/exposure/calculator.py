@@ -68,4 +68,3 @@ class ExposureCalculator:
 
         # Sort by priority
         return sorted(results, key=lambda x: x["priority_score"], reverse=True)
-

@@ -35,4 +35,3 @@ class EvacuationRouter:
                 best_time = time
 
         return best_route, best_time
-

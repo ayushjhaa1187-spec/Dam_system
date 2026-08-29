@@ -770,7 +770,7 @@ export default function CreateScenarioScreen({
             {currentStep < 4 ? (
               <button
                 onClick={handleNext}
-                className="px-5 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs flex items-center space-x-1.5 transition shadow-md shadow-cyan-500/20"
+                className="px-5 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs flex items-center space-x-1.5 transition shadow-md shadow-cyan-500/20"
               >
                 <span>Continue</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -779,9 +779,9 @@ export default function CreateScenarioScreen({
               <button
                 onClick={handleSubmitScenario}
                 disabled={isSubmitting || isSimulating}
-                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-bold text-xs flex items-center space-x-2 transition shadow-lg shadow-cyan-500/20 disabled:opacity-50"
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-hc-ink font-bold text-xs flex items-center space-x-2 transition shadow-lg shadow-cyan-500/20 disabled:opacity-50"
               >
-                <Sparkles className="w-4 h-4 fill-slate-950" />
+                <Sparkles className="w-4 h-4 fill-hc-ink" />
                 <span>{isSubmitting || isSimulating ? 'Submitting Scenario...' : 'Compute & Launch Simulation'}</span>
               </button>
             )}

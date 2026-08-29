@@ -168,7 +168,7 @@ export default function ScenarioDrawer({
           <button
             onClick={handleRun}
             disabled={isSimulating}
-            className="px-5 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs flex items-center gap-2 transition disabled:opacity-50"
+            className="px-5 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs flex items-center gap-2 transition disabled:opacity-50"
           >
             {isSimulating ? (
               <>
@@ -177,7 +177,7 @@ export default function ScenarioDrawer({
               </>
             ) : (
               <>
-                <Play className="w-3.5 h-3.5 fill-slate-950" />
+                <Play className="w-3.5 h-3.5 fill-hc-ink" />
                 <span>Execute Scenario</span>
               </>
             )}

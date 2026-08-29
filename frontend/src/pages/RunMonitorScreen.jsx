@@ -116,7 +116,7 @@ export default function RunMonitorScreen({
             </button>
             <button
               onClick={() => onNavigate('results')}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition shadow-md shadow-cyan-500/20"
             >
               <span>View Results Map</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -262,7 +262,7 @@ export default function RunMonitorScreen({
                     key={lvl}
                     onClick={() => setLogFilter(lvl)}
                     className={`px-2 py-0.5 rounded ${
-                      logFilter === lvl ? 'bg-hc-active text-slate-950 font-bold' : 'text-hc-textSecondary hover:text-hc-ink'
+                      logFilter === lvl ? 'bg-hc-active text-hc-ink font-bold' : 'text-hc-textSecondary hover:text-hc-ink'
                     }`}
                   >
                     {lvl}
@@ -284,7 +284,7 @@ export default function RunMonitorScreen({
           {/* Console Body */}
           <div
             ref={logContainerRef}
-            className="flex-1 p-4 overflow-y-auto font-mono text-xs space-y-1.5 bg-hc-bg/90 selection:bg-hc-active selection:text-slate-950"
+            className="flex-1 p-4 overflow-y-auto font-mono text-xs space-y-1.5 bg-hc-bg/90 selection:bg-hc-active selection:text-hc-ink"
           >
             {filteredLogs.map((l) => {
               const isWarn = l.level === 'WARN';

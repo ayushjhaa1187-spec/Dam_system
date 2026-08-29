@@ -3,7 +3,7 @@ import { X, ArrowRight, ArrowLeft, CheckCircle2, LayoutDashboard, PlusCircle, Ac
 
 const TUTORIAL_STEPS = [
   {
-    title: 'Welcome to FLOODLAB (HydroBreach)',
+    title: 'Welcome to HYDRO COMMAND (HydroBreach)',
     icon: Sparkles,
     badge: 'Overview',
     description: 'HydroBreach is an operational HADR decision-support platform designed for catastrophic dam breaks, glacial lake outbursts (GLOF), and Himalayan flash flood routing.',
@@ -159,7 +159,7 @@ export default function TutorialModal({ isOpen, onClose }) {
             )}
             <button
               onClick={handleNext}
-              className="px-4 py-1.5 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 text-xs font-bold flex items-center space-x-1 shadow-md shadow-cyan-500/20"
+              className="px-4 py-1.5 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink text-xs font-bold flex items-center space-x-1 shadow-md shadow-cyan-500/20"
             >
               <span>{currentStep === TUTORIAL_STEPS.length - 1 ? 'Get Started' : 'Next'}</span>
               <ArrowRight className="w-3.5 h-3.5" />

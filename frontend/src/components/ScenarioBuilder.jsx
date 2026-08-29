@@ -498,10 +498,10 @@ export default function ScenarioBuilder({
               className={`w-full py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-lg transition-all ${
                 isSimulating
                   ? 'bg-hc-secondary text-hc-textSecondary cursor-not-allowed'
-                  : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 glow-cyan'
+                  : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-hc-ink glow-cyan'
               }`}
             >
-              <Play className={`w-4 h-4 ${isSimulating ? 'animate-spin' : 'fill-slate-950'}`} />
+              <Play className={`w-4 h-4 ${isSimulating ? 'animate-spin' : 'fill-hc-ink'}`} />
               <span>{isSimulating ? 'Running Hydrodynamic Physics...' : 'Launch Simulation Run'}</span>
             </button>
           </div>

@@ -464,7 +464,7 @@ export default function ScientificRunAuditModal({
                     </button>
                     <button
                       onClick={handleDownloadJson}
-                      className="px-3 py-1.5 rounded-lg bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs flex items-center gap-1.5 transition"
+                      className="px-3 py-1.5 rounded-lg bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs flex items-center gap-1.5 transition"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>Download JSON</span>
@@ -534,7 +534,7 @@ export default function ScientificRunAuditModal({
             </button>
             <button
               onClick={onClose}
-              className="px-5 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs transition"
+              className="px-5 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition"
             >
               Close
             </button>

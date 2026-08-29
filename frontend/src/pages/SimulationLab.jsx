@@ -188,9 +188,9 @@ export default function SimulationLab({
             <button
               onClick={onRunSimulation}
               disabled={isSimulating}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition shadow-md shadow-cyan-500/20"
             >
-              <Play className="w-3.5 h-3.5 fill-slate-950" />
+              <Play className="w-3.5 h-3.5 fill-hc-ink" />
               <span>{isSimulating ? 'Computing Solver...' : 'Run Simulation'}</span>
             </button>
           </div>
@@ -204,12 +204,12 @@ export default function SimulationLab({
             <span className="text-hc-textSecondary">ENGINE:</span>
             <span className="text-hc-ink font-bold">{modelName}</span>
           </div>
-          <span className="text-slate-700 hidden sm:inline">&bull;</span>
+          <span className="text-hc-textSecondary hidden sm:inline">&bull;</span>
           <div className="flex items-center gap-1.5">
             <span className="text-hc-textSecondary">DEM:</span>
             <span className="text-hc-success font-medium">{demSource} ({demResolution}m)</span>
           </div>
-          <span className="text-slate-700 hidden sm:inline">&bull;</span>
+          <span className="text-hc-textSecondary hidden sm:inline">&bull;</span>
           <div className="flex items-center gap-1.5">
             <span className="text-hc-textSecondary">CORRIDOR:</span>
             <span className="text-hc-active">100 km (Bhagirathi-Ganga)</span>

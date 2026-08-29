@@ -119,9 +119,9 @@ export default function ImpactExportScreen({
           <div className="flex items-center space-x-2">
             <button
               onClick={() => api.downloadRunPackage(payload)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-bold text-xs transition shadow-lg shadow-cyan-500/20"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-hc-ink font-bold text-xs transition shadow-lg shadow-cyan-500/20"
             >
-              <Archive className="w-3.5 h-3.5 fill-slate-950" />
+              <Archive className="w-3.5 h-3.5 fill-hc-ink" />
               <span>Download Complete Run Package (.zip)</span>
             </button>
           </div>
@@ -504,7 +504,7 @@ export default function ImpactExportScreen({
               <button
                 onClick={handleRunSatelliteAnalysis}
                 disabled={isAnalyzingSatellite}
-                className="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs transition flex items-center justify-center space-x-2 shadow-md shadow-emerald-600/20 disabled:opacity-50"
+                className="w-full py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-hc-ink font-bold text-xs transition flex items-center justify-center space-x-2 shadow-md shadow-emerald-600/20 disabled:opacity-50"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{isAnalyzingSatellite ? 'Processing SAR...' : 'Run GEE Analysis'}</span>

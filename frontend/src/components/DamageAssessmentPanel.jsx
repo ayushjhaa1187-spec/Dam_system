@@ -241,7 +241,7 @@ export default function DamageAssessmentPanel({
                       <th className="p-2">Tactical Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800 font-mono">
+                  <tbody className="divide-y divide-hc-border font-mono">
                     {priorityQueue.map((item, idx) => (
                       <tr key={item.priority_rank || idx} className="hover:bg-hc-secondary/40">
                         <td className="p-2 font-bold text-hc-active">#{item.priority_rank || idx + 1}</td>

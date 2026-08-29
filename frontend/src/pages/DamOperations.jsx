@@ -61,7 +61,7 @@ export default function DamOperations({
             </button>
             <button
               onClick={onOpenScenarioDrawer}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition shadow-md shadow-cyan-500/20"
             >
               <Sliders className="w-3.5 h-3.5" />
               <span>Configure Scenario</span>

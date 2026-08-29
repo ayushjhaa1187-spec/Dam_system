@@ -1,5 +1,6 @@
-from typing import Optional, List, Dict, Any
+from typing import List
 from pydantic import BaseModel
+
 
 class RasterLayer(BaseModel):
     layer_name: str
@@ -8,10 +9,12 @@ class RasterLayer(BaseModel):
     max_value: float
     unit: str
 
+
 class VectorLayer(BaseModel):
     layer_name: str
     format: str
     url: str
+
 
 class ExposureResult(BaseModel):
     population_at_risk: int
@@ -19,10 +22,12 @@ class ExposureResult(BaseModel):
     critical_infrastructure_affected: int
     economic_loss_estimate: float
 
+
 class RunMetadata(BaseModel):
     execution_time_seconds: float
     solver_version: str
     compute_node: str
+
 
 class SimulationResult(BaseModel):
     run_id: str

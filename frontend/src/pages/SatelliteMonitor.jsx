@@ -216,9 +216,9 @@ export default function SatelliteMonitor({ onTriggerScenarioFromLake }) {
                         estimated_volume_m3: 1850000.0,
                       })
                     }
-                    className="w-full py-2.5 px-3 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs transition flex items-center justify-center gap-2"
+                    className="w-full py-2.5 px-3 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition flex items-center justify-center gap-2"
                   >
-                    <Play className="w-3.5 h-3.5 fill-slate-950" />
+                    <Play className="w-3.5 h-3.5 fill-hc-ink" />
                     <span>Simulate Outburst Hydrodynamics</span>
                   </button>
                 </div>

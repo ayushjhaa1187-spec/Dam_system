@@ -12,4 +12,3 @@ async def process_sentinel1(body: dict):
         body.get("pre_event", "2023-01-01"),
         body.get("post_event", "2023-01-05")
     )
-

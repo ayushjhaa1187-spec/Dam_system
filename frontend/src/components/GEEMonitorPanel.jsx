@@ -160,9 +160,9 @@ export default function GEEMonitorPanel({ onTriggerScenarioFromLake }) {
                   {onTriggerScenarioFromLake && (
                     <button
                       onClick={() => onTriggerScenarioFromLake(alt)}
-                      className="px-3 py-1.5 rounded-lg bg-hc-active hover:bg-hc-active text-slate-950 text-xs font-bold flex items-center space-x-1 transition shadow"
+                      className="px-3 py-1.5 rounded-lg bg-hc-active hover:bg-hc-active text-hc-ink text-xs font-bold flex items-center space-x-1 transition shadow"
                     >
-                      <Play className="w-3 h-3 fill-slate-950" />
+                      <Play className="w-3 h-3 fill-hc-ink" />
                       <span>Simulate Outburst</span>
                     </button>
                   )}
@@ -213,7 +213,7 @@ export default function GEEMonitorPanel({ onTriggerScenarioFromLake }) {
           <button
             onClick={handleRunCustomSAR}
             disabled={isAnalyzing}
-            className="w-full py-2 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs transition flex items-center justify-center space-x-2 disabled:opacity-50"
+            className="w-full py-2 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-hc-ink font-bold text-xs transition flex items-center justify-center space-x-2 disabled:opacity-50"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>{isAnalyzing ? 'Extracting Backscatter...' : 'Run SAR Detection'}</span>

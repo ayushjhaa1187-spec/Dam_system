@@ -215,7 +215,7 @@ export default function HADRDashboard({
                       }}
                       className={`mt-1 py-1.5 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
                         isSelected
-                          ? 'bg-hc-active text-slate-950 shadow-sm'
+                          ? 'bg-hc-active text-hc-ink shadow-sm'
                           : 'bg-hc-surface border border-hc-border text-hc-textSecondary hover:bg-hc-secondary'
                       }`}
                     >

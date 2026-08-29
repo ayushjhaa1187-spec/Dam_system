@@ -280,7 +280,7 @@ export default function DataUploadWizard({
                   <span
                     className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
                       isActive
-                        ? 'bg-hc-active text-slate-950'
+                        ? 'bg-hc-active text-hc-ink'
                         : isPast
                         ? 'bg-emerald-950 text-hc-success border border-emerald-800/60'
                         : 'bg-hc-secondary text-hc-textSecondary'
@@ -911,7 +911,7 @@ export default function DataUploadWizard({
                   }
                   setCurrentStep((prev) => Math.min(10, prev + 1));
                 }}
-                className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 text-xs font-bold transition shadow-md shadow-cyan-500/20"
+                className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink text-xs font-bold transition shadow-md shadow-cyan-500/20"
               >
                 <span>Next Step</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -919,9 +919,9 @@ export default function DataUploadWizard({
             ) : (
               <button
                 onClick={handleExecute}
-                className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-400 hover:from-cyan-400 hover:to-emerald-300 text-slate-950 text-xs font-bold transition shadow-lg shadow-cyan-500/30"
+                className="flex items-center gap-2 px-6 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-400 hover:from-cyan-400 hover:to-emerald-300 text-hc-ink text-xs font-bold transition shadow-lg shadow-cyan-500/30"
               >
-                <Play className="w-4 h-4 fill-slate-950" />
+                <Play className="w-4 h-4 fill-hc-ink" />
                 <span>Dispatch Simulation Job</span>
               </button>
             )}

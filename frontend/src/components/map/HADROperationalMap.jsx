@@ -399,7 +399,7 @@ export default function HADROperationalMap({
             onClick={() => setViewMode('immediate')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               viewMode === 'immediate'
-                ? 'bg-hc-active text-slate-950 shadow-sm'
+                ? 'bg-hc-active text-hc-ink shadow-sm'
                 : 'text-hc-textSecondary hover:text-hc-ink'
             }`}
           >
@@ -409,7 +409,7 @@ export default function HADROperationalMap({
             onClick={() => setViewMode('corridor')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               viewMode === 'corridor'
-                ? 'bg-hc-active text-slate-950 shadow-sm'
+                ? 'bg-hc-active text-hc-ink shadow-sm'
                 : 'text-hc-textSecondary hover:text-hc-ink'
             }`}
           >
@@ -419,7 +419,7 @@ export default function HADROperationalMap({
             onClick={() => setViewMode('basin')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
               viewMode === 'basin'
-                ? 'bg-hc-active text-slate-950 shadow-sm'
+                ? 'bg-hc-active text-hc-ink shadow-sm'
                 : 'text-hc-textSecondary hover:text-hc-ink'
             }`}
           >

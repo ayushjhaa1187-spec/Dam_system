@@ -128,7 +128,7 @@ export default function Overview({
         actions={
           <button
             onClick={() => onNavigate('simulation')}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition shadow-md shadow-cyan-500/20"
           >
             <span>Launch Simulation Lab</span>
             <ArrowRight className="w-3.5 h-3.5" />

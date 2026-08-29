@@ -97,9 +97,9 @@ export default function Topbar({
         <button
           onClick={onRunSimulation}
           disabled={isSimulating}
-          className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-slate-950 font-bold text-xs transition shadow-md shadow-cyan-500/20 disabled:opacity-50"
+          className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition shadow-md shadow-cyan-500/20 disabled:opacity-50"
         >
-          <Play className={`w-3.5 h-3.5 fill-slate-950 ${isSimulating ? 'animate-pulse' : ''}`} />
+          <Play className={`w-3.5 h-3.5 fill-hc-ink ${isSimulating ? 'animate-pulse' : ''}`} />
           <span>{isSimulating ? 'Computing...' : 'Run Simulation'}</span>
         </button>
       </div>
