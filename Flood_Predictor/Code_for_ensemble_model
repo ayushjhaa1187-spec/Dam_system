@@ -13,7 +13,7 @@ from catboost import CatBoostRegressor
 df = pd.read_csv("flood.csv")
 df.head()
 
-# Defining Labels and Target
+# Defining Target and Features
 X = df.drop(columns=['FloodProbability'])
 y = df['FloodProbability']
 
@@ -29,7 +29,6 @@ cat = CatBoostRegressor(iterations=200, learning_rate=0.05, verbose=0, random_st
 ensemble = VotingRegressor(estimators=[('xgb', xgb), ('lgb', lgb), ('cat', cat)])
 ensemble.fit(X_train, y_train)
 
-# Model Evaluation
 y_pred = ensemble.predict(X_test)
 print(f"✅ Final Ensemble Model Accuracy (R² Score): {r2_score(y_test, y_pred) * 100}%")
 print(f"✅ Final Ensemble Model Mean Square error (MSE Score): {mean_squared_error(y_test, y_pred) * 100:}%")
