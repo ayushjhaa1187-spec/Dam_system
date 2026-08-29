@@ -34,3 +34,5 @@ y_pred = ensemble.predict(X_test)
 print(f"✅ Final Ensemble Model Accuracy (R² Score): {r2_score(y_test, y_pred) * 100}%")
 print(f"✅ Final Ensemble Model Mean Square error (MSE Score): {mean_squared_error(y_test, y_pred) * 100:}%")
 print(f"✅ Final Ensemble Model Accuracy (MAE Score): {mean_absolute_error(y_test, y_pred) * 100}%")
+
+# End of the code
