@@ -3,7 +3,7 @@ import React from 'react';
 export function MapSkeleton({ className = "h-[450px]" }) {
   return (
     <div className={`w-full rounded-2xl bg-hc-surface border border-hc-border animate-pulse flex flex-col items-center justify-center relative overflow-hidden ${className}`}>
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-800/60 to-slate-900 animate-[shimmer_2s_infinite]" />
+      <div className="absolute inset-0 bg-gradient-to-r from-hc-surface via-hc-secondary/60 to-hc-surface animate-[shimmer_2s_infinite]" />
       <div className="z-10 text-center space-y-2 p-6">
         <div className="w-10 h-10 rounded-xl bg-hc-secondary border border-hc-border mx-auto flex items-center justify-center text-hc-textSecondary">
           <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor">

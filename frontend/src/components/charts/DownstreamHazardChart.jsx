@@ -61,8 +61,8 @@ export default function DownstreamHazardChart({
             const y = padT + plotH * (1 - frac);
             return (
               <g key={i}>
-                <line x1={padL} y1={y} x2={svgW - padR} y2={y} stroke="#1e293b" strokeWidth="1" strokeDasharray="3,3" />
-                <text x={padL - 4} y={y + 3} fill="#64748b" fontSize="8" textAnchor="end" fontFamily="monospace">
+                <line x1={padL} y1={y} x2={svgW - padR} y2={y} stroke="#D7E4EC" strokeWidth="1" strokeDasharray="3,3" />
+                <text x={padL - 4} y={y + 3} fill="#5F7180" fontSize="8" textAnchor="end" fontFamily="monospace">
                   {Math.round(maxDepth * frac)}m
                 </text>
                 <text x={svgW - padR + 4} y={y + 3} fill="#9333ea" fontSize="8" textAnchor="start" fontFamily="monospace">
@@ -77,8 +77,8 @@ export default function DownstreamHazardChart({
             const x = scaleX(km);
             return (
               <g key={km}>
-                <line x1={x} y1={svgH - padB} x2={x} y2={svgH - padB + 4} stroke="#475569" strokeWidth="1" />
-                <text x={x} y={svgH - padB + 14} fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="monospace">
+                <line x1={x} y1={svgH - padB} x2={x} y2={svgH - padB + 4} stroke="#D7E4EC" strokeWidth="1" />
+                <text x={x} y={svgH - padB + 14} fill="#5F7180" fontSize="8" textAnchor="middle" fontFamily="monospace">
                   {km}km
                 </text>
               </g>
@@ -86,9 +86,9 @@ export default function DownstreamHazardChart({
           })}
 
           {/* Depth Line (Cyan) */}
-          <polyline points={depthPoints} fill="none" stroke="#06b6d4" strokeWidth="2.5" strokeLinecap="round" />
+          <polyline points={depthPoints} fill="none" stroke="#00A9C6" strokeWidth="2.5" strokeLinecap="round" />
           {stations.map((s, i) => (
-            <circle key={i} cx={scaleX(s.km)} cy={scaleDepthY(s.depth)} r="3.5" fill="#06b6d4" stroke="#0f172a" strokeWidth="1.5" />
+            <circle key={i} cx={scaleX(s.km)} cy={scaleDepthY(s.depth)} r="3.5" fill="#00A9C6" stroke="#0f172a" strokeWidth="1.5" />
           ))}
 
           {/* Velocity Line (Purple) */}

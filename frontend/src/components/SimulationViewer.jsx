@@ -138,7 +138,7 @@ export default function SimulationViewer({
 
     // 2. Dam Axis Structure (Chainage 0 km)
     const damX = paddingX + 25;
-    ctx.strokeStyle = '#ef4444';
+    ctx.strokeStyle = '#D94242';
     ctx.lineWidth = 3;
     ctx.setLineDash([5, 4]);
     ctx.beginPath();
@@ -148,7 +148,7 @@ export default function SimulationViewer({
     ctx.setLineDash([]);
 
     // Dam Crest Label
-    ctx.fillStyle = '#ef4444';
+    ctx.fillStyle = '#D94242';
     ctx.font = 'bold 9px monospace';
     ctx.fillText(`${(params.dam_name || 'DAM').toUpperCase()} AXIS (0 km)`, damX - 25, midY - 86);
     ctx.fillText(`${params.dam_height_m || 0}m ${params.dam_type || ''}`, damX - 25, midY + 92);
@@ -156,7 +156,7 @@ export default function SimulationViewer({
     // 3. Coupling Interface Transect (Near Field SPH -> Far Field Delft3D at 2 km)
     const couplingKm = 2.0;
     const couplingX = paddingX + (couplingKm / reachKm) * riverW + 40;
-    ctx.strokeStyle = '#a855f7';
+    ctx.strokeStyle = '#7667D8';
     ctx.lineWidth = 2;
     ctx.setLineDash([3, 3]);
     ctx.beginPath();
@@ -166,20 +166,20 @@ export default function SimulationViewer({
     ctx.setLineDash([]);
 
     // Coupling Interface Label
-    ctx.fillStyle = '#c084fc';
+    ctx.fillStyle = '#7667D8';
     ctx.font = 'bold 8px monospace';
     ctx.fillText('COUPLING INTERFACE: Q(t) = ∫ v·n dA', couplingX - 35, midY - 74);
 
     // Near Field & Far Field Zone Badges
-    ctx.fillStyle = 'rgba(168, 85, 247, 0.12)';
+    ctx.fillStyle = 'rgba(118, 103, 216, 0.12)';
     ctx.fillRect(damX, midY - 60, couplingX - damX, 120);
-    ctx.fillStyle = '#e9d5ff';
+    ctx.fillStyle = '#7667D8';
     ctx.font = '8px sans-serif';
     ctx.fillText('SPH Near Field (0–2km)', damX + 4, midY - 48);
 
-    ctx.fillStyle = 'rgba(14, 165, 233, 0.08)';
+    ctx.fillStyle = 'rgba(20, 121, 201, 0.08)';
     ctx.fillRect(couplingX, midY - 60, w - paddingX - couplingX, 120);
-    ctx.fillStyle = '#7dd3fc';
+    ctx.fillStyle = '#1479C9';
     ctx.fillText('Delft3D Far Field (2–100km)', couplingX + 8, midY - 48);
 
     // 4. Downstream Landmark Stations
@@ -187,7 +187,7 @@ export default function SimulationViewer({
       const stKm = st.chainage_km !== undefined ? st.chainage_km : st.km !== undefined ? st.km : 0;
       const xPos = paddingX + (stKm / reachKm) * riverW;
 
-      ctx.fillStyle = '#06b6d4';
+      ctx.fillStyle = '#1479C9';
       ctx.beginPath();
       ctx.arc(xPos, midY, 4, 0, Math.PI * 2);
       ctx.fill();
@@ -195,11 +195,11 @@ export default function SimulationViewer({
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      ctx.fillStyle = '#94a3b8';
+      ctx.fillStyle = '#5F7180';
       ctx.font = '9px sans-serif';
       const label = (st.name || st.station_name || '').split(' (')[0];
       ctx.fillText(label, xPos - 15, midY - 14);
-      ctx.fillStyle = '#64748b';
+      ctx.fillStyle = '#5F7180';
       ctx.font = '8px monospace';
       ctx.fillText(`${stKm} km`, xPos - 8, midY + 20);
     });
@@ -291,7 +291,7 @@ export default function SimulationViewer({
     ctx.fillText(`Peak Surge: ${currentFrame.max_velocity_ms || 18.2} m/s`, w - 180, 38);
     ctx.fillStyle = '#38bdf8';
     ctx.fillText(`Inundated: ${currentFrame.inundated_area_km2 || 12.5} km²`, w - 180, 52);
-    ctx.fillStyle = '#a855f7';
+    ctx.fillStyle = '#7667D8';
     ctx.font = '9px monospace';
     ctx.fillText('PROVENANCE: MODELLED', w - 180, 68);
   }, [currentFrame, viewMode, params, stations]);
@@ -329,7 +329,7 @@ export default function SimulationViewer({
       // Station Markers
       stations.forEach((st, idx) => {
         const isDam = idx === 0;
-        const iconColor = isDam ? '#ef4444' : '#06b6d4';
+        const iconColor = isDam ? '#D94242' : '#1479C9';
         const icon = L.divIcon({
           className: 'custom-station-marker',
           html: `<div style="background-color: ${iconColor}; width: ${isDam ? 14 : 10}px; height: ${isDam ? 14 : 10}px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px ${iconColor};"></div>`,

@@ -71,8 +71,8 @@ export default function HydrographChart({
             const val = Math.round(maxFlow * frac);
             return (
               <g key={i}>
-                <line x1={padL} y1={y} x2={svgW - padR} y2={y} stroke="#1e293b" strokeWidth="1" strokeDasharray="3,3" />
-                <text x={padL - 6} y={y + 3} fill="#64748b" fontSize="8" textAnchor="end" fontFamily="monospace">
+                <line x1={padL} y1={y} x2={svgW - padR} y2={y} stroke="#D7E4EC" strokeWidth="1" strokeDasharray="3,3" />
+                <text x={padL - 6} y={y + 3} fill="#5F7180" fontSize="8" textAnchor="end" fontFamily="monospace">
                   {val > 1000 ? `${(val / 1000).toFixed(0)}k` : val}
                 </text>
               </g>
@@ -84,8 +84,8 @@ export default function HydrographChart({
             const x = scaleX(t);
             return (
               <g key={t}>
-                <line x1={x} y1={svgH - padB} x2={x} y2={svgH - padB + 4} stroke="#475569" strokeWidth="1" />
-                <text x={x} y={svgH - padB + 14} fill="#64748b" fontSize="8" textAnchor="middle" fontFamily="monospace">
+                <line x1={x} y1={svgH - padB} x2={x} y2={svgH - padB + 4} stroke="#D7E4EC" strokeWidth="1" />
+                <text x={x} y={svgH - padB + 14} fill="#5F7180" fontSize="8" textAnchor="middle" fontFamily="monospace">
                   {t}h
                 </text>
               </g>
@@ -96,7 +96,7 @@ export default function HydrographChart({
           <polygon points={areaPoints} fill="url(#hydroFill)" fillOpacity="0.4" />
 
           {/* Discharge Line */}
-          <polyline points={points} fill="none" stroke="#06b6d4" strokeWidth="2.5" strokeLinecap="round" />
+          <polyline points={points} fill="none" stroke="#00A9C6" strokeWidth="2.5" strokeLinecap="round" />
 
           {/* Current Time Cursor Line */}
           <line
@@ -113,8 +113,8 @@ export default function HydrographChart({
           {/* Gradients */}
           <defs>
             <linearGradient id="hydroFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.6" />
-              <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.0" />
+              <stop offset="0%" stopColor="#00A9C6" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#00A9C6" stopOpacity="0.0" />
             </linearGradient>
           </defs>
         </svg>
