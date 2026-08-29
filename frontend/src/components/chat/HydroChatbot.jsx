@@ -261,7 +261,7 @@ export default function HydroChatbot({ currentPreset, simulationResult, activeTa
             }`}
           >
             {/* Header */}
-            <div className="p-3.5 bg-gradient-to-r from-slate-900 via-cyan-950/40 to-slate-900 border-b border-hc-border flex items-center justify-between select-none">
+            <div className="p-3.5 bg-gradient-to-r from-hc-surface via-hc-secondary/40 to-hc-surface border-b border-hc-border flex items-center justify-between select-none">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-hc-active/20 border border-cyan-400/40 flex items-center justify-center text-hc-active">
                   <Bot className="w-4 h-4" />
