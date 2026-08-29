@@ -14,7 +14,6 @@ import subprocess
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-import numpy as np
 
 from floodlab.config.constants import G
 from floodlab.provenance.labels import label_modelled
@@ -180,7 +179,7 @@ class Delft3DFMAdapter:
         logger.info(f"Delft3D FM version: {version}")
 
         # Build boundary files
-        upstream_pli = self.boundary_builder.write_pli(
+        _upstream_pli = self.boundary_builder.write_pli(  # noqa: F841
             "upstream_breach",
             [(scenario_params.get("longitude", 78.48), scenario_params.get("latitude", 30.38))],
             delft_dir / "upstream_boundary.pli",
@@ -193,7 +192,7 @@ class Delft3DFMAdapter:
             net_file="mesh.nc",
         )
 
-        output_dir = self.runner.run(mdu_path)
+        _output_dir = self.runner.run(mdu_path)  # noqa: F841
 
         return {
             "stub_used": False,
@@ -216,7 +215,7 @@ class Delft3DFMAdapter:
         """
         Qp = coupling_result.get("peak_Q_m3s", 10000.0)
         reach_km = scenario_params.get("reach_length_km", 100.0)
-        manning_n = scenario_params.get("manning_n", 0.042)
+        _manning_n = scenario_params.get("manning_n", 0.042)  # noqa: F841
         bed_slope = scenario_params.get("bed_slope", 0.005)
         valley_width = scenario_params.get("valley_width_m", 400.0)
 

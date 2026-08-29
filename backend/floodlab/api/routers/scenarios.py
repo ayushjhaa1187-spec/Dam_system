@@ -1,5 +1,4 @@
 """Scenario registry and breach calculation endpoints."""
-import os
 import yaml
 from pathlib import Path
 from typing import Optional

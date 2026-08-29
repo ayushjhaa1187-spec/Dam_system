@@ -1,17 +1,12 @@
 """Simulation endpoints: run, status, results."""
-import os
 import time
 import uuid
 from typing import Any, Dict, Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from floodlab.config.constants import BreachModel, SolverType, ExecutionStatus
+from floodlab.config.constants import BreachModel, ExecutionStatus
 from floodlab.engines.breach.breach_models import BreachMechanicsEngine, DamBreachInput
-from floodlab.engines.hydrology.inflow_hydrograph import HydrologyEngine, HydrologyInput
-from floodlab.engines.coupling.sph_to_delft3d import CouplingEngine
-from floodlab.engines.hazard.hazard_rating import HazardRatingEngine
-from floodlab.engines.loss_damage.damage_estimator import DamageEstimator
 from floodlab.provenance.metadata import RunManifest
 from floodlab.config.paths import get_run_dir, get_manifest_path
 from floodlab.config.settings import get_settings
@@ -20,7 +15,7 @@ from floodlab.config.settings import get_settings
 from hydrobreach.models.sph_engine.sph_solver import SPHHydroSolver
 from hydrobreach.models.delft3d_engine.delft3d_adapter import Delft3DHydroSolver
 from hydrobreach.models.scenario_comparator.comparison import ScenarioComparator
-from hydrobreach.data.preset_scenarios import INDIAN_PRESET_SCENARIOS, get_preset_by_id
+from hydrobreach.data.preset_scenarios import get_preset_by_id
 
 import math
 import numpy as np
@@ -66,7 +61,7 @@ class RunSimulationRequest(BaseModel):
 async def run_simulation(req: RunSimulationRequest):
     run_id = f"sim_{uuid.uuid4().hex[:10]}"
     settings = get_settings()
-    run_dir = get_run_dir(run_id)
+    _run_dir = get_run_dir(run_id)  # noqa: F841
 
     # 1. Resolve scenario parameters
     lookup_id = req.scenario_id or req.preset_id or "tehri_base"

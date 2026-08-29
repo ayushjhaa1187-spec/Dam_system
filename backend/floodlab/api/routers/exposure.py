@@ -1,6 +1,8 @@
 """Exposure assessment endpoints."""
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 router = APIRouter()
+
+
 @router.post("/evaluate")
 async def evaluate_exposure(body: dict):
     from floodlab.engines.loss_damage.damage_estimator import DamageEstimator

@@ -4,17 +4,20 @@ from pydantic import BaseModel
 from typing import List, Optional, Dict
 router = APIRouter()
 
+
 class EvacuationRequest(BaseModel):
     village_coords: List[Dict]
     safe_zones: Optional[List[Dict]] = None
     flood_arrival_times: Optional[Dict[str, float]] = None
     agency_thresholds: Optional[Dict] = None
 
+
 class RescueRequest(BaseModel):
     ndrf_base: Dict
     target_settlements: List[Dict]
     flood_arrival_times: Optional[Dict[str, float]] = None
     agency_thresholds: Optional[Dict] = None
+
 
 @router.post("/evacuate")
 async def plan_evacuation(req: EvacuationRequest):
@@ -26,6 +29,7 @@ async def plan_evacuation(req: EvacuationRequest):
         req.flood_arrival_times or {},
         req.agency_thresholds,
     )
+
 
 @router.post("/rescue")
 async def plan_rescue(req: RescueRequest):
