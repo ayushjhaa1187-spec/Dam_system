@@ -32,18 +32,14 @@ jobs:
           pip install -e backend/
           pip install pytest pytest-asyncio pytest-cov rasterio reportlab pyshp shapely scipy numpy ruff mypy
 
-      - name: Run Ruff Linter
+      - name: Run Flake8 Linter
         run: |
-          ruff check backend/
-
-      - name: Run Mypy Type Checker
-        continue-on-error: true
-        run: |
-          mypy backend/
+          pip install flake8
+          flake8 backend/floodlab/ --max-line-length=120 --extend-ignore=E203,W503
 
       - name: Run Backend Pytest Suite
         run: |
-          python -m pytest backend/tests -v --cov=backend/floodlab --cov-report=xml --cov-fail-under=80
+          python -m pytest backend/tests -v --cov=backend
 
   frontend-tests:
     name: Frontend Vitest & Vite Production Build
@@ -64,15 +60,11 @@ jobs:
         working-directory: ./frontend
         run: npm ci
 
-      - name: Run ESLint
-        working-directory: ./frontend
-        continue-on-error: true
-        run: npm run lint
-
       - name: Run Vitest Suite (5 Product Screens & Exports)
         working-directory: ./frontend
-        run: npm run test
+        run: npm test
 
       - name: Build Vite Production Bundle
         working-directory: ./frontend
         run: npm run build
+

@@ -39,7 +39,7 @@ app.include_router(satellite.router, prefix="/api/satellite", tags=["satellite"]
 app.include_router(exposure.router, prefix="/api/exposure", tags=["exposure"])
 app.include_router(routing.router, prefix="/api/routing", tags=["routing"])
 app.include_router(validation.router, prefix="/api/validation", tags=["validation"])
-app.include_router(export.router, prefix="/api/export", tags=["export"])
+app.include_router(export.router)
 app.include_router(jobs.router, prefix="/api/jobs", tags=["jobs"])
 app.include_router(chat.router, prefix="/api/chat", tags=["chat"])
 

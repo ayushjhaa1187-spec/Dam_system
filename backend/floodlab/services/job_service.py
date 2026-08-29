@@ -273,7 +273,7 @@ class JobService:
                 return
 
             log(f"Validation passed: {val_res.checked_rules_count} rules verified.", level="SUCCESS")
-            time.sleep(1.0)
+            time.sleep(0.05)
 
             # Stage 2: Preprocessing DEM
             if job.state == JobStage.CANCELLED:
@@ -282,7 +282,7 @@ class JobService:
             job.stage_label = STAGE_LABELS[JobStage.PREPROCESSING_DEM]
             job.progress_pct = 30
             log("Loading DEM raster grid and calculating flow accumulation...")
-            time.sleep(1.2)
+            time.sleep(0.05)
             log("River thalweg elevation profile and valley width extracted.", level="INFO")
 
             # Stage 3: Generating Mesh
@@ -292,7 +292,7 @@ class JobService:
             job.stage_label = STAGE_LABELS[JobStage.GENERATING_MESH]
             job.progress_pct = 45
             log(f"Generating computational grid for solver [{job.solver_type}]...")
-            time.sleep(1.2)
+            time.sleep(0.05)
             log("Coupling interface set at 2.0 km downstream of dam axis.", level="INFO")
 
             # Stage 4: Running Solver
@@ -311,7 +311,7 @@ class JobService:
                 breach_model=job.breach_model,
                 run_id=job.run_id,
             )
-            time.sleep(1.5)
+            time.sleep(0.05)
             log(f"Peak discharge computed: {sim_result.get('breach_mechanics', {}).get('peak_discharge_m3s', 84200):,.0f} m³/s", level="SUCCESS")  # noqa: E501
 
             # Stage 5: Post-Processing
@@ -321,7 +321,7 @@ class JobService:
             job.stage_label = STAGE_LABELS[JobStage.POST_PROCESSING]
             job.progress_pct = 85
             log("Calculating CWC hazard ratings, depth-damage curves, and population exposure...")
-            time.sleep(1.0)
+            time.sleep(0.05)
             log(f"HADR impact: {sim_result.get('damage_assessment', {}).get('exposure_and_loss', {}).get('population_at_risk', 91500):,} persons at risk.", level="INFO")  # noqa: E501
 
             # Stage 6: Exporting
@@ -331,7 +331,7 @@ class JobService:
             job.stage_label = STAGE_LABELS[JobStage.EXPORTING]
             job.progress_pct = 95
             log("Packaging ESRI Shapefiles, Google Earth KML, and GeoJSON vectors...")
-            time.sleep(0.8)
+            time.sleep(0.05)
 
             # Completed!
             job.state = JobStage.COMPLETED
