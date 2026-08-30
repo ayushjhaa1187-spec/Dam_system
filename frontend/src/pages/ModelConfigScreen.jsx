@@ -99,7 +99,7 @@ export default function ModelConfigScreen({
               className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition ${
                 isActive
                   ? 'bg-blue-600 text-white shadow-sm'
-                  : 'text-hc-textSecondary hover:text-hc-ink hover:bg-hc-surface/60'
+                  : 'text-hc-textSecondary hover:text-hc-ink hover:bg-hc-surface'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -110,7 +110,7 @@ export default function ModelConfigScreen({
       </div>
 
       {/* Main Settings Card */}
-      <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-6 space-y-6">
+      <div className="bg-hc-surface border border-hc-border rounded-2xl p-6 space-y-6 shadow-card-dark">
         {/* 1. Model Selection Tab Content */}
         {activeTab === 'model_selection' && (
           <div className="space-y-6">
@@ -123,7 +123,7 @@ export default function ModelConfigScreen({
                   Choose between Eulerian shallow-water mesh or Lagrangian particle fluid mechanics.
                 </p>
               </div>
-              <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950 px-2.5 py-1 rounded-lg border border-cyan-800/40">
+              <span className="text-[10px] font-mono text-cyan-800 bg-cyan-50 px-2.5 py-1 rounded-lg border border-cyan-200 font-bold">
                 GPU ACCELERATED
               </span>
             </div>
@@ -133,16 +133,16 @@ export default function ModelConfigScreen({
               {/* Delft3D Card */}
               <div
                 onClick={() => setSelectedModel('delft3d')}
-                className={`p-5 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-4 ${
+                className={`p-5 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-4 shadow-sm ${
                   selectedModel === 'delft3d' || comparisonMode
-                    ? 'bg-hc-card border-blue-500 shadow-glow-blue ring-1 ring-blue-500/30'
-                    : 'bg-hc-canvas/60 border-hc-border hover:border-hc-borderLight'
+                    ? 'bg-white border-blue-500 ring-1 ring-blue-500/30'
+                    : 'bg-white border-hc-border hover:border-slate-300'
                 }`}
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center border border-blue-500/30">
+                      <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-200">
                         <Waves className="w-4 h-4" />
                       </div>
                       <div>
@@ -152,7 +152,7 @@ export default function ModelConfigScreen({
                         </span>
                       </div>
                     </div>
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
                       STABLE FAR-FIELD
                     </span>
                   </div>
@@ -162,25 +162,25 @@ export default function ModelConfigScreen({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 p-2.5 bg-hc-canvas rounded-xl border border-hc-border text-[11px] font-mono text-hc-textSecondary">
-                  <div>Grid: <strong className="text-hc-ink">15m–60m Mesh</strong></div>
-                  <div>Turbulence: <strong className="text-hc-ink">k-ε Model</strong></div>
+                <div className="grid grid-cols-2 gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-[11px] font-mono text-hc-textSecondary">
+                  <div>Grid: <strong className="text-hc-ink font-bold">15m–60m Mesh</strong></div>
+                  <div>Turbulence: <strong className="text-hc-ink font-bold">k-ε Model</strong></div>
                 </div>
               </div>
 
               {/* SPH Card */}
               <div
                 onClick={() => setSelectedModel('sph')}
-                className={`p-5 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-4 ${
+                className={`p-5 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-4 shadow-sm ${
                   selectedModel === 'sph' || comparisonMode
-                    ? 'bg-hc-card border-cyan-400 shadow-glow-cyan ring-1 ring-cyan-400/30'
-                    : 'bg-hc-canvas/60 border-hc-border hover:border-hc-borderLight'
+                    ? 'bg-white border-cyan-500 ring-1 ring-cyan-500/30'
+                    : 'bg-white border-hc-border hover:border-slate-300'
                 }`}
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 rounded-xl bg-cyan-600/20 text-cyan-400 flex items-center justify-center border border-cyan-500/30">
+                      <div className="w-8 h-8 rounded-xl bg-cyan-50 text-cyan-700 flex items-center justify-center border border-cyan-200">
                         <Cpu className="w-4 h-4" />
                       </div>
                       <div>
@@ -190,7 +190,7 @@ export default function ModelConfigScreen({
                         </span>
                       </div>
                     </div>
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-50 text-cyan-700 border border-cyan-200">
                       HIGH-IMPACT NEAR-FIELD
                     </span>
                   </div>
@@ -200,9 +200,9 @@ export default function ModelConfigScreen({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 p-2.5 bg-hc-canvas rounded-xl border border-hc-border text-[11px] font-mono text-hc-textSecondary">
-                  <div>Particles: <strong className="text-hc-ink">120,000 Pts</strong></div>
-                  <div>Kernel: <strong className="text-hc-ink">Wendland C2</strong></div>
+                <div className="grid grid-cols-2 gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-[11px] font-mono text-hc-textSecondary">
+                  <div>Particles: <strong className="text-hc-ink font-bold">120,000 Pts</strong></div>
+                  <div>Kernel: <strong className="text-hc-ink font-bold">Wendland C2</strong></div>
                 </div>
               </div>
             </div>
@@ -210,7 +210,7 @@ export default function ModelConfigScreen({
             {/* Comparison Mode Toggle Switch */}
             <div className="p-4 rounded-xl bg-hc-card border border-hc-border flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-9 h-9 rounded-xl bg-purple-950/80 text-purple-300 flex items-center justify-center border border-purple-800/40">
+                <div className="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center border border-purple-300">
                   <GitCompare className="w-4 h-4" />
                 </div>
                 <div>
@@ -230,7 +230,7 @@ export default function ModelConfigScreen({
                   onChange={(e) => setComparisonMode(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-hc-canvas peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 border border-hc-border"></div>
+                <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600 border border-slate-300"></div>
               </label>
             </div>
           </div>
@@ -251,7 +251,7 @@ export default function ModelConfigScreen({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
-                  Manning’s Roughness (n): <span className="text-hc-active font-mono font-bold">{manningN}</span>
+                  Manning’s Roughness (n): <span className="text-blue-700 font-mono font-bold">{manningN}</span>
                 </label>
                 <input
                   type="range"
@@ -260,7 +260,7 @@ export default function ModelConfigScreen({
                   step="0.001"
                   value={manningN}
                   onChange={(e) => setManningN(parseFloat(e.target.value))}
-                  className="w-full accent-cyan-500"
+                  className="w-full accent-blue-600"
                 />
                 <span className="text-[10px] text-hc-textMuted mt-1 block">
                   0.035 (Alluvial plain) &bull; 0.042 (Mountain gorge) &bull; 0.060 (Boulder bed)
@@ -269,7 +269,7 @@ export default function ModelConfigScreen({
 
               <div>
                 <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
-                  Delft3D Flexible Mesh Resolution: <span className="text-hc-active font-mono font-bold">{gridRes} m</span>
+                  Delft3D Flexible Mesh Resolution: <span className="text-blue-700 font-mono font-bold">{gridRes} m</span>
                 </label>
                 <input
                   type="range"
@@ -278,7 +278,7 @@ export default function ModelConfigScreen({
                   step="5"
                   value={gridRes}
                   onChange={(e) => setGridRes(parseInt(e.target.value))}
-                  className="w-full accent-cyan-500"
+                  className="w-full accent-blue-600"
                 />
                 <span className="text-[10px] text-hc-textMuted mt-1 block">
                   Higher resolution increases computation time exponentially.
@@ -287,7 +287,7 @@ export default function ModelConfigScreen({
 
               <div>
                 <label className="text-xs font-semibold text-hc-textSecondary block mb-1">
-                  SPH Initial Particle Spacing: <span className="text-hc-active font-mono font-bold">{particleSpacing} m</span>
+                  SPH Initial Particle Spacing: <span className="text-cyan-700 font-mono font-bold">{particleSpacing} m</span>
                 </label>
                 <input
                   type="range"
@@ -296,7 +296,7 @@ export default function ModelConfigScreen({
                   step="0.1"
                   value={particleSpacing}
                   onChange={(e) => setParticleSpacing(parseFloat(e.target.value))}
-                  className="w-full accent-cyan-500"
+                  className="w-full accent-blue-600"
                 />
               </div>
 
@@ -307,7 +307,7 @@ export default function ModelConfigScreen({
                 <select
                   value={boundaryCondition}
                   onChange={(e) => setBoundaryCondition(e.target.value)}
-                  className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl px-3.5 py-2 focus:outline-none focus:border-blue-500 shadow-xs"
                 >
                   <option value="free_outflow">Free Outflow / Critical Depth</option>
                   <option value="stage_discharge">Rating Curve / Q-h Stage Hydrograph</option>
@@ -338,7 +338,7 @@ export default function ModelConfigScreen({
                 <select
                   value={breachType}
                   onChange={(e) => setBreachType(e.target.value)}
-                  className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl px-3.5 py-2 focus:outline-none focus:border-blue-500 shadow-xs"
                 >
                   <option value="instantaneous">Instantaneous Collapse (Full Breach)</option>
                   <option value="overtopping">Progressive Overtopping Breach</option>
@@ -351,7 +351,7 @@ export default function ModelConfigScreen({
                   <label className="text-xs font-semibold text-hc-textSecondary">
                     Breach Width (m)
                   </label>
-                  <span className="text-xs font-mono font-bold text-cyan-400">{breachWidth} m</span>
+                  <span className="text-xs font-mono font-bold text-cyan-700">{breachWidth} m</span>
                 </div>
                 <input
                   type="range"
@@ -360,7 +360,7 @@ export default function ModelConfigScreen({
                   step="5"
                   value={breachWidth}
                   onChange={(e) => setBreachWidth(parseInt(e.target.value))}
-                  className="w-full accent-cyan-500"
+                  className="w-full accent-blue-600"
                 />
               </div>
 
@@ -369,7 +369,7 @@ export default function ModelConfigScreen({
                   <label className="text-xs font-semibold text-hc-textSecondary">
                     Breach Formation Time (hr)
                   </label>
-                  <span className="text-xs font-mono font-bold text-amber-400">{formationTime} hr ({(formationTime * 60).toFixed(0)} min)</span>
+                  <span className="text-xs font-mono font-bold text-amber-700">{formationTime} hr ({(formationTime * 60).toFixed(0)} min)</span>
                 </div>
                 <input
                   type="range"
@@ -378,7 +378,7 @@ export default function ModelConfigScreen({
                   step="0.05"
                   value={formationTime}
                   onChange={(e) => setFormationTime(parseFloat(e.target.value))}
-                  className="w-full accent-cyan-500"
+                  className="w-full accent-blue-600"
                 />
               </div>
 
@@ -387,7 +387,7 @@ export default function ModelConfigScreen({
                   <label className="text-xs font-semibold text-hc-textSecondary">
                     Reservoir Level (%)
                   </label>
-                  <span className="text-xs font-mono font-bold text-blue-400">{reservoirLevel}% FRL</span>
+                  <span className="text-xs font-mono font-bold text-blue-700">{reservoirLevel}% FRL</span>
                 </div>
                 <input
                   type="range"
@@ -396,7 +396,7 @@ export default function ModelConfigScreen({
                   step="1"
                   value={reservoirLevel}
                   onChange={(e) => setReservoirLevel(parseInt(e.target.value))}
-                  className="w-full accent-cyan-500"
+                  className="w-full accent-blue-600"
                 />
               </div>
 
@@ -405,7 +405,7 @@ export default function ModelConfigScreen({
                   <label className="text-xs font-semibold text-hc-textSecondary">
                     Simulation Duration (hr)
                   </label>
-                  <span className="text-xs font-mono font-bold text-emerald-400">{duration} Hours</span>
+                  <span className="text-xs font-mono font-bold text-emerald-700">{duration} Hours</span>
                 </div>
                 <input
                   type="range"
@@ -414,7 +414,7 @@ export default function ModelConfigScreen({
                   step="1"
                   value={duration}
                   onChange={(e) => setDuration(parseInt(e.target.value))}
-                  className="w-full accent-cyan-500"
+                  className="w-full accent-blue-600"
                 />
               </div>
             </div>

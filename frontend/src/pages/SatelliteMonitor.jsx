@@ -71,7 +71,7 @@ export default function SatelliteMonitor({
     ];
 
     L.polygon(sarPolygon, {
-      color: '#38BDF8',
+      color: '#0284C7',
       fillColor: '#0284C7',
       fillOpacity: 0.65,
       weight: 2.5,
@@ -127,7 +127,7 @@ export default function SatelliteMonitor({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* 1. Left 3 cols: GEE Data & Controls */}
         <div className="lg:col-span-3 space-y-4">
-          <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-4 space-y-4">
+          <div className="bg-hc-surface border border-hc-border rounded-2xl p-4 space-y-4 shadow-card-dark">
             {/* Tab switch: GEE Data vs Controls */}
             <div className="flex items-center space-x-1 bg-hc-card p-1 rounded-xl border border-hc-border">
               <button
@@ -156,7 +156,7 @@ export default function SatelliteMonitor({
               <select
                 value={sensor}
                 onChange={(e) => setSensor(e.target.value)}
-                className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl px-3 py-2 focus:outline-none focus:border-blue-500 shadow-xs"
               >
                 <option value="sentinel_1_sar">Sentinel-1 C-SAR (Cloud Penetrating)</option>
                 <option value="sentinel_2_optical">Sentinel-2 MSI (10m Optical)</option>
@@ -169,32 +169,32 @@ export default function SatelliteMonitor({
                 Satellite Layer Overlays
               </span>
 
-              <label className="flex items-center space-x-2.5 p-2 rounded-xl bg-hc-card/60 hover:bg-hc-card border border-hc-border/80 cursor-pointer transition">
+              <label className="flex items-center space-x-2.5 p-2 rounded-xl bg-hc-card hover:bg-slate-200/60 border border-hc-border cursor-pointer transition">
                 <input
                   type="checkbox"
                   checked={layers.floodExtent}
                   onChange={() => toggleLayer('floodExtent')}
-                  className="w-4 h-4 rounded bg-hc-canvas border-hc-border text-blue-600 focus:ring-0"
+                  className="w-4 h-4 rounded bg-white border-slate-300 text-blue-600 focus:ring-0"
                 />
                 <span className="text-hc-ink text-xs">Near Real-Time Flood Extent</span>
               </label>
 
-              <label className="flex items-center space-x-2.5 p-2 rounded-xl bg-hc-card/60 hover:bg-hc-card border border-hc-border/80 cursor-pointer transition">
+              <label className="flex items-center space-x-2.5 p-2 rounded-xl bg-hc-card hover:bg-slate-200/60 border border-hc-border cursor-pointer transition">
                 <input
                   type="checkbox"
                   checked={layers.sic}
                   onChange={() => toggleLayer('sic')}
-                  className="w-4 h-4 rounded bg-hc-canvas border-hc-border text-blue-600 focus:ring-0"
+                  className="w-4 h-4 rounded bg-white border-slate-300 text-blue-600 focus:ring-0"
                 />
                 <span className="text-hc-ink text-xs">Surface Inundation Change (SIC)</span>
               </label>
 
-              <label className="flex items-center space-x-2.5 p-2 rounded-xl bg-hc-card/60 hover:bg-hc-card border border-hc-border/80 cursor-pointer transition">
+              <label className="flex items-center space-x-2.5 p-2 rounded-xl bg-hc-card hover:bg-slate-200/60 border border-hc-border cursor-pointer transition">
                 <input
                   type="checkbox"
                   checked={layers.dockDiary}
                   onChange={() => toggleLayer('dockDiary')}
-                  className="w-4 h-4 rounded bg-hc-canvas border-hc-border text-blue-600 focus:ring-0"
+                  className="w-4 h-4 rounded bg-white border-slate-300 text-blue-600 focus:ring-0"
                 />
                 <span className="text-hc-ink text-xs">Dock Diary / Pass History</span>
               </label>
@@ -204,21 +204,21 @@ export default function SatelliteMonitor({
 
         {/* 2. Middle 5 cols: Satellite Map + Google Watermark */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="relative w-full h-[480px] rounded-2xl overflow-hidden border border-hc-border bg-hc-canvas shadow-card-dark">
+          <div className="relative w-full h-[480px] rounded-2xl overflow-hidden border border-hc-border bg-slate-100 shadow-card-dark">
             <div ref={mapContainerRef} className="absolute inset-0 w-full h-full z-0" />
 
             {/* Inundation Extent Badge */}
-            <div className="absolute top-4 left-4 z-10 bg-hc-surface/90 backdrop-blur-md border border-hc-border p-3 rounded-xl shadow-lg space-y-1 font-mono text-[10px]">
+            <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-md border border-slate-200 p-3 rounded-xl shadow-lg space-y-1 font-mono text-[10px] text-slate-800">
               <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
-                <span className="font-bold text-hc-ink">Near Real-Time Flood Extent</span>
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+                <span className="font-bold text-slate-900">Near Real-Time Flood Extent</span>
               </div>
               <p className="text-hc-textSecondary">Google Earth Engine &bull; Sentinel-1 C-SAR</p>
-              <span className="text-cyan-300 font-bold block pt-0.5">Observed: 14.8 ha detected water</span>
+              <span className="text-blue-700 font-bold block pt-0.5">Observed: 14.8 ha detected water</span>
             </div>
 
             {/* Google Watermark in bottom-left */}
-            <div className="absolute bottom-3 left-3 z-10 bg-black/60 px-2 py-1 rounded text-[10px] font-mono text-white/80 select-none">
+            <div className="absolute bottom-3 left-3 z-10 bg-white/90 backdrop-blur border border-slate-200 px-2 py-1 rounded text-[10px] font-mono text-slate-800 select-none shadow-sm">
               Google &copy; Earth Engine &bull; Copernicus Sentinel (2026)
             </div>
           </div>
@@ -227,12 +227,12 @@ export default function SatelliteMonitor({
         {/* 3. Right 4 cols: Reporting & Export + Simulation Queue */}
         <div className="lg:col-span-4 space-y-5">
           {/* Reporting & Export Card */}
-          <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-5 space-y-3.5">
+          <div className="bg-hc-surface border border-hc-border rounded-2xl p-5 space-y-3.5 shadow-card-dark">
             <div className="flex items-center justify-between pb-2 border-b border-hc-border">
               <h3 className="text-xs font-bold uppercase tracking-wider text-hc-ink">
                 Reporting &amp; Export
               </h3>
-              <span className="text-[10px] font-mono text-cyan-400">GIS READY</span>
+              <span className="text-[10px] font-mono text-blue-700 font-bold">GIS READY</span>
             </div>
 
             <div className="space-y-2">
@@ -246,17 +246,17 @@ export default function SatelliteMonitor({
 
               <button
                 onClick={() => api.downloadShapefile(downloadPayload)}
-                className="w-full py-2.5 px-4 rounded-xl bg-hc-card hover:bg-hc-elevated border border-hc-border text-hc-ink font-semibold text-xs transition flex items-center justify-center space-x-2"
+                className="w-full py-2.5 px-4 rounded-xl bg-hc-card hover:bg-slate-200 border border-hc-border text-hc-ink font-semibold text-xs transition flex items-center justify-center space-x-2 shadow-xs"
               >
-                <Download className="w-3.5 h-3.5 text-emerald-400" />
+                <Download className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Export Inundation Layer (.shp)</span>
               </button>
 
               <button
                 onClick={() => api.downloadKML(downloadPayload)}
-                className="w-full py-2.5 px-4 rounded-xl bg-hc-card hover:bg-hc-elevated border border-hc-border text-hc-ink font-semibold text-xs transition flex items-center justify-center space-x-2"
+                className="w-full py-2.5 px-4 rounded-xl bg-hc-card hover:bg-slate-200 border border-hc-border text-hc-ink font-semibold text-xs transition flex items-center justify-center space-x-2 shadow-xs"
               >
-                <Download className="w-3.5 h-3.5 text-cyan-400" />
+                <Download className="w-3.5 h-3.5 text-blue-600" />
                 <span>Export Inundation Layer (.kml)</span>
               </button>
             </div>

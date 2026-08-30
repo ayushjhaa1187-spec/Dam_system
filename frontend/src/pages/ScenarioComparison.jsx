@@ -55,7 +55,7 @@ export default function ScenarioComparison({
           [33.310, 75.766], [33.220, 75.720], [33.145, 75.760],
           [33.160, 75.680], [33.143, 75.546], [33.190, 75.400], [33.242, 75.244]
         ],
-        { color: '#06B6D4', fillColor: '#0284C7', fillOpacity: 0.5, weight: 3 }
+        { color: '#0284C7', fillColor: '#0284C7', fillOpacity: 0.5, weight: 3 }
       ).addTo(mapSph);
 
       mapSphRef.current._leafletMap = mapSph;
@@ -77,7 +77,7 @@ export default function ScenarioComparison({
           [33.310, 75.766], [33.220, 75.720], [33.145, 75.760],
           [33.160, 75.680], [33.143, 75.546], [33.190, 75.400], [33.242, 75.244]
         ],
-        { color: '#3B82F6', fillColor: '#1D4ED8', fillOpacity: 0.45, weight: 3 }
+        { color: '#2563EB', fillColor: '#1D4ED8', fillOpacity: 0.45, weight: 3 }
       ).addTo(mapDelft);
 
       mapDelftRef.current._leafletMap = mapDelft;
@@ -136,52 +136,52 @@ export default function ScenarioComparison({
       {/* Main Dual Side-by-Side Map Viewports matching Image 2 bottom-left */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left: SPH Viewport */}
-        <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-4 space-y-3 shadow-card-dark">
+        <div className="bg-hc-surface border border-hc-border rounded-2xl p-4 space-y-3 shadow-card-dark">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-600" />
               <h3 className="text-xs font-bold font-mono uppercase text-hc-ink">
                 Smooth Particle Hydrodynamics (SPH)
               </h3>
             </div>
-            <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">
+            <span className="text-[10px] font-mono text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200 font-bold">
               3D LAGRANGIAN
             </span>
           </div>
 
-          <div className="relative w-full h-72 rounded-xl overflow-hidden border border-hc-border bg-hc-canvas">
+          <div className="relative w-full h-72 rounded-xl overflow-hidden border border-hc-border bg-slate-100 shadow-inner">
             <div ref={mapSphRef} className="absolute inset-0 w-full h-full" />
             {/* SPH Depth Legend */}
-            <div className="absolute top-3 left-3 z-10 bg-hc-surface/90 backdrop-blur p-2.5 rounded-xl border border-hc-border text-[9px] font-mono space-y-1">
-              <span className="font-bold text-hc-ink block">SPH Flood Depth</span>
+            <div className="absolute top-3 left-3 z-10 bg-white/95 backdrop-blur p-2.5 rounded-xl border border-slate-200 text-[9px] font-mono space-y-1 shadow-md text-slate-800">
+              <span className="font-bold text-slate-900 block">SPH Flood Depth</span>
               <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-red-600 rounded-xs" /> &gt; 10.0 m</div>
               <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-amber-500 rounded-xs" /> 5.0 - 10.0 m</div>
-              <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-cyan-400 rounded-xs" /> 0.5 - 5.0 m</div>
+              <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-cyan-500 rounded-xs" /> 0.5 - 5.0 m</div>
             </div>
           </div>
         </div>
 
         {/* Right: Delft3D Viewport */}
-        <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-4 space-y-3 shadow-card-dark">
+        <div className="bg-hc-surface border border-hc-border rounded-2xl p-4 space-y-3 shadow-card-dark">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
               <h3 className="text-xs font-bold font-mono uppercase text-hc-ink">
                 Delft3D Flexible Mesh (D-Flow FM)
               </h3>
             </div>
-            <span className="text-[10px] font-mono text-blue-300 bg-blue-950 px-2 py-0.5 rounded border border-blue-800">
+            <span className="text-[10px] font-mono text-blue-800 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 font-bold">
               2D EULERIAN SWE
             </span>
           </div>
 
-          <div className="relative w-full h-72 rounded-xl overflow-hidden border border-hc-border bg-hc-canvas">
+          <div className="relative w-full h-72 rounded-xl overflow-hidden border border-hc-border bg-slate-100 shadow-inner">
             <div ref={mapDelftRef} className="absolute inset-0 w-full h-full" />
             {/* Delft3D Velocity Legend */}
-            <div className="absolute top-3 left-3 z-10 bg-hc-surface/90 backdrop-blur p-2.5 rounded-xl border border-hc-border text-[9px] font-mono space-y-1">
-              <span className="font-bold text-hc-ink block">Delft3D Velocity</span>
+            <div className="absolute top-3 left-3 z-10 bg-white/95 backdrop-blur p-2.5 rounded-xl border border-slate-200 text-[9px] font-mono space-y-1 shadow-md text-slate-800">
+              <span className="font-bold text-slate-900 block">Delft3D Velocity</span>
               <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-red-600 rounded-xs" /> &gt; 18.0 m/s</div>
-              <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-cyan-400 rounded-xs" /> 8.0 - 18.0 m/s</div>
+              <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-cyan-500 rounded-xs" /> 8.0 - 18.0 m/s</div>
               <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 bg-blue-600 rounded-xs" /> &lt; 8.0 m/s</div>
             </div>
           </div>
@@ -192,15 +192,15 @@ export default function ScenarioComparison({
       <ComparisonCharts />
 
       {/* Bottom: Statistical Comparison Table */}
-      <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-5 space-y-4">
+      <div className="bg-hc-surface border border-hc-border rounded-2xl p-5 space-y-4 shadow-card-dark">
         <div className="flex items-center justify-between pb-3 border-b border-hc-border">
           <div className="flex items-center space-x-2">
-            <GitCompare className="w-4 h-4 text-cyan-400" />
+            <GitCompare className="w-4 h-4 text-blue-600" />
             <h3 className="text-xs font-bold uppercase tracking-wider text-hc-ink">
               Inter-Model Hydrodynamic Comparison Table
             </h3>
           </div>
-          <span className="text-[10px] font-mono text-hc-textSecondary">
+          <span className="text-[10px] font-mono text-hc-textSecondary font-semibold">
             Gauging Station Transects (0 km to 78 km)
           </span>
         </div>
@@ -210,24 +210,24 @@ export default function ScenarioComparison({
             <thead>
               <tr className="border-b border-hc-border text-hc-textSecondary text-[11px]">
                 <th className="py-2.5">Gauging Station</th>
-                <th className="py-2.5 text-cyan-400">SPH Flood Depth</th>
-                <th className="py-2.5 text-blue-400">Delft3D Flood Depth</th>
+                <th className="py-2.5 text-cyan-700 font-bold">SPH Flood Depth</th>
+                <th className="py-2.5 text-blue-700 font-bold">Delft3D Flood Depth</th>
                 <th className="py-2.5">Maximum Depth</th>
-                <th className="py-2.5 text-cyan-400">SPH Velocity</th>
-                <th className="py-2.5 text-blue-400">Delft3D Velocity</th>
+                <th className="py-2.5 text-cyan-700 font-bold">SPH Velocity</th>
+                <th className="py-2.5 text-blue-700 font-bold">Delft3D Velocity</th>
                 <th className="py-2.5">Model Δ %</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-hc-border/60">
               {COMPARISON_STATION_STATS.map((row, idx) => (
-                <tr key={idx} className="hover:bg-hc-canvas/40 transition">
+                <tr key={idx} className="hover:bg-slate-50 transition">
                   <td className="py-3 font-bold text-hc-ink">{row.station}</td>
-                  <td className="py-3 text-cyan-300 font-bold">{row.sphDepth}</td>
-                  <td className="py-3 text-blue-300 font-bold">{row.delftDepth}</td>
-                  <td className="py-3 text-white font-bold">{row.maxDepth}</td>
-                  <td className="py-3 text-cyan-300">{row.sphVel}</td>
-                  <td className="py-3 text-blue-300">{row.delftVel}</td>
-                  <td className="py-3 font-bold text-amber-400">{row.diff}</td>
+                  <td className="py-3 text-cyan-700 font-bold">{row.sphDepth}</td>
+                  <td className="py-3 text-blue-700 font-bold">{row.delftDepth}</td>
+                  <td className="py-3 text-slate-900 font-bold">{row.maxDepth}</td>
+                  <td className="py-3 text-cyan-700">{row.sphVel}</td>
+                  <td className="py-3 text-blue-700">{row.delftVel}</td>
+                  <td className="py-3 font-bold text-amber-800">{row.diff}</td>
                 </tr>
               ))}
             </tbody>
@@ -235,8 +235,8 @@ export default function ScenarioComparison({
         </div>
 
         {/* Auto-generated Diff Summary Narrative */}
-        <div className="p-4 bg-hc-canvas rounded-xl border border-hc-border flex items-start gap-3 text-xs text-hc-textSecondary">
-          <Info className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+        <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-start gap-3 text-xs text-hc-textSecondary shadow-xs">
+          <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
           <p className="leading-relaxed">
             <strong className="text-hc-ink">Inter-Model Synthesis:</strong> SPH predicts <strong>20.0% higher near-field peak depth</strong> at Station 1 (Dam Axis) due to 3D vertical velocity momentum and turbulent gorge splashback. Further downstream (&gt; 38 km), Delft3D Flexible Mesh and SPH converge within <strong>±3.2% error</strong>, confirming robust mass conservation across both solvers.
           </p>

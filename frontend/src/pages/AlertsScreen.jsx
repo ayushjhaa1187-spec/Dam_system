@@ -90,7 +90,7 @@ export default function AlertsScreen({ onNavigate }) {
       />
 
       {/* Filter and Search Bar */}
-      <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+      <div className="bg-hc-surface border border-hc-border rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-card-dark">
         {/* Severity Filter Chips */}
         <div className="flex items-center space-x-2">
           <Filter className="w-4 h-4 text-hc-textSecondary" />
@@ -121,7 +121,7 @@ export default function AlertsScreen({ onNavigate }) {
             placeholder="Search alerts..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl pl-8 pr-3 py-1.5 focus:outline-none focus:border-cyan-500"
+            className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl pl-8 pr-3 py-1.5 focus:outline-none focus:border-blue-500 shadow-xs"
           />
           <Search className="w-3.5 h-3.5 text-hc-textSecondary absolute left-2.5 top-1/2 -translate-y-1/2" />
         </div>
@@ -137,22 +137,22 @@ export default function AlertsScreen({ onNavigate }) {
             <div
               key={alert.id}
               onClick={() => onNavigate && onNavigate(alert.targetTab || 'analytics')}
-              className={`p-4 rounded-2xl border transition cursor-pointer flex items-center justify-between gap-4 ${
+              className={`p-4 rounded-2xl border transition cursor-pointer flex items-center justify-between gap-4 shadow-card-dark ${
                 isHigh
-                  ? 'bg-red-950/20 border-red-800/60 hover:bg-red-950/30'
+                  ? 'bg-red-50/70 border-red-200 hover:bg-red-100/70'
                   : isMed
-                  ? 'bg-amber-950/20 border-amber-800/60 hover:bg-amber-950/30'
-                  : 'bg-emerald-950/20 border-emerald-800/60 hover:bg-emerald-950/30'
+                  ? 'bg-amber-50/70 border-amber-200 hover:bg-amber-100/70'
+                  : 'bg-emerald-50/70 border-emerald-200 hover:bg-emerald-100/70'
               }`}
             >
               <div className="flex items-start space-x-3.5">
                 <div
                   className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${
                     isHigh
-                      ? 'bg-red-900/40 border-red-700 text-red-400'
+                      ? 'bg-red-100 border-red-300 text-red-600'
                       : isMed
-                      ? 'bg-amber-900/40 border-amber-700 text-amber-400'
-                      : 'bg-emerald-900/40 border-emerald-700 text-emerald-400'
+                      ? 'bg-amber-100 border-amber-300 text-amber-800'
+                      : 'bg-emerald-100 border-emerald-300 text-emerald-700'
                   }`}
                 >
                   <ShieldAlert className="w-4 h-4" />
@@ -164,10 +164,10 @@ export default function AlertsScreen({ onNavigate }) {
                     <span
                       className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-full ${
                         isHigh
-                          ? 'bg-red-950 text-red-300 border border-red-800'
+                          ? 'bg-red-100 text-red-800 border border-red-300'
                           : isMed
-                          ? 'bg-amber-950 text-amber-300 border border-amber-800'
-                          : 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                          ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                          : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                       }`}
                     >
                       {alert.severity}
@@ -179,19 +179,19 @@ export default function AlertsScreen({ onNavigate }) {
                   </p>
 
                   <div className="flex items-center space-x-4 text-[10px] font-mono text-hc-textMuted pt-1">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-cyan-400" />
+                    <span className="flex items-center gap-1 font-semibold">
+                      <MapPin className="w-3 h-3 text-blue-600" />
                       {alert.location}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-amber-400" />
+                    <span className="flex items-center gap-1 font-semibold">
+                      <Clock className="w-3 h-3 text-amber-700" />
                       {alert.timestamp}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <button className="px-3 py-1.5 rounded-xl bg-hc-surface hover:bg-hc-elevated border border-hc-border text-xs font-semibold text-hc-ink shrink-0 flex items-center space-x-1">
+              <button className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-semibold text-slate-900 shrink-0 flex items-center space-x-1 shadow-xs">
                 <span>Inspect</span>
                 <ArrowRight className="w-3 h-3" />
               </button>

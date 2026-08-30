@@ -149,7 +149,7 @@ export default function CreateScenarioScreen({
       />
 
       {/* Step Progress Indicator matching Image 2 top-right */}
-      <div className="bg-hc-surface/80 border border-hc-border rounded-2xl p-4">
+      <div className="bg-hc-surface border border-hc-border rounded-2xl p-4 shadow-card-dark">
         <div className="grid grid-cols-4 gap-3 text-center font-mono text-xs">
           {[
             { step: 1, title: '1. Study Area Selection' },
@@ -166,14 +166,14 @@ export default function CreateScenarioScreen({
               }}
               className={`p-3 rounded-xl border transition cursor-pointer ${
                 currentStep === s.step
-                  ? 'bg-blue-600/20 border-hc-active text-cyan-300 font-bold ring-1 ring-cyan-500/30'
+                  ? 'bg-blue-50 border-blue-500 text-blue-800 font-bold ring-1 ring-blue-500/30'
                   : currentStep > s.step
-                  ? 'bg-hc-card border-emerald-500/40 text-emerald-400 font-semibold'
-                  : 'bg-hc-canvas/60 border-hc-border text-hc-textMuted'
+                  ? 'bg-emerald-50 border-emerald-200 text-emerald-800 font-semibold'
+                  : 'bg-slate-50 border-slate-200 text-slate-500'
               }`}
             >
               <div className="flex items-center justify-center gap-1.5">
-                {currentStep > s.step && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
+                {currentStep > s.step && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
                 <span>{s.title}</span>
               </div>
             </div>
@@ -182,13 +182,13 @@ export default function CreateScenarioScreen({
       </div>
 
       {/* Form Steps Body */}
-      <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-6 space-y-6">
+      <div className="bg-hc-surface border border-hc-border rounded-2xl p-6 space-y-6 shadow-card-dark">
         {/* STEP 1: Study Area Selection */}
         {currentStep === 1 && (
           <div className="space-y-4">
             <div className="pb-3 border-b border-hc-border">
               <h3 className="text-xs font-bold uppercase tracking-wider text-hc-ink flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-cyan-400" />
+                <MapPin className="w-4 h-4 text-blue-600" />
                 <span>1. Study Area &amp; River Basin Selection</span>
               </h3>
               <p className="text-[11px] text-hc-textSecondary mt-0.5">
@@ -205,9 +205,9 @@ export default function CreateScenarioScreen({
                   type="text"
                   value={formData.name}
                   onChange={(e) => handleChange('name', e.target.value)}
-                  className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-500 shadow-xs"
                 />
-                {errors.name && <span className="text-[10px] text-red-400 mt-1">{errors.name}</span>}
+                {errors.name && <span className="text-[10px] text-red-600 mt-1">{errors.name}</span>}
               </div>
 
               <div>
@@ -218,7 +218,7 @@ export default function CreateScenarioScreen({
                   type="text"
                   value={formData.river}
                   onChange={(e) => handleChange('river', e.target.value)}
-                  className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-500 shadow-xs"
                 />
               </div>
 
@@ -230,7 +230,7 @@ export default function CreateScenarioScreen({
                   type="text"
                   value={formData.state}
                   onChange={(e) => handleChange('state', e.target.value)}
-                  className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-500 shadow-xs"
                 />
               </div>
 
@@ -242,7 +242,7 @@ export default function CreateScenarioScreen({
                   type="number"
                   value={formData.reach_length_km}
                   onChange={(e) => handleChange('reach_length_km', e.target.value)}
-                  className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-500 shadow-xs"
                 />
               </div>
             </div>
@@ -254,7 +254,7 @@ export default function CreateScenarioScreen({
           <div className="space-y-4">
             <div className="pb-3 border-b border-hc-border">
               <h3 className="text-xs font-bold uppercase tracking-wider text-hc-ink flex items-center gap-2">
-                <Database className="w-4 h-4 text-amber-400" />
+                <Database className="w-4 h-4 text-amber-600" />
                 <span>2. Dam Structure &amp; Reservoir Parameters</span>
               </h3>
               <p className="text-[11px] text-hc-textSecondary mt-0.5">
@@ -271,7 +271,7 @@ export default function CreateScenarioScreen({
                   type="text"
                   value={formData.dam_name}
                   onChange={(e) => handleChange('dam_name', e.target.value)}
-                  className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-500 shadow-xs"
                 />
               </div>
 
@@ -282,7 +282,7 @@ export default function CreateScenarioScreen({
                 <select
                   value={formData.dam_type}
                   onChange={(e) => handleChange('dam_type', e.target.value)}
-                  className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-500 shadow-xs"
                 >
                   <option value="rockfill">Earth &amp; Rockfill Embankment</option>
                   <option value="earthen">Homogeneous Earthen Embankment</option>
@@ -299,7 +299,7 @@ export default function CreateScenarioScreen({
                   type="number"
                   value={formData.dam_height_m}
                   onChange={(e) => handleChange('dam_height_m', e.target.value)}
-                  className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-500 shadow-xs"
                 />
               </div>
 
@@ -311,9 +311,9 @@ export default function CreateScenarioScreen({
                   type="number"
                   value={formData.reservoir_volume_m3}
                   onChange={(e) => handleChange('reservoir_volume_m3', e.target.value)}
-                  className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-500 shadow-xs"
                 />
-                <span className="text-[10px] font-mono text-cyan-400 mt-1 block">
+                <span className="text-[10px] font-mono text-blue-700 mt-1 block font-bold">
                   = {(Number(formData.reservoir_volume_m3) / 1e6).toFixed(1)} Million m³ (MCM)
                 </span>
               </div>
@@ -326,7 +326,7 @@ export default function CreateScenarioScreen({
           <div className="space-y-4">
             <div className="pb-3 border-b border-hc-border">
               <h3 className="text-xs font-bold uppercase tracking-wider text-hc-ink flex items-center gap-2">
-                <Cpu className="w-4 h-4 text-blue-400" />
+                <Cpu className="w-4 h-4 text-blue-600" />
                 <span>3. Hydrodynamic Model Selection</span>
               </h3>
               <p className="text-[11px] text-hc-textSecondary mt-0.5">
@@ -338,15 +338,15 @@ export default function CreateScenarioScreen({
               {/* SPH Card */}
               <div
                 onClick={() => handleChange('selected_model', 'sph')}
-                className={`p-4 rounded-xl border cursor-pointer transition space-y-2 ${
+                className={`p-4 rounded-xl border cursor-pointer transition space-y-2 shadow-sm ${
                   formData.selected_model === 'sph' || formData.selected_model === 'both'
-                    ? 'bg-hc-card border-cyan-400 shadow-glow-cyan'
-                    : 'bg-hc-canvas border-hc-border'
+                    ? 'bg-white border-cyan-500 ring-1 ring-cyan-500/30'
+                    : 'bg-white border-hc-border hover:border-slate-300'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-hc-ink">Smooth Particle Hydrodynamics (SPH)</span>
-                  <span className="text-[9px] font-mono text-cyan-300 bg-cyan-950 px-1.5 py-0.5 rounded">3D Solver</span>
+                  <span className="text-[9px] font-mono text-cyan-800 bg-cyan-50 px-1.5 py-0.5 rounded border border-cyan-200 font-bold">3D Solver</span>
                 </div>
                 <p className="text-[11px] text-hc-textSecondary">
                   Lagrangian mesh-free particle Navier-Stokes for supercritical near-field splash and wave runup.
@@ -356,15 +356,15 @@ export default function CreateScenarioScreen({
               {/* Delft3D Card */}
               <div
                 onClick={() => handleChange('selected_model', 'delft3d')}
-                className={`p-4 rounded-xl border cursor-pointer transition space-y-2 ${
+                className={`p-4 rounded-xl border cursor-pointer transition space-y-2 shadow-sm ${
                   formData.selected_model === 'delft3d' || formData.selected_model === 'both'
-                    ? 'bg-hc-card border-blue-500 shadow-glow-blue'
-                    : 'bg-hc-canvas border-hc-border'
+                    ? 'bg-white border-blue-500 ring-1 ring-blue-500/30'
+                    : 'bg-white border-hc-border hover:border-slate-300'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-hc-ink">Delft3D Flexible Mesh (FM)</span>
-                  <span className="text-[9px] font-mono text-blue-300 bg-blue-950 px-1.5 py-0.5 rounded">2D SWE</span>
+                  <span className="text-[9px] font-mono text-blue-800 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200 font-bold">2D SWE</span>
                 </div>
                 <p className="text-[11px] text-hc-textSecondary">
                   Eulerian shallow water equations over unstructured polygonal mesh for long downstream corridor routing.
@@ -378,8 +378,8 @@ export default function CreateScenarioScreen({
                 onClick={() => handleChange('selected_model', formData.selected_model === 'both' ? 'delft3d' : 'both')}
                 className={`px-3 py-1 rounded-lg text-xs font-bold transition ${
                   formData.selected_model === 'both'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-hc-canvas border border-hc-border text-hc-textSecondary'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'bg-white border border-slate-300 text-slate-700'
                 }`}
               >
                 {formData.selected_model === 'both' ? 'Comparison Mode: ON' : 'Comparison Mode: OFF'}
@@ -393,7 +393,7 @@ export default function CreateScenarioScreen({
           <div className="space-y-4">
             <div className="pb-3 border-b border-hc-border">
               <h3 className="text-xs font-bold uppercase tracking-wider text-hc-ink flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-red-400" />
+                <Sliders className="w-4 h-4 text-red-600" />
                 <span>4. Breach Trigger Scenario &amp; Formation Mechanics</span>
               </h3>
               <p className="text-[11px] text-hc-textSecondary mt-0.5">
@@ -409,7 +409,7 @@ export default function CreateScenarioScreen({
                 <select
                   value={formData.breach_mode}
                   onChange={(e) => handleChange('breach_mode', e.target.value)}
-                  className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-slate-300 text-xs text-slate-900 rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-blue-500 shadow-xs"
                 >
                   <option value="instantaneous">Instantaneous Collapse</option>
                   <option value="overtopping">Progressive Overtopping</option>
@@ -420,7 +420,7 @@ export default function CreateScenarioScreen({
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <label className="text-xs font-semibold text-hc-textSecondary">Breach Width (m)</label>
-                  <span className="text-xs font-mono font-bold text-cyan-400">{formData.breach_width_m} m</span>
+                  <span className="text-xs font-mono font-bold text-cyan-700">{formData.breach_width_m} m</span>
                 </div>
                 <input
                   type="range"
@@ -429,14 +429,14 @@ export default function CreateScenarioScreen({
                   step="5"
                   value={formData.breach_width_m}
                   onChange={(e) => handleChange('breach_width_m', parseInt(e.target.value))}
-                  className="w-full accent-cyan-500"
+                  className="w-full accent-blue-600"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <label className="text-xs font-semibold text-hc-textSecondary">Time of Failure (hrs)</label>
-                  <span className="text-xs font-mono font-bold text-amber-400">{formData.time_of_failure_hrs} hrs</span>
+                  <span className="text-xs font-mono font-bold text-amber-800">{formData.time_of_failure_hrs} hrs</span>
                 </div>
                 <input
                   type="range"
@@ -445,7 +445,7 @@ export default function CreateScenarioScreen({
                   step="0.05"
                   value={formData.time_of_failure_hrs}
                   onChange={(e) => handleChange('time_of_failure_hrs', parseFloat(e.target.value))}
-                  className="w-full accent-cyan-500"
+                  className="w-full accent-blue-600"
                 />
               </div>
 
@@ -455,7 +455,7 @@ export default function CreateScenarioScreen({
                     type="checkbox"
                     checked={formData.estimate_unknown_time}
                     onChange={(e) => handleChange('estimate_unknown_time', e.target.checked)}
-                    className="w-4 h-4 rounded bg-hc-canvas border-hc-border text-blue-600 focus:ring-0"
+                    className="w-4 h-4 rounded bg-white border-slate-300 text-blue-600 focus:ring-0"
                   />
                   <span>Time of failure unknown → estimate from Froehlich (2008) formula</span>
                 </label>
@@ -469,7 +469,7 @@ export default function CreateScenarioScreen({
           {currentStep > 1 ? (
             <button
               onClick={handleBack}
-              className="px-4 py-2 rounded-xl bg-hc-card hover:bg-hc-elevated border border-hc-border text-xs font-semibold flex items-center space-x-1.5"
+              className="px-4 py-2 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 text-xs font-semibold flex items-center space-x-1.5 shadow-xs"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back</span>
