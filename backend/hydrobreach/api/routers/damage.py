@@ -46,6 +46,6 @@ async def evaluate_damage(req: DamageEvaluationRequest):
         max_inundated_area_km2=max_area,
         peak_velocity_ms=peak_v,
         max_depth_m=max_d,
-        valley_type=v_type
+        valley_type=v_type,
     )
     return res

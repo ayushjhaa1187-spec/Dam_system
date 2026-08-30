@@ -24,7 +24,7 @@ class EvacuationRouter:
     ) -> Tuple[List[str], float]:
         # Using Dijkstra's
         best_route = []
-        best_time = float('inf')
+        best_time = float("inf")
         for dest in destinations:
             if not nx.has_path(self.graph, origin, dest):
                 continue

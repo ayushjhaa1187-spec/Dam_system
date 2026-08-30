@@ -5,6 +5,7 @@ Provenance labels attach to value-generation processes, not permanently
 to variable types. The same variable can have different provenance depending
 on HOW it was determined.
 """
+
 import hashlib
 import json
 from dataclasses import dataclass
@@ -24,6 +25,7 @@ class ProvenanceRecord:
     notes:   optional additional context
     value_hash: SHA256 of the value itself (populated when needed for audit)
     """
+
     level: ProvenanceLevel
     source: str
     notes: str = ""

@@ -6,6 +6,7 @@ Falls back to 2D SWE finite-volume stub when binaries not available,
 clearly labelling provenance as MODELLED (adapter=swe_fallback).
 Never silently falls back — always logs clearly when stub is used.
 """
+
 from __future__ import annotations
 
 import logging
@@ -39,10 +40,7 @@ class DFlowFMRunner:
             raise RuntimeError("dflowfm binary not found")
         solver = self.bin_dir / "dflowfm"
         try:
-            result = subprocess.run(
-                [str(solver), "--version"],
-                capture_output=True, text=True, timeout=10
-            )
+            result = subprocess.run([str(solver), "--version"], capture_output=True, text=True, timeout=10)
             line = result.stdout.strip() or result.stderr.strip()
             return line.split("\n")[0] if line else "unknown"
         except Exception as e:
@@ -105,7 +103,7 @@ BedLevelType=3
 ManholeFile=
 
 [numerics]
-CFLMax={scenario_params.get('cfl', 0.45)}
+CFLMax={scenario_params.get("cfl", 0.45)}
 AdvecType=33
 TimeStepType=2
 
@@ -243,6 +241,7 @@ class Delft3DFMAdapter:
         # Save stub summary
         import json
         from floodlab.core.units import m2_to_km2
+
         summary_file = delft_dir / "stub_summary.json"
         reach_m = reach_km * 1000.0
         total_valley_area_km2 = m2_to_km2(reach_m * valley_width)
@@ -267,9 +266,7 @@ class Delft3DFMAdapter:
             "inundated_area_km2": inundated_area,
             "station_results": station_results,
             "provenance": label_modelled(
-                "Delft3D FM",
-                "stub",
-                notes="Binary not available. 1D Muskingum stub used."
+                "Delft3D FM", "stub", notes="Binary not available. 1D Muskingum stub used."
             ).to_dict(),
         }
 

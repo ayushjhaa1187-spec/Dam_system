@@ -1,4 +1,5 @@
 """Full end-to-end simulation pipeline integration test."""
+
 from floodlab.config.constants import BreachModel, SolverType
 from floodlab.engines.breach.breach_models import BreachMechanicsEngine, DamBreachInput
 from floodlab.engines.sph.dualsphysics_adapter import DualSPHysicsAdapter
@@ -45,8 +46,11 @@ def test_full_pipeline(tmp_path):
     hr = HazardRatingEngine().compute_hr(delft_res["h_max_m"], 4.0, "mountain_gorge")
     assert hr is not None
     damage = DamageEstimator().estimate(
-        delft_res["inundated_area_km2"], 4.0, delft_res["h_max_m"],
-        "mountain_gorge", {"population_density_per_km2": 150.0},
+        delft_res["inundated_area_km2"],
+        4.0,
+        delft_res["h_max_m"],
+        "mountain_gorge",
+        {"population_density_per_km2": 150.0},
     )
 
     # 6. Manifest

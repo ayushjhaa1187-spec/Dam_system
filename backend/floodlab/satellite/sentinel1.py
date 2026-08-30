@@ -1,6 +1,7 @@
 """
 Sentinel-1 SAR flood monitoring and lake outburst surveillance.
 """
+
 from typing import Any, Dict, List, Tuple
 from floodlab.domain.provenance import ProvenanceRecord
 from floodlab.provenance.labels import label_observed, label_derived
@@ -38,13 +39,15 @@ class Sentinel1Monitor:
         """List active surveillance alerts with OBSERVED provenance."""
         alerts = []
         for z in SURVEILLANCE_ZONES:
-            alerts.append({
-                **z,
-                "detected_area_ha": 0.0,
-                "estimated_volume_m3": 0.0,
-                "acquisition_date": "2026-01-01",
-                "provenance": label_observed("Sentinel-1_C-SAR_GRD").to_dict(),
-            })
+            alerts.append(
+                {
+                    **z,
+                    "detected_area_ha": 0.0,
+                    "estimated_volume_m3": 0.0,
+                    "acquisition_date": "2026-01-01",
+                    "provenance": label_observed("Sentinel-1_C-SAR_GRD").to_dict(),
+                }
+            )
         return alerts
 
     def run_change_detection(

@@ -6,6 +6,7 @@ Three-tier validation framework:
   Tier 2: Model comparison (SPH vs Delft3D)
   Tier 3: Observation validation (Rishi Ganga 2021 for methodology)
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
@@ -57,14 +58,14 @@ class HydrographMetrics:
     def rmse(observed: List[float], modelled: List[float]) -> float:
         """Root Mean Square Error."""
         arr_o = np.array(observed)
-        arr_m = np.array(modelled[:len(observed)])
+        arr_m = np.array(modelled[: len(observed)])
         return float(np.sqrt(np.mean((arr_o - arr_m) ** 2)))
 
     @staticmethod
     def mae(observed: List[float], modelled: List[float]) -> float:
         """Mean Absolute Error."""
         arr_o = np.array(observed)
-        arr_m = np.array(modelled[:len(observed)])
+        arr_m = np.array(modelled[: len(observed)])
         return float(np.mean(np.abs(arr_o - arr_m)))
 
     @staticmethod
@@ -83,7 +84,7 @@ class HydrographMetrics:
     def nse(observed: List[float], modelled: List[float]) -> float:
         """Nash-Sutcliffe Efficiency."""
         arr_o = np.array(observed)
-        arr_m = np.array(modelled[:len(observed)])
+        arr_m = np.array(modelled[: len(observed)])
         obs_mean = np.mean(arr_o)
         ss_res = np.sum((arr_o - arr_m) ** 2)
         ss_tot = np.sum((arr_o - obs_mean) ** 2)
@@ -135,6 +136,7 @@ class ModelComparison:
             dict with extent_metrics, depth_metrics, hydrograph_metrics
         """
         from floodlab.provenance.labels import label_derived
+
         provenance = label_derived(
             from_sources=["DualSPHysics_output", "Delft3D_FM_output"],
             method="model_comparison",

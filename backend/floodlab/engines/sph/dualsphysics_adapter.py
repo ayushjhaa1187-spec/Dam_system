@@ -9,6 +9,7 @@ stub simulation and clearly labels provenance as MODELLED (adapter=wcsph_stub).
 Never silently falls back — always raises EngineNotAvailableError or logs
 clearly when stub is used.
 """
+
 from __future__ import annotations
 
 import logging
@@ -130,9 +131,7 @@ class DualSPHysicsAdapter:
             "discharge_times_hrs": times,
             "discharge_flows_m3s": flows,
             "provenance": label_modelled(
-                "DualSPHysics",
-                "stub",
-                notes="Binary not available. Kinematic wave stub used."
+                "DualSPHysics", "stub", notes="Binary not available. Kinematic wave stub used."
             ).to_dict(),
             "gauges": {},
         }

@@ -88,8 +88,5 @@ async def export_detected_polygon(req: SARAnalysisRequest):
 async def process_sentinel1(body: dict):
     module = GEESentinel1Module()
     return module.execute_workflow(
-        body.get("aoi", {}),
-        body.get("pre_event", "2023-01-01"),
-        body.get("post_event", "2023-01-05")
+        body.get("aoi", {}), body.get("pre_event", "2023-01-01"), body.get("post_event", "2023-01-05")
     )
-

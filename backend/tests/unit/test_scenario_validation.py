@@ -1,6 +1,7 @@
 """
 Tests for physical constraint validation and GIS layer checks.
 """
+
 from floodlab.validation.scenario_validator import ScenarioValidator, LayerValidator
 
 
@@ -80,17 +81,13 @@ def test_dem_layer_validation():
         elevation_max_m=2400.0,
         resolution_m=30.0,
         file_size_bytes=5 * 1024 * 1024,
-        filename="tehri_dem.tif"
+        filename="tehri_dem.tif",
     )
     assert valid_res.is_valid is True
 
     # Invalid DEM (min elevation > max elevation)
     invalid_res = LayerValidator.validate_dem(
-        crs="EPSG:4326",
-        elevation_min_m=3000.0,
-        elevation_max_m=1000.0,
-        resolution_m=30.0,
-        filename="broken.tif"
+        crs="EPSG:4326", elevation_min_m=3000.0, elevation_max_m=1000.0, resolution_m=30.0, filename="broken.tif"
     )
     assert invalid_res.is_valid is False
     assert any(e.rule == "ELEVATION_RANGE_VALID" for e in invalid_res.errors)

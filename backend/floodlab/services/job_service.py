@@ -12,6 +12,7 @@ Provides:
 - In-memory & persisted job registry with previous-run history
 - Comprehensive simulation run report generation (Markdown & JSON)
 """
+
 from __future__ import annotations
 
 import datetime
@@ -88,6 +89,7 @@ class SimulationJob(BaseModel):
 
 class JobService:
     """Singleton in-memory & background thread job manager."""
+
     _instance: Optional[JobService] = None
     _lock = threading.Lock()
     _jobs: Dict[str, SimulationJob] = {}
@@ -126,18 +128,28 @@ class JobService:
             completed_at=now,
             elapsed_seconds=11.8,
             logs=[
-                JobLogEntry(timestamp=now, level="INFO",
-                            message="Scenario submitted: Tehri Dam (Bhagirathi River, Uttarakhand)"),
-                JobLogEntry(timestamp=now, level="SUCCESS",
-                            message="Physical validation checks passed (12/12 checks)."),
-                JobLogEntry(timestamp=now, level="INFO",
-                            message="DEM elevation raster loaded (EPSG:32644, 30m resolution)."),
-                JobLogEntry(timestamp=now, level="INFO",
-                            message="Generated 100km corridor flexible mesh and 2km near-field SPH particle domain."),
-                JobLogEntry(timestamp=now, level="INFO",
-                            message="Coupled solver converged (Peak Q = 84,200 m³/s, Peak depth = 68.5m)."),
-                JobLogEntry(timestamp=now, level="SUCCESS",
-                            message="All outputs, GIS layers, and situation reports exported."),
+                JobLogEntry(
+                    timestamp=now, level="INFO", message="Scenario submitted: Tehri Dam (Bhagirathi River, Uttarakhand)"
+                ),
+                JobLogEntry(
+                    timestamp=now, level="SUCCESS", message="Physical validation checks passed (12/12 checks)."
+                ),
+                JobLogEntry(
+                    timestamp=now, level="INFO", message="DEM elevation raster loaded (EPSG:32644, 30m resolution)."
+                ),
+                JobLogEntry(
+                    timestamp=now,
+                    level="INFO",
+                    message="Generated 100km corridor flexible mesh and 2km near-field SPH particle domain.",
+                ),
+                JobLogEntry(
+                    timestamp=now,
+                    level="INFO",
+                    message="Coupled solver converged (Peak Q = 84,200 m³/s, Peak depth = 68.5m).",
+                ),
+                JobLogEntry(
+                    timestamp=now, level="SUCCESS", message="All outputs, GIS layers, and situation reports exported."
+                ),
             ],
             scenario_params=default_preset,
             can_retry=False,
@@ -203,7 +215,7 @@ class JobService:
             can_retry=False,
             logs=[
                 JobLogEntry(timestamp=now, level="INFO", message=f"Job queued: {scen_name} [{job_id}]"),
-            ]
+            ],
         )
         self._jobs[job_id] = job
 
@@ -305,6 +317,7 @@ class JobService:
 
             # Execute actual solver synthesis logic
             from floodlab.api.routers.simulations import execute_simulation_computation
+
             sim_result = execute_simulation_computation(
                 params=job.scenario_params,
                 solver_type=job.solver_type,
@@ -312,7 +325,10 @@ class JobService:
                 run_id=job.run_id,
             )
             time.sleep(0.05)
-            log(f"Peak discharge computed: {sim_result.get('breach_mechanics', {}).get('peak_discharge_m3s', 84200):,.0f} m³/s", level="SUCCESS")  # noqa: E501
+            log(
+                f"Peak discharge computed: {sim_result.get('breach_mechanics', {}).get('peak_discharge_m3s', 84200):,.0f} m³/s",
+                level="SUCCESS",
+            )  # noqa: E501
 
             # Stage 5: Post-Processing
             if job.state == JobStage.CANCELLED:
@@ -322,7 +338,10 @@ class JobService:
             job.progress_pct = 85
             log("Calculating CWC hazard ratings, depth-damage curves, and population exposure...")
             time.sleep(0.05)
-            log(f"HADR impact: {sim_result.get('damage_assessment', {}).get('exposure_and_loss', {}).get('population_at_risk', 91500):,} persons at risk.", level="INFO")  # noqa: E501
+            log(
+                f"HADR impact: {sim_result.get('damage_assessment', {}).get('exposure_and_loss', {}).get('population_at_risk', 91500):,} persons at risk.",
+                level="INFO",
+            )  # noqa: E501
 
             # Stage 6: Exporting
             if job.state == JobStage.CANCELLED:
@@ -370,33 +389,33 @@ class JobService:
 **Scenario**: {job.scenario_name}
 **Run ID**: `{job.run_id}` | **Job ID**: `{job.job_id}`
 **Status**: `{job.state.upper()}` | **Execution Time**: {job.elapsed_seconds} seconds
-**Solver**: `{job.solver_type.upper()}` ({res.get('provenance', {}).get('source', 'Multi-Scale Engine')})
+**Solver**: `{job.solver_type.upper()}` ({res.get("provenance", {}).get("source", "Multi-Scale Engine")})
 **Timestamp**: {job.created_at}
 
 ---
 
 ## 1. Executive Summary
-- **Peak Outflow Discharge ($Q_p$)**: {breach.get('peak_discharge_m3s', 0):,.0f} $\\text{{m}}^3/\\text{{s}}$
-- **Breach Formation Time ($t_f$)**: {breach.get('breach_formation_time_hrs', 0):.2f} hours
-- **Maximum Flood Depth ($d_{{max}}$)**: {damage.get('hazard_metrics', {}).get('max_flood_depth_m', 0):.1f} meters
-- **Peak Surge Velocity ($v_{{max}}$)**: {damage.get('hazard_metrics', {}).get('peak_velocity_ms', 0):.1f} m/s
-- **Total Inundated Footprint**: {res.get('delft3d_result', {}).get('summary', {}).get('max_inundated_area_km2', 26.5):.1f} $\\text{{km}}^2$  # noqa: E501
-- **Total Population at Risk**: {exposure.get('population_at_risk', 0):,} people
-- **Displaced Persons**: {exposure.get('displaced_persons', 0):,} people
+- **Peak Outflow Discharge ($Q_p$)**: {breach.get("peak_discharge_m3s", 0):,.0f} $\\text{{m}}^3/\\text{{s}}$
+- **Breach Formation Time ($t_f$)**: {breach.get("breach_formation_time_hrs", 0):.2f} hours
+- **Maximum Flood Depth ($d_{{max}}$)**: {damage.get("hazard_metrics", {}).get("max_flood_depth_m", 0):.1f} meters
+- **Peak Surge Velocity ($v_{{max}}$)**: {damage.get("hazard_metrics", {}).get("peak_velocity_ms", 0):.1f} m/s
+- **Total Inundated Footprint**: {res.get("delft3d_result", {}).get("summary", {}).get("max_inundated_area_km2", 26.5):.1f} $\\text{{km}}^2$  # noqa: E501
+- **Total Population at Risk**: {exposure.get("population_at_risk", 0):,} people
+- **Displaced Persons**: {exposure.get("displaced_persons", 0):,} people
 
 ---
 
 ## 2. Embankment & Reservoir Specifications
 | Parameter | Value | Units | Provenance |
 |---|---|---|---|
-| Dam Type | {params.get('dam_type', 'rockfill').capitalize()} | - | Reported |
-| Structural Height ($h_d$) | {params.get('dam_height_m', 260.5)} | m | Reported |
-| Operating Head ($h_w$) | {params.get('hydraulic_head_m', 260.0)} | m | Reported |
-| Reservoir Storage ($V_w$) | {params.get('reservoir_volume_m3', 3.54e9) / 1e6:,.1f} | Million $\\text{{m}}^3$ | Reported |  # noqa: E501
-| Crest Length | {params.get('crest_length_m', 575.0)} | m | Reported |
-| Breach Failure Mode | {params.get('breach_mode', 'overtopping')} | - | Assumed |
-| Reach Corridor Length | {params.get('reach_length_km', 100.0)} | km | Measured |
-| Valley Manning's n | {params.get('manning_n', 0.042)} | $\\text{{s}}/\\text{{m}}^{{1/3}}$ | Calibrated |
+| Dam Type | {params.get("dam_type", "rockfill").capitalize()} | - | Reported |
+| Structural Height ($h_d$) | {params.get("dam_height_m", 260.5)} | m | Reported |
+| Operating Head ($h_w$) | {params.get("hydraulic_head_m", 260.0)} | m | Reported |
+| Reservoir Storage ($V_w$) | {params.get("reservoir_volume_m3", 3.54e9) / 1e6:,.1f} | Million $\\text{{m}}^3$ | Reported |  # noqa: E501
+| Crest Length | {params.get("crest_length_m", 575.0)} | m | Reported |
+| Breach Failure Mode | {params.get("breach_mode", "overtopping")} | - | Assumed |
+| Reach Corridor Length | {params.get("reach_length_km", 100.0)} | km | Measured |
+| Valley Manning's n | {params.get("manning_n", 0.042)} | $\\text{{s}}/\\text{{m}}^{{1/3}}$ | Calibrated |
 
 ---
 
@@ -413,16 +432,16 @@ class JobService:
 ---
 
 ## 4. HADR Disaster Response & Zoning
-- **Red Zone (Extreme Hazard / Lead Time < 30 min)**: {hadr.get('red_zone', {}).get('area_km2', 14.8)} $\\text{{km}}^2$ - *Immediate Forced Evacuation*  # noqa: E501
-- **Orange Zone (High Hazard / Lead Time 30-120 min)**: {hadr.get('orange_zone', {}).get('area_km2', 8.5)} $\\text{{km}}^2$ - *Pre-emptive Shelter Relocation*  # noqa: E501
-- **Yellow Zone (Moderate Hazard / Lead Time > 120 min)**: {hadr.get('yellow_zone', {}).get('area_km2', 5.2)} $\\text{{km}}^2$ - *Continuous Floodplain Telemetry Monitoring*  # noqa: E501
+- **Red Zone (Extreme Hazard / Lead Time < 30 min)**: {hadr.get("red_zone", {}).get("area_km2", 14.8)} $\\text{{km}}^2$ - *Immediate Forced Evacuation*  # noqa: E501
+- **Orange Zone (High Hazard / Lead Time 30-120 min)**: {hadr.get("orange_zone", {}).get("area_km2", 8.5)} $\\text{{km}}^2$ - *Pre-emptive Shelter Relocation*  # noqa: E501
+- **Yellow Zone (Moderate Hazard / Lead Time > 120 min)**: {hadr.get("yellow_zone", {}).get("area_km2", 5.2)} $\\text{{km}}^2$ - *Continuous Floodplain Telemetry Monitoring*  # noqa: E501
 
 ---
 
 ## 5. Model Validation & Numerical Quality Checks
-- **Critical Success Index (CSI)**: {metrics.get('critical_success_index_csi', 0.865):.3f} (Benchmark Threshold: $\\ge 0.70$ - **PASSED**)  # noqa: E501
-- **Probability of Detection (POD)**: {metrics.get('probability_of_detection_pod', 0.912):.3f}
-- **False Alarm Ratio (FAR)**: {metrics.get('false_alarm_ratio_far', 0.088):.3f}
+- **Critical Success Index (CSI)**: {metrics.get("critical_success_index_csi", 0.865):.3f} (Benchmark Threshold: $\\ge 0.70$ - **PASSED**)  # noqa: E501
+- **Probability of Detection (POD)**: {metrics.get("probability_of_detection_pod", 0.912):.3f}
+- **False Alarm Ratio (FAR)**: {metrics.get("false_alarm_ratio_far", 0.088):.3f}
 - **Mass Conservation Error**: < 0.05%
 - **Export Formats**: ESRI Shapefile Package (.zip), Google Earth KML (.kml), GeoJSON, HADR CSV.
 """

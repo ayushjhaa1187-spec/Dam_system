@@ -132,8 +132,21 @@ def test_csv_exports():
     assert "0.000,0.0,0.0" in hydro_csv
 
     damage_data = {
-        "hazard_metrics": {"hazard_level": "EXTREME", "hazard_rating_hr": 2.85, "max_flood_depth_m": 68.5, "peak_velocity_ms": 24.2},
-        "exposure_and_loss": {"population_at_risk": 284000, "displaced_persons": 198000, "total_buildings_exposed": 42000, "destroyed_structures": 24500, "submerged_structures": 17500, "inundated_agricultural_ha": 4850.0, "total_economic_loss_crores_inr": 4820.0},
+        "hazard_metrics": {
+            "hazard_level": "EXTREME",
+            "hazard_rating_hr": 2.85,
+            "max_flood_depth_m": 68.5,
+            "peak_velocity_ms": 24.2,
+        },
+        "exposure_and_loss": {
+            "population_at_risk": 284000,
+            "displaced_persons": 198000,
+            "total_buildings_exposed": 42000,
+            "destroyed_structures": 24500,
+            "submerged_structures": 17500,
+            "inundated_agricultural_ha": 4850.0,
+            "total_economic_loss_crores_inr": 4820.0,
+        },
     }
     exp_csv = GeospatialExporter.generate_exposure_csv(damage_data, "Tehri Dam", "run_exp_01")
     assert "# HydroBreach HADR Settlement Exposure & Disaster Impact Summary" in exp_csv
@@ -143,11 +156,35 @@ def test_csv_exports():
 
 def test_decision_maker_pdf_generation():
     params = {"name": "Tehri Dam", "dam_height_m": 260.5, "reservoir_volume_m3": 3.54e9}
-    breach_data = {"peak_discharge_m3s": 84200.0, "formation_time_hrs": 1.85, "avg_breach_width_m": 248.5, "model_used": "Froehlich (2008)"}
+    breach_data = {
+        "peak_discharge_m3s": 84200.0,
+        "formation_time_hrs": 1.85,
+        "avg_breach_width_m": 248.5,
+        "model_used": "Froehlich (2008)",
+    }
     damage_data = {
-        "hazard_metrics": {"hazard_level": "EXTREME", "hazard_rating_hr": 2.85, "max_flood_depth_m": 68.5, "peak_velocity_ms": 24.2},
-        "exposure_and_loss": {"population_at_risk": 284000, "displaced_persons": 198000, "total_buildings_exposed": 42000, "destroyed_structures": 24500, "submerged_structures": 17500, "inundated_agricultural_ha": 4850.0, "total_economic_loss_crores_inr": 4820.0},
-        "resource_allocation": {"ndrf_sdrf_battalions": 8, "inflatable_rescue_boats": 120, "emergency_relief_shelters": 45, "food_water_packets_per_day": 594000, "air_evacuation_helipads_needed": 6}
+        "hazard_metrics": {
+            "hazard_level": "EXTREME",
+            "hazard_rating_hr": 2.85,
+            "max_flood_depth_m": 68.5,
+            "peak_velocity_ms": 24.2,
+        },
+        "exposure_and_loss": {
+            "population_at_risk": 284000,
+            "displaced_persons": 198000,
+            "total_buildings_exposed": 42000,
+            "destroyed_structures": 24500,
+            "submerged_structures": 17500,
+            "inundated_agricultural_ha": 4850.0,
+            "total_economic_loss_crores_inr": 4820.0,
+        },
+        "resource_allocation": {
+            "ndrf_sdrf_battalions": 8,
+            "inflatable_rescue_boats": 120,
+            "emergency_relief_shelters": 45,
+            "food_water_packets_per_day": 594000,
+            "air_evacuation_helipads_needed": 6,
+        },
     }
 
     pdf_bytes = GeospatialExporter.generate_decision_maker_pdf(
@@ -163,12 +200,42 @@ def test_decision_maker_pdf_generation():
 
 
 def test_run_package_zip_generation():
-    params = {"name": "Tehri Dam", "lat": 30.378, "lon": 78.481, "reach_length_km": 100.0, "dam_height_m": 260.5, "reservoir_volume_m3": 3.54e9}
-    breach = {"peak_discharge_m3s": 84200.0, "formation_time_hrs": 1.85, "hydrograph_times": [0, 1, 2], "hydrograph_flows": [0, 84200, 10000]}
+    params = {
+        "name": "Tehri Dam",
+        "lat": 30.378,
+        "lon": 78.481,
+        "reach_length_km": 100.0,
+        "dam_height_m": 260.5,
+        "reservoir_volume_m3": 3.54e9,
+    }
+    breach = {
+        "peak_discharge_m3s": 84200.0,
+        "formation_time_hrs": 1.85,
+        "hydrograph_times": [0, 1, 2],
+        "hydrograph_flows": [0, 84200, 10000],
+    }
     damage = {
-        "hazard_metrics": {"hazard_level": "EXTREME", "hazard_rating_hr": 2.85, "max_flood_depth_m": 68.5, "peak_velocity_ms": 24.2},
-        "exposure_and_loss": {"population_at_risk": 284000, "displaced_persons": 198000, "total_buildings_exposed": 42000, "destroyed_structures": 24500, "submerged_structures": 17500, "inundated_agricultural_ha": 4850.0, "total_economic_loss_crores_inr": 4820.0},
-        "resource_allocation": {"ndrf_sdrf_battalions": 8, "inflatable_rescue_boats": 120, "emergency_relief_shelters": 45, "food_water_packets_per_day": 594000}
+        "hazard_metrics": {
+            "hazard_level": "EXTREME",
+            "hazard_rating_hr": 2.85,
+            "max_flood_depth_m": 68.5,
+            "peak_velocity_ms": 24.2,
+        },
+        "exposure_and_loss": {
+            "population_at_risk": 284000,
+            "displaced_persons": 198000,
+            "total_buildings_exposed": 42000,
+            "destroyed_structures": 24500,
+            "submerged_structures": 17500,
+            "inundated_agricultural_ha": 4850.0,
+            "total_economic_loss_crores_inr": 4820.0,
+        },
+        "resource_allocation": {
+            "ndrf_sdrf_battalions": 8,
+            "inflatable_rescue_boats": 120,
+            "emergency_relief_shelters": 45,
+            "food_water_packets_per_day": 594000,
+        },
     }
 
     zip_bytes = GeospatialExporter.generate_run_package_zip(
@@ -205,6 +272,7 @@ def test_invalid_geojson_rejection():
     except Exception as e:
         assert str(e) != ""
 
+
 def test_crs_conversion_and_geometry_validity():
     # Create valid geojson with explicit CRS and test its conversion/validation
     geojson_data = GeospatialExporter.generate_geojson(
@@ -213,7 +281,7 @@ def test_crs_conversion_and_geometry_validity():
         reach_length_km=10.0,
         run_id="test_crs_run",
     )
-    
+
     # Basic geometry validity check (using shapely if possible or just validating dict structure)
     for feat in geojson_data.get("features", []):
         geom = feat.get("geometry", {})
@@ -226,7 +294,8 @@ def test_crs_conversion_and_geometry_validity():
     zip_buf = io.BytesIO(shp_zip_bytes)
     with zipfile.ZipFile(zip_buf, "r") as zf:
         prj_content = zf.read("inundation_hazard_zones.prj").decode("utf-8")
-        assert "GEOGCS[\"GCS_WGS_1984\"" in prj_content or "WGS_1984" in prj_content
+        assert 'GEOGCS["GCS_WGS_1984"' in prj_content or "WGS_1984" in prj_content
+
 
 def test_export_router_endpoints():
     run_id = "test_endpoint_run"

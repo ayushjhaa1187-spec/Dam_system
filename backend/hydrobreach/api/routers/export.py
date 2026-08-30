@@ -71,9 +71,28 @@ def _get_simulation_context(run_id: Optional[str] = None, req: Optional[ExportRe
             "hydrograph_flows": [0, 12000, 48000, 84200, 62000, 38000, 21000, 8500, 2400, 500],
         }
         damage_data = {
-            "hazard_metrics": {"hazard_level": "EXTREME", "hazard_rating_hr": 2.85, "max_flood_depth_m": 68.5, "peak_velocity_ms": 24.2},
-            "exposure_and_loss": {"population_at_risk": 284000, "displaced_persons": 198000, "total_buildings_exposed": 42000, "destroyed_structures": 24500, "submerged_structures": 17500, "inundated_agricultural_ha": 4850.0, "total_economic_loss_crores_inr": 4820.0},
-            "resource_allocation": {"inflatable_rescue_boats": 120, "ndrf_sdrf_battalions": 8, "emergency_relief_shelters": 45, "food_water_packets_per_day": 594000, "air_evacuation_helipads_needed": 6}
+            "hazard_metrics": {
+                "hazard_level": "EXTREME",
+                "hazard_rating_hr": 2.85,
+                "max_flood_depth_m": 68.5,
+                "peak_velocity_ms": 24.2,
+            },
+            "exposure_and_loss": {
+                "population_at_risk": 284000,
+                "displaced_persons": 198000,
+                "total_buildings_exposed": 42000,
+                "destroyed_structures": 24500,
+                "submerged_structures": 17500,
+                "inundated_agricultural_ha": 4850.0,
+                "total_economic_loss_crores_inr": 4820.0,
+            },
+            "resource_allocation": {
+                "inflatable_rescue_boats": 120,
+                "ndrf_sdrf_battalions": 8,
+                "emergency_relief_shelters": 45,
+                "food_water_packets_per_day": 594000,
+                "air_evacuation_helipads_needed": 6,
+            },
         }
 
     return {
@@ -92,6 +111,7 @@ def _get_simulation_context(run_id: Optional[str] = None, req: Optional[ExportRe
 # ==========================================================
 # 1. GeoJSON Endpoints
 # ==========================================================
+
 
 @router.get("/{run_id}/geojson")
 async def get_export_geojson(run_id: str):
@@ -120,6 +140,7 @@ async def post_export_geojson(req: ExportRequest):
 # ==========================================================
 # 2. Google Earth KML Endpoints
 # ==========================================================
+
 
 @router.get("/{run_id}/kml")
 async def get_export_kml(run_id: str):
@@ -163,6 +184,7 @@ async def post_export_kml(req: ExportRequest):
 # 3. Shapefile ZIP Endpoints
 # ==========================================================
 
+
 @router.get("/{run_id}/shapefile")
 async def get_export_shapefile(run_id: str):
     """Downloads ESRI Shapefile package (.shp, .shx, .dbf, .prj, .cpg) in a ZIP."""
@@ -205,11 +227,14 @@ async def post_export_shapefile(req: ExportRequest):
 # 4. GeoTIFF Raster Endpoints
 # ==========================================================
 
+
 @router.get("/{run_id}/geotiff/{raster_type}")
 async def get_export_geotiff(run_id: str, raster_type: str):
     """Downloads georeferenced GeoTIFF raster for depth, velocity, arrival_time, or hazard."""
     if raster_type not in ["depth", "velocity", "arrival_time", "hazard"]:
-        raise HTTPException(400, f"Invalid raster_type '{raster_type}'. Must be depth, velocity, arrival_time, or hazard.")
+        raise HTTPException(
+            400, f"Invalid raster_type '{raster_type}'. Must be depth, velocity, arrival_time, or hazard."
+        )
     ctx = _get_simulation_context(run_id=run_id)
     tif_bytes = GeospatialExporter.generate_geotiff_raster(
         raster_type=raster_type,
@@ -244,6 +269,7 @@ async def post_export_geotiff(req: ExportRequest):
 # ==========================================================
 # 5. CSV Report Endpoints
 # ==========================================================
+
 
 @router.get("/{run_id}/csv/{csv_type}")
 async def get_export_csv_by_type(run_id: str, csv_type: str):
@@ -287,6 +313,7 @@ async def post_export_csv(req: ExportRequest):
 # 6. Decision-Maker Executive PDF Endpoints
 # ==========================================================
 
+
 @router.get("/{run_id}/pdf")
 async def get_export_pdf(run_id: str):
     """Downloads executive Decision-Maker PDF Report."""
@@ -328,6 +355,7 @@ async def post_export_pdf(req: ExportRequest):
 # ==========================================================
 # 7. ZIP Run Package Endpoints
 # ==========================================================
+
 
 @router.get("/{run_id}/package")
 async def get_export_package(run_id: str):
@@ -371,9 +399,11 @@ async def post_export_package(req: ExportRequest):
 # 8. Manifest & Delft3D Endpoints
 # ==========================================================
 
+
 @router.get("/{run_id}/manifest")
 async def get_manifest(run_id: str):
     from floodlab.config.paths import get_manifest_path
+
     path = get_manifest_path(run_id)
     if path.exists():
         return json.loads(path.read_text())

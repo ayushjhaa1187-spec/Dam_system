@@ -1,6 +1,7 @@
 """
 ProvenanceRegistry: tracks provenance records for all values in a run.
 """
+
 from typing import Dict, Optional
 
 from floodlab.domain.provenance import ProvenanceRecord

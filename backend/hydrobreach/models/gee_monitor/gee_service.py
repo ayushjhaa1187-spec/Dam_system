@@ -144,32 +144,34 @@ class GEESentinel1Monitor:
         for zone in cls.SURVEILLANCE_ZONES:
             dl = zone["detected_lake"]
             if dl["detected"]:
-                alerts.append({
-                    "alert_id": f"ALT-{zone['id'].upper()}-{int(time.time()) % 10000}",
-                    "zone_id": zone["id"],
-                    "zone_name": zone["name"],
-                    "river": zone["river"],
-                    "state": zone["state"],
-                    "risk_type": zone["risk_type"],
-                    "severity": zone["alert_level"],
-                    "impounded_area_ha": dl["surface_area_ha"],
-                    "estimated_depth_m": dl["estimated_depth_m"],
-                    "estimated_volume_m3": dl["estimated_volume_m3"],
-                    "confidence": dl["confidence_score"],
-                    "timestamp": zone["last_sar_pass"],
-                    "sensor": zone.get("sensor", "Sentinel-1A C-SAR GRD"),
-                    "orbit_pass": zone.get("orbit_pass", "Descending"),
-                    "coordinates": dl["coordinates"],
-                    "provenance": {
-                        "level": "OBSERVED / DERIVED",
-                        "source": "Copernicus Sentinel-1 C-Band SAR GRD",
+                alerts.append(
+                    {
+                        "alert_id": f"ALT-{zone['id'].upper()}-{int(time.time()) % 10000}",
+                        "zone_id": zone["id"],
+                        "zone_name": zone["name"],
+                        "river": zone["river"],
+                        "state": zone["state"],
+                        "risk_type": zone["risk_type"],
+                        "severity": zone["alert_level"],
+                        "impounded_area_ha": dl["surface_area_ha"],
+                        "estimated_depth_m": dl["estimated_depth_m"],
+                        "estimated_volume_m3": dl["estimated_volume_m3"],
+                        "confidence": dl["confidence_score"],
                         "timestamp": zone["last_sar_pass"],
-                        "method": "SAR Backscatter Differencing & Conical Volume Approximation",
-                        "validation_status": "OBSERVED",
-                        "disclaimer": PROTOTYPE_DISCLAIMER,
-                    },
-                    "recommendation": f"Trigger hydrodynamic flood simulation with estimated outburst volume {dl['estimated_volume_m3'] / 1e6:.2f} Mm³ and height {dl['estimated_depth_m']} m.",
-                })
+                        "sensor": zone.get("sensor", "Sentinel-1A C-SAR GRD"),
+                        "orbit_pass": zone.get("orbit_pass", "Descending"),
+                        "coordinates": dl["coordinates"],
+                        "provenance": {
+                            "level": "OBSERVED / DERIVED",
+                            "source": "Copernicus Sentinel-1 C-Band SAR GRD",
+                            "timestamp": zone["last_sar_pass"],
+                            "method": "SAR Backscatter Differencing & Conical Volume Approximation",
+                            "validation_status": "OBSERVED",
+                            "disclaimer": PROTOTYPE_DISCLAIMER,
+                        },
+                        "recommendation": f"Trigger hydrodynamic flood simulation with estimated outburst volume {dl['estimated_volume_m3'] / 1e6:.2f} Mm³ and height {dl['estimated_depth_m']} m.",
+                    }
+                )
         return alerts
 
     @classmethod

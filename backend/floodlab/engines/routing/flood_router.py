@@ -3,6 +3,7 @@ Generic Hydrodynamic 2D Flood Routing Engine & Breach Hydrograph Calculator.
 Operates as a pure function on arbitrary DEM topography matrices, roughness fields,
 and physical breach hydrographs without hardcoded basin dependencies.
 """
+
 from __future__ import annotations
 
 import math
@@ -24,9 +25,10 @@ from floodlab.schemas.generic_scenario import (
 @dataclass
 class FloodRoutingOutput:
     """Output matrices and time-series from 2D flood routing."""
-    max_depth_m: np.ndarray      # 2D float32 array
+
+    max_depth_m: np.ndarray  # 2D float32 array
     max_velocity_ms: np.ndarray  # 2D float32 array
-    arrival_time_min: np.ndarray # 2D float32 array (-1.0 if not inundated)
+    arrival_time_min: np.ndarray  # 2D float32 array (-1.0 if not inundated)
     station_probes: List[StationProbeResult]
     frames: List[Dict[str, Any]]
     total_simulated_minutes: float
@@ -42,11 +44,7 @@ class BreachHydrographEngine:
 
     @classmethod
     def compute(
-        cls,
-        dam: DamConfig,
-        breach: BreachConfig,
-        duration_hr: float = 24.0,
-        time_steps: int = 120
+        cls, dam: DamConfig, breach: BreachConfig, duration_hr: float = 24.0, time_steps: int = 120
     ) -> HydrographResult:
         """
         Pure function computing breach hydrograph from dam and breach parameters.
@@ -62,16 +60,16 @@ class BreachHydrographEngine:
         if failure_type == "instantaneous" or model_name == "ritter":
             # Ritter (1892) dam-break solution
             b_w = breach.breach_width_m or min(dam.crest_length_m or (h_w * 4.0), h_w * 3.5)
-            q_peak = (8.0 / 27.0) * b_w * math.sqrt(cls.G) * (h_w ** 1.5)
+            q_peak = (8.0 / 27.0) * b_w * math.sqrt(cls.G) * (h_w**1.5)
             t_f_hr = breach.breach_formation_time_hr or 0.15
             model_used = "Ritter (1892) Instantaneous Analytical Dam-Break"
 
         elif model_name == "macdonald":
             # MacDonald & Langridge-Monopolis (1984)
             v_eroded = 0.0261 * ((v_m3 * h_w) ** 0.769)
-            t_f_hr = breach.breach_formation_time_hr or max(0.0179 * (v_eroded ** 0.364), 0.20)
+            t_f_hr = breach.breach_formation_time_hr or max(0.0179 * (v_eroded**0.364), 0.20)
             q_peak = 1.154 * ((v_m3 * h_w) ** 0.412)
-            b_w = breach.breach_width_m or min((v_eroded / max(h_w ** 2, 1.0)) * 0.8, dam.crest_length_m or (h_w * 5.0))
+            b_w = breach.breach_width_m or min((v_eroded / max(h_w**2, 1.0)) * 0.8, dam.crest_length_m or (h_w * 5.0))
             model_used = "MacDonald & Langridge-Monopolis (1984) Semi-Empirical"
 
         elif model_name == "von_thun":
@@ -80,23 +78,23 @@ class BreachHydrographEngine:
             b_w = breach.breach_width_m or min(2.5 * h_w + c_b, dam.crest_length_m or (h_w * 4.0))
             t_f_hr = breach.breach_formation_time_hr or max(0.015 * h_w, 0.25)
             # Broad-crested weir formulation at full breach
-            q_peak = 1.7 * b_w * (h_w ** 1.5)
+            q_peak = 1.7 * b_w * (h_w**1.5)
             model_used = "Von Thun & Gillette (1990) Empirical"
 
         else:
             # Froehlich (2008) - default benchmark
             k_o = 1.3 if failure_type == "overtopping" else 1.0
-            b_w_calc = 0.27 * k_o * (v_m3 ** 0.32) * (h_w ** 0.04)
+            b_w_calc = 0.27 * k_o * (v_m3**0.32) * (h_w**0.04)
             b_w = breach.breach_width_m or min(b_w_calc, dam.crest_length_m or (h_w * 5.0))
-            t_f_sec = 63.2 * math.sqrt(max(v_m3 / (cls.G * (h_w ** 2)), 1.0))
+            t_f_sec = 63.2 * math.sqrt(max(v_m3 / (cls.G * (h_w**2)), 1.0))
             t_f_hr = breach.breach_formation_time_hr or max(t_f_sec / 3600.0, 0.20)
             # Froehlich peak discharge formula (V_w in m³, h_w in m)
-            q_peak = 0.607 * ((v_mcm * 1e6) ** 0.295) * (h_w ** 1.24)
+            q_peak = 0.607 * ((v_mcm * 1e6) ** 0.295) * (h_w**1.24)
             model_used = "Froehlich (2008) Multi-Parameter Regression"
 
         # Apply user reservoir level percentage modifier
         level_factor = max(breach.reservoir_level_pct or 100.0, 10.0) / 100.0
-        q_peak = round(q_peak * (level_factor ** 1.5), 1)
+        q_peak = round(q_peak * (level_factor**1.5), 1)
         b_w = round(b_w, 1)
         t_f_hr = round(t_f_hr, 3)
 
@@ -136,7 +134,7 @@ class BreachHydrographEngine:
             total_volume_m3=round(total_vol, 1),
             time_series_hr=[round(t, 3) for t in time_series_hr],
             discharge_series_m3s=discharge_series,
-            model_used=model_used
+            model_used=model_used,
         )
 
 
@@ -158,7 +156,7 @@ class FloodRouter:
         roughness_grid: np.ndarray,
         run_settings: RunSettingsConfig,
         stations: Optional[List[RiverStation]] = None,
-        progress_callback: Optional[Callable[[float, Dict[str, Any]], None]] = None
+        progress_callback: Optional[Callable[[float, Dict[str, Any]], None]] = None,
     ) -> FloodRoutingOutput:
         """
         Routes breach hydrograph over 2D topography and records depth, velocity, and arrival times.
@@ -204,11 +202,7 @@ class FloodRouter:
         station_records: Dict[str, Dict[str, List[float]]] = {}
         if stations:
             for st in stations:
-                station_records[st.station_id] = {
-                    "time_min": [],
-                    "depth_m": [],
-                    "discharge_m3s": []
-                }
+                station_records[st.station_id] = {"time_min": [], "depth_m": [], "discharge_m3s": []}
 
         frames: List[Dict[str, Any]] = []
         last_frame_time = -300.0
@@ -219,7 +213,7 @@ class FloodRouter:
         while t_sim < sim_duration_s:
             # 1. CFL Timestep Calculation
             celerity = np.sqrt(cls.G * np.maximum(h, 0.01))
-            speed = np.sqrt(u ** 2 + v ** 2)
+            speed = np.sqrt(u**2 + v**2)
             wave_speed = np.max(celerity + speed)
             dt = min(max(cfl * min(dx, dy) / max(float(wave_speed), 0.5), 3.0), 20.0)
 
@@ -227,7 +221,9 @@ class FloodRouter:
             current_q = float(np.interp(t_sim, hydro_times_s, hydro_q)) if len(hydro_times_s) > 1 else hydro_q[0]
             dh_inj = (current_q / (inj_cells_count * cell_area_m2)) * dt
             h[dam_r_min:dam_r_max, dam_col] += dh_inj
-            inflow_vel = min(current_q / (inj_cells_count * dy * max(float(np.mean(h[dam_r_min:dam_r_max, dam_col])), 0.5)), 25.0)
+            inflow_vel = min(
+                current_q / (inj_cells_count * dy * max(float(np.mean(h[dam_r_min:dam_r_max, dam_col])), 0.5)), 25.0
+            )
             u[dam_r_min:dam_r_max, dam_col] = np.maximum(u[dam_r_min:dam_r_max, dam_col], inflow_vel)
 
             # 3. 2D Hydrodynamic Flux & Water Surface Elevation Update
@@ -252,10 +248,10 @@ class FloodRouter:
             h_sm[1:-1, 1:-1] = 0.25 * (h[:-2, 1:-1] + h[2:, 1:-1] + h[1:-1, :-2] + h[1:-1, 2:])
 
             # Manning friction deceleration
-            vel_mag = np.sqrt(u ** 2 + v ** 2)
+            vel_mag = np.sqrt(u**2 + v**2)
             r_hyd = np.maximum(h, 0.05)
             manning_n = roughness_grid.astype(np.float64)
-            friction_drag = cls.G * (manning_n ** 2) * vel_mag / (r_hyd ** (4.0 / 3.0))
+            friction_drag = cls.G * (manning_n**2) * vel_mag / (r_hyd ** (4.0 / 3.0))
             friction_drag = np.minimum(friction_drag, 8.0)
 
             # Continuity step
@@ -280,7 +276,7 @@ class FloodRouter:
             v = v_new
 
             # 4. Envelopes and Arrival Times
-            curr_speed = np.sqrt(u ** 2 + v ** 2).astype(np.float32)
+            curr_speed = np.sqrt(u**2 + v**2).astype(np.float32)
             curr_depth = h.astype(np.float32)
 
             max_depth = np.maximum(max_depth, curr_depth)
@@ -343,18 +339,20 @@ class FloodRouter:
                     arr_t = float(rec["time_min"][next(i for i, d in enumerate(d_series) if d > wet_thresh)])
                 arr_t = max(arr_t, 0.0)
 
-                probe_results.append(StationProbeResult(
-                    station_id=st.station_id,
-                    station_name=st.name,
-                    chainage_km=st.chainage_km,
-                    arrival_time_min=round(arr_t, 1),
-                    peak_depth_m=round(p_depth, 2),
-                    peak_velocity_ms=round(float(max_vel[st.grid_row, st.grid_col]), 2),
-                    flood_duration_hr=round(run_settings.simulation_duration_hr * 0.75, 2),
-                    time_minutes=rec["time_min"],
-                    depth_series_m=d_series,
-                    discharge_series_m3s=q_series
-                ))
+                probe_results.append(
+                    StationProbeResult(
+                        station_id=st.station_id,
+                        station_name=st.name,
+                        chainage_km=st.chainage_km,
+                        arrival_time_min=round(arr_t, 1),
+                        peak_depth_m=round(p_depth, 2),
+                        peak_velocity_ms=round(float(max_vel[st.grid_row, st.grid_col]), 2),
+                        flood_duration_hr=round(run_settings.simulation_duration_hr * 0.75, 2),
+                        time_minutes=rec["time_min"],
+                        depth_series_m=d_series,
+                        discharge_series_m3s=q_series,
+                    )
+                )
 
         total_inundated_area = float(np.sum(max_depth >= wet_thresh) * cell_area_m2 / 1e6)
 
@@ -367,5 +365,5 @@ class FloodRouter:
             total_simulated_minutes=round(t_sim / 60.0, 2),
             max_inundated_area_km2=round(total_inundated_area, 2),
             peak_depth_overall_m=round(float(np.max(max_depth)), 2),
-            peak_velocity_overall_ms=round(float(np.max(max_vel)), 2)
+            peak_velocity_overall_ms=round(float(np.max(max_vel)), 2),
         )

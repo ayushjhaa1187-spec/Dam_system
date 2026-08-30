@@ -1,6 +1,7 @@
 """
 Job queue and multi-stage simulation execution endpoints.
 """
+
 from typing import Any, Dict, Optional
 from fastapi import APIRouter, HTTPException, Response
 from pydantic import BaseModel
@@ -31,6 +32,7 @@ async def submit_simulation_job(req: SubmitJobRequest):
     scen_id = req.scenario_id or req.preset_id or params.get("id") or "tehri_dam_bhagirathi"
     if not params:
         from hydrobreach.data.preset_scenarios import get_preset_by_id
+
         preset = get_preset_by_id(scen_id)
         if preset:
             params = dict(preset)
@@ -84,5 +86,5 @@ async def download_run_report(job_id: str):
     return Response(
         content=report_md,
         media_type="text/markdown",
-        headers={"Content-Disposition": f"attachment; filename=HydroBreach_Report_{job_id}.md"}
+        headers={"Content-Disposition": f"attachment; filename=HydroBreach_Report_{job_id}.md"},
     )

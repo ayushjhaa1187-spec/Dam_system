@@ -1,6 +1,7 @@
 """
 Coordinate Reference System utilities.
 """
+
 import math
 
 WGS84_EPSG = 4326

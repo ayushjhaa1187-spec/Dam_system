@@ -220,7 +220,11 @@ def classify_risk(prob: float) -> Tuple[str, str, str]:
     elif prob < 0.80:
         return "SEVERE", "#f97316", "Severe inundation hazard; prepare evacuation corridors and deploy barriers."
     else:
-        return "CRITICAL", "#ef4444", "Catastrophic breach / flood probability; initiate immediate emergency action plan."
+        return (
+            "CRITICAL",
+            "#ef4444",
+            "Catastrophic breach / flood probability; initiate immediate emergency action plan.",
+        )
 
 
 class FloodEnsemblePredictor:
@@ -302,7 +306,9 @@ class FloodEnsemblePredictor:
         n_samples = 3000
         data = {}
         for feat in FEATURE_NAMES:
-            data[feat] = np.clip(np.random.poisson(lam=5.0, size=n_samples) + np.random.randint(0, 3, size=n_samples), 0, 16)
+            data[feat] = np.clip(
+                np.random.poisson(lam=5.0, size=n_samples) + np.random.randint(0, 3, size=n_samples), 0, 16
+            )
         df = pd.DataFrame(data)
         feature_sum = df.sum(axis=1)
         raw_prob = (
@@ -342,11 +348,13 @@ class FloodEnsemblePredictor:
         # XGBoost
         try:
             from xgboost import XGBRegressor
+
             xgb = XGBRegressor(n_estimators=200, learning_rate=0.05, random_state=42, n_jobs=2)
             estimators.append(("xgb", xgb))
             models_dict["xgboost"] = "XGBRegressor (n_estimators=200, lr=0.05)"
         except ImportError:
             from sklearn.ensemble import GradientBoostingRegressor
+
             xgb = GradientBoostingRegressor(n_estimators=200, learning_rate=0.05, random_state=42)
             estimators.append(("xgb", xgb))
             models_dict["xgboost"] = "GradientBoostingRegressor (fallback)"
@@ -354,11 +362,13 @@ class FloodEnsemblePredictor:
         # LightGBM
         try:
             from lightgbm import LGBMRegressor
+
             lgb = LGBMRegressor(n_estimators=200, learning_rate=0.05, random_state=42, verbose=-1, n_jobs=2)
             estimators.append(("lgb", lgb))
             models_dict["lightgbm"] = "LGBMRegressor (n_estimators=200, lr=0.05)"
         except ImportError:
             from sklearn.ensemble import HistGradientBoostingRegressor
+
             lgb = HistGradientBoostingRegressor(max_iter=200, learning_rate=0.05, random_state=42)
             estimators.append(("lgb", lgb))
             models_dict["lightgbm"] = "HistGradientBoostingRegressor (fallback)"
@@ -366,17 +376,20 @@ class FloodEnsemblePredictor:
         # CatBoost
         try:
             from catboost import CatBoostRegressor
+
             cat = CatBoostRegressor(iterations=200, learning_rate=0.05, verbose=0, random_state=42, thread_count=2)
             estimators.append(("cat", cat))
             models_dict["catboost"] = "CatBoostRegressor (iterations=200, lr=0.05)"
         except ImportError:
             from sklearn.ensemble import RandomForestRegressor
+
             cat = RandomForestRegressor(n_estimators=200, random_state=42, n_jobs=2)
             estimators.append(("cat", cat))
             models_dict["catboost"] = "RandomForestRegressor (fallback)"
 
         # 2. Ensemble (VotingRegressor)
         from sklearn.ensemble import VotingRegressor
+
         ensemble = VotingRegressor(estimators=estimators)
         ensemble.fit(X_train, y_train)
 
@@ -406,10 +419,7 @@ class FloodEnsemblePredictor:
                     imp = imp / np.sum(imp)
                 importances += imp
         importances = importances / len(ensemble.named_estimators_)
-        feat_imp_dict = {
-            FEATURE_NAMES[i]: round(float(importances[i]), 4)
-            for i in range(len(FEATURE_NAMES))
-        }
+        feat_imp_dict = {FEATURE_NAMES[i]: round(float(importances[i]), 4) for i in range(len(FEATURE_NAMES))}
         # Sort by importance descending
         feat_imp_dict = dict(sorted(feat_imp_dict.items(), key=lambda item: item[1], reverse=True))
 
@@ -548,54 +558,70 @@ class FloodEnsemblePredictor:
             val = factor["value"]
 
             if f_name == "MonsoonIntensity" and val > 8:
-                recs.append({
-                    "target": "Spillway & Reservoirs",
-                    "action": "Initiate pre-depletion drawdown on upstream dams to buffer extreme monsoon surge.",
-                    "urgency": "HIGH",
-                })
+                recs.append(
+                    {
+                        "target": "Spillway & Reservoirs",
+                        "action": "Initiate pre-depletion drawdown on upstream dams to buffer extreme monsoon surge.",
+                        "urgency": "HIGH",
+                    }
+                )
             elif f_name == "DamsQuality" and val < 8:
-                recs.append({
-                    "target": "Dam Structural Health",
-                    "action": "Immediate geotechnical piezometer and seepage survey; reduce full reservoir level (FRL).",
-                    "urgency": "CRITICAL",
-                })
+                recs.append(
+                    {
+                        "target": "Dam Structural Health",
+                        "action": "Immediate geotechnical piezometer and seepage survey; reduce full reservoir level (FRL).",
+                        "urgency": "CRITICAL",
+                    }
+                )
             elif f_name == "Siltation" and val > 8:
-                recs.append({
-                    "target": "Reservoir & Channel Sediment",
-                    "action": "Activate bottom outlet scouring flushes and clear downstream bridge aggradation.",
-                    "urgency": "MEDIUM",
-                })
+                recs.append(
+                    {
+                        "target": "Reservoir & Channel Sediment",
+                        "action": "Activate bottom outlet scouring flushes and clear downstream bridge aggradation.",
+                        "urgency": "MEDIUM",
+                    }
+                )
             elif f_name == "Landslides" and val > 9:
-                recs.append({
-                    "target": "Himalayan Slopes & Tributaries",
-                    "action": "Deploy UAV LiDAR for landslide dam monitoring on steep tributary gorges.",
-                    "urgency": "HIGH",
-                })
+                recs.append(
+                    {
+                        "target": "Himalayan Slopes & Tributaries",
+                        "action": "Deploy UAV LiDAR for landslide dam monitoring on steep tributary gorges.",
+                        "urgency": "HIGH",
+                    }
+                )
             elif f_name == "DrainageSystems" and val < 8:
-                recs.append({
-                    "target": "Urban & Valley Culverts",
-                    "action": "Mobilize municipal heavy pumps and unblock stormwater outfalls.",
-                    "urgency": "HIGH",
-                })
+                recs.append(
+                    {
+                        "target": "Urban & Valley Culverts",
+                        "action": "Mobilize municipal heavy pumps and unblock stormwater outfalls.",
+                        "urgency": "HIGH",
+                    }
+                )
             elif f_name == "IneffectiveDisasterPreparedness" and val > 8:
-                recs.append({
-                    "target": "Emergency Ops Center (EOC)",
-                    "action": "Trigger automated siren broadcast and test SMS geo-fenced warning beacons.",
-                    "urgency": "CRITICAL",
-                })
+                recs.append(
+                    {
+                        "target": "Emergency Ops Center (EOC)",
+                        "action": "Trigger automated siren broadcast and test SMS geo-fenced warning beacons.",
+                        "urgency": "CRITICAL",
+                    }
+                )
             elif f_name == "Encroachments" and val > 8:
-                recs.append({
-                    "target": "Floodplain Management",
-                    "action": "Enforce temporary exclusion zonation in low-lying Riverfront settlements.",
-                    "urgency": "HIGH",
-                })
+                recs.append(
+                    {
+                        "target": "Floodplain Management",
+                        "action": "Enforce temporary exclusion zonation in low-lying Riverfront settlements.",
+                        "urgency": "HIGH",
+                    }
+                )
 
         if not recs:
-            recs.append({
-                "target": "Routine Surveillance",
-                "action": "Maintain standard 6-hourly telemetry logging and automated satellite SAR surveillance.",
-                "urgency": "LOW",
-            })
+            recs.append(
+                {
+                    "target": "Routine Surveillance",
+                    "action": "Maintain standard 6-hourly telemetry logging and automated satellite SAR surveillance.",
+                    "urgency": "LOW",
+                }
+            )
         return recs
 
     def map_scenario_to_features(self, scenario_dict: Dict[str, Any]) -> Dict[str, float]:

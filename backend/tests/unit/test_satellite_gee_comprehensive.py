@@ -108,21 +108,27 @@ def test_satellite_api_endpoints():
     assert "zones" in res.json()
 
     # Analyze
-    analyze_res = client.post("/api/satellite/analyse", json={
-        "bbox": [78.30, 30.25, 78.85, 30.70],
-        "sensor_type": "sentinel_1_sar",
-        "apply_permanent_water_mask": True,
-        "apply_slope_mask": True,
-    })
+    analyze_res = client.post(
+        "/api/satellite/analyse",
+        json={
+            "bbox": [78.30, 30.25, 78.85, 30.70],
+            "sensor_type": "sentinel_1_sar",
+            "apply_permanent_water_mask": True,
+            "apply_slope_mask": True,
+        },
+    )
     assert analyze_res.status_code == 200
     data = analyze_res.json()
     assert "detected_water" in data
     assert "simulation_comparison" in data
 
     # Export polygon
-    export_res = client.post("/api/satellite/export-detected-polygon", json={
-        "bbox": [78.30, 30.25, 78.85, 30.70],
-    })
+    export_res = client.post(
+        "/api/satellite/export-detected-polygon",
+        json={
+            "bbox": [78.30, 30.25, 78.85, 30.70],
+        },
+    )
     assert export_res.status_code == 200
     assert export_res.headers["content-type"] == "application/geo+json"
     assert export_res.json()["type"] == "FeatureCollection"

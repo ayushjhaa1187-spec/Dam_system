@@ -1,6 +1,7 @@
 """
 SQLAlchemy models package.
 """
+
 from floodlab.database.models.base import Base
 from floodlab.database.models.dam import DamModel
 from floodlab.database.models.scenario import ScenarioModel

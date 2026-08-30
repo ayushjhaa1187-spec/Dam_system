@@ -1,6 +1,7 @@
 """
 Flood product ORM model.
 """
+
 from datetime import datetime, timezone
 import uuid
 from sqlalchemy import Column, String, Text, DateTime, ForeignKey

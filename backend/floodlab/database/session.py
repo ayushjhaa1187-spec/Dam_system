@@ -2,6 +2,7 @@
 SQLAlchemy database session.
 PostgreSQL/PostGIS primary; SQLite fallback for dev/testing.
 """
+
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from floodlab.config.settings import get_settings

@@ -17,7 +17,7 @@ class LossAndDamageEngine:
         max_inundated_area_km2: float,
         peak_velocity_ms: float,
         max_depth_m: float,
-        valley_type: str = "mountain_gorge" # "mountain_gorge", "plains_alluvial", "semi_urban"
+        valley_type: str = "mountain_gorge",  # "mountain_gorge", "plains_alluvial", "semi_urban"
     ) -> Dict[str, Any]:
         """
         Computes comprehensive loss, damage, and HADR emergency response requirements.
@@ -102,19 +102,69 @@ class LossAndDamageEngine:
 
         if "tehri" in dam_name.lower() or "bhagirathi" in reach_name.lower():
             critical_facilities = [
-                {"name": "Koteshwar Dam & 400 MW Hydropower Complex", "type": "Downstream Hydraulic Barrier", "status": "EXTREME RISK - Overtopping Surge", "distance_km": 22.0},
-                {"name": "Devprayag Sangam Ghats & NH-58 Suspension Bridge", "type": "Heritage & Transport Lifeline", "status": "SEVERE RISK - Complete Submergence", "distance_km": 42.0},
-                {"name": "Laxman Jhula & Ram Jhula Iconic Bridges (Rishikesh)", "type": "Footbridges & Tourism Hub", "status": "COLLAPSE HAZARD - Structural Failure", "distance_km": 76.5},
-                {"name": "Triveni Ghat & Muni Ki Reti Pilgrimage Center", "type": "High Density Religious Node", "status": "MANDATORY EVACUATION", "distance_km": 78.0},
-                {"name": "Har Ki Pauri & Bhimgoda Barrage (Haridwar)", "type": "National Heritage Ghats & Barrage", "status": "FLOOD EMERGENCY - Gate Operations", "distance_km": 100.0},
-                {"name": "Upper Ganga Canal Headworks & BHEL Industrial Complex", "type": "Irrigation & Industrial Lifeline", "status": "ALERT - Inundation of Lower Blocks", "distance_km": 104.0}
+                {
+                    "name": "Koteshwar Dam & 400 MW Hydropower Complex",
+                    "type": "Downstream Hydraulic Barrier",
+                    "status": "EXTREME RISK - Overtopping Surge",
+                    "distance_km": 22.0,
+                },
+                {
+                    "name": "Devprayag Sangam Ghats & NH-58 Suspension Bridge",
+                    "type": "Heritage & Transport Lifeline",
+                    "status": "SEVERE RISK - Complete Submergence",
+                    "distance_km": 42.0,
+                },
+                {
+                    "name": "Laxman Jhula & Ram Jhula Iconic Bridges (Rishikesh)",
+                    "type": "Footbridges & Tourism Hub",
+                    "status": "COLLAPSE HAZARD - Structural Failure",
+                    "distance_km": 76.5,
+                },
+                {
+                    "name": "Triveni Ghat & Muni Ki Reti Pilgrimage Center",
+                    "type": "High Density Religious Node",
+                    "status": "MANDATORY EVACUATION",
+                    "distance_km": 78.0,
+                },
+                {
+                    "name": "Har Ki Pauri & Bhimgoda Barrage (Haridwar)",
+                    "type": "National Heritage Ghats & Barrage",
+                    "status": "FLOOD EMERGENCY - Gate Operations",
+                    "distance_km": 100.0,
+                },
+                {
+                    "name": "Upper Ganga Canal Headworks & BHEL Industrial Complex",
+                    "type": "Irrigation & Industrial Lifeline",
+                    "status": "ALERT - Inundation of Lower Blocks",
+                    "distance_km": 104.0,
+                },
             ]
         else:
             critical_facilities = [
-                {"name": "Downstream Hydropower Barrage Site", "type": "Hydropower Infrastructure", "status": "SEVERE RISK - Immediate Evacuation", "distance_km": 15.2},
-                {"name": "District Bailey Bridge & Highway", "type": "Transportation Lifeline", "status": "COLLAPSE HAZARD", "distance_km": 6.8},
-                {"name": "Sub-Divisional Civil Hospital", "type": "Medical Facility", "status": "ALERT - Move to Upper Floors", "distance_km": 21.0},
-                {"name": "National Highway Corridor", "type": "Evacuation Corridor", "status": "PARTIALLY INUNDATED", "distance_km": 18.5}
+                {
+                    "name": "Downstream Hydropower Barrage Site",
+                    "type": "Hydropower Infrastructure",
+                    "status": "SEVERE RISK - Immediate Evacuation",
+                    "distance_km": 15.2,
+                },
+                {
+                    "name": "District Bailey Bridge & Highway",
+                    "type": "Transportation Lifeline",
+                    "status": "COLLAPSE HAZARD",
+                    "distance_km": 6.8,
+                },
+                {
+                    "name": "Sub-Divisional Civil Hospital",
+                    "type": "Medical Facility",
+                    "status": "ALERT - Move to Upper Floors",
+                    "distance_km": 21.0,
+                },
+                {
+                    "name": "National Highway Corridor",
+                    "type": "Evacuation Corridor",
+                    "status": "PARTIALLY INUNDATED",
+                    "distance_km": 18.5,
+                },
             ]
 
         return {
@@ -126,7 +176,7 @@ class LossAndDamageEngine:
                 "hazard_color": hazard_color,
                 "debris_factor": debris_factor,
                 "max_flood_depth_m": round(max_depth_m, 2),
-                "peak_velocity_ms": round(peak_velocity_ms, 2)
+                "peak_velocity_ms": round(peak_velocity_ms, 2),
             },
             "exposure_and_loss": {
                 "population_at_risk": total_exposed_pop,
@@ -139,35 +189,35 @@ class LossAndDamageEngine:
                 "breakdown_loss_crores": {
                     "buildings_residential_commercial": round(cost_building_cr, 2),
                     "agriculture_and_crops": round(cost_agri_cr, 2),
-                    "infrastructure_and_power": round(cost_infra_cr, 2)
-                }
+                    "infrastructure_and_power": round(cost_infra_cr, 2),
+                },
             },
             "hadr_zoning": {
                 "red_zone": {
                     "area_km2": red_zone_area,
                     "lead_time_min": "< 30 mins",
                     "action": "Immediate Forced Evacuation / NDRF High-Speed Deployment",
-                    "color": "#ef4444"
+                    "color": "#ef4444",
                 },
                 "orange_zone": {
                     "area_km2": orange_zone_area,
                     "lead_time_min": "30 - 120 mins",
                     "action": "Pre-emptive Evacuation to Relief Shelters",
-                    "color": "#f97316"
+                    "color": "#f97316",
                 },
                 "yellow_zone": {
                     "area_km2": yellow_zone_area,
                     "lead_time_min": "> 120 mins",
                     "action": "Alert Standby / Secondary Transport Mobilization",
-                    "color": "#eab308"
-                }
+                    "color": "#eab308",
+                },
             },
             "resource_allocation": {
                 "inflatable_rescue_boats": boats_required,
                 "ndrf_sdrf_battalions": ndrf_teams_required,
                 "emergency_relief_shelters": shelter_camps,
                 "food_water_packets_per_day": displaced_population * 3,
-                "air_evacuation_helipads_needed": 2 if displaced_population > 1000 else 1
+                "air_evacuation_helipads_needed": 2 if displaced_population > 1000 else 1,
             },
             "critical_infrastructure_status": critical_facilities,
             "evacuation_priority_queue": [
@@ -180,7 +230,7 @@ class LossAndDamageEngine:
                     "max_depth_range_m": "38.0 – 68.5 m",
                     "exposed_population": 4200,
                     "action_required": "FORCED EVACUATION — Deploy NDRF Motorboats & Army Aviation Helis",
-                    "color": "#ef4444"
+                    "color": "#ef4444",
                 },
                 {
                     "priority_rank": 2,
@@ -191,7 +241,7 @@ class LossAndDamageEngine:
                     "max_depth_range_m": "22.0 – 28.5 m",
                     "exposed_population": 12800,
                     "action_required": "MANDATORY EVACUATION — Clear NH-58 Bridges & Sangam Pilgrim Nodes",
-                    "color": "#f97316"
+                    "color": "#f97316",
                 },
                 {
                     "priority_rank": 3,
@@ -202,7 +252,7 @@ class LossAndDamageEngine:
                     "max_depth_range_m": "18.0 – 22.0 m",
                     "exposed_population": 6500,
                     "action_required": "PRE-EMPTIVE RELOCATION — Evacuate Rafting Camps to Ridge Lines",
-                    "color": "#f97316"
+                    "color": "#f97316",
                 },
                 {
                     "priority_rank": 4,
@@ -213,7 +263,7 @@ class LossAndDamageEngine:
                     "max_depth_range_m": "12.0 – 15.2 m",
                     "exposed_population": 68000,
                     "action_required": "HIGH-ALERT EVACUATION — Relocate Pilgrims & AIIMS Low Blocks",
-                    "color": "#eab308"
+                    "color": "#eab308",
                 },
                 {
                     "priority_rank": 5,
@@ -224,8 +274,8 @@ class LossAndDamageEngine:
                     "max_depth_range_m": "7.5 – 9.4 m",
                     "exposed_population": 115000,
                     "action_required": "ALERT STANDBY — Open Bhimgoda Barrage Gates & Standby NDRF",
-                    "color": "#eab308"
-                }
+                    "color": "#eab308",
+                },
             ],
-            "data_provenance": "MODEL ESTIMATE (CWC/Defra Vulnerability & Evacuation Intelligence)"
+            "data_provenance": "MODEL ESTIMATE (CWC/Defra Vulnerability & Evacuation Intelligence)",
         }

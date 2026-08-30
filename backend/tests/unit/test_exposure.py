@@ -1,4 +1,5 @@
 """Unit tests for exposure and loss damage."""
+
 from floodlab.engines.loss_damage.damage_estimator import DamageEstimator
 from floodlab.engines.hazard.hazard_rating import HazardRatingEngine
 

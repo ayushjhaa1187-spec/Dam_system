@@ -7,6 +7,7 @@ Mission B: NDRF Base -> Village -> Safe Extraction (Rescue Operations)
 Uses NetworkX graph with time-dependent edge costs based on flood arrival times.
 Vehicle-class-aware routing is available when agency thresholds are configured.
 """
+
 from __future__ import annotations
 
 import math
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 try:
     import networkx as nx  # noqa: F401
+
     HAS_NETWORKX = True
 except ImportError:
     HAS_NETWORKX = False
@@ -54,9 +56,7 @@ class EdgeRiskClassifier:
         """
         if not HAS_NETWORKX:
             return graph
-        threshold = (
-            agency_thresholds.get("passable_depth_threshold_m") if agency_thresholds else None
-        )
+        threshold = agency_thresholds.get("passable_depth_threshold_m") if agency_thresholds else None
         for u, v, data in graph.edges(data=True):
             depth = data.get("flood_depth_m", 0.0)
             if threshold is not None:
@@ -78,8 +78,14 @@ class TimeDependentCostModel:
     """
 
     BASE_SPEEDS = {
-        "motorway": 100, "trunk": 80, "primary": 60, "secondary": 50,
-        "tertiary": 40, "residential": 30, "track": 20, "path": 10,
+        "motorway": 100,
+        "trunk": 80,
+        "primary": 60,
+        "secondary": 50,
+        "tertiary": 40,
+        "residential": 30,
+        "track": 20,
+        "path": 10,
     }
 
     def edge_cost(
@@ -105,10 +111,7 @@ class TimeDependentCostModel:
         if flood_arrival_s is not None and flood_arrival_s <= query_time_s:
             # Check if passable despite flooding (if agency threshold allows)
             depth = edge_data.get("flood_depth_m", 0.0)
-            threshold = (
-                agency_thresholds.get("passable_depth_threshold_m")
-                if agency_thresholds else None
-            )
+            threshold = agency_thresholds.get("passable_depth_threshold_m") if agency_thresholds else None
             if threshold is not None and depth < threshold:
                 return base_time_s  # passable despite flooding
             return float("inf")  # impassable
@@ -152,19 +155,23 @@ class EvacuationPlanner:
             # Find nearest safe zone (Euclidean approximation)
             nearest = self._nearest_safe_zone(village, safe_zones)
             if not nearest:
-                results.append({
-                    "village_id": vid,
-                    "village_name": village.get("name", ""),
-                    "status": "NO_SHELTER_FOUND",
-                    "travel_time_min": None,
-                    "lead_time_min": None,
-                })
+                results.append(
+                    {
+                        "village_id": vid,
+                        "village_name": village.get("name", ""),
+                        "status": "NO_SHELTER_FOUND",
+                        "travel_time_min": None,
+                        "lead_time_min": None,
+                    }
+                )
                 continue
 
             # Estimate travel time (straight-line / road factor)
             dist_km = self._haversine_km(
-                village.get("lat", 0), village.get("lon", 0),
-                nearest.get("lat", 0), nearest.get("lon", 0),
+                village.get("lat", 0),
+                village.get("lon", 0),
+                nearest.get("lat", 0),
+                nearest.get("lon", 0),
             )
             road_factor = 1.5  # road vs straight-line
             speed_kmh = 30.0  # conserved village road speed
@@ -179,23 +186,25 @@ class EvacuationPlanner:
             else:
                 status = "CRITICAL_INSUFFICIENT_TIME"
 
-            results.append({
-                "village_id": vid,
-                "village_name": village.get("name", ""),
-                "origin_lat": village.get("lat"),
-                "origin_lon": village.get("lon"),
-                "destination_id": nearest.get("id"),
-                "destination_lat": nearest.get("lat"),
-                "destination_lon": nearest.get("lon"),
-                "distance_km": round(dist_km * road_factor, 2),
-                "travel_time_min": round(travel_time_min, 1),
-                "lead_time_available_min": round(lead_time_min, 1) if lead_time_min else None,
-                "status": status,
-                "path_coords": [
-                    [village.get("lon"), village.get("lat")],
-                    [nearest.get("lon"), nearest.get("lat")],
-                ],
-            })
+            results.append(
+                {
+                    "village_id": vid,
+                    "village_name": village.get("name", ""),
+                    "origin_lat": village.get("lat"),
+                    "origin_lon": village.get("lon"),
+                    "destination_id": nearest.get("id"),
+                    "destination_lat": nearest.get("lat"),
+                    "destination_lon": nearest.get("lon"),
+                    "distance_km": round(dist_km * road_factor, 2),
+                    "travel_time_min": round(travel_time_min, 1),
+                    "lead_time_available_min": round(lead_time_min, 1) if lead_time_min else None,
+                    "status": status,
+                    "path_coords": [
+                        [village.get("lon"), village.get("lat")],
+                        [nearest.get("lon"), nearest.get("lat")],
+                    ],
+                }
+            )
 
         return results
 
@@ -206,9 +215,12 @@ class EvacuationPlanner:
 
         def dist(sz):
             return EvacuationPlanner._haversine_km(
-                village.get("lat", 0), village.get("lon", 0),
-                sz.get("lat", 0), sz.get("lon", 0),
+                village.get("lat", 0),
+                village.get("lon", 0),
+                sz.get("lat", 0),
+                sz.get("lon", 0),
             )
+
         return min(safe_zones, key=dist)
 
     @staticmethod
@@ -216,8 +228,10 @@ class EvacuationPlanner:
         R = 6371.0
         dlat = math.radians(lat2 - lat1)
         dlon = math.radians(lon2 - lon1)
-        a = math.sin(dlat / 2) ** 2 + math.cos(math.radians(lat1)) * \
-            math.cos(math.radians(lat2)) * math.sin(dlon / 2) ** 2
+        a = (
+            math.sin(dlat / 2) ** 2
+            + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dlon / 2) ** 2
+        )
         return R * 2 * math.asin(math.sqrt(a))
 
 
@@ -250,36 +264,37 @@ class RescueRouteEngine:
             arrival_s = flood_arrival_times.get(sid)
 
             dist_km = planner._haversine_km(
-                ndrf_base.get("lat", 0), ndrf_base.get("lon", 0),
-                settlement.get("lat", 0), settlement.get("lon", 0),
+                ndrf_base.get("lat", 0),
+                ndrf_base.get("lon", 0),
+                settlement.get("lat", 0),
+                settlement.get("lon", 0),
             )
             road_factor = 1.4
             speed_kmh = 40.0  # NDRF vehicle speed
             travel_min = (dist_km * road_factor / speed_kmh) * 60.0
 
             if agency_thresholds and agency_thresholds.get("passable_depth_threshold_m"):
-                traversability_note = (
-                    f"Vehicle depth threshold: "
-                    f"{agency_thresholds['passable_depth_threshold_m']} m"
-                )
+                traversability_note = f"Vehicle depth threshold: {agency_thresholds['passable_depth_threshold_m']} m"
             else:
                 traversability_note = "No agency threshold configured; traversability not classified"
 
-            results.append({
-                "settlement_id": sid,
-                "settlement_name": settlement.get("name", ""),
-                "ndrf_base_lat": ndrf_base.get("lat"),
-                "ndrf_base_lon": ndrf_base.get("lon"),
-                "target_lat": settlement.get("lat"),
-                "target_lon": settlement.get("lon"),
-                "distance_km": round(dist_km * road_factor, 2),
-                "travel_time_min": round(travel_min, 1),
-                "flood_arrival_min": round(arrival_s / 60.0, 1) if arrival_s else None,
-                "traversability_note": traversability_note,
-                "path_coords": [
-                    [ndrf_base.get("lon"), ndrf_base.get("lat")],
-                    [settlement.get("lon"), settlement.get("lat")],
-                ],
-            })
+            results.append(
+                {
+                    "settlement_id": sid,
+                    "settlement_name": settlement.get("name", ""),
+                    "ndrf_base_lat": ndrf_base.get("lat"),
+                    "ndrf_base_lon": ndrf_base.get("lon"),
+                    "target_lat": settlement.get("lat"),
+                    "target_lon": settlement.get("lon"),
+                    "distance_km": round(dist_km * road_factor, 2),
+                    "travel_time_min": round(travel_min, 1),
+                    "flood_arrival_min": round(arrival_s / 60.0, 1) if arrival_s else None,
+                    "traversability_note": traversability_note,
+                    "path_coords": [
+                        [ndrf_base.get("lon"), ndrf_base.get("lat")],
+                        [settlement.get("lon"), settlement.get("lat")],
+                    ],
+                }
+            )
 
         return results

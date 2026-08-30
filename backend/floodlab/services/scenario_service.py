@@ -1,6 +1,7 @@
 """
 Scenario service.
 """
+
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 import yaml
@@ -16,13 +17,15 @@ class ScenarioService:
             for f in sorted(self.scenarios_dir.glob("*.yaml")):
                 with open(f) as fh:
                     data = yaml.safe_load(fh)
-                presets.append({
-                    "id": data.get("scenario_id", f.stem),
-                    "name": data.get("name", f.stem),
-                    "dam_name": data.get("dam_name"),
-                    "is_hypothetical": data.get("is_hypothetical", True),
-                    "observation_validation_status": data.get("observation_validation_status", "NOT_AVAILABLE"),
-                })
+                presets.append(
+                    {
+                        "id": data.get("scenario_id", f.stem),
+                        "name": data.get("name", f.stem),
+                        "dam_name": data.get("dam_name"),
+                        "is_hypothetical": data.get("is_hypothetical", True),
+                        "observation_validation_status": data.get("observation_validation_status", "NOT_AVAILABLE"),
+                    }
+                )
         return presets
 
     def get_preset_by_id(self, scenario_id: str) -> Optional[Dict[str, Any]]:

@@ -20,7 +20,9 @@ class DamBreachInput(BaseModel):
     reservoir_volume_m3: float = Field(..., description="Volume of water stored in reservoir at breach time (m³)")
     hydraulic_head_m: float = Field(..., description="Height of water above breach invert at breach (m)")
     crest_length_m: Optional[float] = Field(default=None, description="Dam crest length (m)")
-    breach_mode: str = Field(default="overtopping", description="overtopping, piping, instantaneous, landslide_outburst")
+    breach_mode: str = Field(
+        default="overtopping", description="overtopping, piping, instantaneous, landslide_outburst"
+    )
     material_cohesion: str = Field(default="medium", description="high, medium, low (for Von Thun)")
 
 
@@ -51,7 +53,7 @@ class BreachMechanicsEngine:
     def calculate_froehlich_2008(cls, inp: DamBreachInput) -> BreachResult:
         """
         Froehlich (2008) updated empirical breach formulation based on 74 dam failure case studies.
-        
+
         Average breach width (m):
         B_avg = 0.27 * K_o * (V_w)^0.32 * (h_b)^0.04
         where:
@@ -76,16 +78,16 @@ class BreachMechanicsEngine:
         k_o = 1.3 if inp.breach_mode.lower() == "overtopping" else 1.0
         z = 1.0 if inp.breach_mode.lower() == "overtopping" else 0.7
 
-        b_avg = 0.27 * k_o * (V_w ** 0.32) * (h_b ** 0.04)
+        b_avg = 0.27 * k_o * (V_w**0.32) * (h_b**0.04)
         if inp.crest_length_m and b_avg > inp.crest_length_m:
             b_avg = inp.crest_length_m * 0.85
 
         # Formation time in hours
-        t_f_sec = 63.2 * math.sqrt(V_w / (cls.G * (h_b ** 2)))
+        t_f_sec = 63.2 * math.sqrt(V_w / (cls.G * (h_b**2)))
         t_f_hrs = max(t_f_sec / 3600.0, 0.05)  # min 3 minutes
 
         # Peak discharge (Froehlich 1995b peak discharge equation)
-        q_p = 0.607 * (V_w ** 0.295) * (h_w ** 1.24)
+        q_p = 0.607 * (V_w**0.295) * (h_w**1.24)
 
         # Bottom and top widths based on trapezoid: B_avg = B_bottom + z * h_b
         b_bottom = max(b_avg - z * h_b, 0.2 * b_avg)
@@ -115,8 +117,8 @@ class BreachMechanicsEngine:
                 "dam_type": inp.dam_type,
                 "breach_mode": inp.breach_mode,
                 "k_o_factor": k_o,
-                "total_surge_volume_m3": V_w
-            }
+                "total_surge_volume_m3": V_w,
+            },
         )
 
     @classmethod
@@ -133,7 +135,7 @@ class BreachMechanicsEngine:
         # Eroded volume m³
         v_er = 0.0261 * ((V_w * h_w) ** 0.77)
         # Formation time in hours
-        t_f_hrs = max(0.0179 * (v_er ** 0.364), 0.1)
+        t_f_hrs = max(0.0179 * (v_er**0.364), 0.1)
 
         # Average breach width estimated from eroded volume assuming triangular/trapezoidal cross section
         z = 0.5
@@ -165,7 +167,7 @@ class BreachMechanicsEngine:
             breach_hydrograph_discharge_m3s=flow_series,
             eroded_volume_m3=round(v_er, 1),
             model_used="MacDonald & Langridge-Monopolis (1984)",
-            summary={"eroded_volume_m3": round(v_er, 1)}
+            summary={"eroded_volume_m3": round(v_er, 1)},
         )
 
     @classmethod
@@ -209,7 +211,7 @@ class BreachMechanicsEngine:
 
         # Peak discharge via broad-crested weir formulation
         # Q_p = 1.7 * B_avg * (h_w)^1.5
-        q_p = 1.7 * b_avg * (h_w ** 1.5)
+        q_p = 1.7 * b_avg * (h_w**1.5)
 
         b_bottom = max(b_avg - z * h_w, 0.2 * b_avg)
         b_top = b_bottom + 2 * z * h_w
@@ -231,7 +233,7 @@ class BreachMechanicsEngine:
             breach_hydrograph_discharge_m3s=flow_series,
             eroded_volume_m3=None,
             model_used="Von Thun & Gillette (1990)",
-            summary={"material_cohesion": cohesion, "c_b_offset": c_b}
+            summary={"material_cohesion": cohesion, "c_b_offset": c_b},
         )
 
     @classmethod
@@ -275,8 +277,8 @@ class BreachMechanicsEngine:
             summary={
                 "wave_front_velocity_ms": round(v_front, 2),
                 "c0_celerity_ms": round(c_0, 2),
-                "unit_peak_m2s": round(q_unit_peak, 2)
-            }
+                "unit_peak_m2s": round(q_unit_peak, 2),
+            },
         )
 
     @classmethod
@@ -294,13 +296,13 @@ class BreachMechanicsEngine:
         # Costa & Schuster (1988) empirical peak discharge for landslide dams:
         # Q_p = 0.063 * (P_e)^0.42 where P_e = V_w * h_w * rho * g
         p_e = V_w * h_w * 9810.0  # Potential energy in Joules
-        q_p = 0.063 * (p_e ** 0.42)
+        q_p = 0.063 * (p_e**0.42)
         if q_p < 50.0:
-            q_p = 0.607 * (V_w ** 0.295) * (h_w ** 1.24) * 1.3
+            q_p = 0.607 * (V_w**0.295) * (h_w**1.24) * 1.3
 
         # Landslide dams have wide breaches with steep side slopes (z=0.7 to 1.2)
         z = 0.8
-        b_avg = 0.35 * (V_w ** 0.33) * (h_b ** 0.05)
+        b_avg = 0.35 * (V_w**0.33) * (h_b**0.05)
         if inp.crest_length_m and b_avg > inp.crest_length_m:
             b_avg = inp.crest_length_m * 0.9
 
@@ -308,7 +310,7 @@ class BreachMechanicsEngine:
         b_top = b_bottom + 2 * z * h_b
 
         # Formation time typically 0.25 to 1.5 hrs
-        t_f_sec = 45.0 * math.sqrt(V_w / (cls.G * (h_b ** 2)))
+        t_f_sec = 45.0 * math.sqrt(V_w / (cls.G * (h_b**2)))
         t_f_hrs = max(t_f_sec / 3600.0, 0.15)
         t_peak_hrs = t_f_hrs * 0.35
 
@@ -328,10 +330,7 @@ class BreachMechanicsEngine:
             breach_hydrograph_discharge_m3s=flow_series,
             eroded_volume_m3=None,
             model_used="Costa & Schuster / Walder & O'Connor (LDOF)",
-            summary={
-                "potential_energy_joules": f"{p_e:.2e}",
-                "event_type": "Landslide-Dammed Lake Outburst"
-            }
+            summary={"potential_energy_joules": f"{p_e:.2e}", "event_type": "Landslide-Dammed Lake Outburst"},
         )
 
     @classmethod
@@ -342,16 +341,16 @@ class BreachMechanicsEngine:
         """
         V_w = max(inp.reservoir_volume_m3, 100.0)
         h_w = max(inp.hydraulic_head_m, 1.0)
-        
+
         # Assume peak is limited by some safe channel capacity or spillway capacity
         # We'll just assume a conservative peak flow of 5000 m3/s or lower based on head
         q_p = min(2000.0 * math.sqrt(h_w), 10000.0)
-        
+
         t_f_hrs = V_w / (q_p * 3600.0 * 0.5)  # triangular hydrograph approximation
-        t_f_hrs = max(t_f_hrs, 24.0) # Release over at least 24 hours
-        
+        t_f_hrs = max(t_f_hrs, 24.0)  # Release over at least 24 hours
+
         t_peak_hrs = t_f_hrs * 0.1
-        
+
         time_series, flow_series = cls._synthesize_breach_hydrograph(
             V_w=V_w, Q_p=q_p, t_peak_hrs=t_peak_hrs, t_f_hrs=t_f_hrs
         )
@@ -367,7 +366,7 @@ class BreachMechanicsEngine:
             breach_hydrograph_time_hrs=time_series,
             breach_hydrograph_discharge_m3s=flow_series,
             model_used="Controlled Emergency Release",
-            summary={"event_type": "Controlled Release"}
+            summary={"event_type": "Controlled Release"},
         )
 
     @classmethod
@@ -399,7 +398,7 @@ class BreachMechanicsEngine:
                 res = cls.calculate_controlled_release(inp)
             else:
                 res = cls.calculate_froehlich_2008(inp)
-        
+
         return cls._post_process_result(res, inp.reservoir_volume_m3)
 
     @classmethod
@@ -425,7 +424,7 @@ class BreachMechanicsEngine:
             elif t <= t_peak_hrs:
                 # Rising limb (power or polynomial)
                 frac = t / max(t_peak_hrs, 0.001)
-                q = Q_p * (frac ** 2.2)
+                q = Q_p * (frac**2.2)
             else:
                 # Falling limb (exponential decay)
                 decay_rate = 2.5 / max(t_f_hrs, 0.1)
@@ -455,8 +454,10 @@ class BreachMechanicsEngine:
         area_m3 = 0.0
         for i in range(len(res.breach_hydrograph_time_hrs) - 1):
             dt_sec = (res.breach_hydrograph_time_hrs[i + 1] - res.breach_hydrograph_time_hrs[i]) * 3600.0
-            area_m3 += 0.5 * (res.breach_hydrograph_discharge_m3s[i] + res.breach_hydrograph_discharge_m3s[i + 1]) * dt_sec
-        
+            area_m3 += (
+                0.5 * (res.breach_hydrograph_discharge_m3s[i] + res.breach_hydrograph_discharge_m3s[i + 1]) * dt_sec
+            )
+
         res.reservoir_volume_released_m3 = area_m3
         res.mass_balance_check_m3 = area_m3 - V_w
 

@@ -11,7 +11,7 @@ from floodlab.api.routers import flood_predictor
 app = FastAPI(
     title="FLOODLAB - Tehri Dam Break & Flash Flood Decision-Support Platform",
     description="Operational HADR hydrodynamic modeling platform integrating SPH, Delft3D 2D SWE, Sentinel-1 SAR change detection, SCS-CN hydrology, and uncertainty ensembles.",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 # CORS middleware for seamless local React development
@@ -44,7 +44,7 @@ async def root():
         "status": "OPERATIONAL",
         "supported_solvers": ["WCSPH (Smoothed Particle Hydrodynamics)", "Delft3D Flexible Mesh / 2D SWE"],
         "satellite_engine": "Sentinel-1 SAR / GEE Near-Real-Time",
-        "export_formats": [".shp (ESRI Shapefile)", ".kml (Google Earth)", ".geojson", ".csv (HADR Report)"]
+        "export_formats": [".shp (ESRI Shapefile)", ".kml (Google Earth)", ".geojson", ".csv (HADR Report)"],
     }
 
 
@@ -55,4 +55,5 @@ async def health():
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run("hydrobreach.api.main:app", host="0.0.0.0", port=8000, reload=True)

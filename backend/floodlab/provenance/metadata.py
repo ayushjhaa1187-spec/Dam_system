@@ -4,6 +4,7 @@ Run Manifest: immutable provenance record for every simulation run.
 Created at run start with inputs and config snapshot.
 Updated on completion with output artifact URIs and execution status.
 """
+
 import hashlib
 import json
 from dataclasses import dataclass, field
@@ -38,6 +39,7 @@ class RunManifest:
 
     Serialised to storage/simulations/<run_id>/manifest.json.
     """
+
     run_id: str
     scenario_id: str
     solver_type: str

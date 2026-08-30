@@ -14,5 +14,5 @@ class GEESentinel1Module:
             "processing_threshold": -1.5,
             "cloud_radar_limitations": "None, SAR penetrates clouds",
             "source_label": "OBSERVED",
-            "flood_mask_geojson": {"type": "FeatureCollection", "features": []}
+            "flood_mask_geojson": {"type": "FeatureCollection", "features": []},
         }

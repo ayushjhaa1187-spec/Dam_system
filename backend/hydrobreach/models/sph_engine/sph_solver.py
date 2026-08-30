@@ -25,12 +25,12 @@ class SPHKernel:
             return 0.0, 0.0
 
         # Normalization factor for 2D Wendland C2
-        alpha_d = 7.0 / (4.0 * math.pi * (h ** 2))
+        alpha_d = 7.0 / (4.0 * math.pi * (h**2))
         w = alpha_d * ((1.0 - 0.5 * q) ** 4) * (2.0 * q + 1.0)
 
         # Derivative: dW/dr = -alpha_d * (5/h) * q * (1 - q/2)^3
         # grad_w_over_r = dW/dr / r
-        grad_w_over_r = -alpha_d * (5.0 / (h ** 2)) * ((1.0 - 0.5 * q) ** 3)
+        grad_w_over_r = -alpha_d * (5.0 / (h**2)) * ((1.0 - 0.5 * q) ** 3)
 
         return w, grad_w_over_r
 
@@ -39,13 +39,13 @@ class SPHKernel:
         """Vectorized Wendland C2 kernel in 2D."""
         q = r / h
         mask = q <= 2.0
-        alpha_d = 7.0 / (4.0 * math.pi * (h ** 2))
+        alpha_d = 7.0 / (4.0 * math.pi * (h**2))
         w = np.zeros_like(r)
         grad_w_over_r = np.zeros_like(r)
-        
+
         q_mask = q[mask]
         w[mask] = alpha_d * ((1.0 - 0.5 * q_mask) ** 4) * (2.0 * q_mask + 1.0)
-        grad_w_over_r[mask] = -alpha_d * (5.0 / (h ** 2)) * ((1.0 - 0.5 * q_mask) ** 3)
+        grad_w_over_r[mask] = -alpha_d * (5.0 / (h**2)) * ((1.0 - 0.5 * q_mask) ** 3)
         return w, grad_w_over_r
 
     @staticmethod
@@ -58,10 +58,10 @@ class SPHKernel:
         if q > 2.0 or q < 1e-9:
             return 0.0, 0.0
 
-        sigma = 10.0 / (7.0 * math.pi * (h ** 2))
+        sigma = 10.0 / (7.0 * math.pi * (h**2))
         if q <= 1.0:
-            w = sigma * (1.0 - 1.5 * (q ** 2) + 0.75 * (q ** 3))
-            dw_dr = sigma * (-3.0 * q + 2.25 * (q ** 2)) / h
+            w = sigma * (1.0 - 1.5 * (q**2) + 0.75 * (q**3))
+            dw_dr = sigma * (-3.0 * q + 2.25 * (q**2)) / h
         else:
             w = sigma * 0.25 * ((2.0 - q) ** 3)
             dw_dr = -0.75 * sigma * ((2.0 - q) ** 2) / h
@@ -72,20 +72,21 @@ class SPHKernel:
 
 class SPHSimulationConfig:
     """Configuration parameters for SPH solver."""
+
     def __init__(
         self,
         particle_spacing_m: float = 120.0,
         smoothing_length_ratio: float = 1.3,
-        c0: float = 40.0,            # Numerical speed of sound (m/s)
-        rho0: float = 1000.0,        # Rest density (kg/m³)
-        gamma: float = 7.0,          # Tait equation exponent
-        alpha_visc: float = 0.1,     # Monaghan artificial viscosity coefficient
+        c0: float = 40.0,  # Numerical speed of sound (m/s)
+        rho0: float = 1000.0,  # Rest density (kg/m³)
+        gamma: float = 7.0,  # Tait equation exponent
+        alpha_visc: float = 0.1,  # Monaghan artificial viscosity coefficient
         beta_visc: float = 0.2,
-        manning_n: float = 0.035,    # Channel roughness
-        cfl_factor: float = 0.2,     # CFL stability factor
-        time_step_dt: float = 4.0,   # Integration time step (s)
+        manning_n: float = 0.035,  # Channel roughness
+        cfl_factor: float = 0.2,  # CFL stability factor
+        time_step_dt: float = 4.0,  # Integration time step (s)
         total_duration_s: float = 7200.0,
-        save_interval_s: float = 120.0
+        save_interval_s: float = 120.0,
     ):
         self.dx = particle_spacing_m
         self.h = particle_spacing_m * smoothing_length_ratio
@@ -100,7 +101,7 @@ class SPHSimulationConfig:
         self.total_duration_s = total_duration_s
         self.save_interval_s = save_interval_s
         # Tait constant B = c0^2 * rho0 / gamma
-        self.B = (c0 ** 2) * rho0 / gamma
+        self.B = (c0**2) * rho0 / gamma
 
 
 class SPHParticleSystem:
@@ -112,16 +113,16 @@ class SPHParticleSystem:
 
     def __init__(self, config: SPHSimulationConfig):
         self.config = config
-        self.mass_per_particle = config.rho0 * (config.dx ** 2)
+        self.mass_per_particle = config.rho0 * (config.dx**2)
 
         # Fluid particles arrays
-        self.pos = np.empty((0, 2), dtype=np.float64)      # (x, y) [m]
-        self.vel = np.empty((0, 2), dtype=np.float64)      # (u, v) [m/s]
-        self.rho = np.empty((0,), dtype=np.float64)        # density [kg/m³]
-        self.p = np.empty((0,), dtype=np.float64)          # pressure [Pa]
-        self.depth = np.empty((0,), dtype=np.float64)      # local water depth [m]
-        self.arrival_time = np.empty((0,), dtype=np.float64) # time of arrival [s]
-        self.p_type = np.empty((0,), dtype=np.int32)       # 0: fluid, 1: boundary
+        self.pos = np.empty((0, 2), dtype=np.float64)  # (x, y) [m]
+        self.vel = np.empty((0, 2), dtype=np.float64)  # (u, v) [m/s]
+        self.rho = np.empty((0,), dtype=np.float64)  # density [kg/m³]
+        self.p = np.empty((0,), dtype=np.float64)  # pressure [Pa]
+        self.depth = np.empty((0,), dtype=np.float64)  # local water depth [m]
+        self.arrival_time = np.empty((0,), dtype=np.float64)  # time of arrival [s]
+        self.p_type = np.empty((0,), dtype=np.int32)  # 0: fluid, 1: boundary
 
         # Boundary geometry
         self.boundary_pos = np.empty((0, 2), dtype=np.float64)
@@ -141,7 +142,7 @@ class SPHParticleSystem:
         downstream_bed_slope: float = 0.005,
         upstream_bed_slope: float = 0.001,
         valley_shape: str = "trapezoidal",
-        valley_meander_amplitude_m: float = 0.0
+        valley_meander_amplitude_m: float = 0.0,
     ):
         """
         Initializes fluid particles inside reservoir and along downstream river domain.
@@ -205,7 +206,7 @@ class SPHHydroSolver:
         scenario_params: Dict[str, Any],
         hydrograph_times: List[float],
         hydrograph_discharges: List[float],
-        progress_callback: Optional[Any] = None
+        progress_callback: Optional[Any] = None,
     ) -> Dict[str, Any]:
         """
         Runs SPH dam-break simulation and generates spatial frames and summary metrics.
@@ -225,21 +226,36 @@ class SPHHydroSolver:
             dam_location_x_m=dam_location_x_m,
             reservoir_depth_m=reservoir_depth_m,
             downstream_bed_slope=bed_slope,
-            valley_meander_amplitude_m=valley_width_m * 0.5
+            valley_meander_amplitude_m=valley_width_m * 0.5,
         )
 
         dt = self.config.dt
         total_time = min(self.config.total_duration_s, 7200.0)  # up to 2 hours default
-        save_interval = max(self.config.save_interval_s, 120.0) # 2 min frames
+        save_interval = max(self.config.save_interval_s, 120.0)  # 2 min frames
         num_steps = int(total_time / dt)
         save_every_step = max(int(save_interval / dt), 1)
 
         frames = []
         gauges_data = {
             "dam_axis": {"x_km": dam_location_x_m / 1000.0, "time_min": [], "depth_m": [], "discharge_m3s": []},
-            "gauge_5km": {"x_km": (dam_location_x_m + 5000.0) / 1000.0, "time_min": [], "depth_m": [], "discharge_m3s": []},
-            "gauge_15km": {"x_km": (dam_location_x_m + 15000.0) / 1000.0, "time_min": [], "depth_m": [], "discharge_m3s": []},
-            "gauge_25km": {"x_km": min((dam_location_x_m + 25000.0) / 1000.0, reach_length_km), "time_min": [], "depth_m": [], "discharge_m3s": []},
+            "gauge_5km": {
+                "x_km": (dam_location_x_m + 5000.0) / 1000.0,
+                "time_min": [],
+                "depth_m": [],
+                "discharge_m3s": [],
+            },
+            "gauge_15km": {
+                "x_km": (dam_location_x_m + 15000.0) / 1000.0,
+                "time_min": [],
+                "depth_m": [],
+                "discharge_m3s": [],
+            },
+            "gauge_25km": {
+                "x_km": min((dam_location_x_m + 25000.0) / 1000.0, reach_length_km),
+                "time_min": [],
+                "depth_m": [],
+                "discharge_m3s": [],
+            },
         }
 
         current_time = 0.0
@@ -263,7 +279,11 @@ class SPHHydroSolver:
             time_min = current_time / 60.0
 
             # Current inflow discharge from hydrograph
-            current_q = float(np.interp(current_time, hydro_times_sec, hydro_flows)) if len(hydro_times_sec) > 1 else hydro_flows[0]
+            current_q = (
+                float(np.interp(current_time, hydro_times_sec, hydro_flows))
+                if len(hydro_times_sec) > 1
+                else hydro_flows[0]
+            )
 
             # Physics Step: Vectorized particle dynamic update
             self._step_physics(dt, current_time, dam_location_x_m, bed_slope, manning_n, current_q)
@@ -279,7 +299,7 @@ class SPHHydroSolver:
                     step_index=len(frames),
                     X_mesh=X_mesh,
                     Y_mesh=Y_mesh,
-                    dam_location_x_m=dam_location_x_m
+                    dam_location_x_m=dam_location_x_m,
                 )
                 frames.append(frame_data)
 
@@ -306,31 +326,19 @@ class SPHHydroSolver:
             "max_inundated_area_km2": round(max_inundation_area_km2, 2),
             "num_frames": len(frames),
             "gauges": gauges_data,
-            "coupling_hydrograph": {
-                "time_min": coupling_times,
-                "discharge_m3s": coupling_discharges
-            },
-            "data_provenance": "MODEL ESTIMATE (SPH WCSPH Physics Engine)"
+            "coupling_hydrograph": {"time_min": coupling_times, "discharge_m3s": coupling_discharges},
+            "data_provenance": "MODEL ESTIMATE (SPH WCSPH Physics Engine)",
         }
 
         return {
             "summary": summary,
             "frames": frames,
             "gauges": gauges_data,
-            "coupling_hydrograph": {
-                "time_min": coupling_times,
-                "discharge_m3s": coupling_discharges
-            }
+            "coupling_hydrograph": {"time_min": coupling_times, "discharge_m3s": coupling_discharges},
         }
 
     def _step_physics(
-        self,
-        dt: float,
-        current_time: float,
-        dam_x: float,
-        bed_slope: float,
-        manning_n: float,
-        current_q: float
+        self, dt: float, current_time: float, dam_x: float, bed_slope: float, manning_n: float, current_q: float
     ):
         """Vectorized WCSPH dynamics step."""
         ps = self.particle_system
@@ -349,52 +357,52 @@ class SPHHydroSolver:
 
         # Bed friction deceleration via Manning-Strickler equation
         # a_fric = g * n^2 * u * |u| / (R^(4/3)) where R ~ depth
-        vel_mag = np.sqrt(u ** 2 + v ** 2) + 1e-4
+        vel_mag = np.sqrt(u**2 + v**2) + 1e-4
         r_hyd = np.maximum(depth, 0.1)
-        fric_factor = g * (manning_n ** 2) * vel_mag / (r_hyd ** (4.0 / 3.0))
+        fric_factor = g * (manning_n**2) * vel_mag / (r_hyd ** (4.0 / 3.0))
         # Limit max friction to prevent numerical oscillation
         fric_factor = np.minimum(fric_factor, 5.0)
 
         # Base acceleration (gravity slope and friction)
         a_x = f_x - fric_factor * u
         a_y = -fric_factor * v - 0.05 * y  # Centering force
-        
+
         # SPH particle dispersion along x and y gradients using KDTree
         tree = cKDTree(ps.pos)
         h_sm = self.config.h
-        pairs = tree.query_pairs(r=h_sm, output_type='ndarray')
-        
-        V_0 = self.config.dx ** 2
+        pairs = tree.query_pairs(r=h_sm, output_type="ndarray")
+
+        V_0 = self.config.dx**2
         new_depth = np.full_like(depth, 0.1)  # base minimum depth
-        
+
         # Self-contribution to depth
         w_self, _ = SPHKernel.wendland_c2_2d_vec(np.array([0.0]), h_sm)
         new_depth += V_0 * w_self[0]
-        
+
         if len(pairs) > 0:
             i = pairs[:, 0]
             j = pairs[:, 1]
             dx_arr = x[i] - x[j]
             dy_arr = y[i] - y[j]
             dist = np.sqrt(dx_arr**2 + dy_arr**2) + 1e-6
-            
+
             # Kernel and gradient
             w, gw_r = SPHKernel.wendland_c2_2d_vec(dist, h_sm)
-            
+
             # Density (Depth) Summation: h_i = sum_j V_0 W_ij
             w_contrib = V_0 * w
             np.add.at(new_depth, i, w_contrib)
             np.add.at(new_depth, j, w_contrib)
-            
+
             # SPH Momentum eq (pressure gradient) for shallow water:
             F_ij_x = -g * V_0 * gw_r * dx_arr
             F_ij_y = -g * V_0 * gw_r * dy_arr
-            
+
             np.add.at(a_x, i, F_ij_x)
             np.add.at(a_x, j, -F_ij_x)
             np.add.at(a_y, i, F_ij_y)
             np.add.at(a_y, j, -F_ij_y)
-            
+
             # SPH Artificial Viscosity for stability
             dvx = u[i] - u[j]
             dvy = v[i] - v[j]
@@ -406,20 +414,20 @@ class SPHHydroSolver:
                 vd = v_dot_r[visc_mask]
                 dd = dist[visc_mask]
                 gw = gw_r[visc_mask]
-                
+
                 mu = h_sm * vd / (dd**2 + 0.01 * h_sm**2)
                 c_bar = np.sqrt(g * depth[vi]) + np.sqrt(g * depth[vj])
                 rho_bar = 0.5 * (depth[vi] + depth[vj])
                 Pi_ij = (-self.config.alpha_visc * c_bar * mu + self.config.beta_visc * mu**2) / rho_bar
-                
+
                 visc_F_x = -V_0 * Pi_ij * gw * dx_arr[visc_mask]
                 visc_F_y = -V_0 * Pi_ij * gw * dy_arr[visc_mask]
-                
+
                 np.add.at(a_x, vi, visc_F_x)
                 np.add.at(a_x, vj, -visc_F_x)
                 np.add.at(a_y, vi, visc_F_y)
                 np.add.at(a_y, vj, -visc_F_y)
-                
+
         # Surge acceleration downstream of dam
         # Particles near dam breach get accelerated proportional to breach hydrograph
         near_breach_mask = (x >= dam_x - 200.0) & (x <= dam_x + 800.0)
@@ -453,9 +461,7 @@ class SPHHydroSolver:
         ps.vel[:, 1] = v_new
         ps.depth = depth_new
 
-    def _record_gauges(
-        self, gauges: Dict[str, Any], time_min: float, dam_x: float, valley_width: float
-    ):
+    def _record_gauges(self, gauges: Dict[str, Any], time_min: float, dam_x: float, valley_width: float):
         """Records water depth and estimated discharge at monitoring stations."""
         ps = self.particle_system
         x = ps.pos[:, 0]
@@ -480,12 +486,7 @@ class SPHHydroSolver:
             g_info["discharge_m3s"].append(round(q_val, 1))
 
     def _create_frame(
-        self,
-        current_time: float,
-        step_index: int,
-        X_mesh: np.ndarray,
-        Y_mesh: np.ndarray,
-        dam_location_x_m: float
+        self, current_time: float, step_index: int, X_mesh: np.ndarray, Y_mesh: np.ndarray, dam_location_x_m: float
     ) -> Dict[str, Any]:
         """Interpolates particle data into a lightweight raster grid for dashboard visualization."""
         ps = self.particle_system
@@ -494,7 +495,7 @@ class SPHHydroSolver:
         u = ps.vel[:, 0]
         v = ps.vel[:, 1]
         depth = ps.depth
-        speed = np.sqrt(u ** 2 + v ** 2)
+        speed = np.sqrt(u**2 + v**2)
 
         # Sample particles down to a max of 400 points for real-time WebGL/Canvas rendering
         n_sample = min(len(x), 400)
@@ -518,7 +519,7 @@ class SPHHydroSolver:
         # Inundated area calculation (particles with depth > 0.3m downstream of dam)
         inundated_count = int(np.sum((depth > 0.3) & (x >= dam_location_x_m)))
         dx = self.config.dx
-        inundated_area_km2 = (inundated_count * (dx ** 2)) / 1e6
+        inundated_area_km2 = (inundated_count * (dx**2)) / 1e6
 
         # Generate a 12x6 coarse raster summary for fast map layer rendering
         nx_coarse, ny_coarse = 20, 8
@@ -550,6 +551,6 @@ class SPHHydroSolver:
                 "x_max": float(np.max(X_mesh)),
                 "y_min": float(np.min(Y_mesh)),
                 "y_max": float(np.max(Y_mesh)),
-                "depth_matrix": [[round(val, 2) for val in row] for row in grid_depths.tolist()]
-            }
+                "depth_matrix": [[round(val, 2) for val in row] for row in grid_depths.tolist()],
+            },
         }

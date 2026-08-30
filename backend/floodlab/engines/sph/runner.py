@@ -6,6 +6,7 @@ Executes DualSPHysics via subprocess:
 
 Discovers binary version at runtime; never hardcodes version numbers.
 """
+
 from __future__ import annotations
 
 import logging
@@ -18,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 class EngineNotAvailableError(RuntimeError):
     """Raised when a required solver binary is not found."""
+
     pass
 
 
@@ -50,8 +52,7 @@ class DualSPHysicsRunner:
         """
         if not self.is_available():
             raise EngineNotAvailableError(
-                f"DualSPHysics not found in {self.bin_dir}. "
-                "Set DUALSPHYSICS_BIN_DIR in .env and install the binary."
+                f"DualSPHysics not found in {self.bin_dir}. Set DUALSPHYSICS_BIN_DIR in .env and install the binary."
             )
         solver = self.bin_dir / "dualsphysics"
         try:

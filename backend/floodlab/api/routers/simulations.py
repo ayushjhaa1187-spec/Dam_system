@@ -1,4 +1,5 @@
 """Simulation endpoints: run, status, results, and imported datasets."""
+
 import hashlib
 import json
 import math
@@ -59,18 +60,60 @@ _SIMULATION_STORE: dict = {}
 def generate_station_probe_time_series(peak_flow: float, dam_height: float) -> List[Dict[str, Any]]:
     """Generates authentic flood depth time-series hydrographs for key corridor monitoring stations."""
     stations = [
-        {"id": "tehri_axis", "name": "Tehri Dam Axis", "km": 0.0, "arr_min": 0,
-            "peak_depth": dam_height * 0.26, "peak_v": 24.5, "dur_hrs": 6.5},
-        {"id": "koteshwar", "name": "Koteshwar Dam", "km": 22.0,
-            "arr_min": 32, "peak_depth": 42.0, "peak_v": 21.0, "dur_hrs": 7.2},
-        {"id": "devprayag", "name": "Devprayag Sangam", "km": 42.0,
-            "arr_min": 68, "peak_depth": 28.5, "peak_v": 17.5, "dur_hrs": 8.0},
-        {"id": "shivpuri", "name": "Shivpuri Gorge", "km": 62.0,
-            "arr_min": 92, "peak_depth": 22.0, "peak_v": 14.8, "dur_hrs": 9.5},
-        {"id": "rishikesh", "name": "Rishikesh Town", "km": 78.0,
-            "arr_min": 118, "peak_depth": 15.2, "peak_v": 11.2, "dur_hrs": 11.0},
-        {"id": "haridwar", "name": "Haridwar Plains", "km": 100.0,
-            "arr_min": 175, "peak_depth": 9.4, "peak_v": 7.6, "dur_hrs": 14.5},
+        {
+            "id": "tehri_axis",
+            "name": "Tehri Dam Axis",
+            "km": 0.0,
+            "arr_min": 0,
+            "peak_depth": dam_height * 0.26,
+            "peak_v": 24.5,
+            "dur_hrs": 6.5,
+        },
+        {
+            "id": "koteshwar",
+            "name": "Koteshwar Dam",
+            "km": 22.0,
+            "arr_min": 32,
+            "peak_depth": 42.0,
+            "peak_v": 21.0,
+            "dur_hrs": 7.2,
+        },
+        {
+            "id": "devprayag",
+            "name": "Devprayag Sangam",
+            "km": 42.0,
+            "arr_min": 68,
+            "peak_depth": 28.5,
+            "peak_v": 17.5,
+            "dur_hrs": 8.0,
+        },
+        {
+            "id": "shivpuri",
+            "name": "Shivpuri Gorge",
+            "km": 62.0,
+            "arr_min": 92,
+            "peak_depth": 22.0,
+            "peak_v": 14.8,
+            "dur_hrs": 9.5,
+        },
+        {
+            "id": "rishikesh",
+            "name": "Rishikesh Town",
+            "km": 78.0,
+            "arr_min": 118,
+            "peak_depth": 15.2,
+            "peak_v": 11.2,
+            "dur_hrs": 11.0,
+        },
+        {
+            "id": "haridwar",
+            "name": "Haridwar Plains",
+            "km": 100.0,
+            "arr_min": 175,
+            "peak_depth": 9.4,
+            "peak_v": 7.6,
+            "dur_hrs": 14.5,
+        },
     ]
 
     time_steps_min = list(range(0, 241, 10))  # 0 to 240 minutes in 10-min increments
@@ -96,24 +139,26 @@ def generate_station_probe_time_series(peak_flow: float, dam_height: float) -> L
                     d = 0.0
                     q = 150.0
                 else:
-                    shape_val = (norm_t ** 1.8) * math.exp(1.8 * (1.0 - norm_t))
+                    shape_val = (norm_t**1.8) * math.exp(1.8 * (1.0 - norm_t))
                     d = round(max(0.0, p_depth * shape_val), 2)
                     q = round(max(150.0, 150.0 + (p_q - 150.0) * shape_val), 1)
             depth_series.append(d)
             discharge_series.append(q)
 
-        results.append({
-            "station_id": st["id"],
-            "station_name": st["name"],
-            "chainage_km": st["km"],
-            "arrival_time_min": st["arr_min"],
-            "peak_depth_m": st["peak_depth"],
-            "peak_velocity_ms": st["peak_v"],
-            "flood_duration_hrs": st["dur_hrs"],
-            "time_minutes": time_steps_min,
-            "depth_series_m": depth_series,
-            "discharge_series_m3s": discharge_series,
-        })
+        results.append(
+            {
+                "station_id": st["id"],
+                "station_name": st["name"],
+                "chainage_km": st["km"],
+                "arrival_time_min": st["arr_min"],
+                "peak_depth_m": st["peak_depth"],
+                "peak_velocity_ms": st["peak_v"],
+                "flood_duration_hrs": st["dur_hrs"],
+                "time_minutes": time_steps_min,
+                "depth_series_m": depth_series,
+                "discharge_series_m3s": discharge_series,
+            }
+        )
 
     return results
 
@@ -123,7 +168,7 @@ def execute_simulation_computation(
     solver_type: str = "coupled",
     breach_model: str = "auto",
     run_id: Optional[str] = None,
-    engine: str = "coupled"
+    engine: str = "coupled",
 ) -> Dict[str, Any]:
     """Core simulation solver pipeline returning verified physical results."""
     t_start = time.perf_counter()
@@ -175,11 +220,15 @@ def execute_simulation_computation(
     comparison_res = ScenarioComparator.compare_runs(sph_res, delft_res)
 
     # 3. Loss & Damage Assessment
-    primary_summary = delft_res.get("summary", {
-        "max_inundated_area_km2": 26.5,
-        "peak_surge_velocity_ms": 18.2,
-    })
+    primary_summary = delft_res.get(
+        "summary",
+        {
+            "max_inundated_area_km2": 26.5,
+            "peak_surge_velocity_ms": 18.2,
+        },
+    )
     from hydrobreach.models.loss_damage.damage_estimator import LossAndDamageEngine
+
     damage_assessment = LossAndDamageEngine.evaluate_scenario_damage(
         scenario_params=params,
         max_inundated_area_km2=primary_summary.get("max_inundated_area_km2", 26.5),
@@ -190,8 +239,7 @@ def execute_simulation_computation(
 
     # 4. Probe Time Series & Land Use / Infrastructure Breakdown
     station_probes = generate_station_probe_time_series(
-        peak_flow=breach_result.peak_discharge_m3s,
-        dam_height=dam_height
+        peak_flow=breach_result.peak_discharge_m3s, dam_height=dam_height
     )
 
     land_use_breakdown = [
@@ -264,49 +312,51 @@ def execute_simulation_computation(
             "error": str(e),
         }
 
-    result_payload = to_serializable({
-        "run_id": run_id,
-        "scenario_id": lookup_id,
-        "scenario_params": params,
-        "simulation_engine": solver_type,
-        "solver_type": solver_type,
-        "validation_status": "validated",
-        "scientific_metadata": {
-            "model_name": "Coupled DualSPHysics 3D & Delft3D Flexible Mesh",
-            "model_version": "2.4.0-hybrid",
-            "engine_type": solver_type,
-            "validation_status": "validated",
-            "dem_source": dem_src,
-            "dem_resolution_m": dem_res,
-            "hydrology_source": hydro_src,
-            "simulation_start_time": now_iso,
-            "simulation_duration_hrs": 4.0,
-            "compute_duration_s": compute_duration,
-            "input_hash": input_hash,
-            "reproducibility_id": reproducibility_id,
-        },
-        "breach_mechanics": breach_result.model_dump(),
-        "sph_result": sph_res,
-        "delft3d_result": delft_res,
-        "comparison_result": comparison_res,
-        "damage_assessment": damage_assessment,
-        "flood_prediction": ml_prediction,
-        "station_probes": station_probes,
-        "land_use_breakdown": land_use_breakdown,
-        "infrastructure_exposure": infrastructure_exposure,
-        "uncertainty_envelope": uncertainty_envelope,
-        "hazard_rating": 8.5,
-        "status": "COMPLETED_ADAPTER",
-        "provenance": {
-            "level": "MODELLED",
-            "source": "Coupled DualSPHysics-Delft3DFM (Packaged Indian Case Study)",
-            "scenario_id": lookup_id,
+    result_payload = to_serializable(
+        {
             "run_id": run_id,
-            "input_hash": input_hash,
-            "reproducibility_id": reproducibility_id,
-        },
-        "created_at": now_iso,
-    })
+            "scenario_id": lookup_id,
+            "scenario_params": params,
+            "simulation_engine": solver_type,
+            "solver_type": solver_type,
+            "validation_status": "validated",
+            "scientific_metadata": {
+                "model_name": "Coupled DualSPHysics 3D & Delft3D Flexible Mesh",
+                "model_version": "2.4.0-hybrid",
+                "engine_type": solver_type,
+                "validation_status": "validated",
+                "dem_source": dem_src,
+                "dem_resolution_m": dem_res,
+                "hydrology_source": hydro_src,
+                "simulation_start_time": now_iso,
+                "simulation_duration_hrs": 4.0,
+                "compute_duration_s": compute_duration,
+                "input_hash": input_hash,
+                "reproducibility_id": reproducibility_id,
+            },
+            "breach_mechanics": breach_result.model_dump(),
+            "sph_result": sph_res,
+            "delft3d_result": delft_res,
+            "comparison_result": comparison_res,
+            "damage_assessment": damage_assessment,
+            "flood_prediction": ml_prediction,
+            "station_probes": station_probes,
+            "land_use_breakdown": land_use_breakdown,
+            "infrastructure_exposure": infrastructure_exposure,
+            "uncertainty_envelope": uncertainty_envelope,
+            "hazard_rating": 8.5,
+            "status": "COMPLETED_ADAPTER",
+            "provenance": {
+                "level": "MODELLED",
+                "source": "Coupled DualSPHysics-Delft3DFM (Packaged Indian Case Study)",
+                "scenario_id": lookup_id,
+                "run_id": run_id,
+                "input_hash": input_hash,
+                "reproducibility_id": reproducibility_id,
+            },
+            "created_at": now_iso,
+        }
+    )
 
     _SIMULATION_STORE[run_id] = result_payload
     return result_payload
@@ -352,7 +402,7 @@ async def run_simulation(req: RunSimulationRequest):
                 detail=(
                     "SPH solver is restricted to the Near Field domain (<= 2km). "
                     "Use Delft3D FM for far-field propagation."
-                )
+                ),
             )
         if solver.lower() == "coupled":
             # For coupled runs, SPH must hand off to Delft3D quickly
@@ -404,6 +454,7 @@ async def get_simulation(run_id: str):
     if run_id not in _SIMULATION_STORE:
         # Check JobService store as well
         from floodlab.services.job_service import JobService
+
         job = JobService().get_job(run_id)
         if job and job.result:
             return job.result
@@ -421,6 +472,7 @@ async def get_status(run_id: str):
     if run_id in _SIMULATION_STORE:
         return {"run_id": run_id, "status": _SIMULATION_STORE[run_id].get("status")}
     from floodlab.services.job_service import JobService
+
     job = JobService().get_job(run_id)
     if job:
         return {"run_id": run_id, "status": job.state, "stage": job.stage_label, "progress_pct": job.progress_pct}
@@ -429,7 +481,10 @@ async def get_status(run_id: str):
 
 @router.get("")
 async def list_simulations():
-    return [{"run_id": k, "status": v.get("status"), "engine": v.get("simulation_engine")} for k, v in _SIMULATION_STORE.items()]  # noqa: E501
+    return [
+        {"run_id": k, "status": v.get("status"), "engine": v.get("simulation_engine")}
+        for k, v in _SIMULATION_STORE.items()
+    ]  # noqa: E501
 
 
 @router.post("/run-generic")
@@ -447,7 +502,9 @@ async def run_generic_simulation(config: Dict[str, Any]):
         _SIMULATION_STORE[res.run_id] = res.model_dump()
         return res
     except DatasetValidationError as e:
-        raise HTTPException(status_code=400, detail={"error": "Dataset validation failed", "details": e.report.model_dump()})
+        raise HTTPException(
+            status_code=400, detail={"error": "Dataset validation failed", "details": e.report.model_dump()}
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Simulation failed: {str(e)}")
 

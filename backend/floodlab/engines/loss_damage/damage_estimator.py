@@ -8,6 +8,7 @@ Reference:
     CWC (2019) "Flood Damage Mitigation Manual"
     JRC (2017) "Flood Damage Model for Europe"
 """
+
 from __future__ import annotations
 
 import math
@@ -17,8 +18,14 @@ from floodlab.provenance.labels import label_derived
 
 # Default depth-damage fractions (residential) [depth_m -> fraction 0-1]
 DEFAULT_DEPTH_DAMAGE_RESIDENTIAL: list[tuple[float, float]] = [
-    (0.0, 0.0), (0.1, 0.05), (0.3, 0.15), (0.5, 0.25),
-    (1.0, 0.45), (1.5, 0.60), (2.0, 0.75), (3.0, 0.90),
+    (0.0, 0.0),
+    (0.1, 0.05),
+    (0.3, 0.15),
+    (0.5, 0.25),
+    (1.0, 0.45),
+    (1.5, 0.60),
+    (2.0, 0.75),
+    (3.0, 0.90),
     (5.0, 1.00),
 ]
 
@@ -41,7 +48,7 @@ class DamageEstimator:
     """
 
     # Average asset values (INR Crores, rough national averages)
-    AVG_HOUSE_VALUE_CR: float = 0.020      # 20 lakh per house
+    AVG_HOUSE_VALUE_CR: float = 0.020  # 20 lakh per house
     AVG_COMMERCIAL_VALUE_CR: float = 0.150
     AGRICULTURAL_LOSS_PER_HA_CR: float = 0.002  # 2 lakh/ha (crop loss)
 

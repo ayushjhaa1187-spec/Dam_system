@@ -1,6 +1,7 @@
 """
 Observation comparator: compares simulation inundation vs satellite observations.
 """
+
 from typing import Any, Dict
 import numpy as np
 from floodlab.provenance.labels import label_derived

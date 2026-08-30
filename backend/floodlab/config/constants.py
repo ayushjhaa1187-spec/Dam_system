@@ -1,6 +1,7 @@
 """
 FloodLab constants and enumerations.
 """
+
 from enum import Enum
 
 
@@ -63,6 +64,6 @@ class HazardLevel(str, Enum):
 
 
 # Physical constants
-G: float = 9.81          # Gravitational acceleration [m/s^2]
-RHO0: float = 1000.0     # Reference water density [kg/m^3]
-GAMMA: float = 7.0        # Tait EOS exponent
+G: float = 9.81  # Gravitational acceleration [m/s^2]
+RHO0: float = 1000.0  # Reference water density [kg/m^3]
+GAMMA: float = 7.0  # Tait EOS exponent

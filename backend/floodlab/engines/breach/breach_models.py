@@ -15,6 +15,7 @@ References:
     Costa, J.E., Schuster, R.L. (1988). "The Formation and Failure of Natural Dams."
         Geol. Soc. Am. Bulletin, 100(7), 1054-1068.
 """
+
 from __future__ import annotations
 
 import math
@@ -91,11 +92,11 @@ class BreachMechanicsEngine:
         Ko = 0.7 if inp.breach_mode == "overtopping" else 1.0
 
         # Breach width and side slope
-        Bavg = 0.27 * Ko * (Vw ** 0.32) * (hb ** 0.04)
+        Bavg = 0.27 * Ko * (Vw**0.32) * (hb**0.04)
         z = 1.4 if inp.breach_mode == "overtopping" else 0.9
 
         # Formation time [hours]
-        tf = 63.2 * math.sqrt(Vw / (G * hb ** 2))
+        tf = 63.2 * math.sqrt(Vw / (G * hb**2))
 
         Bavg, tf = self._apply_overrides(inp, Bavg, tf)
         Qp, t_times, t_flows = self._synthesize_hydrograph(Vw, hb, Bavg, z, tf)
@@ -113,7 +114,8 @@ class BreachMechanicsEngine:
                 "avg_breach_width_m": "MODELLED:froehlich_2008",
                 "side_slope_z": "MODELLED:froehlich_2008",
                 "formation_time_hrs": "MODELLED:froehlich_2008"
-                if not inp.formation_time_override_hrs else "ASSUMED:analyst_override",
+                if not inp.formation_time_override_hrs
+                else "ASSUMED:analyst_override",
                 "peak_discharge_m3s": "MODELLED:froehlich_2008",
             },
         )
@@ -136,7 +138,7 @@ class BreachMechanicsEngine:
         Ve = 0.0261 * ((Vw * hw) ** 0.769)
         Bavg = math.sqrt(Ve / hb) if hb > 0 else 10.0
         z = 0.5
-        tf = 0.364 * (Ve ** 0.364)  # [hours] - empirical
+        tf = 0.364 * (Ve**0.364)  # [hours] - empirical
 
         Bavg, tf = self._apply_overrides(inp, Bavg, tf)
         Qp, t_times, t_flows = self._synthesize_hydrograph(Vw, hb, Bavg, z, tf)
@@ -218,7 +220,7 @@ class BreachMechanicsEngine:
         z = 0.0
         tf = 0.0
 
-        Qp = (8.0 / 27.0) * math.sqrt(G) * (hb ** 2.5) * Bavg
+        Qp = (8.0 / 27.0) * math.sqrt(G) * (hb**2.5) * Bavg
 
         # Instantaneous: triangular hydrograph with very short rise
         t_peak = 0.001
@@ -264,7 +266,7 @@ class BreachMechanicsEngine:
         z = 0.5
         tf = 0.5  # rapid failure typical
 
-        Qp = 6.7 * (Vw ** 0.56)
+        Qp = 6.7 * (Vw**0.56)
 
         Bavg, tf = self._apply_overrides(inp, Bavg, tf)
         _, t_times, t_flows = self._synthesize_hydrograph(Vw, hb, Bavg, z, tf)

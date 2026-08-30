@@ -1,4 +1,5 @@
 """API endpoints tests using TestClient."""
+
 from fastapi.testclient import TestClient
 from floodlab.api.main import app
 
@@ -19,23 +20,29 @@ def test_list_presets():
 
 
 def test_calculate_hydrology():
-    res = client.post("/api/hydrology/calculate", json={
-        "catchment_area_km2": 100.0,
-        "curve_number_cn": 80.0,
-        "rainfall_24h_mm": 150.0,
-        "time_of_concentration_hrs": 4.0,
-    })
+    res = client.post(
+        "/api/hydrology/calculate",
+        json={
+            "catchment_area_km2": 100.0,
+            "curve_number_cn": 80.0,
+            "rainfall_24h_mm": 150.0,
+            "time_of_concentration_hrs": 4.0,
+        },
+    )
     assert res.status_code == 200
     data = res.json()
     assert data.get("peak_inflow_m3s", 0) > 0 or data.get("peak_inflow_discharge_m3s", 0) > 0
 
 
 def test_run_simulation():
-    res = client.post("/api/simulations/run", json={
-        "scenario_id": "tehri_base",
-        "solver_type": "coupled",
-        "breach_model": "froehlich_2008",
-    })
+    res = client.post(
+        "/api/simulations/run",
+        json={
+            "scenario_id": "tehri_base",
+            "solver_type": "coupled",
+            "breach_model": "froehlich_2008",
+        },
+    )
     assert res.status_code == 200
     data = res.json()
     assert "run_id" in data
@@ -49,11 +56,14 @@ def test_run_simulation():
 
 
 def test_chat_endpoint():
-    res = client.post("/api/chat", json={
-        "message": "Explain the 2021 Rishi Ganga disaster benchmark",
-        "history": [],
-        "context": {"name": "Rishi Ganga"}
-    })
+    res = client.post(
+        "/api/chat",
+        json={
+            "message": "Explain the 2021 Rishi Ganga disaster benchmark",
+            "history": [],
+            "context": {"name": "Rishi Ganga"},
+        },
+    )
     assert res.status_code == 200
     data = res.json()
     assert "reply" in data

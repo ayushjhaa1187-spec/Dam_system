@@ -29,7 +29,9 @@ async def evaluate_comparison(req: ComparisonRequest):
     delft_res = run.get("delft3d_result")
 
     if not sph_res or not delft_res:
-        raise HTTPException(status_code=400, detail="Comparison requires both SPH and Delft3D results. Run with solver_type='dual'.")
+        raise HTTPException(
+            status_code=400, detail="Comparison requires both SPH and Delft3D results. Run with solver_type='dual'."
+        )
 
     comp = ScenarioComparator.compare_runs(sph_res, delft_res, threshold_depth_m=req.threshold_depth_m)
     run["comparison_result"] = comp

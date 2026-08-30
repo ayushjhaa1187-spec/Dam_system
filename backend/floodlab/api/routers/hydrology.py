@@ -1,6 +1,10 @@
 """Hydrology calculation endpoint."""
+
 from fastapi import APIRouter
-from hydrobreach.models.hydrology.hydrology_engine import HydrologyEngine as HydroBreachHydrology, HydrologyInput as HBInput  # noqa: E501
+from hydrobreach.models.hydrology.hydrology_engine import (
+    HydrologyEngine as HydroBreachHydrology,
+    HydrologyInput as HBInput,
+)  # noqa: E501
 
 router = APIRouter()
 

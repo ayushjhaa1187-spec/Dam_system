@@ -1,6 +1,7 @@
 """
 Celery application and asynchronous jobs.
 """
+
 from typing import Any, Dict
 from floodlab.config.settings import get_settings
 
@@ -8,6 +9,7 @@ settings = get_settings()
 
 try:
     from celery import Celery
+
     celery_app = Celery(
         "floodlab",
         broker=settings.redis_url,

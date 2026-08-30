@@ -24,7 +24,7 @@ class CustomBreachRequest(BaseModel):
     crest_length_m: Optional[float] = None
     breach_mode: str = Field(default="overtopping")
     material_cohesion: str = Field(default="medium")
-    model_override: str = Field(default="auto") # "froehlich", "macdonald", "von_thun", "ritter", "landslide"
+    model_override: str = Field(default="auto")  # "froehlich", "macdonald", "von_thun", "ritter", "landslide"
 
 
 @router.get("/presets")
@@ -55,7 +55,7 @@ async def calculate_breach(req: CustomBreachRequest):
         hydraulic_head_m=req.hydraulic_head_m,
         crest_length_m=req.crest_length_m,
         breach_mode=req.breach_mode,
-        material_cohesion=req.material_cohesion
+        material_cohesion=req.material_cohesion,
     )
     result = BreachMechanicsEngine.evaluate(inp, model_type=req.model_override)
     return result
@@ -65,12 +65,10 @@ async def calculate_breach(req: CustomBreachRequest):
 async def get_dem_profile(
     reach_length_km: float = Query(25.0, ge=5.0, le=150.0),
     upstream_elev_m: float = Query(2200.0, ge=100.0),
-    downstream_elev_m: float = Query(1100.0, ge=0.0)
+    downstream_elev_m: float = Query(1100.0, ge=0.0),
 ):
     """Generates DEM cross sections and thalweg profile for the river valley reach."""
     dem_data = DEMProcessor.generate_synthetic_river_dem(
-        reach_length_km=reach_length_km,
-        upstream_elev_m=upstream_elev_m,
-        downstream_elev_m=downstream_elev_m
+        reach_length_km=reach_length_km, upstream_elev_m=upstream_elev_m, downstream_elev_m=downstream_elev_m
     )
     return dem_data

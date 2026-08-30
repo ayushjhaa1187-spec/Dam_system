@@ -1,4 +1,5 @@
 """Scenario registry, breach calculation, and generic customizable simulation endpoints."""
+
 import json
 from pathlib import Path
 from typing import Optional
@@ -68,14 +69,16 @@ async def list_custom_datasets():
                     try:
                         with open(cfg_file, "r", encoding="utf-8") as f:
                             raw = json.load(f) if cfg_file.suffix == ".json" else yaml.safe_load(f)
-                        discovered.append({
-                            "basin_id": d.name,
-                            "scenario_id": raw.get("scenario_id", d.name),
-                            "basin_name": raw.get("basin", {}).get("name", d.name),
-                            "dam_name": raw.get("dam", {}).get("name", "Unknown Dam"),
-                            "config_path": str(cfg_file.resolve()),
-                            "files": [f.name for f in d.iterdir() if f.is_file()]
-                        })
+                        discovered.append(
+                            {
+                                "basin_id": d.name,
+                                "scenario_id": raw.get("scenario_id", d.name),
+                                "basin_name": raw.get("basin", {}).get("name", d.name),
+                                "dam_name": raw.get("dam", {}).get("name", "Unknown Dam"),
+                                "config_path": str(cfg_file.resolve()),
+                                "files": [f.name for f in d.iterdir() if f.is_file()],
+                            }
+                        )
                     except Exception:
                         pass
     return {"datasets": discovered}
@@ -112,7 +115,9 @@ async def run_custom_scenario(config: ScenarioConfig):
         result = run_simulation(config)
         return result
     except DatasetValidationError as e:
-        raise HTTPException(status_code=400, detail={"error": "Dataset validation failed", "details": e.report.model_dump()})
+        raise HTTPException(
+            status_code=400, detail={"error": "Dataset validation failed", "details": e.report.model_dump()}
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Simulation run failed: {str(e)}")
 

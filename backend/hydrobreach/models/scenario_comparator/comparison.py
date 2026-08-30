@@ -14,10 +14,7 @@ class ScenarioComparator:
 
     @classmethod
     def compare_runs(
-        cls,
-        sph_result: Dict[str, Any],
-        delft3d_result: Dict[str, Any],
-        threshold_depth_m: float = 0.3
+        cls, sph_result: Dict[str, Any], delft3d_result: Dict[str, Any], threshold_depth_m: float = 0.3
     ) -> Dict[str, Any]:
         """
         Calculates comprehensive comparison metrics between SPH and Delft3D runs.
@@ -67,17 +64,21 @@ class ScenarioComparator:
                 frame_pod = hits / (hits + misses) if (hits + misses) > 0 else 1.0
                 frame_far = false_alarms / (hits + false_alarms) if (hits + false_alarms) > 0 else 0.0
 
-                frame_comparisons.append({
-                    "step_index": i,
-                    "time_minutes": sph_f.get("time_minutes", i * 2.0),
-                    "csi": round(frame_csi, 3),
-                    "pod": round(frame_pod, 3),
-                    "far": round(frame_far, 3),
-                    "sph_inundated_km2": sph_f.get("inundated_area_km2", 0.0),
-                    "delft_inundated_km2": delft_f.get("inundated_area_km2", 0.0),
-                    "diff_inundated_km2": round(sph_f.get("inundated_area_km2", 0.0) - delft_f.get("inundated_area_km2", 0.0), 3),
-                    "diff_grid": [[round(val, 2) for val in row] for row in diff_grid]
-                })
+                frame_comparisons.append(
+                    {
+                        "step_index": i,
+                        "time_minutes": sph_f.get("time_minutes", i * 2.0),
+                        "csi": round(frame_csi, 3),
+                        "pod": round(frame_pod, 3),
+                        "far": round(frame_far, 3),
+                        "sph_inundated_km2": sph_f.get("inundated_area_km2", 0.0),
+                        "delft_inundated_km2": delft_f.get("inundated_area_km2", 0.0),
+                        "diff_inundated_km2": round(
+                            sph_f.get("inundated_area_km2", 0.0) - delft_f.get("inundated_area_km2", 0.0), 3
+                        ),
+                        "diff_grid": [[round(val, 2) for val in row] for row in diff_grid],
+                    }
+                )
 
         if not sph_frames or not delft_frames or num_frames == 0:
             return {
@@ -107,14 +108,16 @@ class ScenarioComparator:
         total_denom = total_hits + total_false_alarms + total_misses
         overall_csi = round(total_hits / total_denom, 3) if total_denom > 0 else 0.0
         overall_pod = round(total_hits / (total_hits + total_misses), 3) if (total_hits + total_misses) > 0 else 0.0
-        overall_far = round(total_false_alarms / (total_hits + total_false_alarms), 3) if (total_hits + total_false_alarms) > 0 else 0.0
+        overall_far = (
+            round(total_false_alarms / (total_hits + total_false_alarms), 3)
+            if (total_hits + total_false_alarms) > 0
+            else 0.0
+        )
         mae_depth = round(float(np.mean(depth_diffs_all)), 2) if depth_diffs_all else 0.0
         target_met = bool(overall_csi >= 0.70 and total_denom > 0)
 
         # Gauge Hydrograph Cross-Validation
-        gauge_comparisons = cls._compare_gauges(
-            sph_result.get("gauges", {}), delft3d_result.get("gauges", {})
-        )
+        gauge_comparisons = cls._compare_gauges(sph_result.get("gauges", {}), delft3d_result.get("gauges", {}))
 
         csi_finding = (
             f"Overall Critical Success Index (CSI) is {overall_csi:.3f}, meeting operational threshold (>= 0.70)."
@@ -185,6 +188,6 @@ class ScenarioComparator:
                     "delta_peak_depth_m": round(s_peak_d - d_peak_d, 2),
                     "sph_peak_time_min": round(s_peak_t, 1),
                     "delft_peak_time_min": round(d_peak_t, 1),
-                    "arrival_time_lag_min": round(abs(s_peak_t - d_peak_t), 1)
+                    "arrival_time_lag_min": round(abs(s_peak_t - d_peak_t), 1),
                 }
         return out

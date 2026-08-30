@@ -6,6 +6,7 @@ resamples to Delft3D timestep, writes boundary files, validates mass conservatio
 
 Q(t) = integral over A of v . n dA
 """
+
 from __future__ import annotations
 
 import logging
@@ -21,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 class CouplingValidationError(ValueError):
     """Raised when SPH -> Delft3D mass conservation check fails."""
+
     pass
 
 
@@ -133,10 +135,14 @@ class TemporalResampler:
             orig_vol = float(trapz_fn(orig_Q, orig_times))
             res_vol = float(trapz_fn(res_Q, res_times))
         else:
-            orig_vol = sum((t2 - t1) * (q1 + q2) / 2.0 for (t1, q1), (t2, q2)
-                           in zip(zip(orig_times, orig_Q), zip(orig_times[1:], orig_Q[1:])))
-            res_vol = sum((t2 - t1) * (q1 + q2) / 2.0 for (t1, q1), (t2, q2)
-                          in zip(zip(res_times, res_Q), zip(res_times[1:], res_Q[1:])))
+            orig_vol = sum(
+                (t2 - t1) * (q1 + q2) / 2.0
+                for (t1, q1), (t2, q2) in zip(zip(orig_times, orig_Q), zip(orig_times[1:], orig_Q[1:]))
+            )
+            res_vol = sum(
+                (t2 - t1) * (q1 + q2) / 2.0
+                for (t1, q1), (t2, q2) in zip(zip(res_times, res_Q), zip(res_times[1:], res_Q[1:]))
+            )
         if orig_vol == 0:
             return 0.0
         return abs(orig_vol - res_vol) / orig_vol
@@ -176,13 +182,7 @@ class HydrographConverter:
         pli_filename: str,
     ) -> str:
         """Return a Delft3D FM external forcing block string."""
-        return (
-            f"QUANTITY=dischargebnd\n"
-            f"FILENAME={tim_filename}\n"
-            f"FILETYPE=1\n"
-            f"METHOD=3\n"
-            f"LOCATIONFILE={pli_filename}\n"
-        )
+        return f"QUANTITY=dischargebnd\nFILENAME={tim_filename}\nFILETYPE=1\nMETHOD=3\nLOCATIONFILE={pli_filename}\n"
 
 
 class CouplingEngine:
@@ -229,23 +229,16 @@ class CouplingEngine:
         res_times_s, res_Q = self.resampler.resample(orig_times_s, orig_Q, self.target_dt_s)
 
         # Mass conservation check
-        mass_err = self.resampler.check_mass_conservation(
-            orig_times_s, orig_Q, res_times_s, res_Q
-        )
+        mass_err = self.resampler.check_mass_conservation(orig_times_s, orig_Q, res_times_s, res_Q)
 
         if mass_err > self.mass_tolerance:
             raise CouplingValidationError(
-                f"Mass conservation error {mass_err*100:.1f}% exceeds "
-                f"tolerance {self.mass_tolerance*100:.1f}%"
+                f"Mass conservation error {mass_err * 100:.1f}% exceeds tolerance {self.mass_tolerance * 100:.1f}%"
             )
 
         # Write boundary files
-        tim_path = self.converter.to_tim_file(
-            res_times_s, res_Q, coupling_dir / "discharge_boundary.tim"
-        )
-        ext_block = self.converter.to_ext_block(
-            "upstream_breach", "discharge_boundary.tim", "upstream_boundary.pli"
-        )
+        tim_path = self.converter.to_tim_file(res_times_s, res_Q, coupling_dir / "discharge_boundary.tim")
+        ext_block = self.converter.to_ext_block("upstream_breach", "discharge_boundary.tim", "upstream_boundary.pli")
         ext_path = coupling_dir / "boundary.ext"
         ext_path.write_text(ext_block)
 

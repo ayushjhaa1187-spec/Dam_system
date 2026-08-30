@@ -2,6 +2,7 @@
 Unit tests for FloodLab scientific data integrity, numerical guards, unit conversions,
 CSI comparison logic, mass conservation, uncertainty intervals, and provenance propagation.
 """
+
 import numpy as np
 import pytest
 
@@ -155,9 +156,7 @@ class TestMassAndHydrographIntegrity:
     def test_mass_conservation_volume_check(self):
         times = [0.0, 1.0, 2.0]
         flows = [0.0, 1000.0, 0.0]  # Integrated vol = 0.5*2*3600*1000 = 3.6e6 m3
-        valid, vol, err = validate_hydrograph_integrity(
-            times, flows, expected_volume_m3=3.6e6, mass_tolerance=0.05
-        )
+        valid, vol, err = validate_hydrograph_integrity(times, flows, expected_volume_m3=3.6e6, mass_tolerance=0.05)
         assert valid is True
         assert vol == pytest.approx(3.6e6, rel=1e-3)
 

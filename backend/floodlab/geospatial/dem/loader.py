@@ -1,6 +1,7 @@
 """
 DEM Loader: loads real GeoTIFF or synthesises realistic Himalayan terrain.
 """
+
 from pathlib import Path
 from typing import Any, Dict, Tuple
 import numpy as np
@@ -13,6 +14,7 @@ class DEMLoader:
         """Load GeoTIFF with rasterio or tifffile fallback."""
         try:
             import rasterio
+
             with rasterio.open(path) as src:
                 arr = src.read(1)
                 meta = {

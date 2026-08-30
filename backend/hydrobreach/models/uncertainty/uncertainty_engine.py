@@ -20,8 +20,12 @@ from hydrobreach.data.preset_scenarios import get_preset_by_id
 class UncertaintyInput(BaseModel):
     preset_id: str = Field(default="tehri_dam_bhagirathi")
     ensemble_size: int = Field(default=20, ge=5, le=50, description="Number of Monte Carlo perturbation runs")
-    variation_breach_width_pct: float = Field(default=25.0, description="± percentage variation in average breach width")
-    variation_formation_time_pct: float = Field(default=30.0, description="± percentage variation in breach formation time")
+    variation_breach_width_pct: float = Field(
+        default=25.0, description="± percentage variation in average breach width"
+    )
+    variation_formation_time_pct: float = Field(
+        default=30.0, description="± percentage variation in breach formation time"
+    )
     variation_reservoir_level_m: float = Field(default=5.0, description="± variation in reservoir water head (m)")
     variation_manning_n_pct: float = Field(default=20.0, description="± percentage variation in Manning's n roughness")
 
@@ -101,7 +105,7 @@ class UncertaintyEngine:
                 reservoir_volume_m3=base_v,
                 hydraulic_head_m=perturbed_head,
                 crest_length_m=base_crest * w_factor,
-                breach_mode=preset.get("breach_mode", "overtopping")
+                breach_mode=preset.get("breach_mode", "overtopping"),
             )
 
             b_res = BreachMechanicsEngine.evaluate(b_inp, model_type="froehlich")
@@ -145,20 +149,22 @@ class UncertaintyEngine:
             med_d = float(np.median(deps))
             prob_inundated = float(np.sum(deps > 0.5) / len(deps)) * 100.0
 
-            station_unc_list.append(StationUncertainty(
-                station_id=sid,
-                station_name=st.get("name", sid),
-                chainage_km=st.get("chainage_km", 0.0),
-                arrival_time_p5_min=round(p5_arr, 1),
-                arrival_time_p10_min=round(p10_arr, 1),
-                arrival_time_p50_min=round(p50_arr, 1),
-                arrival_time_p90_min=round(p90_arr, 1),
-                arrival_time_p95_min=round(p95_arr, 1),
-                max_depth_min_m=round(min_d, 1),
-                max_depth_max_m=round(max_d, 1),
-                max_depth_median_m=round(med_d, 1),
-                inundation_probability_pct=round(prob_inundated, 1)
-            ))
+            station_unc_list.append(
+                StationUncertainty(
+                    station_id=sid,
+                    station_name=st.get("name", sid),
+                    chainage_km=st.get("chainage_km", 0.0),
+                    arrival_time_p5_min=round(p5_arr, 1),
+                    arrival_time_p10_min=round(p10_arr, 1),
+                    arrival_time_p50_min=round(p50_arr, 1),
+                    arrival_time_p90_min=round(p90_arr, 1),
+                    arrival_time_p95_min=round(p95_arr, 1),
+                    max_depth_min_m=round(min_d, 1),
+                    max_depth_max_m=round(max_d, 1),
+                    max_depth_median_m=round(med_d, 1),
+                    inundation_probability_pct=round(prob_inundated, 1),
+                )
+            )
 
         def _safe_corr(x: list, y: list) -> float:
             if len(x) < 2 or np.std(x) <= 1e-9 or np.std(y) <= 1e-9:
@@ -184,12 +190,11 @@ class UncertaintyEngine:
         for rank, item in enumerate(sens_list, 1):
             c_val = round(item["corr"], 3)
             impact = "HIGH" if c_val > 0.6 else ("MEDIUM" if c_val > 0.3 else "LOW")
-            rankings.append(SensitivityRankItem(
-                parameter=item["param"],
-                correlation_coefficient=c_val,
-                sensitivity_rank=rank,
-                impact_level=impact
-            ))
+            rankings.append(
+                SensitivityRankItem(
+                    parameter=item["param"], correlation_coefficient=c_val, sensitivity_rank=rank, impact_level=impact
+                )
+            )
 
         return UncertaintyResult(
             preset_id=inp.preset_id,
@@ -201,6 +206,6 @@ class UncertaintyEngine:
                 "max_peak_flow_m3s": round(float(np.max(ensemble_peak_flows)), 1),
                 "mean_peak_flow_m3s": round(float(np.mean(ensemble_peak_flows)), 1),
                 "std_peak_flow_m3s": round(float(np.std(ensemble_peak_flows)), 1),
-                "data_provenance": "MODEL ESTIMATE (Monte Carlo Uncertainty Ensemble)"
-            }
+                "data_provenance": "MODEL ESTIMATE (Monte Carlo Uncertainty Ensemble)",
+            },
         )

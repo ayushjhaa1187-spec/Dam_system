@@ -1,6 +1,7 @@
 """
 Scenario domain model.
 """
+
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 from floodlab.domain.provenance import ProvenanceRecord

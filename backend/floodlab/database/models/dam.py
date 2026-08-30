@@ -1,6 +1,7 @@
 """
 Dam ORM model.
 """
+
 from datetime import datetime, timezone
 import uuid
 from sqlalchemy import Column, String, Float, Text, DateTime

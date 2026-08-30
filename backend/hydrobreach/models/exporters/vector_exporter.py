@@ -94,70 +94,146 @@ class GeospatialExporter:
         features = []
 
         # 1. Dam Axis Point Feature
-        features.append({
-            "type": "Feature",
-            "properties": {
-                "name": f"{scenario_name} - Dam Axis",
-                "feature_type": "Dam / Breach Origin",
-                "latitude": dam_lat,
-                "longitude": dam_lon,
-                "dam_height_m": 260.5,
-                "structure": "Earth & Rockfill Embankment",
-                "river": "Bhagirathi River",
-                "run_id": r_id,
-                "crs": "EPSG:4326",
-                "units": "meters",
-                "timestamp": ts,
-                "disclaimer": PROTOTYPE_DISCLAIMER,
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [round(dam_lon, 5), round(dam_lat, 5)],
-            },
-        })
-
-        # 2. Key Monitoring Stations along River Reach
-        stations = [
-            {"name": "Tehri Dam Axis (0 km)", "coords": [78.4810, 30.3780], "depth_m": 68.5, "arr_min": 0.0, "vel_ms": 22.4, "hr": 223.0},
-            {"name": "Koteshwar Dam (22 km)", "coords": [78.5040, 30.2830], "depth_m": 42.0, "arr_min": 32.0, "vel_ms": 18.2, "hr": 165.0},
-            {"name": "Devprayag Confluence (42 km)", "coords": [78.5980, 30.1460], "depth_m": 28.5, "arr_min": 68.0, "vel_ms": 14.5, "hr": 110.0},
-            {"name": "Shivpuri Gorge (62 km)", "coords": [78.3960, 30.1130], "depth_m": 22.0, "arr_min": 92.0, "vel_ms": 11.8, "hr": 78.0},
-            {"name": "Rishikesh Laxman Jhula (78 km)", "coords": [78.2670, 30.0860], "depth_m": 15.2, "arr_min": 118.0, "vel_ms": 9.2, "hr": 48.0},
-            {"name": "Haridwar Har Ki Pauri (100 km)", "coords": [78.1640, 29.9450], "depth_m": 9.4, "arr_min": 175.0, "vel_ms": 6.5, "hr": 24.0},
-        ]
-
-        for st in stations:
-            features.append({
+        features.append(
+            {
                 "type": "Feature",
                 "properties": {
-                    "station_name": st["name"],
-                    "feature_type": "Hydrodynamic Monitoring Station",
-                    "peak_water_depth_m": st["depth_m"],
-                    "surge_arrival_time_min": st["arr_min"],
-                    "peak_velocity_ms": st["vel_ms"],
-                    "hazard_rating": st["hr"],
-                    "units": {"depth": "m", "time": "min", "velocity": "m/s"},
+                    "name": f"{scenario_name} - Dam Axis",
+                    "feature_type": "Dam / Breach Origin",
+                    "latitude": dam_lat,
+                    "longitude": dam_lon,
+                    "dam_height_m": 260.5,
+                    "structure": "Earth & Rockfill Embankment",
+                    "river": "Bhagirathi River",
                     "run_id": r_id,
                     "crs": "EPSG:4326",
+                    "units": "meters",
+                    "timestamp": ts,
                     "disclaimer": PROTOTYPE_DISCLAIMER,
                 },
                 "geometry": {
                     "type": "Point",
-                    "coordinates": st["coords"],
+                    "coordinates": [round(dam_lon, 5), round(dam_lat, 5)],
                 },
-            })
+            }
+        )
+
+        # 2. Key Monitoring Stations along River Reach
+        stations = [
+            {
+                "name": "Tehri Dam Axis (0 km)",
+                "coords": [78.4810, 30.3780],
+                "depth_m": 68.5,
+                "arr_min": 0.0,
+                "vel_ms": 22.4,
+                "hr": 223.0,
+            },
+            {
+                "name": "Koteshwar Dam (22 km)",
+                "coords": [78.5040, 30.2830],
+                "depth_m": 42.0,
+                "arr_min": 32.0,
+                "vel_ms": 18.2,
+                "hr": 165.0,
+            },
+            {
+                "name": "Devprayag Confluence (42 km)",
+                "coords": [78.5980, 30.1460],
+                "depth_m": 28.5,
+                "arr_min": 68.0,
+                "vel_ms": 14.5,
+                "hr": 110.0,
+            },
+            {
+                "name": "Shivpuri Gorge (62 km)",
+                "coords": [78.3960, 30.1130],
+                "depth_m": 22.0,
+                "arr_min": 92.0,
+                "vel_ms": 11.8,
+                "hr": 78.0,
+            },
+            {
+                "name": "Rishikesh Laxman Jhula (78 km)",
+                "coords": [78.2670, 30.0860],
+                "depth_m": 15.2,
+                "arr_min": 118.0,
+                "vel_ms": 9.2,
+                "hr": 48.0,
+            },
+            {
+                "name": "Haridwar Har Ki Pauri (100 km)",
+                "coords": [78.1640, 29.9450],
+                "depth_m": 9.4,
+                "arr_min": 175.0,
+                "vel_ms": 6.5,
+                "hr": 24.0,
+            },
+        ]
+
+        for st in stations:
+            features.append(
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "station_name": st["name"],
+                        "feature_type": "Hydrodynamic Monitoring Station",
+                        "peak_water_depth_m": st["depth_m"],
+                        "surge_arrival_time_min": st["arr_min"],
+                        "peak_velocity_ms": st["vel_ms"],
+                        "hazard_rating": st["hr"],
+                        "units": {"depth": "m", "time": "min", "velocity": "m/s"},
+                        "run_id": r_id,
+                        "crs": "EPSG:4326",
+                        "disclaimer": PROTOTYPE_DISCLAIMER,
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": st["coords"],
+                    },
+                }
+            )
 
         # 3. Authentic Hazard Zone Polygons along Bhagirathi path
         path = TEHRI_BHAGIRATHI_RIVER_PATH
 
         zones_meta = [
-            {"name": "RED ZONE: Extreme Hazard / Immediate Evacuation", "start_idx": 0, "end_idx": 7, "width_km": 0.6, "color": "#ef4444", "hazard": "EXTREME", "lead_time": "< 45 min", "depth_range_m": "30–70m", "velocity_range_ms": "14–24m/s"},
-            {"name": "ORANGE ZONE: High Hazard / Shelter Relocation", "start_idx": 6, "end_idx": 15, "width_km": 1.1, "color": "#f97316", "hazard": "HIGH", "lead_time": "45 - 120 min", "depth_range_m": "15–30m", "velocity_range_ms": "8–14m/s"},
-            {"name": "YELLOW ZONE: Moderate Hazard / Alluvial Floodplain", "start_idx": 14, "end_idx": len(path) - 1, "width_km": 2.2, "color": "#eab308", "hazard": "MODERATE", "lead_time": "120 - 240 min", "depth_range_m": "3–15m", "velocity_range_ms": "3–8m/s"},
+            {
+                "name": "RED ZONE: Extreme Hazard / Immediate Evacuation",
+                "start_idx": 0,
+                "end_idx": 7,
+                "width_km": 0.6,
+                "color": "#ef4444",
+                "hazard": "EXTREME",
+                "lead_time": "< 45 min",
+                "depth_range_m": "30–70m",
+                "velocity_range_ms": "14–24m/s",
+            },
+            {
+                "name": "ORANGE ZONE: High Hazard / Shelter Relocation",
+                "start_idx": 6,
+                "end_idx": 15,
+                "width_km": 1.1,
+                "color": "#f97316",
+                "hazard": "HIGH",
+                "lead_time": "45 - 120 min",
+                "depth_range_m": "15–30m",
+                "velocity_range_ms": "8–14m/s",
+            },
+            {
+                "name": "YELLOW ZONE: Moderate Hazard / Alluvial Floodplain",
+                "start_idx": 14,
+                "end_idx": len(path) - 1,
+                "width_km": 2.2,
+                "color": "#eab308",
+                "hazard": "MODERATE",
+                "lead_time": "120 - 240 min",
+                "depth_range_m": "3–15m",
+                "velocity_range_ms": "3–8m/s",
+            },
         ]
 
         for z in zones_meta:
-            sub_path = path[z["start_idx"]:z["end_idx"] + 1]
+            sub_path = path[z["start_idx"] : z["end_idx"] + 1]
             left_bank = []
             right_bank = []
             width_deg = z["width_km"] / 111.0
@@ -180,27 +256,29 @@ class GeospatialExporter:
 
             poly_coords = left_bank + right_bank[::-1] + [left_bank[0]]
 
-            features.append({
-                "type": "Feature",
-                "properties": {
-                    "scenario": scenario_name,
-                    "zone_name": z["name"],
-                    "hazard_rating": z["hazard"],
-                    "lead_time": z["lead_time"],
-                    "depth_range_m": z["depth_range_m"],
-                    "velocity_range_ms": z["velocity_range_ms"],
-                    "river_basin": "Bhagirathi - Ganga Corridor",
-                    "color": z["color"],
-                    "fill_opacity": 0.55,
-                    "run_id": r_id,
-                    "crs": "EPSG:4326",
-                    "disclaimer": PROTOTYPE_DISCLAIMER,
-                },
-                "geometry": {
-                    "type": "Polygon",
-                    "coordinates": [poly_coords],
-                },
-            })
+            features.append(
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "scenario": scenario_name,
+                        "zone_name": z["name"],
+                        "hazard_rating": z["hazard"],
+                        "lead_time": z["lead_time"],
+                        "depth_range_m": z["depth_range_m"],
+                        "velocity_range_ms": z["velocity_range_ms"],
+                        "river_basin": "Bhagirathi - Ganga Corridor",
+                        "color": z["color"],
+                        "fill_opacity": 0.55,
+                        "run_id": r_id,
+                        "crs": "EPSG:4326",
+                        "disclaimer": PROTOTYPE_DISCLAIMER,
+                    },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [poly_coords],
+                    },
+                }
+            )
 
         return {
             "type": "FeatureCollection",
@@ -241,33 +319,33 @@ class GeospatialExporter:
         kml_lines = [
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<kml xmlns="http://www.opengis.net/kml/2.2">',
-            '  <Document>',
-            f'    <name>{name}</name>',
-            f'    <description><![CDATA[<b>HydroBreach Simulation Export</b><br/>'
-            f'<b>Run ID:</b> {run_id}<br/>'
-            f'<b>CRS:</b> EPSG:4326 (WGS84)<br/>'
-            f'<b>Model Used:</b> {model}<br/>'
-            f'<b>Timestamp:</b> {ts}<br/>'
-            f'<b>Disclaimer:</b> {PROTOTYPE_DISCLAIMER}]]></description>',
-            '    <!-- Styles -->',
+            "  <Document>",
+            f"    <name>{name}</name>",
+            f"    <description><![CDATA[<b>HydroBreach Simulation Export</b><br/>"
+            f"<b>Run ID:</b> {run_id}<br/>"
+            f"<b>CRS:</b> EPSG:4326 (WGS84)<br/>"
+            f"<b>Model Used:</b> {model}<br/>"
+            f"<b>Timestamp:</b> {ts}<br/>"
+            f"<b>Disclaimer:</b> {PROTOTYPE_DISCLAIMER}]]></description>",
+            "    <!-- Styles -->",
             '    <Style id="redZoneStyle">',
-            '      <LineStyle><color>ff0000ff</color><width>2</width></LineStyle>',
-            '      <PolyStyle><color>7f0000ff</color><fill>1</fill><outline>1</outline></PolyStyle>',
-            '    </Style>',
+            "      <LineStyle><color>ff0000ff</color><width>2</width></LineStyle>",
+            "      <PolyStyle><color>7f0000ff</color><fill>1</fill><outline>1</outline></PolyStyle>",
+            "    </Style>",
             '    <Style id="orangeZoneStyle">',
-            '      <LineStyle><color>ff00a5ff</color><width>2</width></LineStyle>',
-            '      <PolyStyle><color>7f00a5ff</color><fill>1</fill><outline>1</outline></PolyStyle>',
-            '    </Style>',
+            "      <LineStyle><color>ff00a5ff</color><width>2</width></LineStyle>",
+            "      <PolyStyle><color>7f00a5ff</color><fill>1</fill><outline>1</outline></PolyStyle>",
+            "    </Style>",
             '    <Style id="yellowZoneStyle">',
-            '      <LineStyle><color>ff00ffff</color><width>2</width></LineStyle>',
-            '      <PolyStyle><color>7f00ffff</color><fill>1</fill><outline>1</outline></PolyStyle>',
-            '    </Style>',
+            "      <LineStyle><color>ff00ffff</color><width>2</width></LineStyle>",
+            "      <PolyStyle><color>7f00ffff</color><fill>1</fill><outline>1</outline></PolyStyle>",
+            "    </Style>",
             '    <Style id="damPointStyle">',
-            '      <IconStyle><scale>1.3</scale><Icon><href>http://maps.google.com/mapfiles/kml/shapes/caution.png</href></Icon></IconStyle>',
-            '    </Style>',
+            "      <IconStyle><scale>1.3</scale><Icon><href>http://maps.google.com/mapfiles/kml/shapes/caution.png</href></Icon></IconStyle>",
+            "    </Style>",
             '    <Style id="gaugePointStyle">',
-            '      <IconStyle><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png</href></Icon></IconStyle>',
-            '    </Style>',
+            "      <IconStyle><scale>1.0</scale><Icon><href>http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png</href></Icon></IconStyle>",
+            "    </Style>",
         ]
 
         for feat in features:
@@ -279,19 +357,21 @@ class GeospatialExporter:
             if geom.get("type") == "Point":
                 coords = geom.get("coordinates", [0, 0])
                 style_url = "#damPointStyle" if "Dam" in f_name else "#gaugePointStyle"
-                kml_lines.extend([
-                    '    <Placemark>',
-                    f'      <name>{f_name}</name>',
-                    f'      <description><![CDATA[<b>Peak Depth:</b> {f_props.get("peak_water_depth_m", "N/A")} m<br/>'
-                    f'<b>Arrival Time:</b> {f_props.get("surge_arrival_time_min", "0")} min<br/>'
-                    f'<b>Peak Velocity:</b> {f_props.get("peak_velocity_ms", "N/A")} m/s<br/>'
-                    f'<b>Run ID:</b> {run_id}]]></description>',
-                    f'      <styleUrl>{style_url}</styleUrl>',
-                    '      <Point>',
-                    f'        <coordinates>{coords[0]},{coords[1]},15</coordinates>',
-                    '      </Point>',
-                    '    </Placemark>',
-                ])
+                kml_lines.extend(
+                    [
+                        "    <Placemark>",
+                        f"      <name>{f_name}</name>",
+                        f"      <description><![CDATA[<b>Peak Depth:</b> {f_props.get('peak_water_depth_m', 'N/A')} m<br/>"
+                        f"<b>Arrival Time:</b> {f_props.get('surge_arrival_time_min', '0')} min<br/>"
+                        f"<b>Peak Velocity:</b> {f_props.get('peak_velocity_ms', 'N/A')} m/s<br/>"
+                        f"<b>Run ID:</b> {run_id}]]></description>",
+                        f"      <styleUrl>{style_url}</styleUrl>",
+                        "      <Point>",
+                        f"        <coordinates>{coords[0]},{coords[1]},15</coordinates>",
+                        "      </Point>",
+                        "    </Placemark>",
+                    ]
+                )
             elif geom.get("type") == "Polygon":
                 style_url = (
                     "#redZoneStyle"
@@ -301,32 +381,36 @@ class GeospatialExporter:
                 coords_list = geom.get("coordinates", [[]])[0]
                 coord_str = " ".join([f"{c[0]},{c[1]},30" for c in coords_list])
 
-                kml_lines.extend([
-                    '    <Placemark>',
-                    f'      <name>{f_name}</name>',
-                    f'      <description><![CDATA[<b>Hazard Level:</b> {f_hazard}<br/>'
-                    f'<b>Evacuation Lead Time:</b> {f_props.get("lead_time", "N/A")}<br/>'
-                    f'<b>Depth Range:</b> {f_props.get("depth_range_m", "N/A")}<br/>'
-                    f'<b>Velocity Range:</b> {f_props.get("velocity_range_ms", "N/A")}<br/>'
-                    f'<b>River Corridor:</b> Bhagirathi to Ganga (100km)<br/>'
-                    f'<b>Run ID:</b> {run_id}]]></description>',
-                    f'      <styleUrl>{style_url}</styleUrl>',
-                    '      <Polygon>',
-                    '        <extrude>1</extrude>',
-                    '        <altitudeMode>relativeToGround</altitudeMode>',
-                    '        <outerBoundaryIs>',
-                    '          <LinearRing>',
-                    f'            <coordinates>{coord_str}</coordinates>',
-                    '          </LinearRing>',
-                    '        </outerBoundaryIs>',
-                    '      </Polygon>',
-                    '    </Placemark>',
-                ])
+                kml_lines.extend(
+                    [
+                        "    <Placemark>",
+                        f"      <name>{f_name}</name>",
+                        f"      <description><![CDATA[<b>Hazard Level:</b> {f_hazard}<br/>"
+                        f"<b>Evacuation Lead Time:</b> {f_props.get('lead_time', 'N/A')}<br/>"
+                        f"<b>Depth Range:</b> {f_props.get('depth_range_m', 'N/A')}<br/>"
+                        f"<b>Velocity Range:</b> {f_props.get('velocity_range_ms', 'N/A')}<br/>"
+                        f"<b>River Corridor:</b> Bhagirathi to Ganga (100km)<br/>"
+                        f"<b>Run ID:</b> {run_id}]]></description>",
+                        f"      <styleUrl>{style_url}</styleUrl>",
+                        "      <Polygon>",
+                        "        <extrude>1</extrude>",
+                        "        <altitudeMode>relativeToGround</altitudeMode>",
+                        "        <outerBoundaryIs>",
+                        "          <LinearRing>",
+                        f"            <coordinates>{coord_str}</coordinates>",
+                        "          </LinearRing>",
+                        "        </outerBoundaryIs>",
+                        "      </Polygon>",
+                        "    </Placemark>",
+                    ]
+                )
 
-        kml_lines.extend([
-            '  </Document>',
-            '</kml>',
-        ])
+        kml_lines.extend(
+            [
+                "  </Document>",
+                "</kml>",
+            ]
+        )
 
         return "\n".join(kml_lines)
 
@@ -471,7 +555,9 @@ class GeospatialExporter:
                 # UK DEFRA / Australian Hazard Rating: HR = d * (v + 0.5) + DF
                 decay_factor = 1.0 - (y_indices / float(height)) * 0.85
                 d = np.maximum(0.0, (dam_height * 0.28) * decay_factor * (1.0 - (dist_from_channel / 12.0) ** 2))
-                v = np.maximum(0.0, 24.0 * (1.0 - (y_indices / float(height)) * 0.75) * (1.0 - (dist_from_channel / 10.0) ** 2))
+                v = np.maximum(
+                    0.0, 24.0 * (1.0 - (y_indices / float(height)) * 0.75) * (1.0 - (dist_from_channel / 10.0) ** 2)
+                )
                 hr = d * (v + 0.5)
                 arr = hr.astype(np.float32)
                 units = "Hazard Rating Index (d*(v+0.5))"
@@ -706,23 +792,30 @@ class GeospatialExporter:
             ["Reservoir Storage (Vw)", f"{vol_bcm:.2f}", "Billion m³ (BCM)", "Bathymetry Elevation-Capacity Curve"],
             ["Peak Outflow (Qp)", f"{q_peak:,.0f}", "m³/s", breach_data.get("model_used", "Froehlich 2008")],
             ["Breach Formation Time (tf)", f"{t_f:.2f}", "hours", "Froehlich (2008) Regression"],
-            ["Average Breach Width (Bavg)", f"{breach_data.get('avg_breach_width_m', 248.5):.1f}", "meters", "Empirical Embankment Breach Model"],
+            [
+                "Average Breach Width (Bavg)",
+                f"{breach_data.get('avg_breach_width_m', 248.5):.1f}",
+                "meters",
+                "Empirical Embankment Breach Model",
+            ],
             ["Peak Surge Velocity (0-2 km)", "22.4", "m/s", "DualSPHysics 3D Particle Solver"],
             ["Far-Field Flood Area (100 km)", "26.5", "km²", "Delft3D Flexible Mesh 2D SWE"],
         ]
         t1 = Table(breach_rows, colWidths=[1.8 * inch, 1.4 * inch, 1.4 * inch, 2.4 * inch])
         t1.setStyle(
-            TableStyle([
-                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0f172a")),
-                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                ("FONTSIZE", (0, 0), (-1, 0), 8.5),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-                ("TOPPADDING", (0, 0), (-1, -1), 4),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
-                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.HexColor("#f8fafc"), colors.white]),
-                ("FONTSIZE", (0, 1), (-1, -1), 8),
-            ])
+            TableStyle(
+                [
+                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0f172a")),
+                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                    ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                    ("FONTSIZE", (0, 0), (-1, 0), 8.5),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                    ("TOPPADDING", (0, 0), (-1, -1), 4),
+                    ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
+                    ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.HexColor("#f8fafc"), colors.white]),
+                    ("FONTSIZE", (0, 1), (-1, -1), 8),
+                ]
+            )
         )
         story.append(t1)
         story.append(Spacer(1, 12))
@@ -734,26 +827,58 @@ class GeospatialExporter:
 
         exp_rows = [
             ["Impact Category", "Estimated Metric", "Operational Unit", "HADR Strategic Action"],
-            ["Population at Risk", f"{exp.get('population_at_risk', 284000):,}", "Persons", "Forced / Pre-emptive Evacuation"],
-            ["Displaced Persons", f"{exp.get('displaced_persons', 198000):,}", "Persons", "Relief Shelter Accommodation"],
-            ["Destroyed Structures", f"{exp.get('destroyed_structures', 24500):,}", "Buildings", "Search & Rescue (USAR) Priority"],
-            ["Submerged Structures", f"{exp.get('submerged_structures', 17500):,}", "Buildings", "Utility Cutoff & Pumping"],
-            ["Agricultural Inundation", f"{exp.get('inundated_agricultural_ha', 4850.0):,.1f}", "Hectares", "Crop Loss Relief Assessment"],
-            ["Estimated Economic Loss", f"{exp.get('total_economic_loss_crores_inr', 4820.0):,.1f}", "INR Crores", "SDRF / NDRF Disaster Fund"],
+            [
+                "Population at Risk",
+                f"{exp.get('population_at_risk', 284000):,}",
+                "Persons",
+                "Forced / Pre-emptive Evacuation",
+            ],
+            [
+                "Displaced Persons",
+                f"{exp.get('displaced_persons', 198000):,}",
+                "Persons",
+                "Relief Shelter Accommodation",
+            ],
+            [
+                "Destroyed Structures",
+                f"{exp.get('destroyed_structures', 24500):,}",
+                "Buildings",
+                "Search & Rescue (USAR) Priority",
+            ],
+            [
+                "Submerged Structures",
+                f"{exp.get('submerged_structures', 17500):,}",
+                "Buildings",
+                "Utility Cutoff & Pumping",
+            ],
+            [
+                "Agricultural Inundation",
+                f"{exp.get('inundated_agricultural_ha', 4850.0):,.1f}",
+                "Hectares",
+                "Crop Loss Relief Assessment",
+            ],
+            [
+                "Estimated Economic Loss",
+                f"{exp.get('total_economic_loss_crores_inr', 4820.0):,.1f}",
+                "INR Crores",
+                "SDRF / NDRF Disaster Fund",
+            ],
         ]
         t2 = Table(exp_rows, colWidths=[1.8 * inch, 1.4 * inch, 1.4 * inch, 2.4 * inch])
         t2.setStyle(
-            TableStyle([
-                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0f172a")),
-                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                ("FONTSIZE", (0, 0), (-1, 0), 8.5),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-                ("TOPPADDING", (0, 0), (-1, -1), 4),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
-                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.HexColor("#f8fafc"), colors.white]),
-                ("FONTSIZE", (0, 1), (-1, -1), 8),
-            ])
+            TableStyle(
+                [
+                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0f172a")),
+                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                    ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                    ("FONTSIZE", (0, 0), (-1, 0), 8.5),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                    ("TOPPADDING", (0, 0), (-1, -1), 4),
+                    ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
+                    ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.HexColor("#f8fafc"), colors.white]),
+                    ("FONTSIZE", (0, 1), (-1, -1), 8),
+                ]
+            )
         )
         story.append(t2)
         story.append(Spacer(1, 12))
@@ -762,25 +887,52 @@ class GeospatialExporter:
         story.append(Paragraph("3. NDRF / SDRF Tactical Logistics Resource Allocation", h2_style))
         hadr_rows = [
             ["Logistics Resource", "Required Allocation", "Deployment Timeline", "Primary Staging Location"],
-            ["NDRF & SDRF Battalions", f"{res.get('ndrf_sdrf_battalions', 8)} Battalions", "T+30 min to T+2 hrs", "Rishikesh, Devprayag & Haridwar"],
-            ["Inflatable Motor Rescue Boats", f"{res.get('inflatable_rescue_boats', 120)} Zodiacs", "Immediate", "Koteshwar & Muni Ki Reti Ghats"],
-            ["Emergency Relief Shelters", f"{res.get('emergency_relief_shelters', 45)} Hubs", "Pre-positioned", "High Ground (> 720m MSL)"],
-            ["Food & Drinking Water Packets", f"{res.get('food_water_packets_per_day', 594000):,} / day", "Daily Ongoing", "District Logistics Depots"],
-            ["IAF Air Evacuation Helipads", f"{res.get('air_evacuation_helipads_needed', 6)} Helipads", "Immediate Clearance", "Jolly Grant & Tehri Airstrip"],
+            [
+                "NDRF & SDRF Battalions",
+                f"{res.get('ndrf_sdrf_battalions', 8)} Battalions",
+                "T+30 min to T+2 hrs",
+                "Rishikesh, Devprayag & Haridwar",
+            ],
+            [
+                "Inflatable Motor Rescue Boats",
+                f"{res.get('inflatable_rescue_boats', 120)} Zodiacs",
+                "Immediate",
+                "Koteshwar & Muni Ki Reti Ghats",
+            ],
+            [
+                "Emergency Relief Shelters",
+                f"{res.get('emergency_relief_shelters', 45)} Hubs",
+                "Pre-positioned",
+                "High Ground (> 720m MSL)",
+            ],
+            [
+                "Food & Drinking Water Packets",
+                f"{res.get('food_water_packets_per_day', 594000):,} / day",
+                "Daily Ongoing",
+                "District Logistics Depots",
+            ],
+            [
+                "IAF Air Evacuation Helipads",
+                f"{res.get('air_evacuation_helipads_needed', 6)} Helipads",
+                "Immediate Clearance",
+                "Jolly Grant & Tehri Airstrip",
+            ],
         ]
         t3 = Table(hadr_rows, colWidths=[1.8 * inch, 1.4 * inch, 1.4 * inch, 2.4 * inch])
         t3.setStyle(
-            TableStyle([
-                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0f172a")),
-                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-                ("FONTSIZE", (0, 0), (-1, 0), 8.5),
-                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-                ("TOPPADDING", (0, 0), (-1, -1), 4),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
-                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.HexColor("#f8fafc"), colors.white]),
-                ("FONTSIZE", (0, 1), (-1, -1), 8),
-            ])
+            TableStyle(
+                [
+                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#0f172a")),
+                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                    ("FONTSIZE", (0, 0), (-1, 0), 8.5),
+                    ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                    ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                    ("TOPPADDING", (0, 0), (-1, -1), 4),
+                    ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
+                    ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.HexColor("#f8fafc"), colors.white]),
+                    ("FONTSIZE", (0, 1), (-1, -1), 8),
+                ]
+            )
         )
         story.append(t3)
         story.append(Spacer(1, 14))
@@ -799,11 +951,13 @@ class GeospatialExporter:
         ]
         t_disc = Table(disclaimer_box, colWidths=[7.0 * inch])
         t_disc.setStyle(
-            TableStyle([
-                ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#fee2e2")),
-                ("BOX", (0, 0), (-1, -1), 1.0, colors.HexColor("#ef4444")),
-                ("PADDING", (0, 0), (-1, -1), 8),
-            ])
+            TableStyle(
+                [
+                    ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#fee2e2")),
+                    ("BOX", (0, 0), (-1, -1), 1.0, colors.HexColor("#ef4444")),
+                    ("PADDING", (0, 0), (-1, -1), 8),
+                ]
+            )
         )
         story.append(t_disc)
 

@@ -25,7 +25,7 @@ INDIAN_PRESET_SCENARIOS: List[Dict[str, Any]] = [
         "reach_length_km": 100.0,  # From Tehri down to Haridwar
         "valley_width_m": 450.0,
         "bed_slope": 0.0055,  # 630m to 290m over 100km
-        "manning_n": 0.042,   # Steep boulder gorge in Bhagirathi, transitioning to gravel/alluvial at Haridwar
+        "manning_n": 0.042,  # Steep boulder gorge in Bhagirathi, transitioning to gravel/alluvial at Haridwar
         "valley_type": "mountain_gorge",
         "historical_event": False,
         "description": "Comprehensive simulation of extreme overtopping and progressive piping breach on Tehri Dam (260.5m, highest earth & rockfill dam in India). Outflow flood waves propagate along the Bhagirathi river through Koteshwar Dam, the Devprayag confluence, Rishikesh pilgrim centers, and the densely populated Haridwar plains.",
@@ -56,7 +56,7 @@ INDIAN_PRESET_SCENARIOS: List[Dict[str, Any]] = [
                 "elevation_msl": 570.0,
                 "expected_arrival_min": 0.0,
                 "estimated_peak_depth_m": 68.5,
-                "critical_assets": "Dam Crest, Chute Spillway, Underground Powerhouse"
+                "critical_assets": "Dam Crest, Chute Spillway, Underground Powerhouse",
             },
             {
                 "id": "koteshwar_dam",
@@ -67,7 +67,7 @@ INDIAN_PRESET_SCENARIOS: List[Dict[str, Any]] = [
                 "elevation_msl": 515.0,
                 "expected_arrival_min": 32.0,
                 "estimated_peak_depth_m": 42.0,
-                "critical_assets": "97.5m Concrete Gravity Dam, 400 MW Hydropower Plant"
+                "critical_assets": "97.5m Concrete Gravity Dam, 400 MW Hydropower Plant",
             },
             {
                 "id": "devprayag_confluence",
@@ -78,7 +78,7 @@ INDIAN_PRESET_SCENARIOS: List[Dict[str, Any]] = [
                 "elevation_msl": 460.0,
                 "expected_arrival_min": 68.0,
                 "estimated_peak_depth_m": 28.5,
-                "critical_assets": "Raghunathji Temple Ghats, Sangam Bridges, NH-58 Highway"
+                "critical_assets": "Raghunathji Temple Ghats, Sangam Bridges, NH-58 Highway",
             },
             {
                 "id": "shivpuri_gorge",
@@ -89,7 +89,7 @@ INDIAN_PRESET_SCENARIOS: List[Dict[str, Any]] = [
                 "elevation_msl": 370.0,
                 "expected_arrival_min": 92.0,
                 "estimated_peak_depth_m": 22.0,
-                "critical_assets": "River Rafting Hubs, Eco-tourism Camps, Suspension Footbridges"
+                "critical_assets": "River Rafting Hubs, Eco-tourism Camps, Suspension Footbridges",
             },
             {
                 "id": "rishikesh_town",
@@ -100,7 +100,7 @@ INDIAN_PRESET_SCENARIOS: List[Dict[str, Any]] = [
                 "elevation_msl": 340.0,
                 "expected_arrival_min": 118.0,
                 "estimated_peak_depth_m": 15.2,
-                "critical_assets": "Laxman Jhula, Ram Jhula, Triveni Ghat, AIIMS Rishikesh, Railway Station"
+                "critical_assets": "Laxman Jhula, Ram Jhula, Triveni Ghat, AIIMS Rishikesh, Railway Station",
             },
             {
                 "id": "haridwar_plains",
@@ -111,8 +111,8 @@ INDIAN_PRESET_SCENARIOS: List[Dict[str, Any]] = [
                 "elevation_msl": 290.0,
                 "expected_arrival_min": 175.0,
                 "estimated_peak_depth_m": 9.4,
-                "critical_assets": "Har Ki Pauri Ghats, Bhimgoda Barrage, Upper Ganga Canal Headworks, BHEL Industrial Complex"
-            }
+                "critical_assets": "Har Ki Pauri Ghats, Bhimgoda Barrage, Upper Ganga Canal Headworks, BHEL Industrial Complex",
+            },
         ],
         "district_exposure_profile": {
             "districts_impacted": ["Tehri Garhwal", "Pauri Garhwal", "Dehradun", "Haridwar"],
@@ -121,11 +121,14 @@ INDIAN_PRESET_SCENARIOS: List[Dict[str, Any]] = [
             "critical_infra_count": 48,
             "major_highways": ["NH-58 (Rishikesh-Badrinath)", "NH-94 (Rishikesh-Yamunotri)", "NH-74"],
             "ndrf_response_nodes": [
-                {"battalion": "8th Battalion NDRF (Ghaziabad / Jolly Grant Regional Response Centre)", "response_time_hrs": 1.5},
+                {
+                    "battalion": "8th Battalion NDRF (Ghaziabad / Jolly Grant Regional Response Centre)",
+                    "response_time_hrs": 1.5,
+                },
                 {"battalion": "SDRF Uttarakhand (Jolly Grant Headquarters)", "response_time_hrs": 0.8},
-                {"battalion": "Indian Army Central Command (Raiwala Military Station)", "response_time_hrs": 0.5}
-            ]
-        }
+                {"battalion": "Indian Army Central Command (Raiwala Military Station)", "response_time_hrs": 0.5},
+            ],
+        },
     },
     {
         "id": "rishi_ganga_2021",
@@ -150,8 +153,8 @@ INDIAN_PRESET_SCENARIOS: List[Dict[str, Any]] = [
         "key_impact_locations": [
             {"name": "Raini Village Bailey Bridge", "distance_km": 6.8, "observed_arrival_min": 12.0},
             {"name": "Tapovan Vishnugad HEP Barrage (NTPC)", "distance_km": 15.2, "observed_arrival_min": 26.0},
-            {"name": "Vishnuprayag Confluence", "distance_km": 24.0, "observed_arrival_min": 42.0}
-        ]
+            {"name": "Vishnuprayag Confluence", "distance_km": 24.0, "observed_arrival_min": 42.0},
+        ],
     },
     {
         "id": "bhakra_dam_sutlej",
@@ -176,8 +179,8 @@ INDIAN_PRESET_SCENARIOS: List[Dict[str, Any]] = [
         "key_impact_locations": [
             {"name": "Nangal Barrage & Township", "distance_km": 12.5, "observed_arrival_min": 18.0},
             {"name": "Anandpur Sahib Religious Complex", "distance_km": 28.0, "observed_arrival_min": 45.0},
-            {"name": "Rupnagar (Ropar) Headworks", "distance_km": 54.0, "observed_arrival_min": 92.0}
-        ]
+            {"name": "Rupnagar (Ropar) Headworks", "distance_km": 54.0, "observed_arrival_min": 92.0},
+        ],
     },
     {
         "id": "hirakud_dam_mahanadi",
@@ -202,9 +205,9 @@ INDIAN_PRESET_SCENARIOS: List[Dict[str, Any]] = [
         "key_impact_locations": [
             {"name": "Sambalpur City", "distance_km": 14.0, "observed_arrival_min": 28.0},
             {"name": "Burla Industrial Zone", "distance_km": 8.0, "observed_arrival_min": 16.0},
-            {"name": "Sonepur Floodplain", "distance_km": 45.0, "observed_arrival_min": 105.0}
-        ]
-    }
+            {"name": "Sonepur Floodplain", "distance_km": 45.0, "observed_arrival_min": 105.0},
+        ],
+    },
 ]
 
 

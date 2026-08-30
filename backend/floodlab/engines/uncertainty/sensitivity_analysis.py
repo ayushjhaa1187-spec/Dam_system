@@ -1,6 +1,7 @@
 """
 Sensitivity analysis using Pearson and Spearman correlation.
 """
+
 from __future__ import annotations
 from typing import List
 import math
@@ -28,9 +29,5 @@ class SensitivityAnalyzer:
 
     def rank_parameters(self, param_names: List[str], correlations: List[float]) -> List[dict]:
         """Sort parameters by |correlation| descending."""
-        ranked = sorted(
-            zip(param_names, correlations),
-            key=lambda x: abs(x[1]),
-            reverse=True
-        )
-        return [{"parameter": p, "correlation": c, "rank": i+1} for i, (p, c) in enumerate(ranked)]
+        ranked = sorted(zip(param_names, correlations), key=lambda x: abs(x[1]), reverse=True)
+        return [{"parameter": p, "correlation": c, "rank": i + 1} for i, (p, c) in enumerate(ranked)]

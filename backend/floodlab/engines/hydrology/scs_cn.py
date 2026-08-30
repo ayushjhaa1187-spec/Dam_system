@@ -4,6 +4,7 @@ SCS Curve Number rainfall-runoff method.
 Reference: USDA-SCS National Engineering Handbook, Section 4 (1972).
            NRCS Technical Release 55 (TR-55, 1986).
 """
+
 from __future__ import annotations
 
 

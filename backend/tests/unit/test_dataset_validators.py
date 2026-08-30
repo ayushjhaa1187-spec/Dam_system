@@ -1,6 +1,7 @@
 """
 Unit tests for pre-flight generic scenario dataset validator.
 """
+
 import pytest
 from pathlib import Path
 from floodlab.schemas.generic_scenario import (
@@ -20,6 +21,7 @@ def test_valid_chenab_scenario_validation():
     cfg_path = DATASETS_DIR / "chenab" / "scenario_config.json"
     if cfg_path.exists():
         import json
+
         with open(cfg_path, "r", encoding="utf-8") as f:
             raw = json.load(f)
         cfg = ScenarioConfig(**raw).resolve_paths(base_dir=cfg_path.parent)
@@ -33,6 +35,7 @@ def test_valid_kosi_scenario_validation():
     cfg_path = DATASETS_DIR / "kosi" / "scenario_config.json"
     if cfg_path.exists():
         import json
+
         with open(cfg_path, "r", encoding="utf-8") as f:
             raw = json.load(f)
         cfg = ScenarioConfig(**raw).resolve_paths(base_dir=cfg_path.parent)
@@ -48,7 +51,7 @@ def test_missing_dem_fails_validation():
         inputs=InputsConfig(dem="non_existent_dem.tif"),
         dam=DamConfig(name="Fake Dam", location=[33.15, 75.35], height_m=50.0, storage_volume_mcm=100.0),
         breach=BreachConfig(),
-        run_settings=RunSettingsConfig()
+        run_settings=RunSettingsConfig(),
     )
     report = GenericScenarioValidator.validate(cfg, raise_on_error=False)
     assert report.is_valid is False
@@ -63,9 +66,11 @@ def test_dam_outside_aoi_fails_validation():
         scenario_id="out-of-bounds-dam",
         basin=BasinConfig(name="Chenab Basin", aoi_boundary=str(DATASETS_DIR / "chenab" / "aoi.geojson")),
         inputs=InputsConfig(dem=str(DATASETS_DIR / "chenab" / "dem.tif")),
-        dam=DamConfig(name="Faraway Dam", location=[12.97, 77.59], height_m=50.0, storage_volume_mcm=100.0), # Bangalore coords
+        dam=DamConfig(
+            name="Faraway Dam", location=[12.97, 77.59], height_m=50.0, storage_volume_mcm=100.0
+        ),  # Bangalore coords
         breach=BreachConfig(),
-        run_settings=RunSettingsConfig()
+        run_settings=RunSettingsConfig(),
     )
     report = GenericScenarioValidator.validate(cfg, raise_on_error=False)
     assert report.is_valid is False
@@ -79,7 +84,7 @@ def test_invalid_dam_height_fails():
         inputs=InputsConfig(dem=str(DATASETS_DIR / "chenab" / "dem.tif")),
         dam=DamConfig(name="Neg Dam", location=[33.15, 75.35], height_m=1.0, storage_volume_mcm=100.0),
         breach=BreachConfig(failure_type="invalid_mode"),
-        run_settings=RunSettingsConfig()
+        run_settings=RunSettingsConfig(),
     )
     report = GenericScenarioValidator.validate(cfg, raise_on_error=False)
     assert report.is_valid is False

@@ -71,14 +71,8 @@ class ChatMessage(BaseModel):
 
 class ChatRequest(BaseModel):
     message: str = Field(..., description="User's question")
-    history: Optional[List[ChatMessage]] = Field(
-        default=[],
-        description="Previous conversation turns"
-    )
-    context: Optional[Dict[str, Any]] = Field(
-        default=None,
-        description="Current simulation or app context"
-    )
+    history: Optional[List[ChatMessage]] = Field(default=[], description="Previous conversation turns")
+    context: Optional[Dict[str, Any]] = Field(default=None, description="Current simulation or app context")
 
 
 class ChatResponse(BaseModel):
@@ -87,11 +81,7 @@ class ChatResponse(BaseModel):
     status: str = "success"
 
 
-def _call_gemini_api(
-    user_message: str,
-    history: List[ChatMessage],
-    context: Optional[Dict[str, Any]]
-) -> str:
+def _call_gemini_api(user_message: str, history: List[ChatMessage], context: Optional[Dict[str, Any]]) -> str:
     api_key = DEFAULT_API_KEY
     if not api_key:
         return _fallback_response(user_message, context)
@@ -104,54 +94,24 @@ def _call_gemini_api(
 
     for item in history[-8:]:
         role = "user" if item.role in ["user", "human"] else "model"
-        contents.append({
-            "role": role,
-            "parts": [{"text": item.content}]
-        })
+        contents.append({"role": role, "parts": [{"text": item.content}]})
 
     if not contents:
-        full_user_prompt = (
-            f"[System Context: {augmented_system}]\n\n"
-            f"User Question: {user_message}"
-        )
-        contents.append({
-            "role": "user",
-            "parts": [{"text": full_user_prompt}]
-        })
+        full_user_prompt = f"[System Context: {augmented_system}]\n\nUser Question: {user_message}"
+        contents.append({"role": "user", "parts": [{"text": full_user_prompt}]})
     else:
-        contents.append({
-            "role": "user",
-            "parts": [{"text": user_message}]
-        })
+        contents.append({"role": "user", "parts": [{"text": user_message}]})
 
-    payload = {
-        "contents": contents,
-        "generationConfig": {
-            "temperature": 0.7,
-            "maxOutputTokens": 1024,
-            "topP": 0.95
-        }
-    }
+    payload = {"contents": contents, "generationConfig": {"temperature": 0.7, "maxOutputTokens": 1024, "topP": 0.95}}
 
-    candidate_models = [
-        "gemini-3.6-flash",
-        "gemini-3.7-flash",
-        "gemini-2.5-flash-lite",
-        "gemini-flash-latest"
-    ]
+    candidate_models = ["gemini-3.6-flash", "gemini-3.7-flash", "gemini-2.5-flash-lite", "gemini-flash-latest"]
 
     for model_name in candidate_models:
-        url = (
-            f"https://generativelanguage.googleapis.com/v1beta/models/"
-            f"{model_name}:generateContent"
-        )
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent"
         req = urllib.request.Request(
             url,
             data=json.dumps(payload).encode("utf-8"),
-            headers={
-                "Content-Type": "application/json",
-                "x-goog-api-key": api_key
-            }
+            headers={"Content-Type": "application/json", "x-goog-api-key": api_key},
         )
         try:
             with urllib.request.urlopen(req, timeout=15) as response:
@@ -162,12 +122,7 @@ def _call_gemini_api(
                     if parts and "text" in parts[0]:
                         return parts[0]["text"]
         except urllib.error.HTTPError as e:
-            logger.warning(
-                "Gemini model %s error %s: %s",
-                model_name,
-                e.code,
-                e.read().decode()[:100]
-            )
+            logger.warning("Gemini model %s error %s: %s", model_name, e.code, e.read().decode()[:100])
             continue
         except Exception as e:
             logger.warning("Gemini model %s failed: %s", model_name, e)
@@ -234,10 +189,7 @@ def _fallback_response(user_message: str, context: Optional[Dict[str, Any]]) -> 
             "- **Peak Outflow Discharge**: $Q_p = 0.607 \\cdot V_w^{0.295} \\cdot H_w^{1.24}$ (m³/s)"
         )
     else:
-        curr_dam = (
-            context.get("name", "Indian Dam Scenario")
-            if context else "Indian River & Dam Scenario"
-        )
+        curr_dam = context.get("name", "Indian Dam Scenario") if context else "Indian River & Dam Scenario"
         return (
             f"### 🌊 HydroBot AI Assistant\n\n"
             f"I am active and monitoring **{curr_dam}**.\n\n"
@@ -258,8 +210,4 @@ async def chat_endpoint(req: ChatRequest):
     Chat endpoint for HydroBreach / FloodLab AI Assistant.
     """
     reply_text = _call_gemini_api(req.message, req.history or [], req.context)
-    return ChatResponse(
-        reply=reply_text,
-        model="gemini-3.6-flash",
-        status="success"
-    )
+    return ChatResponse(reply=reply_text, model="gemini-3.6-flash", status="success")

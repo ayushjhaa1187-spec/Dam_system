@@ -56,7 +56,7 @@ async def run_simulation(req: RunSimulationRequest):
         reservoir_volume_m3=params.get("reservoir_volume_m3", 5e6),
         hydraulic_head_m=params.get("hydraulic_head_m", 40.0),
         crest_length_m=params.get("crest_length_m", 200.0),
-        breach_mode=params.get("breach_mode", "overtopping")
+        breach_mode=params.get("breach_mode", "overtopping"),
     )
     breach_res = BreachMechanicsEngine.evaluate(breach_inp, model_type=req.breach_model)
 
@@ -74,9 +74,7 @@ async def run_simulation(req: RunSimulationRequest):
     if req.solver_type in ("sph", "dual", "coupled"):
         sph_solver = SPHHydroSolver()
         sph_res = sph_solver.run_simulation(
-            scenario_params=params,
-            hydrograph_times=hydro_times,
-            hydrograph_discharges=hydro_flows
+            scenario_params=params, hydrograph_times=hydro_times, hydrograph_discharges=hydro_flows
         )
 
     if req.solver_type == "coupled" and sph_res:
@@ -88,14 +86,12 @@ async def run_simulation(req: RunSimulationRequest):
         delft_res = delft_solver.run_simulation(
             scenario_params=params,
             hydrograph_times=c_times if c_times else hydro_times,
-            hydrograph_discharges=c_flows if c_flows else hydro_flows
+            hydrograph_discharges=c_flows if c_flows else hydro_flows,
         )
     elif req.solver_type in ("delft3d", "dual"):
         delft_solver = Delft3DHydroSolver()
         delft_res = delft_solver.run_simulation(
-            scenario_params=params,
-            hydrograph_times=hydro_times,
-            hydrograph_discharges=hydro_flows
+            scenario_params=params, hydrograph_times=hydro_times, hydrograph_discharges=hydro_flows
         )
 
     if req.solver_type in ("dual", "coupled") and sph_res and delft_res:
@@ -109,7 +105,7 @@ async def run_simulation(req: RunSimulationRequest):
         max_inundated_area_km2=primary_summary["max_inundated_area_km2"],
         peak_velocity_ms=primary_summary["peak_surge_velocity_ms"],
         max_depth_m=params.get("dam_height_m", 35.0) * 0.4,
-        valley_type=params.get("valley_type", "mountain_gorge")
+        valley_type=params.get("valley_type", "mountain_gorge"),
     )
 
     # 5. ML Ensemble Flood Risk Prediction (XGBoost + LightGBM + CatBoost VotingRegressor)
@@ -147,7 +143,7 @@ async def run_simulation(req: RunSimulationRequest):
             "run_id": run_id,
         },
         "execution_time_seconds": elapsed_s,
-        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
 
     SIMULATION_STORE[run_id] = result_payload
@@ -167,11 +163,13 @@ async def list_recent_runs():
     """Lists summary of all executed simulation runs."""
     summaries = []
     for rid, run in SIMULATION_STORE.items():
-        summaries.append({
-            "run_id": rid,
-            "scenario_name": run.get("scenario_params", {}).get("name", "Custom Run"),
-            "solver_type": run.get("solver_type"),
-            "execution_time_s": run.get("execution_time_seconds"),
-            "created_at": run.get("created_at")
-        })
+        summaries.append(
+            {
+                "run_id": rid,
+                "scenario_name": run.get("scenario_params", {}).get("name", "Custom Run"),
+                "solver_type": run.get("solver_type"),
+                "execution_time_s": run.get("execution_time_seconds"),
+                "created_at": run.get("created_at"),
+            }
+        )
     return {"runs": summaries}

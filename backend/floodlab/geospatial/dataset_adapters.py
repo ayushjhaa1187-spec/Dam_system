@@ -3,6 +3,7 @@ Geospatial Dataset Adapter Layer.
 Standardizes heterogeneous real-world GIS datasets (DEM, river networks, land use, population)
 from diverse sources, projections, and formats into uniform simulation arrays.
 """
+
 from __future__ import annotations
 
 import json
@@ -25,10 +26,11 @@ import shapely.ops
 @dataclass
 class LoadedRaster:
     """Standardized raster grid representation."""
+
     data: np.ndarray  # 2D float32 array (height, width)
-    crs: str          # e.g. "EPSG:32643"
-    transform: Affine # Affine geotransform
-    resolution_m: float # Pixel resolution in meters
+    crs: str  # e.g. "EPSG:32643"
+    transform: Affine  # Affine geotransform
+    resolution_m: float  # Pixel resolution in meters
     bounds: Tuple[float, float, float, float]  # (minx, miny, maxx, maxy) in target CRS
     nodata: float = -9999.0
 
@@ -124,8 +126,7 @@ class AOIAdapter:
 
     @staticmethod
     def load_aoi(
-        aoi_path: Union[str, Path],
-        target_crs: Optional[str] = None
+        aoi_path: Union[str, Path], target_crs: Optional[str] = None
     ) -> Tuple[shapely.geometry.base.BaseGeometry, str, Tuple[float, float, float, float]]:
         """
         Loads AOI boundary from GeoJSON or Shapefile and projects to target_crs.
@@ -151,7 +152,11 @@ class AOIAdapter:
                 geom = shapely.geometry.shape(data)
 
             if not geom and features:
-                geoms = [shapely.geometry.shape(feat["geometry"]) for feat in features if "geometry" in feat and feat["geometry"]]
+                geoms = [
+                    shapely.geometry.shape(feat["geometry"])
+                    for feat in features
+                    if "geometry" in feat and feat["geometry"]
+                ]
                 if geoms:
                     geom = shapely.ops.unary_union(geoms)
 
@@ -163,6 +168,7 @@ class AOIAdapter:
 
         elif path.suffix.lower() == ".shp":
             import geopandas as gpd
+
             gdf = gpd.read_file(path)
             if gdf.crs:
                 source_crs = CRSUtils.normalize_crs(gdf.crs)
@@ -194,7 +200,7 @@ class DEMAdapter:
         dem_path: Union[str, Path],
         target_crs: Optional[str] = None,
         aoi_geom: Optional[shapely.geometry.base.BaseGeometry] = None,
-        target_resolution_m: Optional[float] = None
+        target_resolution_m: Optional[float] = None,
     ) -> LoadedRaster:
         """
         Loads DEM GeoTIFF and converts it into a standardized metric UTM LoadedRaster.
@@ -222,8 +228,7 @@ class DEMAdapter:
             # Determine target resolution and bounds
             if target_crs.upper() != src_crs.upper():
                 dst_transform, dst_width, dst_height = calculate_default_transform(
-                    src.crs, target_crs, src.width, src.height, *src.bounds,
-                    resolution=target_resolution_m
+                    src.crs, target_crs, src.width, src.height, *src.bounds, resolution=target_resolution_m
                 )
                 # Cap grid resolution to avoid huge multi-million cell rasters during interactive runs
                 max_dim = 140
@@ -231,8 +236,7 @@ class DEMAdapter:
                     scale = max(dst_width, dst_height) / max_dim
                     adj_res = (target_resolution_m or abs(float(dst_transform.a))) * scale
                     dst_transform, dst_width, dst_height = calculate_default_transform(
-                        src.crs, target_crs, src.width, src.height, *src.bounds,
-                        resolution=adj_res
+                        src.crs, target_crs, src.width, src.height, *src.bounds, resolution=adj_res
                     )
 
                 dst_data = np.full((dst_height, dst_width), src_nodata, dtype=np.float32)
@@ -246,7 +250,7 @@ class DEMAdapter:
                     dst_crs=target_crs,
                     resampling=Resampling.bilinear,
                     src_nodata=src_nodata,
-                    dst_nodata=src_nodata
+                    dst_nodata=src_nodata,
                 )
                 res_m = target_resolution_m or abs(float(dst_transform.a))
             else:
@@ -257,7 +261,13 @@ class DEMAdapter:
                 res_m = float(src.res[0])
 
         # Fill nodata / NaN / infinite values
-        invalid_mask = (dst_data == src_nodata) | np.isnan(dst_data) | np.isinf(dst_data) | (dst_data < -400.0) | (dst_data > 9000.0)
+        invalid_mask = (
+            (dst_data == src_nodata)
+            | np.isnan(dst_data)
+            | np.isinf(dst_data)
+            | (dst_data < -400.0)
+            | (dst_data > 9000.0)
+        )
         if np.any(invalid_mask):
             valid_vals = dst_data[~invalid_mask]
             min_valid = float(np.min(valid_vals)) if valid_vals.size > 0 else 500.0
@@ -279,7 +289,7 @@ class DEMAdapter:
             transform=dst_transform,
             resolution_m=res_m,
             bounds=bounds,
-            nodata=-9999.0
+            nodata=-9999.0,
         )
 
     @staticmethod
@@ -305,10 +315,7 @@ class RiverNetworkAdapter:
 
     @classmethod
     def load_river_network(
-        cls,
-        river_path: Optional[Union[str, Path]],
-        target_crs: str,
-        dem: LoadedRaster
+        cls, river_path: Optional[Union[str, Path]], target_crs: str, dem: LoadedRaster
     ) -> RiverNetworkData:
         """
         Loads river network from Shapefile or GeoJSON, or constructs realistic thalweg from DEM.
@@ -328,6 +335,7 @@ class RiverNetworkAdapter:
                         geoms.append(shapely.geometry.shape(g))
             elif path.suffix.lower() == ".shp":
                 import geopandas as gpd
+
                 gdf = gpd.read_file(path)
                 if gdf.crs:
                     source_crs = CRSUtils.normalize_crs(gdf.crs)
@@ -344,10 +352,7 @@ class RiverNetworkAdapter:
 
     @classmethod
     def _extract_river_data_from_geom(
-        cls,
-        geom: shapely.geometry.base.BaseGeometry,
-        target_crs: str,
-        dem: LoadedRaster
+        cls, geom: shapely.geometry.base.BaseGeometry, target_crs: str, dem: LoadedRaster
     ) -> RiverNetworkData:
         coords_utm: List[Tuple[float, float]] = []
         if isinstance(geom, shapely.geometry.LineString):
@@ -364,7 +369,7 @@ class RiverNetworkAdapter:
             if abs(coords_utm[-1][0] - coords_utm[0][0]) < abs(coords_utm[-1][1] - coords_utm[0][1]):
                 coords_utm.sort(key=lambda p: -p[1])  # North to South
             else:
-                coords_utm.sort(key=lambda p: p[0])   # West to East
+                coords_utm.sort(key=lambda p: p[0])  # West to East
 
         to_wgs84 = pyproj.Transformer.from_crs(target_crs, "EPSG:4326", always_xy=True)
         coords_wgs84 = [to_wgs84.transform(x, y) for x, y in coords_utm]
@@ -388,7 +393,7 @@ class RiverNetworkAdapter:
             total_length_km=round(total_len_km, 2),
             centerline_coords_utm=coords_utm,
             centerline_coords_wgs84=coords_latlon,
-            stations=stations
+            stations=stations,
         )
 
     @classmethod
@@ -410,7 +415,7 @@ class RiverNetworkAdapter:
         coords_utm: List[Tuple[float, float]],
         coords_latlon: List[Tuple[float, float]],
         total_len_km: float,
-        dem: LoadedRaster
+        dem: LoadedRaster,
     ) -> List[RiverStation]:
         stations = []
         n_pts = len(coords_utm)
@@ -428,17 +433,19 @@ class RiverNetworkAdapter:
             r, c = dem.xy_to_rc(x_u, y_u)
             km = round(frac * total_len_km, 2)
 
-            stations.append(RiverStation(
-                station_id=f"st_{idx + 1}",
-                name=name,
-                chainage_km=km,
-                x_utm=x_u,
-                y_utm=y_u,
-                lat=round(lat, 5),
-                lon=round(lon, 5),
-                grid_row=r,
-                grid_col=c
-            ))
+            stations.append(
+                RiverStation(
+                    station_id=f"st_{idx + 1}",
+                    name=name,
+                    chainage_km=km,
+                    x_utm=x_u,
+                    y_utm=y_u,
+                    lat=round(lat, 5),
+                    lon=round(lon, 5),
+                    grid_row=r,
+                    grid_col=c,
+                )
+            )
         return stations
 
 
@@ -461,10 +468,7 @@ class LandUseAdapter:
 
     @classmethod
     def load_land_use_roughness(
-        cls,
-        land_use_path: Optional[Union[str, Path]],
-        dem: LoadedRaster,
-        default_manning_n: float = 0.035
+        cls, land_use_path: Optional[Union[str, Path]], dem: LoadedRaster, default_manning_n: float = 0.035
     ) -> np.ndarray:
         """
         Returns 2D float32 array of Manning's n matching the DEM grid.
@@ -488,7 +492,7 @@ class LandUseAdapter:
                 src_crs=src.crs,
                 dst_transform=dem.transform,
                 dst_crs=dem.crs,
-                resampling=Resampling.nearest
+                resampling=Resampling.nearest,
             )
 
         # Map codes to roughness
@@ -505,11 +509,7 @@ class PopulationAdapter:
     """
 
     @classmethod
-    def load_population(
-        cls,
-        pop_path: Optional[Union[str, Path]],
-        dem: LoadedRaster
-    ) -> np.ndarray:
+    def load_population(cls, pop_path: Optional[Union[str, Path]], dem: LoadedRaster) -> np.ndarray:
         """
         Returns 2D float32 array of population per grid cell.
         """
@@ -535,7 +535,7 @@ class PopulationAdapter:
                 src_crs=src.crs,
                 dst_transform=dem.transform,
                 dst_crs=dem.crs,
-                resampling=Resampling.bilinear
+                resampling=Resampling.bilinear,
             )
             dst_data = np.maximum(dst_data, 0.0)
             return dst_data

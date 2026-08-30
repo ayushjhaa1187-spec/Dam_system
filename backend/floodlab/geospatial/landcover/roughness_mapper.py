@@ -1,6 +1,7 @@
 """
 Land-cover to Manning's n roughness mapper.
 """
+
 from typing import Dict, Tuple
 import numpy as np
 from floodlab.domain.provenance import ProvenanceRecord

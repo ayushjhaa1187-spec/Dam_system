@@ -1,4 +1,5 @@
 """Unit tests for coupling engine."""
+
 import pytest
 from floodlab.engines.coupling.sph_to_delft3d import CouplingEngine, TemporalResampler
 

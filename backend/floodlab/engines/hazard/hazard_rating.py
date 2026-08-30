@@ -11,6 +11,7 @@ where:
 
 Reference: CWC Flood Damage Mitigation Manual; Defra/EA (2008) FD2320/TR2.
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict, List

@@ -3,6 +3,7 @@ Generic Simulation Runner Service.
 Executes the end-to-end hydrodynamic simulation pipeline on arbitrary basin datasets
 driven strictly by a single ScenarioConfig.
 """
+
 from __future__ import annotations
 
 import csv
@@ -44,7 +45,7 @@ class GenericSimulationRunner:
         config: Union[ScenarioConfig, str, Path, Dict[str, Any]],
         output_dir: Optional[Union[str, Path]] = None,
         run_id: Optional[str] = None,
-        progress_callback: Optional[Callable[[float, Dict[str, Any]], None]] = None
+        progress_callback: Optional[Callable[[float, Dict[str, Any]], None]] = None,
     ) -> GenericSimulationResult:
         """
         Main generic simulation entrypoint.
@@ -62,6 +63,7 @@ class GenericSimulationRunner:
             with open(cfg_path, "r", encoding="utf-8") as f:
                 if cfg_path.suffix.lower() in [".yaml", ".yml"]:
                     import yaml
+
                     raw_dict = yaml.safe_load(f)
                 else:
                     raw_dict = json.load(f)
@@ -78,42 +80,32 @@ class GenericSimulationRunner:
 
         # 3. Load Datasets via Adapter Layer
         aoi_geom, aoi_crs, aoi_bounds = AOIAdapter.load_aoi(
-            aoi_path=parsed_cfg.basin.aoi_boundary,
-            target_crs=parsed_cfg.run_settings.target_crs
+            aoi_path=parsed_cfg.basin.aoi_boundary, target_crs=parsed_cfg.run_settings.target_crs
         )
 
         dem = DEMAdapter.load_dem(
             dem_path=parsed_cfg.inputs.dem,
             target_crs=parsed_cfg.run_settings.target_crs,
             aoi_geom=aoi_geom,
-            target_resolution_m=parsed_cfg.run_settings.grid_resolution_m
+            target_resolution_m=parsed_cfg.run_settings.grid_resolution_m,
         )
 
         river_data = RiverNetworkAdapter.load_river_network(
-            river_path=parsed_cfg.inputs.river_network,
-            target_crs=dem.crs,
-            dem=dem
+            river_path=parsed_cfg.inputs.river_network, target_crs=dem.crs, dem=dem
         )
 
         roughness = LandUseAdapter.load_land_use_roughness(
-            land_use_path=parsed_cfg.inputs.land_use,
-            dem=dem,
-            default_manning_n=parsed_cfg.run_settings.manning_n
+            land_use_path=parsed_cfg.inputs.land_use, dem=dem, default_manning_n=parsed_cfg.run_settings.manning_n
         )
 
-        population_grid = PopulationAdapter.load_population(
-            pop_path=parsed_cfg.inputs.population,
-            dem=dem
-        )
+        population_grid = PopulationAdapter.load_population(pop_path=parsed_cfg.inputs.population, dem=dem)
 
         # 4. Map Dam Coordinates to Grid
         dam_r, dam_c = dem.latlon_to_rc(parsed_cfg.dam.lat, parsed_cfg.dam.lon)
 
         # 5. Compute Breach Hydrograph (Pure Physics)
         hydrograph = BreachHydrographEngine.compute(
-            dam=parsed_cfg.dam,
-            breach=parsed_cfg.breach,
-            duration_hr=parsed_cfg.run_settings.simulation_duration_hr
+            dam=parsed_cfg.dam, breach=parsed_cfg.breach, duration_hr=parsed_cfg.run_settings.simulation_duration_hr
         )
 
         # 6. Run 2D Hydrodynamic Flood Routing (Pure Numerical Solver)
@@ -125,7 +117,7 @@ class GenericSimulationRunner:
             roughness_grid=roughness,
             run_settings=parsed_cfg.run_settings,
             stations=river_data.stations,
-            progress_callback=progress_callback
+            progress_callback=progress_callback,
         )
 
         # 7. Exposure & Socioeconomic Damage Assessment
@@ -148,7 +140,9 @@ class GenericSimulationRunner:
             buildings_affected=buildings_affected,
             roads_submerged_km=roads_km,
             land_use_breakdown=land_use_breakdown,
-            hazard_score=round(min(routing_out.peak_velocity_overall_ms * 0.4 + routing_out.peak_depth_overall_m * 0.3, 10.0), 1)
+            hazard_score=round(
+                min(routing_out.peak_velocity_overall_ms * 0.4 + routing_out.peak_depth_overall_m * 0.3, 10.0), 1
+            ),
         )
 
         # 8. Setup Output Directory and Export Geospatial Assets
@@ -195,19 +189,14 @@ class GenericSimulationRunner:
                 "version": "2.5.0-generic",
                 "crs": dem.crs,
                 "resolution_m": dem.resolution_m,
-                "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-            }
+                "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            },
         )
 
         return result
 
     @classmethod
-    def _export_rasters(
-        cls,
-        dem: LoadedRaster,
-        routing_out: Any,
-        out_dir: Path
-    ) -> Dict[str, RasterOutputMeta]:
+    def _export_rasters(cls, dem: LoadedRaster, routing_out: Any, out_dir: Path) -> Dict[str, RasterOutputMeta]:
         """Exports max depth, velocity, and arrival time GeoTIFFs."""
         metas = {}
         layers = [
@@ -221,7 +210,8 @@ class GenericSimulationRunner:
             arr_f32 = arr.astype(np.float32)
 
             with rasterio.open(
-                fpath, "w",
+                fpath,
+                "w",
                 driver="GTiff",
                 height=arr.shape[0],
                 width=arr.shape[1],
@@ -229,7 +219,7 @@ class GenericSimulationRunner:
                 dtype=rasterio.float32,
                 crs=CRS.from_string(dem.crs),
                 transform=dem.transform,
-                nodata=-9999.0
+                nodata=-9999.0,
             ) as dst:
                 dst.write(arr_f32, 1)
 
@@ -248,40 +238,29 @@ class GenericSimulationRunner:
                 crs=dem.crs,
                 resolution_m=round(dem.resolution_m, 2),
                 shape=list(arr.shape),
-                bounds=list(dem.bounds)
+                bounds=list(dem.bounds),
             )
 
         return metas
 
     @classmethod
-    def _export_vectors(
-        cls,
-        dem: LoadedRaster,
-        max_depth: np.ndarray,
-        out_dir: Path
-    ) -> Dict[str, str]:
+    def _export_vectors(cls, dem: LoadedRaster, max_depth: np.ndarray, out_dir: Path) -> Dict[str, str]:
         """Extracts polygon inundation boundaries and writes GeoJSON."""
         fpath = out_dir / "flood_extent.geojson"
-        mask = (max_depth >= 0.30)
+        mask = max_depth >= 0.30
 
         features = []
         if np.any(mask):
-            shapes = rasterio.features.shapes(
-                max_depth.astype(np.float32),
-                mask=mask,
-                transform=dem.transform
-            )
+            shapes = rasterio.features.shapes(max_depth.astype(np.float32), mask=mask, transform=dem.transform)
             for geom, val in shapes:
-                features.append({
-                    "type": "Feature",
-                    "geometry": geom,
-                    "properties": {"max_depth_m": round(float(val), 2)}
-                })
+                features.append(
+                    {"type": "Feature", "geometry": geom, "properties": {"max_depth_m": round(float(val), 2)}}
+                )
 
         geojson = {
             "type": "FeatureCollection",
             "crs": {"type": "name", "properties": {"name": dem.crs}},
-            "features": features
+            "features": features,
         }
 
         with open(fpath, "w", encoding="utf-8") as f:
@@ -298,7 +277,7 @@ class GenericSimulationRunner:
         exposure: ExposureSummary,
         raster_metas: Dict[str, RasterOutputMeta],
         out_dir: Path,
-        run_id: str
+        run_id: str,
     ):
         """Exports breach hydrograph CSV and complete audit metadata JSON."""
         # 1. Export Inflow Hydrograph Q(t).csv
@@ -322,7 +301,7 @@ class GenericSimulationRunner:
                 "peak_discharge_m3s": hydrograph.peak_discharge_m3s,
                 "formation_time_hr": hydrograph.formation_time_hr,
                 "total_volume_m3": hydrograph.total_volume_m3,
-                "model_used": hydrograph.model_used
+                "model_used": hydrograph.model_used,
             },
             "hydrodynamic_summary": {
                 "max_inundated_area_km2": routing_out.max_inundated_area_km2,
@@ -333,7 +312,7 @@ class GenericSimulationRunner:
             "exposure_summary": exposure.model_dump(),
             "output_rasters": {k: v.model_dump() for k, v in raster_metas.items()},
             "station_probes": [st.model_dump() for st in routing_out.station_probes],
-            "exported_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            "exported_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         }
         with open(meta_path, "w", encoding="utf-8") as f:
             json.dump(metadata, f, indent=2)
@@ -343,14 +322,11 @@ def run_simulation(
     config: Union[ScenarioConfig, str, Path, Dict[str, Any]],
     output_dir: Optional[Union[str, Path]] = None,
     run_id: Optional[str] = None,
-    progress_callback: Optional[Callable[[float, Dict[str, Any]], None]] = None
+    progress_callback: Optional[Callable[[float, Dict[str, Any]], None]] = None,
 ) -> GenericSimulationResult:
     """
     Unified entrypoint function for the customizable simulation framework.
     """
     return GenericSimulationRunner.run_simulation(
-        config=config,
-        output_dir=output_dir,
-        run_id=run_id,
-        progress_callback=progress_callback
+        config=config, output_dir=output_dir, run_id=run_id, progress_callback=progress_callback
     )

@@ -3,6 +3,7 @@ Inflow Hydrograph: combined SCS-CN + Unit Hydrograph engine.
 
 Orchestrates: SCS-CN runoff calculation -> UH peak -> triangular UH -> convolution.
 """
+
 from __future__ import annotations
 
 from pydantic import BaseModel, Field

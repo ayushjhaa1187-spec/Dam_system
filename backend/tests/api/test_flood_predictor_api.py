@@ -1,4 +1,5 @@
 """Integration tests for Flood Predictor API endpoints."""
+
 from fastapi.testclient import TestClient
 from floodlab.api.main import app
 
@@ -62,11 +63,14 @@ def test_post_batch_predict():
 
 
 def test_simulation_run_includes_flood_prediction():
-    res = client.post("/api/simulations/run", json={
-        "scenario_id": "tehri_severe_breach",
-        "solver_type": "coupled",
-        "breach_model": "froehlich_2008",
-    })
+    res = client.post(
+        "/api/simulations/run",
+        json={
+            "scenario_id": "tehri_severe_breach",
+            "solver_type": "coupled",
+            "breach_model": "froehlich_2008",
+        },
+    )
     assert res.status_code == 200
     data = res.json()
     assert "flood_prediction" in data

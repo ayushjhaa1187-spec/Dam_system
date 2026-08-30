@@ -32,34 +32,43 @@ def test_scenario_preset_retrieval_and_reload():
 
 def test_scenario_calculation_with_valid_and_invalid_inputs():
     # Valid input
-    valid_res = client.post("/api/scenarios/calculate-breach", json={
-        "dam_name": "Test Dam",
-        "dam_type": "rockfill",
-        "dam_height_m": 100.0,
-        "hydraulic_head_m": 90.0,
-        "reservoir_volume_m3": 50000000.0,
-        "crest_length_m": 300.0,
-    })
+    valid_res = client.post(
+        "/api/scenarios/calculate-breach",
+        json={
+            "dam_name": "Test Dam",
+            "dam_type": "rockfill",
+            "dam_height_m": 100.0,
+            "hydraulic_head_m": 90.0,
+            "reservoir_volume_m3": 50000000.0,
+            "crest_length_m": 300.0,
+        },
+    )
     assert valid_res.status_code == 200
     assert valid_res.json()["peak_discharge_m3s"] > 0
 
     # Invalid input: negative height
-    inv_res = client.post("/api/scenarios/calculate-breach", json={
-        "dam_name": "Invalid Dam",
-        "dam_height_m": -50.0,
-        "hydraulic_head_m": 90.0,
-        "reservoir_volume_m3": 50000000.0,
-    })
+    inv_res = client.post(
+        "/api/scenarios/calculate-breach",
+        json={
+            "dam_name": "Invalid Dam",
+            "dam_height_m": -50.0,
+            "hydraulic_head_m": 90.0,
+            "reservoir_volume_m3": 50000000.0,
+        },
+    )
     assert inv_res.status_code == 422  # Unprocessable entity validation error
 
 
 def test_simulation_run_idempotency_and_state_recovery():
     # Run simulation
-    run_res = client.post("/api/simulations/run", json={
-        "scenario_id": "tehri_dam_bhagirathi",
-        "solver_type": "coupled",
-        "breach_model": "froehlich_2008",
-    })
+    run_res = client.post(
+        "/api/simulations/run",
+        json={
+            "scenario_id": "tehri_dam_bhagirathi",
+            "solver_type": "coupled",
+            "breach_model": "froehlich_2008",
+        },
+    )
     assert run_res.status_code == 200
     data = run_res.json()
     run_id = data["run_id"]
@@ -79,12 +88,15 @@ def test_simulation_run_idempotency_and_state_recovery():
 
 def test_coordinate_system_validation():
     # Valid coordinates in India
-    res = client.post("/api/export/geojson", json={
-        "scenario_name": "Tehri Coordinates Test",
-        "lat": 30.378,
-        "lon": 78.481,
-        "reach_length_km": 100.0,
-    })
+    res = client.post(
+        "/api/export/geojson",
+        json={
+            "scenario_name": "Tehri Coordinates Test",
+            "lat": 30.378,
+            "lon": 78.481,
+            "reach_length_km": 100.0,
+        },
+    )
     assert res.status_code == 200
     geojson = res.json()
     assert geojson["crs"]["properties"]["name"] == "urn:ogc:def:crs:OGC:1.3:CRS84"

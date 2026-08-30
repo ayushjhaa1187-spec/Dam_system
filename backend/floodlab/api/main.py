@@ -3,14 +3,24 @@ FloodLab FastAPI application.
 
 Registers all routers, CORS middleware, and health endpoint.
 """
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from floodlab.config.settings import get_settings
 from floodlab.api.routers import (
-    simulations, hydrology, scenarios, uncertainty,
-    satellite, exposure, routing, validation, export, jobs, chat,
-    flood_predictor
+    simulations,
+    hydrology,
+    scenarios,
+    uncertainty,
+    satellite,
+    exposure,
+    routing,
+    validation,
+    export,
+    jobs,
+    chat,
+    flood_predictor,
 )
 
 settings = get_settings()

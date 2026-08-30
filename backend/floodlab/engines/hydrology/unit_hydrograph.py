@@ -3,6 +3,7 @@ Dimensionless Unit Hydrograph (NRCS/SCS triangular approximation).
 
 Reference: USDA-NRCS Technical Release 55 (TR-55, 1986).
 """
+
 from __future__ import annotations
 
 
@@ -51,7 +52,7 @@ class UnitHydrograph:
         # Kirpich (1940): tc = 0.0195 * L^0.77 * S^-0.385  [minutes]
         # L in metres
         L_m = reach_length_km * 1000.0
-        tc_min = 0.0195 * (L_m ** 0.77) * (slope ** -0.385)
+        tc_min = 0.0195 * (L_m**0.77) * (slope**-0.385)
         return tc_min / 60.0
 
     def peak_discharge(

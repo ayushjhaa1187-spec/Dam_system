@@ -20,7 +20,7 @@ class GISExporter:
         filepath = os.path.join(self.output_dir, filename + ".csv")
         if not data:
             return filepath
-        with open(filepath, "w", newline='') as f:
+        with open(filepath, "w", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=data[0].keys())
             writer.writeheader()
             writer.writerows(data)
@@ -30,8 +30,8 @@ class GISExporter:
         # Dummy shapefile export using pyshp
         filepath = os.path.join(self.output_dir, filename)
         w = shapefile.Writer(filepath)
-        w.field('name', 'C')
-        w.record('dummy')
+        w.field("name", "C")
+        w.record("dummy")
         w.point(1, 1)
         w.close()
 
@@ -46,8 +46,8 @@ class GISExporter:
 
         # Zip them
         zip_path = filepath + ".zip"
-        with zipfile.ZipFile(zip_path, 'w') as zipf:
-            for ext in ['.shp', '.shx', '.dbf', '.prj']:
+        with zipfile.ZipFile(zip_path, "w") as zipf:
+            for ext in [".shp", ".shx", ".dbf", ".prj"]:
                 zipf.write(filepath + ext, filename + ext)
         return zip_path
 
@@ -64,6 +64,7 @@ class GISExporter:
     def export_pdf(self, filename: str) -> str:
         filepath = os.path.join(self.output_dir, filename + ".pdf")
         from reportlab.pdfgen import canvas
+
         c = canvas.Canvas(filepath)
         c.drawString(100, 750, "HADR Situation Report with Scenario Assumptions")
         c.save()

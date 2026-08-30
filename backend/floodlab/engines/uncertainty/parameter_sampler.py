@@ -2,6 +2,7 @@
 Parameter sampler for ensemble uncertainty analysis.
 Latin Hypercube Sampling (LHS) for better parameter space coverage.
 """
+
 from __future__ import annotations
 import random
 from typing import Dict, List

@@ -1,6 +1,7 @@
 """
 Simulation ORM model.
 """
+
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Text, DateTime
 from floodlab.database.models.base import Base

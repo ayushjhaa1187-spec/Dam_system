@@ -10,6 +10,7 @@ from typing import Dict, Any, List, Optional, Tuple
 
 class Delft3DModelConfig:
     """Delft3D Flexible Mesh simulation parameters."""
+
     def __init__(
         self,
         nx: int = 100,
@@ -20,7 +21,7 @@ class Delft3DModelConfig:
         h_dry_threshold_m: float = 0.02,
         manning_n_default: float = 0.038,
         total_duration_s: float = 7200.0,
-        save_interval_s: float = 120.0
+        save_interval_s: float = 120.0,
     ):
         self.nx = nx
         self.ny = ny
@@ -51,7 +52,7 @@ class Delft3DHydroSolver:
         scenario_params: Dict[str, Any],
         hydrograph_times: List[float],
         hydrograph_discharges: List[float],
-        progress_callback: Optional[Any] = None
+        progress_callback: Optional[Any] = None,
     ) -> Dict[str, Any]:
         """
         Runs 2D SWE hydrodynamic simulation and returns time-series spatial grids and hydrographs.
@@ -107,9 +108,24 @@ class Delft3DHydroSolver:
         frames = []
         gauges_data = {
             "dam_axis": {"x_km": dam_location_x_m / 1000.0, "time_min": [], "depth_m": [], "discharge_m3s": []},
-            "gauge_5km": {"x_km": (dam_location_x_m + 5000.0) / 1000.0, "time_min": [], "depth_m": [], "discharge_m3s": []},
-            "gauge_15km": {"x_km": (dam_location_x_m + 15000.0) / 1000.0, "time_min": [], "depth_m": [], "discharge_m3s": []},
-            "gauge_25km": {"x_km": min((dam_location_x_m + 25000.0) / 1000.0, reach_length_km), "time_min": [], "depth_m": [], "discharge_m3s": []},
+            "gauge_5km": {
+                "x_km": (dam_location_x_m + 5000.0) / 1000.0,
+                "time_min": [],
+                "depth_m": [],
+                "discharge_m3s": [],
+            },
+            "gauge_15km": {
+                "x_km": (dam_location_x_m + 15000.0) / 1000.0,
+                "time_min": [],
+                "depth_m": [],
+                "discharge_m3s": [],
+            },
+            "gauge_25km": {
+                "x_km": min((dam_location_x_m + 25000.0) / 1000.0, reach_length_km),
+                "time_min": [],
+                "depth_m": [],
+                "discharge_m3s": [],
+            },
         }
 
         last_save_time = -save_interval_s
@@ -118,21 +134,23 @@ class Delft3DHydroSolver:
         # Solver loop with adaptive CFL dt
         while t_sim < total_time_s:
             celerity = np.sqrt(self.G * np.maximum(h, 0.01))
-            vel_mag = np.sqrt(u ** 2 + v ** 2)
+            vel_mag = np.sqrt(u**2 + v**2)
             max_wave_speed = float(np.max(celerity + vel_mag))
             # Longitudinal CFL condition: dt <= CFL * dx / max(wave_speed)
             dt = min(self.config.cfl * dx / max(max_wave_speed, 0.1), 5.0)
             dt = max(dt, 1.0)  # Responsive timestep bound for fast interactive execution
 
             # Inflow discharge at dam breach
-            current_q = float(np.interp(t_sim, hydro_times_sec, hydro_flows)) if len(hydro_times_sec) > 1 else hydro_flows[0]
+            current_q = (
+                float(np.interp(t_sim, hydro_times_sec, hydro_flows)) if len(hydro_times_sec) > 1 else hydro_flows[0]
+            )
 
             # Inflow source injection at dam breach cells
             breach_width_cells = max(int(150.0 / dy), 3)
             mid_y = ny // 2
             y_start = max(mid_y - breach_width_cells // 2, 0)
             y_end = min(mid_y + breach_width_cells // 2 + 1, ny)
-            
+
             # Injection flux
             inflow_cell_area = dx * dy * (y_end - y_start)
             dh_inflow = (current_q / max(inflow_cell_area, 1.0)) * dt
@@ -144,7 +162,7 @@ class Delft3DHydroSolver:
             h, u, v = self._step_swe_finite_volume(h, u, v, z_bed, dx, dy, dt, manning_n)
 
             # Update envelopes and arrival times
-            speed = np.sqrt(u ** 2 + v ** 2)
+            speed = np.sqrt(u**2 + v**2)
             max_depth_envelope = np.maximum(max_depth_envelope, h)
             max_vel_envelope = np.maximum(max_vel_envelope, speed)
 
@@ -177,8 +195,8 @@ class Delft3DHydroSolver:
                         "x_max": domain_length_m,
                         "y_min": -valley_width_m / 2.0,
                         "y_max": valley_width_m / 2.0,
-                        "depth_matrix": self._downsample_grid(h, 8, 20)
-                    }
+                        "depth_matrix": self._downsample_grid(h, 8, 20),
+                    },
                 }
                 frames.append(frame_data)
                 last_save_time = t_sim
@@ -193,10 +211,12 @@ class Delft3DHydroSolver:
             "total_simulated_duration_min": round(t_sim / 60.0, 1),
             "grid_cells": nx * ny,
             "peak_surge_velocity_ms": round(float(np.max(max_vel_envelope)), 2),
-            "max_inundated_area_km2": round(float(np.sum(max_depth_envelope[:, dam_idx_x:] > 0.3) * (dx * dy) / 1e6), 2),
+            "max_inundated_area_km2": round(
+                float(np.sum(max_depth_envelope[:, dam_idx_x:] > 0.3) * (dx * dy) / 1e6), 2
+            ),
             "num_frames": len(frames),
             "gauges": gauges_data,
-            "data_provenance": "MODEL ESTIMATE (Delft3D Flexible Mesh 2D SWE Engine)"
+            "data_provenance": "MODEL ESTIMATE (Delft3D Flexible Mesh 2D SWE Engine)",
         }
 
         return {
@@ -204,7 +224,7 @@ class Delft3DHydroSolver:
             "frames": frames,
             "gauges": gauges_data,
             "max_depth_envelope": max_depth_envelope,
-            "arrival_times": arrival_times
+            "arrival_times": arrival_times,
         }
 
     def _step_swe_finite_volume(
@@ -216,7 +236,7 @@ class Delft3DHydroSolver:
         dx: float,
         dy: float,
         dt: float,
-        n_manning: float
+        n_manning: float,
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """Finite difference / finite volume 2D SWE flux step with friction and bed slopes."""
         ny, nx = h.shape
@@ -247,7 +267,7 @@ class Delft3DHydroSolver:
         du_dy = np.zeros_like(u)
         dv_dx = np.zeros_like(v)
         dv_dy = np.zeros_like(v)
-        
+
         du_dx[:, 1:-1] = (u[:, 2:] - u[:, :-2]) / (2.0 * dx)
         du_dy[1:-1, :] = (u[2:, :] - u[:-2, :]) / (2.0 * dy)
         dv_dx[:, 1:-1] = (v[:, 2:] - v[:, :-2]) / (2.0 * dx)
@@ -257,16 +277,16 @@ class Delft3DHydroSolver:
         h_sm = h.copy()
         u_sm = u.copy()
         v_sm = v.copy()
-        
+
         # 4-point average for inner cells
         h_sm[1:-1, 1:-1] = 0.25 * (h[:-2, 1:-1] + h[2:, 1:-1] + h[1:-1, :-2] + h[1:-1, 2:])
         u_sm[1:-1, 1:-1] = 0.25 * (u[:-2, 1:-1] + u[2:, 1:-1] + u[1:-1, :-2] + u[1:-1, 2:])
         v_sm[1:-1, 1:-1] = 0.25 * (v[:-2, 1:-1] + v[2:, 1:-1] + v[1:-1, :-2] + v[1:-1, 2:])
 
         # Manning friction deceleration
-        vel_mag = np.sqrt(u ** 2 + v ** 2)
+        vel_mag = np.sqrt(u**2 + v**2)
         r_hyd = np.maximum(h, 0.1)
-        friction_coeff = self.G * (n_manning ** 2) * vel_mag / (r_hyd ** (4.0 / 3.0))
+        friction_coeff = self.G * (n_manning**2) * vel_mag / (r_hyd ** (4.0 / 3.0))
         friction_coeff = np.minimum(friction_coeff, 10.0)
 
         # Continuity update: dh/dt = - d(hu)/dx - d(hv)/dy
@@ -309,13 +329,21 @@ class Delft3DHydroSolver:
         return h_new, u_new, v_new
 
     def _record_swe_gauges(
-        self, gauges: Dict[str, Any], time_min: float, h: np.ndarray, u: np.ndarray, dx: float, dy: float, dam_idx: int, ny: int
+        self,
+        gauges: Dict[str, Any],
+        time_min: float,
+        h: np.ndarray,
+        u: np.ndarray,
+        dx: float,
+        dy: float,
+        dam_idx: int,
+        ny: int,
     ):
         """Records gauge water depth and discharge."""
         mid_y = ny // 2
         for g_name, g_info in gauges.items():
             target_idx = int(np.clip(g_info["x_km"] * 1000.0 / dx, 0, h.shape[1] - 1))
-            d_val = float(np.mean(h[max(0, mid_y - 2):min(ny, mid_y + 3), target_idx]))
+            d_val = float(np.mean(h[max(0, mid_y - 2) : min(ny, mid_y + 3), target_idx]))
             q_val = float(np.sum(h[:, target_idx] * np.maximum(u[:, target_idx], 0.0) * dy))
 
             g_info["time_min"].append(round(time_min, 2))

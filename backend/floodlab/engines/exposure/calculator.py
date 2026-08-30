@@ -48,7 +48,7 @@ class ExposureCalculator:
                 s.get("max_depth_m", 0.0),
                 s.get("max_velocity_ms", 0.0),
                 s.get("population_exposed", 0),
-                s.get("critical_infrastructure_count", 0)
+                s.get("critical_infrastructure_count", 0),
             )
 
             if score >= 0.7:

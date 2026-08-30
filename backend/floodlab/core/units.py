@@ -8,6 +8,7 @@ Standard unit definitions:
 - 1 MCM = 1,000,000 m³ (10^6 m³)
 - 1 hour = 3600 seconds
 """
+
 from __future__ import annotations
 
 import math
@@ -18,6 +19,7 @@ import numpy as np
 # -----------------------------------------------------------------------------
 # Area Conversions
 # -----------------------------------------------------------------------------
+
 
 def m2_to_km2(area_m2: float) -> float:
     """Convert square meters (m²) to square kilometers (km²)."""
@@ -53,6 +55,7 @@ def m2_to_ha(area_m2: float) -> float:
 # Volume Conversions
 # -----------------------------------------------------------------------------
 
+
 def m3_to_mcm(volume_m3: float) -> float:
     """Convert cubic meters (m³) to Million Cubic Meters (MCM)."""
     return float(volume_m3) / 1_000_000.0
@@ -71,6 +74,7 @@ def m3_to_billion_m3(volume_m3: float) -> float:
 # -----------------------------------------------------------------------------
 # Numerical Validity Guards
 # -----------------------------------------------------------------------------
+
 
 def is_finite_number(val: Any) -> bool:
     """Check if a value is a finite number (not NaN, not Inf, not None)."""
@@ -113,7 +117,9 @@ def validate_array_finite(
     return True, None
 
 
-def sanitize_float(val: Any, default: float = 0.0, min_val: Optional[float] = None, max_val: Optional[float] = None) -> float:  # noqa: E501
+def sanitize_float(
+    val: Any, default: float = 0.0, min_val: Optional[float] = None, max_val: Optional[float] = None
+) -> float:  # noqa: E501
     """Safely convert value to finite float with optional bounds clamping."""
     if not is_finite_number(val):
         return default
@@ -161,8 +167,9 @@ def validate_hydrograph_integrity(
     t_sec = t_arr * 3600.0
     q_arr = np.array(flows_m3s)
     trapz_fn = getattr(np, "trapezoid", getattr(np, "trapz", None))
-    integrated_vol_m3 = float(trapz_fn(q_arr, t_sec)) if trapz_fn else float(
-        np.sum(0.5 * (q_arr[:-1] + q_arr[1:]) * np.diff(t_sec)))
+    integrated_vol_m3 = (
+        float(trapz_fn(q_arr, t_sec)) if trapz_fn else float(np.sum(0.5 * (q_arr[:-1] + q_arr[1:]) * np.diff(t_sec)))
+    )
 
     if not is_finite_number(integrated_vol_m3) or integrated_vol_m3 < 0:
         return False, 0.0, "Integrated hydrograph volume is non-finite or negative."
@@ -170,10 +177,14 @@ def validate_hydrograph_integrity(
     if expected_volume_m3 is not None and expected_volume_m3 > 0:
         rel_error = abs(integrated_vol_m3 - expected_volume_m3) / expected_volume_m3
         if rel_error > mass_tolerance:
-            return False, integrated_vol_m3, (
-                f"Mass conservation violation: integrated volume ({integrated_vol_m3/1e6:.2f} MCM) "
-                f"deviates by {rel_error*100:.1f}% from expected volume ({expected_volume_m3/1e6:.2f} MCM), "
-                f"exceeding tolerance {mass_tolerance*100:.1f}%."
+            return (
+                False,
+                integrated_vol_m3,
+                (
+                    f"Mass conservation violation: integrated volume ({integrated_vol_m3 / 1e6:.2f} MCM) "
+                    f"deviates by {rel_error * 100:.1f}% from expected volume ({expected_volume_m3 / 1e6:.2f} MCM), "
+                    f"exceeding tolerance {mass_tolerance * 100:.1f}%."
+                ),
             )
 
     return True, integrated_vol_m3, None

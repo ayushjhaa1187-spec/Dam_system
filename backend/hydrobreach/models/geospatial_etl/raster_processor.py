@@ -17,9 +17,9 @@ class DEMProcessor:
         reach_length_km: float = 100.0,
         valley_width_km: float = 2.5,
         upstream_elev_m: float = 835.0,  # Tehri Dam Crest MSL
-        downstream_elev_m: float = 290.0, # Haridwar Plains MSL
+        downstream_elev_m: float = 290.0,  # Haridwar Plains MSL
         resolution_m: float = 50.0,
-        meander_amplitude_m: float = 600.0
+        meander_amplitude_m: float = 600.0,
     ) -> Dict[str, Any]:
         """
         Generates a realistic Himalayan/Indian river valley DEM matrix with river gorge,
@@ -48,7 +48,7 @@ class DEMProcessor:
         dem_elev = long_elev + transverse_elev
 
         # Extract river longitudinal thalweg profile
-        thalweg_x = x_arr / 1000.0 # km
+        thalweg_x = x_arr / 1000.0  # km
         thalweg_z = long_elev[ny // 2, :]
 
         # Extract 5 representative cross sections along the reach
@@ -57,13 +57,15 @@ class DEMProcessor:
         for idx in sample_x_indices:
             x_km = round(float(x_arr[idx] / 1000.0), 2)
             z_profile = [round(float(val), 1) for val in dem_elev[:, idx]]
-            cross_sections.append({
-                "chainage_km": x_km,
-                "y_coordinates_m": [round(float(y), 1) for y in y_arr],
-                "elevation_m": z_profile,
-                "min_elev_m": round(float(np.min(z_profile)), 1),
-                "max_elev_m": round(float(np.max(z_profile)), 1)
-            })
+            cross_sections.append(
+                {
+                    "chainage_km": x_km,
+                    "y_coordinates_m": [round(float(y), 1) for y in y_arr],
+                    "elevation_m": z_profile,
+                    "min_elev_m": round(float(np.min(z_profile)), 1),
+                    "max_elev_m": round(float(np.max(z_profile)), 1),
+                }
+            )
 
         return {
             "metadata": {
@@ -71,18 +73,21 @@ class DEMProcessor:
                 "valley_width_km": valley_width_km,
                 "resolution_m": resolution_m,
                 "dimensions": {"nx": nx, "ny": ny},
-                "elevation_range_m": [round(float(np.min(dem_elev)), 1), round(float(np.max(dem_elev)), 1)]
+                "elevation_range_m": [round(float(np.min(dem_elev)), 1), round(float(np.max(dem_elev)), 1)],
             },
             "thalweg_profile": {
                 "distance_km": [round(float(x), 2) for x in thalweg_x],
-                "elevation_m": [round(float(z), 1) for z in thalweg_z]
+                "elevation_m": [round(float(z), 1) for z in thalweg_z],
             },
             "cross_sections": cross_sections,
             "downsampled_preview": {
                 "nx": 20,
                 "ny": 8,
-                "matrix": [[round(float(val), 1) for val in row] for row in dem_elev[::max(1, ny // 8), ::max(1, nx // 20)].tolist()[:8]]
-            }
+                "matrix": [
+                    [round(float(val), 1) for val in row]
+                    for row in dem_elev[:: max(1, ny // 8), :: max(1, nx // 20)].tolist()[:8]
+                ],
+            },
         }
 
     @classmethod
