@@ -40,8 +40,8 @@ class DatasetValidationError(Exception):
         self.report = report
         error_msgs = "\n - ".join([f"[{e.rule_code}] {e.field}: {e.message}" for e in report.errors])
         super().__init__(
-            f"Dataset validation failed for scenario '{report.scenario_id}' "
-            f"with {len(report.errors)} error(s):\n - {error_msgs}"
+            f"Dataset validation failed for scenario '{report.scenario_id}' with {len(report.errors)} error(s):\n"
+            f" - {error_msgs}"
         )
 
 

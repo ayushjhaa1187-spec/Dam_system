@@ -76,7 +76,10 @@ class ScenarioValidator:
             warnings.append(
                 ValidationErrorDetail(
                     field="dam_height_m",
-                    message="Dam height exceeds 400m (taller than any existing earth/rockfill dam). Please verify units.",
+                    message=(
+                        "Dam height exceeds 400m (taller than any existing earth/rockfill dam). "
+                        "Please verify units."
+                    ),
                     rule="DAM_HEIGHT_RANGE_CHECK",
                     severity="warning",
                 )
@@ -142,7 +145,10 @@ class ScenarioValidator:
                 errors.append(
                     ValidationErrorDetail(
                         field="avg_breach_width_m",
-                        message=f"Breach width ({breach_width}m) cannot exceed total dam crest length ({crest_length}m).",
+                        message=(
+                            f"Breach width ({breach_width}m) cannot exceed "
+                            f"total dam crest length ({crest_length}m)."
+                        ),
                         rule="BREACH_WIDTH_BOUNDED_BY_CREST",
                     )
                 )
@@ -309,7 +315,10 @@ class LayerValidator:
             errors.append(
                 ValidationErrorDetail(
                     field="dem_file",
-                    message=f"Uploaded DEM size ({file_size_bytes / (1024 * 1024):.1f} MB) exceeds maximum allowed 50 MB.",
+                    message=(
+                        f"Uploaded DEM size ({file_size_bytes / (1024 * 1024):.1f} MB) "
+                        "exceeds maximum allowed 50 MB."
+                    ),
                     rule="FILE_SIZE_LIMIT",
                 )
             )
@@ -343,7 +352,10 @@ class LayerValidator:
             errors.append(
                 ValidationErrorDetail(
                     field="elevation_range",
-                    message=f"Minimum elevation ({elevation_min_m}m) must be strictly less than maximum elevation ({elevation_max_m}m).",  # noqa: E501
+                    message=(
+                        f"Minimum elevation ({elevation_min_m}m) must be strictly "
+                        f"less than maximum elevation ({elevation_max_m}m)."
+                    ),
                     rule="ELEVATION_RANGE_VALID",
                 )
             )
@@ -351,7 +363,10 @@ class LayerValidator:
             warnings.append(
                 ValidationErrorDetail(
                     field="elevation_range",
-                    message=f"Elevation range [{elevation_min_m}m, {elevation_max_m}m] is unusual for terrestrial terrain.",
+                    message=(
+                        f"Elevation range [{elevation_min_m}m, {elevation_max_m}m] "
+                        "is unusual for terrestrial terrain."
+                    ),
                     rule="ELEVATION_TERRESTRIAL_BOUNDS",
                     severity="warning",
                 )
