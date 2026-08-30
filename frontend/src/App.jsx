@@ -8,19 +8,30 @@ import KeyboardShortcutsModal from './components/common/KeyboardShortcutsModal';
 import ElevationProfileModal from './components/ElevationProfileModal';
 import ExportModal from './components/ExportModal';
 
-// 5 Main Product Screens
-import HomeScreen from './pages/HomeScreen';
-import CreateScenarioScreen from './pages/CreateScenarioScreen';
-import RunMonitorScreen from './pages/RunMonitorScreen';
-import ResultsMapScreen from './pages/ResultsMapScreen';
-import ImpactExportScreen from './pages/ImpactExportScreen';
+// Product Screens matching the 3 UI Mockups
+import Overview from './pages/Overview'; // Panel 1: Mission Control Dashboard
+import HomeScreen from './pages/HomeScreen'; // Panel 2: Landing Page
+import CreateScenarioScreen from './pages/CreateScenarioScreen'; // Wizard: Simulation Setup
+import DataStudioScreen from './pages/DataStudioScreen'; // Panel 3: Data Input / Upload Panel
+import ModelConfigScreen from './pages/ModelConfigScreen'; // Panel 4: Simulation Settings
+import ResultsMapScreen from './pages/ResultsMapScreen'; // Panel 5: Results Explorer
+import ScenarioComparison from './pages/ScenarioComparison'; // Comparison: SPH vs Delft3D
+import SatelliteMonitor from './pages/SatelliteMonitor'; // GEE Monitoring
+import AlertsScreen from './pages/AlertsScreen'; // Panel 6: Alerts & Notifications
+import HADRDashboard from './pages/HADRDashboard'; // HADR Decision Brief
+import ImpactExportScreen from './pages/ImpactExportScreen'; // Panel 7: Reports & Export Hub
+import FloodPredictorScreen from './pages/FloodPredictorScreen'; // AI Ensemble Flood Predictor
 
 import { api, FALLBACK_PRESETS } from './services/api';
 
-const RECENT_RUNS_KEY = 'hydrobreach_recent_runs_v1';
+const RECENT_RUNS_KEY = 'hydroshield_recent_runs_v2';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home'); // 'home', 'create', 'monitor', 'results', 'impact'
+  // Hybrid Navigation State
+  const [activeTopTab, setActiveTopTab] = useState('dashboard'); // 'dashboard', 'modeling', 'data', 'scenarios', 'analytics', 'reports'
+  const [activeSidebarItem, setActiveSidebarItem] = useState('overview');
+  const [activeSubView, setActiveSubView] = useState(null); // 'landing', 'alerts', 'hadr', 'satellite', etc.
+
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [presets, setPresets] = useState(FALLBACK_PRESETS);
   const [selectedPreset, setSelectedPreset] = useState(FALLBACK_PRESETS[0]);
@@ -28,13 +39,13 @@ export default function App() {
   const [isSimulating, setIsSimulating] = useState(false);
   const [recentRuns, setRecentRuns] = useState([]);
 
-  // Modals State
+  // Modals
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [isDemModalOpen, setIsDemModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
-  // 1. Load initial presets and recent runs on mount
+  // 1. Load presets on mount
   useEffect(() => {
     api.getPresets()
       .then((data) => {
@@ -42,46 +53,41 @@ export default function App() {
         if (list.length > 0) {
           setPresets(list);
           setSelectedPreset(list[0]);
-          handleRunSimulation({
-            scenario_id: list[0].id,
-            preset_id: list[0].id,
-            solver_type: 'coupled',
-          }, false); // don't switch screen on initial mount
         }
       })
       .catch((err) => console.error('Failed to load presets:', err));
 
     try {
       const savedRuns = localStorage.getItem(RECENT_RUNS_KEY);
-      if (savedRuns) {
-        setRecentRuns(JSON.parse(savedRuns));
-      }
+      if (savedRuns) setRecentRuns(JSON.parse(savedRuns));
     } catch (e) {
       console.warn('Could not read recent runs:', e);
     }
   }, []);
 
-  // 2. Global Keyboard Navigation Listener
+  // 2. Keyboard Navigation Listener (Alt+1..6, ?, Esc)
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Don't trigger shortcuts if user is typing in an input/textarea/select
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
 
       if (e.altKey && e.key === '1') {
         e.preventDefault();
-        setActiveTab('home');
+        handleSelectTopTab('dashboard');
       } else if (e.altKey && e.key === '2') {
         e.preventDefault();
-        setActiveTab('create');
+        handleSelectTopTab('modeling');
       } else if (e.altKey && e.key === '3') {
         e.preventDefault();
-        setActiveTab('monitor');
+        handleSelectTopTab('data');
       } else if (e.altKey && e.key === '4') {
         e.preventDefault();
-        setActiveTab('results');
+        handleSelectTopTab('scenarios');
       } else if (e.altKey && e.key === '5') {
         e.preventDefault();
-        setActiveTab('impact');
+        handleSelectTopTab('analytics');
+      } else if (e.altKey && e.key === '6') {
+        e.preventDefault();
+        handleSelectTopTab('reports');
       } else if (e.key === '?') {
         e.preventDefault();
         setIsShortcutsOpen(true);
@@ -97,21 +103,63 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handleSelectPreset = (presetId) => {
-    const found = presets.find((p) => p.id === presetId);
-    if (found) {
-      setSelectedPreset(found);
+  // Unified Top Tab Selector
+  const handleSelectTopTab = (tabId) => {
+    setActiveTopTab(tabId);
+    setActiveSubView(null);
+
+    // Sync corresponding sidebar item
+    if (tabId === 'dashboard') setActiveSidebarItem('overview');
+    else if (tabId === 'predictor') setActiveSidebarItem('predictor');
+    else if (tabId === 'modeling') setActiveSidebarItem('dams');
+    else if (tabId === 'data') setActiveSidebarItem('data_sources');
+    else if (tabId === 'scenarios') setActiveSidebarItem('simulations');
+    else if (tabId === 'analytics') setActiveSidebarItem('hazard_maps');
+    else if (tabId === 'reports') setActiveSidebarItem('overview');
+  };
+
+  // Unified Sidebar Selector
+  const handleSelectSidebarItem = (itemId) => {
+    setActiveSidebarItem(itemId);
+
+    if (itemId === 'overview') {
+      setActiveTopTab('dashboard');
+      setActiveSubView(null);
+    } else if (itemId === 'predictor') {
+      setActiveTopTab('predictor');
+      setActiveSubView(null);
+    } else if (itemId === 'rivers') {
+      setActiveTopTab('dashboard');
+      setActiveSubView('landing');
+    } else if (itemId === 'dams') {
+      setActiveTopTab('modeling');
+      setActiveSubView('wizard');
+    } else if (itemId === 'simulations') {
+      setActiveTopTab('scenarios');
+      setActiveSubView(null);
+    } else if (itemId === 'hazard_maps') {
+      setActiveTopTab('analytics');
+      setActiveSubView(null);
+    } else if (itemId === 'alerts') {
+      setActiveSubView('alerts');
+    } else if (itemId === 'data_sources') {
+      setActiveTopTab('data');
+      setActiveSubView(null);
+    } else if (itemId === 'settings') {
+      setActiveTopTab('modeling');
+      setActiveSubView('settings');
     }
   };
 
-  const handleRunSimulation = async (payload = {}, navigateToMonitor = true) => {
+  const handleSelectPreset = (presetId) => {
+    const found = presets.find((p) => p.id === presetId);
+    if (found) setSelectedPreset(found);
+  };
+
+  const handleRunSimulation = async (payload = {}) => {
     setIsSimulating(true);
-    if (navigateToMonitor) {
-      setActiveTab('monitor');
-    }
     try {
-      const scenarioId =
-        payload.scenario_id || payload.preset_id || selectedPreset?.id || 'tehri_dam_bhagirathi';
+      const scenarioId = payload.scenario_id || selectedPreset?.id || 'chenab_dam_axis';
       const runPayload = {
         ...payload,
         scenario_id: scenarioId,
@@ -121,24 +169,15 @@ export default function App() {
       const res = await api.runSimulation(runPayload);
       setSimulationResult(res);
 
-      // Save to recent runs
-      const newRunItem = {
+      const newRun = {
         run_id: res.run_id,
         scenario_id: scenarioId,
         scenario_name: res.scenario_params?.name || selectedPreset?.name || scenarioId,
-        peak_discharge_m3s: res.breach_mechanics?.peak_discharge_m3s || 84200,
-        timestamp: new Date().toLocaleString(),
-        status: res.status || 'COMPLETED',
+        peak_discharge_m3s: res.breach_mechanics?.peak_discharge_m3s || 45600,
+        timestamp: new Date().toLocaleTimeString(),
+        status: 'COMPLETED',
       };
-      setRecentRuns((prev) => {
-        const updated = [newRunItem, ...prev.filter((r) => r.run_id !== res.run_id)].slice(0, 10);
-        try {
-          localStorage.setItem(RECENT_RUNS_KEY, JSON.stringify(updated));
-        } catch (e) {
-          console.warn('Could not save recent run:', e);
-        }
-        return updated;
-      });
+      setRecentRuns((prev) => [newRun, ...prev.filter((r) => r.run_id !== res.run_id)].slice(0, 10));
     } catch (err) {
       console.error('Simulation execution failed:', err);
     } finally {
@@ -146,142 +185,142 @@ export default function App() {
     }
   };
 
-  const handleDeleteRecentRun = (runId) => {
-    setRecentRuns((prev) => {
-      const updated = prev.filter((r) => r.run_id !== runId);
-      try {
-        localStorage.setItem(RECENT_RUNS_KEY, JSON.stringify(updated));
-      } catch (e) {
-        console.warn('Could not update recent runs:', e);
-      }
-      return updated;
-    });
-  };
-
-  const handleLoadRecentRun = (run) => {
-    const foundPreset = presets.find((p) => p.id === run.scenario_id);
-    if (foundPreset) {
-      setSelectedPreset(foundPreset);
-    }
-    setActiveTab('results');
-  };
-
   return (
-    <div className="min-h-screen bg-hc-bg text-hc-ink flex flex-row font-sans selection:bg-hc-active selection:text-white antialiased">
-      {/* 1. Left Fixed Navigation Sidebar */}
+    <div className="min-h-screen bg-hc-bg text-hc-ink flex flex-row font-sans selection:bg-hc-active selection:text-black antialiased">
+      {/* 1. Left Fixed Sidebar */}
       <Sidebar
-        activeTab={activeTab}
-        onSelectTab={setActiveTab}
+        activeSidebarItem={activeSidebarItem}
+        onSelectSidebarItem={handleSelectSidebarItem}
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-        onOpenDem={() => setIsDemModalOpen(true)}
         onOpenTutorial={() => setIsTutorialOpen(true)}
         onOpenShortcuts={() => setIsShortcutsOpen(true)}
       />
 
-      {/* 2. Main Application Body */}
+      {/* 2. Main Content Body */}
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
-        {/* Mobile Warning Banner */}
         <MobileWarning />
 
-        {/* Global Topbar */}
+        {/* Global Topbar with Top Tabs, Case/Model Badges, Run CTA, and Profile */}
         <Topbar
+          activeTopTab={activeTopTab}
+          onSelectTopTab={handleSelectTopTab}
           selectedPreset={selectedPreset}
           presets={presets}
           onSelectPreset={handleSelectPreset}
           simulationResult={simulationResult}
           isSimulating={isSimulating}
-          onRunSimulation={() =>
-            handleRunSimulation({
-              scenario_id: selectedPreset?.id,
-              preset_id: selectedPreset?.id,
-              solver_type: 'coupled',
-            }, true)
-          }
+          onRunSimulation={() => handleRunSimulation()}
           onOpenTutorial={() => setIsTutorialOpen(true)}
           onOpenShortcuts={() => setIsShortcutsOpen(true)}
-          onOpenExport={() => setIsExportModalOpen(true)}
+          onOpenAlerts={() => setActiveSubView('alerts')}
+          alertCount={3}
         />
 
-        {/* Screen Content Container */}
+        {/* Screen Content Viewport */}
         <main className="flex-1 pb-8">
           <AnimatePresence mode="wait">
             <motion.div
-              key={activeTab}
+              key={`${activeTopTab}-${activeSubView}`}
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.18, ease: 'easeOut' }}
             >
-              {/* Screen 1: Home / Case Studies */}
-              {activeTab === 'home' && (
+              {/* Subview Override: Alerts Screen */}
+              {activeSubView === 'alerts' && (
+                <AlertsScreen onNavigate={handleSelectTopTab} />
+              )}
+
+              {/* Subview Override: Landing Page */}
+              {activeSubView === 'landing' && (
                 <HomeScreen
                   presets={presets}
                   selectedPreset={selectedPreset}
                   onSelectPreset={handleSelectPreset}
                   onRunSimulation={handleRunSimulation}
-                  onNavigate={setActiveTab}
+                  onNavigate={handleSelectTopTab}
                   onOpenTutorial={() => setIsTutorialOpen(true)}
-                  recentRuns={recentRuns}
-                  onDeleteRecentRun={handleDeleteRecentRun}
-                  onLoadRecentRun={handleLoadRecentRun}
                   isSimulating={isSimulating}
                 />
               )}
 
-              {/* Screen 2: Create Scenario Wizard */}
-              {activeTab === 'create' && (
-                <CreateScenarioScreen
+              {/* Top Tab 1: Dashboard (Mission Control) */}
+              {!activeSubView && activeTopTab === 'dashboard' && (
+                <Overview
+                  selectedPreset={selectedPreset}
+                  simulationResult={simulationResult}
+                  onNavigate={handleSelectTopTab}
                   onRunSimulation={handleRunSimulation}
-                  onNavigate={setActiveTab}
                   isSimulating={isSimulating}
                 />
               )}
 
-              {/* Screen 3: Run Monitor */}
-              {activeTab === 'monitor' && (
-                <RunMonitorScreen
+              {/* Top Tab 2: AI Predictor (XGBoost + LightGBM + CatBoost Ensemble) */}
+              {!activeSubView && activeTopTab === 'predictor' && (
+                <FloodPredictorScreen
+                  onNavigate={handleSelectTopTab}
+                  onRunSimulation={handleRunSimulation}
+                  isSimulating={isSimulating}
+                />
+              )}
+
+              {/* Top Tab 3: Modeling (Simulation Wizard / Settings) */}
+              {!activeSubView && activeTopTab === 'modeling' && (
+                <ModelConfigScreen
+                  selectedPreset={selectedPreset}
+                  onRunSimulation={handleRunSimulation}
+                  onNavigate={handleSelectTopTab}
+                  isSimulating={isSimulating}
+                />
+              )}
+
+              {/* Top Tab 3: Data (Data Studio & 3D Layer Stack) */}
+              {!activeSubView && activeTopTab === 'data' && (
+                <DataStudioScreen
+                  onNavigate={handleSelectTopTab}
+                  onRunSimulation={handleRunSimulation}
+                  isSimulating={isSimulating}
+                />
+              )}
+
+              {/* Top Tab 4: Scenarios (Dual SPH vs Delft3D Model Comparison & Queue) */}
+              {!activeSubView && activeTopTab === 'scenarios' && (
+                <ScenarioComparison
                   simulationResult={simulationResult}
                   selectedPreset={selectedPreset}
                   onRunSimulation={handleRunSimulation}
-                  onNavigate={setActiveTab}
                   isSimulating={isSimulating}
                 />
               )}
 
-              {/* Screen 4: Results Map */}
-              {activeTab === 'results' && (
+              {/* Top Tab 5: Analytics (Detailed Results & Inundation Map) */}
+              {!activeSubView && activeTopTab === 'analytics' && (
                 <ResultsMapScreen
                   simulationResult={simulationResult}
                   selectedPreset={selectedPreset}
-                  onRunSimulation={() =>
-                    handleRunSimulation({
-                      scenario_id: selectedPreset?.id,
-                      preset_id: selectedPreset?.id,
-                      solver_type: 'coupled',
-                    }, false)
-                  }
+                  onRunSimulation={handleRunSimulation}
                   isSimulating={isSimulating}
-                  onNavigate={setActiveTab}
+                  onNavigate={handleSelectTopTab}
                 />
               )}
 
-              {/* Screen 5: Impact & Export */}
-              {activeTab === 'impact' && (
+              {/* Top Tab 6: Reports (HADR Decision Brief & 120-Page Report Hub) */}
+              {!activeSubView && activeTopTab === 'reports' && (
                 <ImpactExportScreen
                   simulationResult={simulationResult}
                   selectedPreset={selectedPreset}
-                  onNavigate={setActiveTab}
+                  onNavigate={handleSelectTopTab}
                 />
               )}
             </motion.div>
           </AnimatePresence>
         </main>
 
-        {/* Persistent Prototype Disclaimer Footer */}
-        <footer className="mt-auto border-t border-hc-border bg-hc-bg/80 px-6 py-3 text-center text-[11px] text-hc-textSecondary font-sans">
+        {/* Official Footer Disclaimer */}
+        <footer className="mt-auto border-t border-hc-border bg-hc-canvas px-6 py-3 text-center text-[11px] text-hc-textSecondary font-mono">
           <span>
-            <strong>Official Notice:</strong> Decision-support prototype; not a replacement for official flood-warning or emergency-management systems. Refer exclusively to NDMA, CWC &amp; SEOC directives.
+            <strong>Official Notice:</strong> HydroShield Dam Break &amp; Flood Inundation Modelling Platform. Decision-support prototype. Refer to NDMA &amp; CWC directives.
           </span>
         </footer>
       </div>

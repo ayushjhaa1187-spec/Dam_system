@@ -1,7 +1,6 @@
 """Unit tests for SCS-CN and unit hydrograph."""
 import pytest
 from floodlab.engines.hydrology.scs_cn import SCSCN
-from floodlab.engines.hydrology.unit_hydrograph import UnitHydrograph
 from floodlab.engines.hydrology.inflow_hydrograph import HydrologyEngine, HydrologyInput
 
 

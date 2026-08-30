@@ -1,5 +1,4 @@
 """Unit tests for breach mechanics models."""
-import pytest
 from floodlab.config.constants import BreachModel
 from floodlab.engines.breach.breach_models import BreachMechanicsEngine, DamBreachInput
 

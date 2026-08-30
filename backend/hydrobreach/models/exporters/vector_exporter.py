@@ -11,7 +11,6 @@ Generates:
 """
 
 import io
-import os
 import math
 import time
 import json
@@ -32,7 +31,6 @@ from reportlab.platypus import (
     Spacer,
     Table,
     TableStyle,
-    KeepTogether,
     HRFlowable,
 )
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -525,12 +523,12 @@ class GeospatialExporter:
         """Generates structured CSV for breach outflow hydrograph with metadata header."""
         ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         lines = [
-            f"# HydroBreach Outflow Hydrograph Export",
+            "# HydroBreach Outflow Hydrograph Export",
             f"# Scenario: {scenario_name}",
             f"# Run ID: {run_id}",
             f"# Model: {model_used}",
-            f"# CRS: EPSG:4326",
-            f"# Units: Time (hours, minutes), Discharge (m3/s)",
+            "# CRS: EPSG:4326",
+            "# Units: Time (hours, minutes), Discharge (m3/s)",
             f"# Data Timestamp: {ts}",
             f"# Disclaimer: {PROTOTYPE_DISCLAIMER}",
             "Time_hrs,Time_min,Discharge_m3s,Cumulative_Volume_Mm3",
@@ -562,11 +560,11 @@ class GeospatialExporter:
         ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
         lines = [
-            f"# HydroBreach HADR Settlement Exposure & Disaster Impact Summary",
+            "# HydroBreach HADR Settlement Exposure & Disaster Impact Summary",
             f"# Scenario: {scenario_name}",
             f"# Run ID: {run_id}",
             f"# Timestamp: {ts}",
-            f"# CRS: EPSG:4326",
+            "# CRS: EPSG:4326",
             f"# Disclaimer: {PROTOTYPE_DISCLAIMER}",
             "",
             "METRIC_CATEGORY,PARAMETER_NAME,VALUE,UNITS,PROVENANCE",
@@ -732,7 +730,6 @@ class GeospatialExporter:
         # 4. District Exposure & Loss Assessment Table
         story.append(Paragraph("2. Downstream Exposure, Damage & HADR Loss Estimates", h2_style))
         exp = damage_data.get("exposure_and_loss", {})
-        haz = damage_data.get("hazard_metrics", {})
         res = damage_data.get("resource_allocation", {})
 
         exp_rows = [

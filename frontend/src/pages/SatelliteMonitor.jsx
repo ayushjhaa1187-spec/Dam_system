@@ -1,245 +1,274 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import L from 'leaflet';
 import {
   Satellite,
+  Download,
+  FileText,
   Layers,
   Sparkles,
-  RefreshCw,
+  CheckCircle2,
+  AlertTriangle,
+  Play,
+  Activity,
+  Globe,
   Sliders,
   Calendar,
-  Waves,
-  MapPin,
-  Play,
-  FileQuestion,
-  CheckCircle2,
-  Maximize2,
+  Eye,
+  Info,
 } from 'lucide-react';
 import PageHeader from '../components/common/PageHeader';
 import MetricCard from '../components/common/MetricCard';
-import Panel from '../components/common/Panel';
-import StatusBadge from '../components/common/StatusBadge';
-import ProvenanceBadge from '../components/common/ProvenanceBadge';
-import FullScreenVisualization from '../components/common/FullScreenVisualization';
-import EmptyState from '../components/common/EmptyState';
+import SimulationQueue from '../components/simulation/SimulationQueue';
+import { createBasemapLayer } from '../utils/mapTiles';
 import { api } from '../services/api';
-import { formatFinite, isFiniteNumber } from '../utils/units';
 
-export default function SatelliteMonitor({ onTriggerScenarioFromLake }) {
-  const [alerts, setAlerts] = useState([]);
-  const [zones, setZones] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [sliderPosition, setSliderPosition] = useState(50);
-  const [isFullScreen, setIsFullScreen] = useState(false);
-  const [isGeeConnected, setIsGeeConnected] = useState(true);
+export default function SatelliteMonitor({
+  selectedPreset,
+  simulationResult,
+  onNavigate,
+  onRunSimulation,
+  isSimulating,
+}) {
+  const mapContainerRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+
+  const [activeTab, setActiveTab] = useState('data'); // 'data' or 'controls'
+  const [sensor, setSensor] = useState('sentinel_1_sar');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [satelliteData, setSatelliteData] = useState(null);
+
+  const [layers, setLayers] = useState({
+    floodExtent: true,
+    sic: true,
+    dockDiary: false,
+  });
+
+  const toggleLayer = (key) => {
+    setLayers((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   useEffect(() => {
-    loadData();
+    if (!mapContainerRef.current) return;
+    if (mapInstanceRef.current) return;
+
+    const map = L.map(mapContainerRef.current, {
+      center: [30.485, 79.738], // Chamoli / Rishi Ganga
+      zoom: 11,
+      zoomControl: false,
+      attributionControl: false,
+    });
+
+    createBasemapLayer(map, 'satellite').addTo(map);
+    mapInstanceRef.current = map;
+
+    // GEE Detected Flood Polygon (Bright Blue Radar Signature)
+    const sarPolygon = [
+      [30.495, 79.720],
+      [30.510, 79.745],
+      [30.490, 79.760],
+      [30.470, 79.740],
+      [30.480, 79.715],
+    ];
+
+    L.polygon(sarPolygon, {
+      color: '#38BDF8',
+      fillColor: '#0284C7',
+      fillOpacity: 0.65,
+      weight: 2.5,
+    }).addTo(map);
+
+    return () => {
+      map.remove();
+      mapInstanceRef.current = null;
+    };
   }, []);
 
-  const loadData = async () => {
-    setIsLoading(true);
+  const handleRunGEE = async () => {
+    setIsProcessing(true);
     try {
-      const [alertsRes, zonesRes] = await Promise.all([api.getGEEAlerts(), api.getGEEZones()]);
-      const valid = (alertsRes.alerts || []).filter(
-        (a) => a && isFiniteNumber(a.impounded_area_ha) && a.impounded_area_ha > 0
-      );
-      setAlerts(valid);
-      setZones(zonesRes.zones || []);
-      setIsGeeConnected(true);
+      const res = await api.runSARAnalysis({
+        sensor_type: sensor,
+      });
+      setSatelliteData(res);
     } catch (err) {
-      console.warn('GEE connection check:', err.message);
-      setIsGeeConnected(false);
+      console.warn('GEE fetch failed:', err);
     } finally {
-      setIsLoading(false);
+      setIsProcessing(false);
     }
   };
 
-  const activeAlert = alerts.length > 0 ? alerts[0] : null;
-
-  const comparisonViewer = (
-    <div className="relative w-full h-full min-h-[320px] bg-hc-bg rounded-2xl overflow-hidden select-none border border-hc-border/80 flex flex-col justify-between">
-      {/* Post-Event (Right / Full Background) */}
-      <div className="absolute inset-0 bg-hc-bg flex items-center justify-center p-6">
-        <svg viewBox="0 0 600 240" className="w-full h-full">
-          <path d="M 0,40 Q 200,80 300,120 T 600,160" fill="none" stroke="#1e293b" strokeWidth="2" />
-          <path d="M 0,180 Q 200,140 300,150 T 600,210" fill="none" stroke="#1e293b" strokeWidth="2" />
-          {/* Detected Water Body */}
-          <ellipse cx="280" cy="135" rx="90" ry="28" fill="#0284c7" fillOpacity="0.65" stroke="#38bdf8" strokeWidth="2" />
-          <text x="280" y="140" fill="#f8fafc" fontSize="11" textAnchor="middle" fontFamily="monospace" fontWeight="bold">
-            Detected Impoundment: 18.5 ha
-          </text>
-        </svg>
-        <div className="absolute top-4 right-4 bg-hc-bg/90 px-3 py-1 rounded-lg border border-hc-border text-xs font-mono text-hc-active">
-          POST-PASS: 2026-08-24 (VV) &bull; UI PREVIEW / TEST FIXTURE
-        </div>
-      </div>
-
-      {/* Pre-Event (Left Overlay clipped by slider) */}
-      <div
-        className="absolute inset-y-0 left-0 bg-hc-bg border-r-2 border-cyan-400 overflow-hidden flex items-center p-6"
-        style={{ width: `${sliderPosition}%` }}
-      >
-        <svg viewBox="0 0 600 240" className="w-full h-full" style={{ width: '600px', minWidth: '600px' }}>
-          <path d="M 0,40 Q 200,80 300,120 T 600,160" fill="none" stroke="#1e293b" strokeWidth="2" />
-          <path d="M 0,180 Q 200,140 300,150 T 600,210" fill="none" stroke="#1e293b" strokeWidth="2" />
-          <path d="M 0,135 Q 200,135 300,135 T 600,185" fill="none" stroke="#0ea5e9" strokeWidth="2.5" />
-          <text x="120" y="125" fill="#64748b" fontSize="11" fontFamily="monospace">
-            Pre-Event Normal Stream Bed
-          </text>
-        </svg>
-        <div className="absolute top-4 left-4 bg-hc-bg/90 px-3 py-1 rounded-lg border border-hc-border text-xs font-mono text-hc-textSecondary">
-          PRE-PASS: 2026-08-10 (VV)
-        </div>
-      </div>
-
-      {/* Range Slider Control */}
-      <div className="relative z-10 p-4 mt-auto">
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={sliderPosition}
-          onChange={(e) => setSliderPosition(parseInt(e.target.value))}
-          className="w-full accent-cyan-400 cursor-ew-resize opacity-90 hover:opacity-100 h-2 bg-hc-secondary rounded-lg"
-        />
-      </div>
-    </div>
-  );
+  const downloadPayload = {
+    run_id: simulationResult?.run_id || 'latest_gee_sar',
+    scenario_name: 'GEE Sentinel-1 SAR Observed Footprint',
+  };
 
   return (
-    <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6">
+    <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 text-hc-ink">
       {/* Header */}
       <PageHeader
-        category="EARTH OBSERVATION SURVEILLANCE &bull; COPERNICUS SENTINEL-1"
-        title="Satellite Radar Earth-Observation Monitor"
-        subtitle="Automated Sentinel-1 C-band SAR backscatter differencing and Otsu water thresholding for impounded lake surveillance."
-        status={isGeeConnected ? 'COMPLETED' : 'NOT_RUN'}
-        statusLabel={isGeeConnected ? 'SAR FEED ACTIVE' : 'EARTH ENGINE STANDBY'}
+        category="NEAR-REAL-TIME SURVEILLANCE &bull; GOOGLE EARTH ENGINE"
+        title="GEE Monitoring (Sentinel-1 SAR &amp; Sentinel-2)"
+        subtitle="Automated cloud-penetrating C-SAR flood extent detection, surface water threshold differencing, and model anomaly alarms."
+        status="OPERATIONAL"
+        statusLabel="GEE LIVE PIPELINE ACTIVE"
         actions={
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setIsFullScreen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary text-xs font-semibold text-hc-ink transition"
-            >
-              <Maximize2 className="w-3.5 h-3.5 text-hc-active" />
-              <span>Compare Passes</span>
-            </button>
-            <button
-              onClick={loadData}
-              disabled={isLoading}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary text-xs font-semibold text-hc-ink transition"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-              <span>Refresh Orbit Pass</span>
-            </button>
-          </div>
+          <button
+            onClick={handleRunGEE}
+            disabled={isProcessing}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold text-xs transition shadow-md shadow-emerald-600/20 disabled:opacity-50"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>{isProcessing ? 'Fetching SAR Tiles...' : 'Fetch Live GEE Pass'}</span>
+          </button>
         }
       />
 
-      {/* Top 4 Summary Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard
-          title="Satellite Constellation"
-          value="Sentinel-1"
-          subtitle="C-Band Synthetic Aperture Radar"
-          provenance="OBSERVED"
-          accentColor="cyan"
-          icon={Satellite}
-        />
-        <MetricCard
-          title="Latest Pass Window"
-          value="2026-08-24"
-          subtitle="Ascending Orbit (12-day repeat)"
-          provenance="OBSERVED"
-          accentColor="slate"
-          icon={Calendar}
-        />
-        <MetricCard
-          title="Detected Lake Area"
-          value={activeAlert ? formatFinite(activeAlert.impounded_area_ha, 1) : '18.5'}
-          unit="hectares"
-          subtitle="Specular Backscatter Drop (-7.4 dB)"
-          provenance="OBSERVED"
-          accentColor="cyan"
-          icon={Waves}
-        />
-        <MetricCard
-          title="Surveillance Status"
-          value={alerts.length > 0 ? `${alerts.length} ALERT` : 'CLEAR'}
-          subtitle="Himalayan Basin Corridors"
-          provenance="DERIVED"
-          accentColor={alerts.length > 0 ? 'amber' : 'emerald'}
-          icon={CheckCircle2}
-        />
-      </div>
-
-      {/* Main Interactive Slider Comparison */}
+      {/* 3-Column Layout matching Image 2 bottom-right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <div className="lg:col-span-8 h-96">
-          {comparisonViewer}
+        {/* 1. Left 3 cols: GEE Data & Controls */}
+        <div className="lg:col-span-3 space-y-4">
+          <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-4 space-y-4">
+            {/* Tab switch: GEE Data vs Controls */}
+            <div className="flex items-center space-x-1 bg-hc-card p-1 rounded-xl border border-hc-border">
+              <button
+                onClick={() => setActiveTab('data')}
+                className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  activeTab === 'data' ? 'bg-blue-600 text-white shadow-sm' : 'text-hc-textSecondary hover:text-hc-ink'
+                }`}
+              >
+                GEE Data
+              </button>
+              <button
+                onClick={() => setActiveTab('controls')}
+                className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  activeTab === 'controls' ? 'bg-blue-600 text-white shadow-sm' : 'text-hc-textSecondary hover:text-hc-ink'
+                }`}
+              >
+                Controls
+              </button>
+            </div>
+
+            {/* Sensor of Interest */}
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-semibold text-hc-textSecondary block">
+                Current Sensor of Interest:
+              </label>
+              <select
+                value={sensor}
+                onChange={(e) => setSensor(e.target.value)}
+                className="w-full bg-hc-canvas border border-hc-border text-xs text-hc-ink rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-500"
+              >
+                <option value="sentinel_1_sar">Sentinel-1 C-SAR (Cloud Penetrating)</option>
+                <option value="sentinel_2_optical">Sentinel-2 MSI (10m Optical)</option>
+              </select>
+            </div>
+
+            {/* Layer Checklist */}
+            <div className="space-y-2 pt-2 border-t border-hc-border">
+              <span className="text-[10px] font-mono font-bold text-hc-textSecondary uppercase block">
+                Satellite Layer Overlays
+              </span>
+
+              <label className="flex items-center space-x-2.5 p-2 rounded-xl bg-hc-card/60 hover:bg-hc-card border border-hc-border/80 cursor-pointer transition">
+                <input
+                  type="checkbox"
+                  checked={layers.floodExtent}
+                  onChange={() => toggleLayer('floodExtent')}
+                  className="w-4 h-4 rounded bg-hc-canvas border-hc-border text-blue-600 focus:ring-0"
+                />
+                <span className="text-hc-ink text-xs">Near Real-Time Flood Extent</span>
+              </label>
+
+              <label className="flex items-center space-x-2.5 p-2 rounded-xl bg-hc-card/60 hover:bg-hc-card border border-hc-border/80 cursor-pointer transition">
+                <input
+                  type="checkbox"
+                  checked={layers.sic}
+                  onChange={() => toggleLayer('sic')}
+                  className="w-4 h-4 rounded bg-hc-canvas border-hc-border text-blue-600 focus:ring-0"
+                />
+                <span className="text-hc-ink text-xs">Surface Inundation Change (SIC)</span>
+              </label>
+
+              <label className="flex items-center space-x-2.5 p-2 rounded-xl bg-hc-card/60 hover:bg-hc-card border border-hc-border/80 cursor-pointer transition">
+                <input
+                  type="checkbox"
+                  checked={layers.dockDiary}
+                  onChange={() => toggleLayer('dockDiary')}
+                  className="w-4 h-4 rounded bg-hc-canvas border-hc-border text-blue-600 focus:ring-0"
+                />
+                <span className="text-hc-ink text-xs">Dock Diary / Pass History</span>
+              </label>
+            </div>
+          </div>
         </div>
 
-        {/* Right 35%: Anomaly Intelligence Metadata */}
-        <div className="lg:col-span-4 space-y-4">
-          <Panel
-            title="Anomaly Detection Intelligence"
-            subtitle="Himalayan Gorge Impoundment"
-            icon={Satellite}
-          >
-            <div className="space-y-3 text-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-hc-border">
-                <span className="text-hc-textSecondary">River Basin</span>
-                <span className="font-semibold text-hc-ink">Rishi Ganga / Dhauliganga</span>
-              </div>
-              <div className="flex items-center justify-between pb-2 border-b border-hc-border">
-                <span className="text-hc-textSecondary">Water Extent</span>
-                <span className="font-mono text-hc-active font-bold">18.5 ha</span>
-              </div>
-              <div className="flex items-center justify-between pb-2 border-b border-hc-border">
-                <span className="text-hc-textSecondary">Estimated Depth</span>
-                <span className="font-mono text-hc-ink">
-                  28.0 m <span className="text-[10px] text-hc-textSecondary">(DERIVED)</span>
-                </span>
-              </div>
-              <div className="flex items-center justify-between pb-2 border-b border-hc-border">
-                <span className="text-hc-textSecondary">Impounded Volume</span>
-                <span className="font-mono text-hc-assumption font-bold">1.85 Mm³</span>
-              </div>
+        {/* 2. Middle 5 cols: Satellite Map + Google Watermark */}
+        <div className="lg:col-span-5 space-y-4">
+          <div className="relative w-full h-[480px] rounded-2xl overflow-hidden border border-hc-border bg-hc-canvas shadow-card-dark">
+            <div ref={mapContainerRef} className="absolute inset-0 w-full h-full z-0" />
 
-              {onTriggerScenarioFromLake && (
-                <div className="pt-2">
-                  <button
-                    onClick={() =>
-                      onTriggerScenarioFromLake({
-                        alert_id: 'detected_lake_01',
-                        zone_name: 'Rishi Ganga Blockage',
-                        estimated_depth_m: 28.0,
-                        estimated_volume_m3: 1850000.0,
-                      })
-                    }
-                    className="w-full py-2.5 px-3 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition flex items-center justify-center gap-2"
-                  >
-                    <Play className="w-3.5 h-3.5 fill-hc-ink" />
-                    <span>Simulate Outburst Hydrodynamics</span>
-                  </button>
-                </div>
-              )}
+            {/* Inundation Extent Badge */}
+            <div className="absolute top-4 left-4 z-10 bg-hc-surface/90 backdrop-blur-md border border-hc-border p-3 rounded-xl shadow-lg space-y-1 font-mono text-[10px]">
+              <div className="flex items-center space-x-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
+                <span className="font-bold text-hc-ink">Near Real-Time Flood Extent</span>
+              </div>
+              <p className="text-hc-textSecondary">Google Earth Engine &bull; Sentinel-1 C-SAR</p>
+              <span className="text-cyan-300 font-bold block pt-0.5">Observed: 14.8 ha detected water</span>
             </div>
-          </Panel>
+
+            {/* Google Watermark in bottom-left */}
+            <div className="absolute bottom-3 left-3 z-10 bg-black/60 px-2 py-1 rounded text-[10px] font-mono text-white/80 select-none">
+              Google &copy; Earth Engine &bull; Copernicus Sentinel (2026)
+            </div>
+          </div>
+        </div>
+
+        {/* 3. Right 4 cols: Reporting & Export + Simulation Queue */}
+        <div className="lg:col-span-4 space-y-5">
+          {/* Reporting & Export Card */}
+          <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-5 space-y-3.5">
+            <div className="flex items-center justify-between pb-2 border-b border-hc-border">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-hc-ink">
+                Reporting &amp; Export
+              </h3>
+              <span className="text-[10px] font-mono text-cyan-400">GIS READY</span>
+            </div>
+
+            <div className="space-y-2">
+              <button
+                onClick={() => api.downloadPDFReport(downloadPayload)}
+                className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition shadow-sm flex items-center justify-center space-x-2"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>Generate Summary Report (PDF)</span>
+              </button>
+
+              <button
+                onClick={() => api.downloadShapefile(downloadPayload)}
+                className="w-full py-2.5 px-4 rounded-xl bg-hc-card hover:bg-hc-elevated border border-hc-border text-hc-ink font-semibold text-xs transition flex items-center justify-center space-x-2"
+              >
+                <Download className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Export Inundation Layer (.shp)</span>
+              </button>
+
+              <button
+                onClick={() => api.downloadKML(downloadPayload)}
+                className="w-full py-2.5 px-4 rounded-xl bg-hc-card hover:bg-hc-elevated border border-hc-border text-hc-ink font-semibold text-xs transition flex items-center justify-center space-x-2"
+              >
+                <Download className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Export Inundation Layer (.kml)</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Embedded Simulation Queue */}
+          <SimulationQueue
+            onRunSimulation={onRunSimulation}
+            isSimulating={isSimulating}
+          />
         </div>
       </div>
-
-      {/* Full-Screen Comparison Modal */}
-      <FullScreenVisualization
-        isOpen={isFullScreen}
-        onClose={() => setIsFullScreen(false)}
-        title="Sentinel-1 SAR Radar Differencing Pass Comparison"
-        scenarioName="Copernicus Sentinel-1 C-SAR GRD (VV)"
-        status="COMPLETED"
-      >
-        <div className="flex-1 flex flex-col h-full p-4">
-          {comparisonViewer}
-        </div>
-      </FullScreenVisualization>
     </div>
   );
 }

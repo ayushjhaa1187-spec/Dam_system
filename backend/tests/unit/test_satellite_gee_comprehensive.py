@@ -11,7 +11,6 @@ Unit & Integration Tests for Google Earth Engine & Satellite Surveillance:
 - Satellite API routes
 """
 
-import pytest
 from hydrobreach.models.gee_monitor.gee_service import GEESentinel1Monitor
 from fastapi.testclient import TestClient
 from floodlab.api.main import app

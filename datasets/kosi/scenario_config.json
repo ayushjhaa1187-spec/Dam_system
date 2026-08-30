@@ -1,0 +1,40 @@
+{
+  "scenario_id": "kosi-bihar-monsoon-breach",
+  "description": "Monsoon flood overtopping breach simulation for Kosi River Barrage / Embankment in North Bihar.",
+  "basin": {
+    "name": "Kosi River Basin",
+    "aoi_boundary": "datasets/kosi/aoi.geojson",
+    "state": "Bihar",
+    "country": "India"
+  },
+  "inputs": {
+    "dem": "datasets/kosi/dem.tif",
+    "river_network": "datasets/kosi/river.geojson",
+    "land_use": "datasets/kosi/landuse.tif",
+    "population": "datasets/kosi/population.tif"
+  },
+  "dam": {
+    "name": "Kosi Barrage / Dam",
+    "location": [
+      26.85,
+      86.95
+    ],
+    "height_m": 42.0,
+    "storage_volume_mcm": 850.0,
+    "dam_type": "earthfill_barrage",
+    "crest_length_m": 1150.0
+  },
+  "breach": {
+    "failure_type": "overtopping",
+    "breach_width_m": 250.0,
+    "breach_formation_time_hr": 0.5,
+    "reservoir_level_pct": 105.0,
+    "breach_model": "froehlich_2008"
+  },
+  "run_settings": {
+    "grid_resolution_m": 30.0,
+    "manning_n": 0.03,
+    "simulation_duration_hr": 24.0,
+    "target_crs": "EPSG:32645"
+  }
+}

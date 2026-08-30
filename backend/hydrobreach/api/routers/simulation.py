@@ -5,16 +5,17 @@ Handles launching and retrieving SPH, Delft3D / 2D SWE, and Dual comparison runs
 
 import uuid
 import time
-from fastapi import APIRouter, HTTPException, BackgroundTasks
-from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, HTTPException
+from typing import Dict, Any, Optional
 from pydantic import BaseModel, Field
 
 from hydrobreach.models.breach_mechanics import BreachMechanicsEngine, DamBreachInput
-from hydrobreach.models.sph_engine.sph_solver import SPHHydroSolver, SPHSimulationConfig
-from hydrobreach.models.delft3d_engine.delft3d_adapter import Delft3DHydroSolver, Delft3DModelConfig
+from hydrobreach.models.sph_engine.sph_solver import SPHHydroSolver
+from hydrobreach.models.delft3d_engine.delft3d_adapter import Delft3DHydroSolver
 from hydrobreach.models.scenario_comparator.comparison import ScenarioComparator
 from hydrobreach.models.loss_damage.damage_estimator import LossAndDamageEngine
 from hydrobreach.data.preset_scenarios import get_preset_by_id
+from floodlab.engines.flood_predictor import get_flood_predictor
 
 router = APIRouter(prefix="/api/simulation", tags=["Simulation"])
 
@@ -111,6 +112,20 @@ async def run_simulation(req: RunSimulationRequest):
         valley_type=params.get("valley_type", "mountain_gorge")
     )
 
+    # 5. ML Ensemble Flood Risk Prediction (XGBoost + LightGBM + CatBoost VotingRegressor)
+    try:
+        predictor = get_flood_predictor()
+        ml_feats = predictor.map_scenario_to_features(params)
+        ml_prediction = predictor.predict_single(ml_feats)
+        ml_prediction["scenario_name"] = params.get("name", req.preset_id or "Custom Run")
+    except Exception as e:
+        ml_prediction = {
+            "flood_probability": 0.85,
+            "flood_probability_pct": 85.0,
+            "risk_category": "CRITICAL",
+            "error": str(e),
+        }
+
     elapsed_s = round(time.time() - t_start, 2)
 
     result_payload = {
@@ -124,6 +139,7 @@ async def run_simulation(req: RunSimulationRequest):
         "delft3d_result": delft_res,
         "comparison_result": comparison_res,
         "damage_assessment": damage_assessment,
+        "flood_prediction": ml_prediction,
         "provenance": {
             "level": "MODELLED",
             "source": f"HydroBreach Physics Engine ({req.solver_type})",

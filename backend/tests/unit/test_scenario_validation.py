@@ -1,7 +1,6 @@
 """
 Tests for physical constraint validation and GIS layer checks.
 """
-import pytest
 from floodlab.validation.scenario_validator import ScenarioValidator, LayerValidator
 
 

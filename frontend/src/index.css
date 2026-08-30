@@ -4,60 +4,67 @@
 
 @layer base {
   body {
-    @apply bg-hc-bg text-hc-ink selection:bg-hc-active selection:text-white;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    @apply bg-hc-bg text-hc-ink selection:bg-hc-active selection:text-black;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color-scheme: dark;
   }
 }
 
-/* Custom scrollbars */
+/* Custom dark scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #EAF4FA;
+  background: #0A1120;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D7E4EC;
+  background: #1E3563;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #5F7180;
+  background: #2A4782;
 }
 
 /* Glow effects */
 .glow-cyan {
-  box-shadow: 0 0 25px -5px rgba(0, 169, 198, 0.35);
+  box-shadow: 0 0 25px -5px rgba(14, 165, 233, 0.45);
+}
+
+.glow-blue {
+  box-shadow: 0 0 25px -5px rgba(37, 99, 235, 0.45);
 }
 
 .glow-red {
-  box-shadow: 0 0 25px -5px rgba(217, 66, 66, 0.35);
+  box-shadow: 0 0 25px -5px rgba(239, 68, 68, 0.45);
 }
 
-.glow-orange {
-  box-shadow: 0 0 25px -5px rgba(217, 138, 17, 0.35);
+.glow-amber {
+  box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.45);
 }
 
-/* Leaflet Map overrides for light theme */
+/* Leaflet Map overrides for dark theme */
 .leaflet-container {
-  background: #EAF4FA !important;
+  background: #080E1A !important;
   font-family: inherit;
 }
 .leaflet-bar a {
-  background-color: #FFFFFF !important;
-  color: #5F7180 !important;
-  border-color: #D7E4EC !important;
+  background-color: #101B33 !important;
+  color: #8B9BB4 !important;
+  border-color: #1E3563 !important;
 }
 .leaflet-bar a:hover {
-  background-color: #F4F9FC !important;
-  color: #1479C9 !important;
+  background-color: #182B52 !important;
+  color: #0EA5E9 !important;
 }
 .leaflet-popup-content-wrapper {
-  background: #FFFFFF !important;
-  color: #12304A !important;
-  border: 1px solid #D7E4EC;
-  border-radius: 8px !important;
+  background: #101B33 !important;
+  color: #F0F6FC !important;
+  border: 1px solid #1E3563;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
 }
 .leaflet-popup-tip {
-  background: #FFFFFF !important;
+  background: #101B33 !important;
 }
+

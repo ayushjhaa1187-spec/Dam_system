@@ -2,7 +2,6 @@
 Tests for background simulation job management and stage lifecycle.
 """
 import time
-import pytest
 from floodlab.services.job_service import JobService, JobStage
 
 

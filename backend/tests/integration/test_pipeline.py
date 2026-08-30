@@ -43,6 +43,7 @@ def test_full_pipeline(tmp_path):
 
     # 5. Hazard & Loss
     hr = HazardRatingEngine().compute_hr(delft_res["h_max_m"], 4.0, "mountain_gorge")
+    assert hr is not None
     damage = DamageEstimator().estimate(
         delft_res["inundated_area_km2"], 4.0, delft_res["h_max_m"],
         "mountain_gorge", {"population_density_per_km2": 150.0},

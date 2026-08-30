@@ -5,9 +5,8 @@ Computes spatial metrics: Critical Success Index (CSI), Probability of Detection
 False Alarm Ratio (FAR), Depth Differences, Arrival Time Deviations, and Hydrograph Peak Delays.
 """
 
-import math
 import numpy as np
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any
 
 
 class ScenarioComparator:
@@ -53,7 +52,6 @@ class ScenarioComparator:
                 hits = int(np.sum(sph_wet & delft_wet))
                 false_alarms = int(np.sum(sph_wet & (~delft_wet)))
                 misses = int(np.sum((~sph_wet) & delft_wet))
-                correct_negatives = int(np.sum((~sph_wet) & (~delft_wet)))
 
                 total_hits += hits
                 total_false_alarms += false_alarms

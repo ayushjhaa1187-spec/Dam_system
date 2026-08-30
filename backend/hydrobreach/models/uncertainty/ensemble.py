@@ -3,8 +3,7 @@ HydroBreach - Uncertainty Ensemble Wrapper
 Runs multiple dam breach simulations with varied parameters (breach width, formation time, head).
 """
 
-from typing import List, Dict, Any
-import math
+from typing import List
 import random
 from hydrobreach.models.breach_mechanics import BreachMechanicsEngine, DamBreachInput, BreachResult
 

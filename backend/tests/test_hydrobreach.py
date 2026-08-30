@@ -2,15 +2,12 @@
 Unit and Integration Tests for HydroBreach Backend Modules
 """
 
-import pytest
-import numpy as np
 from hydrobreach.models.breach_mechanics import BreachMechanicsEngine, DamBreachInput
 from hydrobreach.models.sph_engine.sph_solver import SPHHydroSolver, SPHSimulationConfig
 from hydrobreach.models.delft3d_engine.delft3d_adapter import Delft3DHydroSolver, Delft3DModelConfig
 from hydrobreach.models.scenario_comparator.comparison import ScenarioComparator
 from hydrobreach.models.loss_damage.damage_estimator import LossAndDamageEngine
 from hydrobreach.models.exporters.vector_exporter import GeospatialExporter
-from hydrobreach.data.preset_scenarios import INDIAN_PRESET_SCENARIOS, get_preset_by_id
 
 
 def test_breach_mechanics_froehlich():

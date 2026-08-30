@@ -4,9 +4,7 @@ Calculates flood hazard ratings (HR = d*(v+0.5)+DF), structural damage vulnerabi
 population exposure (WorldPop), economic damages (INR Crores), and NDRF evacuation zones.
 """
 
-import math
-from typing import Dict, Any, List, Optional
-import numpy as np
+from typing import Dict, Any
 
 
 class LossAndDamageEngine:
@@ -26,7 +24,6 @@ class LossAndDamageEngine:
         """
         reach_name = scenario_params.get("reach_name", "Downstream River Basin")
         dam_name = scenario_params.get("dam_name", "Study Dam")
-        reach_length_km = scenario_params.get("reach_length_km", 25.0)
 
         # Debris factor: 1.0 for Himalayan glacial/rock valleys, 0.5 for alluvial plains
         debris_factor = 1.0 if valley_type == "mountain_gorge" else 0.5
@@ -52,19 +49,16 @@ class LossAndDamageEngine:
             pop_density_per_km2 = 180.0
             buildings_per_km2 = 35.0
             agri_ratio = 0.25
-            commercial_ratio = 0.10
         elif valley_type == "semi_urban":
             # Nangal / Rishikesh / Anandpur Sahib profile
             pop_density_per_km2 = 850.0
             buildings_per_km2 = 160.0
             agri_ratio = 0.40
-            commercial_ratio = 0.25
         else:
             # Alluvial plains (Kosi / Mahanadi profile)
             pop_density_per_km2 = 1100.0
             buildings_per_km2 = 210.0
             agri_ratio = 0.65
-            commercial_ratio = 0.15
 
         # Inundated exposure counts
         total_exposed_pop = int(max_inundated_area_km2 * pop_density_per_km2)
@@ -75,15 +69,12 @@ class LossAndDamageEngine:
         # Structural damage fraction based on depth & velocity
         if hazard_rating >= 2.0:
             structure_destroyed_pct = 0.65
-            structure_inundated_pct = 0.35
             pop_displaced_pct = 0.85
         elif hazard_rating >= 1.25:
             structure_destroyed_pct = 0.30
-            structure_inundated_pct = 0.70
             pop_displaced_pct = 0.60
         else:
             structure_destroyed_pct = 0.05
-            structure_inundated_pct = 0.95
             pop_displaced_pct = 0.30
 
         destroyed_buildings = int(total_exposed_buildings * structure_destroyed_pct)

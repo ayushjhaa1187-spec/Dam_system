@@ -4,7 +4,7 @@ Produces preliminary inundation extent based on HAND / elevation thresholds.
 """
 
 import numpy as np
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 class RapidScreeningSolver:
     @classmethod

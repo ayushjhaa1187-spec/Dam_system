@@ -11,10 +11,7 @@ Unit & Integration Tests for Comprehensive Multi-Format Exporters:
 """
 
 import io
-import json
 import zipfile
-import pytest
-import numpy as np
 import rasterio
 
 from hydrobreach.models.exporters.vector_exporter import GeospatialExporter

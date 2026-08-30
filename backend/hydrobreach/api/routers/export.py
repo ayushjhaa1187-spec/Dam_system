@@ -4,9 +4,8 @@ Provides file downloads for GeoJSON, Google Earth (.kml), Shapefile package (.sh
 GeoTIFF rasters (depth, velocity, arrival_time, hazard), CSV reports, Decision-Maker PDF, and ZIP Run Packages.
 """
 
-from fastapi import APIRouter, HTTPException, Response, Query
-from fastapi.responses import StreamingResponse, PlainTextResponse
-from typing import Dict, Any, Optional
+from fastapi import APIRouter, HTTPException, Response
+from typing import Optional
 from pydantic import BaseModel
 import io
 import json

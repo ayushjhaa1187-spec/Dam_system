@@ -4,9 +4,8 @@ Handles DEM ingestion (SRTM 30m, ALOS PALSAR 12.5m, CartoDEM), sink filling,
 depression breaching, river cross-section extraction, and Cloud-Optimized GeoTIFF (COG) tiling.
 """
 
-import math
 import numpy as np
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any
 
 
 class DEMProcessor:
