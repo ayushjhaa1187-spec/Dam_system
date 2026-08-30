@@ -324,11 +324,8 @@ class JobService:
                 breach_model=job.breach_model,
                 run_id=job.run_id,
             )
-            time.sleep(0.05)
-            log(
-                f"Peak discharge computed: {sim_result.get('breach_mechanics', {}).get('peak_discharge_m3s', 84200):,.0f} m³/s",
-                level="SUCCESS",
-            )  # noqa: E501
+            peak_q = sim_result.get("breach_mechanics", {}).get("peak_discharge_m3s", 84200)
+            log(f"Peak discharge computed: {peak_q:,.0f} m³/s", level="SUCCESS")
 
             # Stage 5: Post-Processing
             if job.state == JobStage.CANCELLED:
@@ -338,10 +335,12 @@ class JobService:
             job.progress_pct = 85
             log("Calculating CWC hazard ratings, depth-damage curves, and population exposure...")
             time.sleep(0.05)
-            log(
-                f"HADR impact: {sim_result.get('damage_assessment', {}).get('exposure_and_loss', {}).get('population_at_risk', 91500):,} persons at risk.",
-                level="INFO",
-            )  # noqa: E501
+            pop_risk = (
+                sim_result.get("damage_assessment", {})
+                .get("exposure_and_loss", {})
+                .get("population_at_risk", 91500)
+            )
+            log(f"HADR impact: {pop_risk:,} persons at risk.", level="INFO")
 
             # Stage 6: Exporting
             if job.state == JobStage.CANCELLED:

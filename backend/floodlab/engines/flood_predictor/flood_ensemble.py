@@ -569,7 +569,10 @@ class FloodEnsemblePredictor:
                 recs.append(
                     {
                         "target": "Dam Structural Health",
-                        "action": "Immediate geotechnical piezometer and seepage survey; reduce full reservoir level (FRL).",
+                        "action": (
+                            "Immediate geotechnical piezometer and seepage survey; "
+                            "reduce full reservoir level (FRL)."
+                        ),
                         "urgency": "CRITICAL",
                     }
                 )

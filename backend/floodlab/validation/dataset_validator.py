@@ -40,7 +40,8 @@ class DatasetValidationError(Exception):
         self.report = report
         error_msgs = "\n - ".join([f"[{e.rule_code}] {e.field}: {e.message}" for e in report.errors])
         super().__init__(
-            f"Dataset validation failed for scenario '{report.scenario_id}' with {len(report.errors)} error(s):\n - {error_msgs}"
+            f"Dataset validation failed for scenario '{report.scenario_id}' "
+            f"with {len(report.errors)} error(s):\n - {error_msgs}"
         )
 
 
@@ -184,7 +185,10 @@ class GenericScenarioValidator:
                 warnings.append(
                     ValidationIssue(
                         field="inputs.river_network",
-                        message=f"River network vector not found at '{riv_path}'; thalweg will be derived directly from DEM.",
+                        message=(
+                            f"River network vector not found at '{riv_path}'; "
+                            "thalweg will be derived directly from DEM."
+                        ),
                         rule_code="RIVER_FILE_MISSING_FALLBACK",
                         severity="WARNING",
                     )
@@ -210,7 +214,10 @@ class GenericScenarioValidator:
                 warnings.append(
                     ValidationIssue(
                         field="inputs.population",
-                        message=f"Population dataset not found at '{pop_path}'; baseline settlement density will be used.",
+                        message=(
+                            f"Population dataset not found at '{pop_path}'; "
+                            "baseline settlement density will be used."
+                        ),
                         rule_code="POPULATION_FILE_MISSING_FALLBACK",
                         severity="WARNING",
                     )
@@ -255,7 +262,10 @@ class GenericScenarioValidator:
             errors.append(
                 ValidationIssue(
                     field="breach.failure_type",
-                    message=f"Invalid failure type '{breach.failure_type}'. Supported: {', '.join(valid_failure_types)}.",
+                    message=(
+                        f"Invalid failure type '{breach.failure_type}'. "
+                        f"Supported: {', '.join(valid_failure_types)}."
+                    ),
                     rule_code="BREACH_TYPE_INVALID",
                 )
             )
@@ -303,7 +313,10 @@ class GenericScenarioValidator:
         summary = (
             f"Scenario '{config.scenario_id}' passed all {rules} pre-flight dataset and physics validation checks."
             if is_valid
-            else f"Scenario '{config.scenario_id}' pre-flight check failed with {len(errors)} error(s) and {len(warnings)} warning(s)."
+            else (
+                f"Scenario '{config.scenario_id}' pre-flight check failed with "
+                f"{len(errors)} error(s) and {len(warnings)} warning(s)."
+            )
         )
 
         report = ValidationReport(

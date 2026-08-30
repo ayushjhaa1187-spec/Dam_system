@@ -3,7 +3,9 @@ HydroShield Scenario Runner CLI.
 Runs hydrodynamic flood simulations directly from scenario configuration files.
 
 Usage:
-    python -m floodlab.runners.scenario_runner --config datasets/chenab/scenario_config.json --output storage/outputs/chenab_run
+    python -m floodlab.runners.scenario_runner \
+        --config datasets/chenab/scenario_config.json \
+        --output storage/outputs/chenab_run
 """
 
 from __future__ import annotations
@@ -48,7 +50,8 @@ def main(argv=None):
         def on_progress(pct, frame):
             if not args.json:
                 sys.stdout.write(
-                    f"\r[Progress: {pct:5.1f}%] T = {frame['time_minutes']:6.1f} min | Inundated: {frame['inundated_area_km2']:6.2f} km²"
+                    f"\r[Progress: {pct:5.1f}%] T = {frame['time_minutes']:6.1f} min | "
+                    f"Inundated: {frame['inundated_area_km2']:6.2f} km²"
                 )
                 sys.stdout.flush()
 
