@@ -1,4 +1,24 @@
+import { runLocalCalculation } from '../utils/localCalculation.js';
+import { EXECUTION_MODES } from '../utils/executionMode.js';
+
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+
+// ─── Backend Health Check ─────────────────────────────────────────────────────
+// Resolved once on first call; cached for session.
+let _backendStatusCache = null;
+export async function checkBackendHealth() {
+  if (_backendStatusCache !== null) return _backendStatusCache;
+  try {
+    const res = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(3000) });
+    _backendStatusCache = res.ok ? 'ONLINE' : 'OFFLINE';
+  } catch {
+    _backendStatusCache = 'OFFLINE';
+  }
+  return _backendStatusCache;
+}
+export function getBackendStatusCached() {
+  return _backendStatusCache || 'CHECKING';
+}
 
 export const FALLBACK_PRESETS = [
   {
@@ -153,10 +173,11 @@ export const api = {
     }
   },
 
+
   runSimulation: async (params) => {
     const payload = {
-      scenario_id: params.scenario_id || params.preset_id || 'tehri_dam_bhagirathi',
-      preset_id: params.scenario_id || params.preset_id || 'tehri_dam_bhagirathi',
+      scenario_id: params.scenario_id || params.preset_id || 'tehri_controlled_release',
+      preset_id: params.scenario_id || params.preset_id || 'tehri_controlled_release',
       solver_type: params.solver_type || 'coupled',
       breach_model: params.breach_model || 'auto',
       custom_params: params.custom_params || null,
@@ -164,6 +185,78 @@ export const api = {
       dem_resolution_m: params.dem_resolution_m || 30.0,
       hydrology_source: params.hydrology_source || 'CWC Gauge Records / IMD 24h PMP',
     };
+
+    try {
+      const result = await fetchJson('/api/simulations/run', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+      // Tag as backend if provenance missing
+      if (!result.provenance) result.provenance = { level: 'BACKEND_API' };
+      return result;
+    } catch {
+      // ─── Real local calculation — values change with inputs ───────────────
+      console.info('[FloodLab] Backend offline — using LOCAL_CALCULATION mode (Froehlich 2008)');
+      const calcParams = {
+        ...(params.custom_params || {}),
+        scenario_id:         payload.scenario_id,
+        reservoir_level_pct: params.reservoir_level_pct || params.custom_params?.reservoir_level_pct || 95,
+        breach_width_m:      params.breach_width_m      || params.custom_params?.breach_width_m      || 90,
+        formation_time_hr:   params.formation_time_hr   || params.custom_params?.formation_time_hr   || 1.5,
+        manning_n:           params.manning_n            || params.custom_params?.manning_n            || 0.042,
+        dam_height_m:        params.dam_height_m         || params.custom_params?.dam_height_m         || 260.5,
+        reservoir_volume_m3: params.reservoir_volume_m3  || params.custom_params?.reservoir_volume_m3  || 3.54e9,
+        valley_width_m:      params.valley_width_m       || params.custom_params?.valley_width_m       || 450.0,
+        bed_slope:           params.bed_slope            || params.custom_params?.bed_slope            || 0.0055,
+        name:                params.name || 'Tehri Dam — Bhagirathi River',
+        dam_name:            params.dam_name || 'Tehri Dam',
+      };
+      const localResult = runLocalCalculation(calcParams);
+
+      // Merge with structure expected by existing screens
+      return {
+        ...localResult,
+        breach_mechanics: {
+          avg_breach_width_m:           calcParams.breach_width_m,
+          peak_discharge_m3s:           localResult.peak_discharge_m3s,
+          breach_formation_time_hrs:    localResult.breach_formation_time_hrs,
+          time_to_peak_hrs:             Math.round(localResult.breach_formation_time_hrs * 0.4 * 100) / 100,
+          hydrograph_times:             localResult.hydrograph.times_hrs,
+          hydrograph_flows:             localResult.hydrograph.flows_m3s,
+          model_used:                   'froehlich_2008',
+        },
+        sph_result: {
+          summary: {
+            peak_surge_velocity_ms:  Math.round(localResult.damage_assessment?.hazard_metrics?.peak_velocity_ms || 18.0),
+            max_inundated_area_km2:  localResult.affected_area_km2,
+          },
+          frames: [],
+          note: 'SPH near-field solver not connected. Showing local empirical estimate.',
+        },
+        delft3d_result: {
+          summary: {
+            peak_surge_velocity_ms:  Math.round((localResult.damage_assessment?.hazard_metrics?.peak_velocity_ms || 18.0) * 0.9),
+            max_inundated_area_km2:  localResult.affected_area_km2,
+          },
+          frames: [],
+          note: 'Delft3D FM solver not connected. Showing local empirical estimate.',
+        },
+        comparison_result: {
+          status: 'LOCAL_CALCULATION',
+          is_valid: false,
+          note: 'Model comparison requires both solvers to be connected.',
+          overall_metrics: {
+            critical_success_index_csi: null,
+            probability_of_detection_pod: null,
+            false_alarm_ratio_far: null,
+            benchmark_status: 'NOT AVAILABLE (LOCAL_CALCULATION mode)',
+          },
+        },
+      };
+    }
+  },
+
+
 
     try {
       return await fetchJson('/api/simulations/run', {

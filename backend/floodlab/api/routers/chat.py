@@ -12,12 +12,14 @@ import urllib.error
 from typing import List, Optional, Dict, Any
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
+from floodlab.config.settings import get_settings
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-DEFAULT_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("AI_API_KEY") or ""
+def _get_api_key():
+    return get_settings().gemini_api_key or os.getenv("AI_API_KEY") or ""
 
 SYSTEM_PROMPT = """You are "HydroBot AI" (JalRakshak AI), the AI assistant for HydroBreach / FloodLab.
 HydroBreach is an Indian dam break, river blockage flash flood simulation, and HADR decision-support platform.
@@ -82,7 +84,7 @@ class ChatResponse(BaseModel):
 
 
 def _call_gemini_api(user_message: str, history: List[ChatMessage], context: Optional[Dict[str, Any]]) -> str:
-    api_key = DEFAULT_API_KEY
+    api_key = _get_api_key()
     if not api_key:
         return _fallback_response(user_message, context)
 

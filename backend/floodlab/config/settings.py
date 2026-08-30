@@ -39,9 +39,10 @@ class Settings(BaseSettings):
     storage_root: str = "./storage"
     data_root: str = "./data"
 
-    # Google Earth Engine
+    # Google Earth Engine & AI
     gee_service_account: Optional[str] = None
     gee_key_file: Optional[str] = None
+    gemini_api_key: Optional[str] = None
 
     # Redis / Celery
     redis_url: str = "redis://localhost:6379/0"
