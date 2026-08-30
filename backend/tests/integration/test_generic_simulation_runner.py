@@ -4,7 +4,6 @@ Verifies that the exact same generic pipeline runs on different real basin datas
 producing distinct, terrain-driven hydrodynamic results without code modification.
 """
 import json
-import pytest
 from pathlib import Path
 import numpy as np
 import rasterio
