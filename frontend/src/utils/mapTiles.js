@@ -1,10 +1,9 @@
 import L from 'leaflet';
 
 /**
- * Creates a robust dark/satellite basemap tile layer with graceful fallback.
+ * Creates a bright/satellite basemap tile layer with graceful fallback.
  */
 export function createBasemapLayer(mapInstance, mode = 'satellite') {
-  // Mode can be 'satellite' or 'dark'
   if (mode === 'satellite') {
     const satelliteUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
     const satLayer = L.tileLayer(satelliteUrl, {
@@ -13,28 +12,27 @@ export function createBasemapLayer(mapInstance, mode = 'satellite') {
     });
 
     satLayer.on('tileerror', () => {
-      console.warn('Satellite tile error, switching to Dark Matter fallback.');
+      console.warn('Satellite tile error, switching to Positron bright fallback.');
       if (mapInstance && !mapInstance._fallbackLayerActive) {
         mapInstance._fallbackLayerActive = true;
         mapInstance.removeLayer(satLayer);
-        const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
           maxZoom: 19,
           subdomains: 'abcd',
           attribution: '&copy; CARTO &copy; OpenStreetMap',
         });
-        darkLayer.addTo(mapInstance);
+        lightLayer.addTo(mapInstance);
       }
     });
 
     return satLayer;
   }
 
-  // Dark matter mode
-  const darkUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
-  return L.tileLayer(darkUrl, {
+  // Bright / Positron mode
+  const lightUrl = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+  return L.tileLayer(lightUrl, {
     maxZoom: 19,
     subdomains: 'abcd',
     attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   });
 }
-

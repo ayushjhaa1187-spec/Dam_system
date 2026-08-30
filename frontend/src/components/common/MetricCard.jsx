@@ -16,21 +16,21 @@ export default function MetricCard({
     cyan: 'text-hc-active',
     emerald: 'text-hc-success',
     red: 'text-hc-critical',
-    amber: 'text-amber-400',
+    amber: 'text-amber-600',
     purple: 'text-hc-assumption',
     slate: 'text-hc-ink',
   };
 
   return (
     <div
-      className={`bg-hc-surface/70 border border-hc-border/80 rounded-2xl p-5 flex flex-col justify-between hover:border-hc-border/80 transition-all ${className}`}
+      className={`bg-hc-surface border border-hc-border rounded-2xl p-5 flex flex-col justify-between shadow-card-dark hover:shadow-card-elevated transition-all ${className}`}
     >
       <div className="flex items-center justify-between gap-2 mb-2">
         <span className="text-xs font-medium text-hc-textSecondary tracking-wide">{title}</span>
         <div className="flex items-center gap-1.5">
           {provenance && <ProvenanceBadge level={provenance} />}
           {Icon && (
-            <div className="w-7 h-7 rounded-lg bg-hc-bg border border-hc-border flex items-center justify-center text-hc-textSecondary">
+            <div className="w-7 h-7 rounded-lg bg-hc-card border border-hc-border flex items-center justify-center text-hc-textSecondary">
               <Icon className="w-3.5 h-3.5" />
             </div>
           )}

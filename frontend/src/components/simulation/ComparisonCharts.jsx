@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrendingUp, Activity, Layers } from 'lucide-react';
+import { TrendingUp, Layers } from 'lucide-react';
 
 export default function ComparisonCharts() {
   // Hydrodynamic time series data (0h to 24h)
@@ -34,33 +34,33 @@ export default function ComparisonCharts() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       {/* Chart 1: Peak Discharge Velocity */}
-      <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-5 space-y-3">
+      <div className="bg-hc-surface border border-hc-border rounded-2xl p-5 space-y-3 shadow-card-dark">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <TrendingUp className="w-4 h-4 text-cyan-400" />
+            <TrendingUp className="w-4 h-4 text-cyan-600" />
             <h4 className="text-xs font-bold uppercase tracking-wider text-hc-ink">
               Peak Discharge Velocity (m/s)
             </h4>
           </div>
           <div className="flex items-center space-x-3 text-[10px] font-mono font-bold">
-            <span className="flex items-center gap-1 text-cyan-400">
-              <span className="w-2.5 h-1 bg-cyan-400 rounded-full" /> SPH
+            <span className="flex items-center gap-1 text-cyan-700">
+              <span className="w-2.5 h-1 bg-cyan-600 rounded-full" /> SPH
             </span>
-            <span className="flex items-center gap-1 text-blue-400">
-              <span className="w-2.5 h-1 bg-blue-500 rounded-full" /> Delft3D
+            <span className="flex items-center gap-1 text-blue-700">
+              <span className="w-2.5 h-1 bg-blue-600 rounded-full" /> Delft3D
             </span>
           </div>
         </div>
 
-        <div className="relative w-full h-44 bg-hc-canvas rounded-xl p-2 border border-hc-border">
+        <div className="relative w-full h-44 bg-slate-50 rounded-xl p-2 border border-hc-border shadow-inner">
           <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-full">
             {/* Grid lines */}
             {[0, 0.25, 0.5, 0.75, 1].map((ratio, i) => {
               const y = pad.top + innerH * ratio;
               return (
                 <g key={i}>
-                  <line x1={pad.left} y1={y} x2={w - pad.right} y2={y} stroke="#1E3563" strokeDasharray="3 3" />
-                  <text x={pad.left - 6} y={y + 3} fill="#8B9BB4" fontSize="8" textAnchor="end" fontFamily="monospace">
+                  <line x1={pad.left} y1={y} x2={w - pad.right} y2={y} stroke="#E2E8F0" strokeDasharray="3 3" />
+                  <text x={pad.left - 6} y={y + 3} fill="#64748B" fontSize="8" textAnchor="end" fontFamily="monospace">
                     {(25 * (1 - ratio)).toFixed(0)}
                   </text>
                 </g>
@@ -71,7 +71,7 @@ export default function ComparisonCharts() {
             {[0, 6, 12, 18, 24].map((t, idx) => {
               const x = pad.left + (t / 24) * innerW;
               return (
-                <text key={idx} x={x} y={h - 6} fill="#8B9BB4" fontSize="8" textAnchor="middle" fontFamily="monospace">
+                <text key={idx} x={x} y={h - 6} fill="#64748B" fontSize="8" textAnchor="middle" fontFamily="monospace">
                   {t}h
                 </text>
               );
@@ -81,16 +81,16 @@ export default function ComparisonCharts() {
             <polyline
               points={makePath(delftVel, 25)}
               fill="none"
-              stroke="#3B82F6"
+              stroke="#2563EB"
               strokeWidth="2.5"
               strokeLinecap="round"
             />
 
-            {/* SPH Line (Cyan Glowing) */}
+            {/* SPH Line (Cyan) */}
             <polyline
               points={makePath(sphVel, 25)}
               fill="none"
-              stroke="#06B6D4"
+              stroke="#0284C7"
               strokeWidth="2.5"
               strokeLinecap="round"
             />
@@ -99,33 +99,33 @@ export default function ComparisonCharts() {
       </div>
 
       {/* Chart 2: Inundation Area Growth Over Time */}
-      <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-5 space-y-3">
+      <div className="bg-hc-surface border border-hc-border rounded-2xl p-5 space-y-3 shadow-card-dark">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Layers className="w-4 h-4 text-emerald-400" />
+            <Layers className="w-4 h-4 text-emerald-600" />
             <h4 className="text-xs font-bold uppercase tracking-wider text-hc-ink">
               Inundation Area Growth Over Time (km²)
             </h4>
           </div>
           <div className="flex items-center space-x-3 text-[10px] font-mono font-bold">
-            <span className="flex items-center gap-1 text-cyan-400">
-              <span className="w-2.5 h-1 bg-cyan-400 rounded-full" /> SPH (48.7 km²)
+            <span className="flex items-center gap-1 text-cyan-700">
+              <span className="w-2.5 h-1 bg-cyan-600 rounded-full" /> SPH (48.7 km²)
             </span>
-            <span className="flex items-center gap-1 text-blue-400">
-              <span className="w-2.5 h-1 bg-blue-500 rounded-full" /> Delft3D (48.5 km²)
+            <span className="flex items-center gap-1 text-blue-700">
+              <span className="w-2.5 h-1 bg-blue-600 rounded-full" /> Delft3D (48.5 km²)
             </span>
           </div>
         </div>
 
-        <div className="relative w-full h-44 bg-hc-canvas rounded-xl p-2 border border-hc-border">
+        <div className="relative w-full h-44 bg-slate-50 rounded-xl p-2 border border-hc-border shadow-inner">
           <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-full">
             {/* Grid lines */}
             {[0, 0.25, 0.5, 0.75, 1].map((ratio, i) => {
               const y = pad.top + innerH * ratio;
               return (
                 <g key={i}>
-                  <line x1={pad.left} y1={y} x2={w - pad.right} y2={y} stroke="#1E3563" strokeDasharray="3 3" />
-                  <text x={pad.left - 6} y={y + 3} fill="#8B9BB4" fontSize="8" textAnchor="end" fontFamily="monospace">
+                  <line x1={pad.left} y1={y} x2={w - pad.right} y2={y} stroke="#E2E8F0" strokeDasharray="3 3" />
+                  <text x={pad.left - 6} y={y + 3} fill="#64748B" fontSize="8" textAnchor="end" fontFamily="monospace">
                     {(50 * (1 - ratio)).toFixed(0)}
                   </text>
                 </g>
@@ -136,7 +136,7 @@ export default function ComparisonCharts() {
             {[0, 6, 12, 18, 24].map((t, idx) => {
               const x = pad.left + (t / 24) * innerW;
               return (
-                <text key={idx} x={x} y={h - 6} fill="#8B9BB4" fontSize="8" textAnchor="middle" fontFamily="monospace">
+                <text key={idx} x={x} y={h - 6} fill="#64748B" fontSize="8" textAnchor="middle" fontFamily="monospace">
                   {t}h
                 </text>
               );
@@ -146,7 +146,7 @@ export default function ComparisonCharts() {
             <polyline
               points={makePath(delftArea, 50)}
               fill="none"
-              stroke="#3B82F6"
+              stroke="#2563EB"
               strokeWidth="2.5"
               strokeLinecap="round"
             />
@@ -155,7 +155,7 @@ export default function ComparisonCharts() {
             <polyline
               points={makePath(sphArea, 50)}
               fill="none"
-              stroke="#06B6D4"
+              stroke="#0284C7"
               strokeWidth="2.5"
               strokeLinecap="round"
             />

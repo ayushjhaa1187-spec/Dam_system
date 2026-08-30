@@ -102,8 +102,8 @@ export default function Topbar({
         </span>
 
         {/* Model Badge */}
-        <span className="px-2.5 py-1 rounded-lg bg-blue-950/60 border border-blue-800/60 text-[11px] font-mono text-blue-300">
-          Model: <strong className="text-cyan-300 uppercase">{modelType}</strong>
+        <span className="px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200 text-[11px] font-mono text-blue-700">
+          Model: <strong className="text-blue-800 uppercase">{modelType}</strong>
         </span>
       </div>
 

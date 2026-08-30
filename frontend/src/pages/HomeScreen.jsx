@@ -28,12 +28,12 @@ export default function HomeScreen({
   return (
     <div className="space-y-12 pb-12 text-hc-ink">
       {/* 1. Hero Section matching Panel 2 of Image 3 */}
-      <div className="relative min-h-[500px] rounded-3xl overflow-hidden border border-hc-border bg-gradient-to-br from-hc-surface via-hc-bg to-hc-canvas mx-4 sm:mx-8 p-8 sm:p-14 flex flex-col justify-between shadow-2xl">
+      <div className="relative min-h-[500px] rounded-3xl overflow-hidden border border-hc-border bg-gradient-to-br from-white via-slate-50 to-sky-50/40 mx-4 sm:mx-8 p-8 sm:p-14 flex flex-col justify-between shadow-xl">
         {/* Background Overlay Visual */}
         <div
-          className="absolute inset-0 opacity-20 pointer-events-none"
+          className="absolute inset-0 opacity-15 pointer-events-none"
           style={{
-            backgroundImage: `radial-gradient(circle at 70% 30%, #0284C7 0%, transparent 60%), radial-gradient(circle at 20% 80%, #06B6D4 0%, transparent 50%)`,
+            backgroundImage: `radial-gradient(circle at 70% 30%, #0284C7 0%, transparent 60%), radial-gradient(circle at 20% 80%, #38BDF8 0%, transparent 50%)`,
           }}
         />
 
@@ -62,14 +62,14 @@ export default function HomeScreen({
 
         {/* Main Headline Block */}
         <div className="relative z-10 max-w-2xl my-8 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-800 text-cyan-300 text-xs font-mono font-bold">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-sky-800 text-xs font-mono font-bold">
+            <Sparkles className="w-3.5 h-3.5 text-sky-600" />
             <span>Next-Gen Dam Breach &amp; Inundation Platform</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight font-sans">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight font-sans">
             Predict. Prepare. <br />
-            <span className="bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Protect.
             </span>
           </h1>
@@ -89,30 +89,30 @@ export default function HomeScreen({
 
             <button
               onClick={onOpenTutorial}
-              className="px-5 py-3 rounded-xl bg-hc-surface hover:bg-hc-elevated border border-hc-border text-hc-ink font-semibold text-xs transition flex items-center space-x-2"
+              className="px-5 py-3 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 font-semibold text-xs transition flex items-center space-x-2 shadow-sm"
             >
-              <Play className="w-3.5 h-3.5 fill-hc-ink" />
+              <Play className="w-3.5 h-3.5 fill-slate-800" />
               <span>Watch Interactive Demo</span>
             </button>
           </div>
         </div>
 
         {/* Live Stat Strip matching Panel 2 of Image 3 */}
-        <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-hc-border/80">
-          <div className="p-3 bg-hc-surface/80 rounded-2xl border border-hc-border text-center">
-            <span className="text-2xl font-extrabold font-mono text-cyan-400 block">100+</span>
+        <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-hc-border">
+          <div className="p-3 bg-white rounded-2xl border border-hc-border text-center shadow-sm">
+            <span className="text-2xl font-extrabold font-mono text-cyan-600 block">100+</span>
             <span className="text-xs text-hc-textSecondary font-medium">Simulations Run</span>
           </div>
-          <div className="p-3 bg-hc-surface/80 rounded-2xl border border-hc-border text-center">
-            <span className="text-2xl font-extrabold font-mono text-emerald-400 block">50+</span>
+          <div className="p-3 bg-white rounded-2xl border border-hc-border text-center shadow-sm">
+            <span className="text-2xl font-extrabold font-mono text-emerald-600 block">50+</span>
             <span className="text-xs text-hc-textSecondary font-medium">River Basins Covered</span>
           </div>
-          <div className="p-3 bg-hc-surface/80 rounded-2xl border border-hc-border text-center">
-            <span className="text-2xl font-extrabold font-mono text-amber-400 block">15+</span>
+          <div className="p-3 bg-white rounded-2xl border border-hc-border text-center shadow-sm">
+            <span className="text-2xl font-extrabold font-mono text-amber-600 block">15+</span>
             <span className="text-xs text-hc-textSecondary font-medium">Geospatial Datasets</span>
           </div>
-          <div className="p-3 bg-hc-surface/80 rounded-2xl border border-hc-border text-center">
-            <span className="text-2xl font-extrabold font-mono text-blue-400 block">10K+</span>
+          <div className="p-3 bg-white rounded-2xl border border-hc-border text-center shadow-sm">
+            <span className="text-2xl font-extrabold font-mono text-blue-600 block">10K+</span>
             <span className="text-xs text-hc-textSecondary font-medium">Lives Protected</span>
           </div>
         </div>
@@ -129,7 +129,7 @@ export default function HomeScreen({
               Select any national river basin or emergency scenario to inspect hydrodynamic flood wave routing.
             </p>
           </div>
-          <span className="text-xs text-hc-textSecondary font-mono">
+          <span className="text-xs text-hc-textSecondary font-mono font-semibold">
             {presets.length} Basins Configured
           </span>
         </div>
@@ -145,10 +145,10 @@ export default function HomeScreen({
                 onClick={() => {
                   if (onSelectPreset) onSelectPreset(preset.id);
                 }}
-                className={`p-5 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-4 ${
+                className={`p-5 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-4 shadow-card-dark ${
                   isSelected
-                    ? 'bg-hc-surface border-cyan-400 shadow-glow-cyan ring-1 ring-cyan-400/30'
-                    : 'bg-hc-surface/70 border-hc-border hover:border-hc-borderLight hover:bg-hc-surface'
+                    ? 'bg-white border-blue-500 shadow-card-elevated ring-1 ring-blue-500/30'
+                    : 'bg-white border-hc-border hover:border-slate-300 hover:shadow-card-elevated'
                 }`}
               >
                 <div>
@@ -163,8 +163,8 @@ export default function HomeScreen({
                     <span
                       className={`text-[10px] px-2.5 py-0.5 rounded-full font-mono font-bold shrink-0 ${
                         isBenchmark
-                          ? 'bg-red-950 text-red-300 border border-red-800'
-                          : 'bg-blue-950 text-blue-300 border border-blue-800'
+                          ? 'bg-red-50 text-red-700 border border-red-200'
+                          : 'bg-blue-50 text-blue-700 border border-blue-200'
                       }`}
                     >
                       {isBenchmark ? 'DISASTER BENCHMARK' : 'SCENARIO FORECAST'}
@@ -176,14 +176,14 @@ export default function HomeScreen({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 py-2 px-3 bg-hc-canvas rounded-xl border border-hc-border text-center font-mono">
+                <div className="grid grid-cols-3 gap-2 py-2 px-3 bg-slate-50 rounded-xl border border-slate-200 text-center font-mono">
                   <div>
                     <span className="text-[10px] text-hc-textMuted block">Dam Height</span>
                     <span className="text-xs font-bold text-hc-ink">{preset.dam_height_m} m</span>
                   </div>
                   <div>
                     <span className="text-[10px] text-hc-textMuted block">Storage Volume</span>
-                    <span className="text-xs font-bold text-cyan-400">
+                    <span className="text-xs font-bold text-cyan-700">
                       {preset.reservoir_volume_m3 ? (preset.reservoir_volume_m3 / 1e6).toFixed(1) : 'N/A'} Mm³
                     </span>
                   </div>

@@ -31,7 +31,7 @@ export default function DataStudioScreen({
       status: 'uploaded',
       source: 'Copernicus GLO-30 DSM (30m)',
       icon: Mountain,
-      color: '#F59E0B',
+      color: '#D97706',
       size: '42.5 MB',
     },
     {
@@ -41,7 +41,7 @@ export default function DataStudioScreen({
       status: 'uploaded',
       source: 'OpenStreetMap / WRIS Vector Reach',
       icon: Waves,
-      color: '#0EA5E9',
+      color: '#0284C7',
       size: '18.2 MB',
     },
     {
@@ -51,7 +51,7 @@ export default function DataStudioScreen({
       status: 'uploaded',
       source: 'ESA WorldCover 10m',
       icon: Trees,
-      color: '#10B981',
+      color: '#059669',
       size: '31.0 MB',
     },
     {
@@ -61,7 +61,7 @@ export default function DataStudioScreen({
       status: 'uploaded',
       source: 'CWC Dam Database Capacity Curves',
       icon: Database,
-      color: '#8B5CF6',
+      color: '#7C3AED',
       size: '2.4 MB',
     },
     {
@@ -71,7 +71,7 @@ export default function DataStudioScreen({
       status: 'pending',
       source: 'IMD Gridded Daily PMP Rainfall',
       icon: CloudRain,
-      color: '#38BDF8',
+      color: '#0284C7',
       size: '—',
     },
     {
@@ -81,12 +81,11 @@ export default function DataStudioScreen({
       status: 'uploaded',
       source: 'Google Earth Engine (GEE) Live Feed',
       icon: Satellite,
-      color: '#EC4899',
+      color: '#DB2777',
       size: 'Live Feed',
     },
   ]);
 
-  const [activeStep, setActiveStep] = useState(2);
   const [uploadToast, setUploadToast] = useState(null);
 
   const handleSimulateUpload = (id) => {
@@ -110,7 +109,7 @@ export default function DataStudioScreen({
           <div className="flex items-center space-x-2">
             <button
               onClick={() => onNavigate && onNavigate('satellite')}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-emerald-500/40 hover:bg-emerald-950/40 text-emerald-400 font-semibold text-xs transition"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-800 font-semibold text-xs transition shadow-sm"
             >
               <Satellite className="w-3.5 h-3.5" />
               <span>GEE Satellite Sync</span>
@@ -127,7 +126,7 @@ export default function DataStudioScreen({
       />
 
       {/* 5-Step Workflow Tracker */}
-      <div className="bg-hc-surface/80 border border-hc-border rounded-2xl p-4">
+      <div className="bg-hc-surface border border-hc-border rounded-2xl p-4 shadow-card-dark">
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           {[
             { step: 1, label: '1. Project Info', done: true },
@@ -140,10 +139,10 @@ export default function DataStudioScreen({
               key={s.step}
               className={`p-2.5 rounded-xl border text-center font-mono text-xs transition ${
                 s.active
-                  ? 'bg-blue-600/20 border-hc-active text-cyan-300 font-bold ring-1 ring-cyan-500/30'
+                  ? 'bg-blue-50 border-blue-500 text-blue-800 font-bold ring-1 ring-blue-500/30'
                   : s.done
-                  ? 'bg-hc-card border-emerald-500/40 text-emerald-400'
-                  : 'bg-hc-canvas/60 border-hc-border text-hc-textMuted'
+                  ? 'bg-emerald-50 border-emerald-200 text-emerald-800 font-semibold'
+                  : 'bg-slate-50 border-slate-200 text-slate-500'
               }`}
             >
               <span className="block font-bold">{s.label}</span>
@@ -154,8 +153,8 @@ export default function DataStudioScreen({
 
       {/* Toast */}
       {uploadToast && (
-        <div className="p-3 bg-emerald-950/80 border border-emerald-800 rounded-xl text-xs text-emerald-300 flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+        <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 flex items-center gap-2 shadow-sm">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
           <span>{uploadToast}</span>
         </div>
       )}
@@ -164,7 +163,7 @@ export default function DataStudioScreen({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left 7 cols: 6 Dataset Upload Cards */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-5 space-y-4">
+          <div className="bg-hc-surface border border-hc-border rounded-2xl p-5 space-y-4 shadow-card-dark">
             <div className="flex items-center justify-between pb-3 border-b border-hc-border">
               <div>
                 <h3 className="text-xs font-bold uppercase tracking-wider text-hc-ink">
@@ -174,7 +173,7 @@ export default function DataStudioScreen({
                   Supported formats: GeoTIFF (.tif), ESRI Shapefile (.shp), NetCDF (.nc), CSV (.csv), KML (.kml)
                 </p>
               </div>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800/40">
+              <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200 font-bold">
                 5 / 6 READY
               </span>
             </div>
@@ -187,7 +186,7 @@ export default function DataStudioScreen({
                 return (
                   <div
                     key={d.id}
-                    className="p-4 bg-hc-card rounded-xl border border-hc-border hover:border-hc-borderLight transition flex flex-col justify-between space-y-3"
+                    className="p-4 bg-hc-card rounded-xl border border-hc-border hover:border-slate-300 transition flex flex-col justify-between space-y-3"
                   >
                     <div>
                       <div className="flex items-center justify-between">
@@ -211,12 +210,12 @@ export default function DataStudioScreen({
                         </div>
 
                         {isUploaded ? (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded-full border border-emerald-800/50">
-                            <CheckCircle2 className="w-3 h-3" />
+                          <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                             Uploaded
                           </span>
                         ) : (
-                          <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-950 px-2 py-0.5 rounded-full border border-amber-800/50">
+                          <span className="text-[10px] font-mono font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
                             Pending
                           </span>
                         )}
@@ -228,12 +227,12 @@ export default function DataStudioScreen({
                     </div>
 
                     <div className="pt-2 border-t border-hc-border/80 flex items-center justify-between text-xs">
-                      <span className="text-[10px] font-mono text-hc-textMuted">{d.size}</span>
+                      <span className="text-[10px] font-mono text-hc-textMuted font-medium">{d.size}</span>
                       <button
                         onClick={() => handleSimulateUpload(d.id)}
                         className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition ${
                           isUploaded
-                            ? 'bg-hc-surface hover:bg-hc-elevated text-hc-textSecondary border border-hc-border'
+                            ? 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 shadow-xs'
                             : 'bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-sm'
                         }`}
                       >

@@ -85,7 +85,7 @@ export default function Sidebar({
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium transition-all ${
                   isActive
                     ? 'bg-blue-600 text-white font-semibold shadow-glow-blue'
-                    : 'text-hc-textSecondary hover:text-hc-ink hover:bg-hc-surface/80'
+                    : 'text-hc-textSecondary hover:text-hc-ink hover:bg-hc-card'
                 }`}
               >
                 <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-hc-textSecondary'}`} />
@@ -99,11 +99,11 @@ export default function Sidebar({
       {/* Footer Collapse Toggle & Telemetry */}
       <div className="p-3 border-t border-hc-border bg-hc-canvas space-y-2">
         {!isCollapsed && (
-          <div className="p-2.5 rounded-xl bg-hc-surface/60 border border-hc-border space-y-1">
+          <div className="p-2.5 rounded-xl bg-hc-card border border-hc-border space-y-1">
             <div className="flex items-center justify-between text-[10px]">
               <span className="text-hc-textSecondary font-mono">TELEMETRY LINK</span>
-              <span className="inline-flex items-center gap-1 text-emerald-400 font-mono text-[9px] font-bold">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="inline-flex items-center gap-1 text-emerald-600 font-mono text-[9px] font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 ACTIVE
               </span>
             </div>

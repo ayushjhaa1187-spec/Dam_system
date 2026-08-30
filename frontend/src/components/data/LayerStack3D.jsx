@@ -8,7 +8,7 @@ export default function LayerStack3D({
   imageryStatus = 'uploaded',
 }) {
   const [layers, setLayers] = useState([
-    { id: 'imagery', name: 'Satellite Imagery (Sentinel-2)', icon: Satellite, color: '#38BDF8', active: true, zOffset: 120 },
+    { id: 'imagery', name: 'Satellite Imagery (Sentinel-2)', icon: Satellite, color: '#0284C7', active: true, zOffset: 120 },
     { id: 'river', name: 'River Network & Flow Vector', icon: Waves, color: '#0EA5E9', active: true, zOffset: 80 },
     { id: 'lulc', name: 'Land Use / Land Cover (LULC)', icon: Trees, color: '#10B981', active: true, zOffset: 40 },
     { id: 'dem', name: 'Digital Elevation Model (DEM 30m)', icon: Mountain, color: '#F59E0B', active: true, zOffset: 0 },
@@ -21,7 +21,7 @@ export default function LayerStack3D({
   };
 
   return (
-    <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-5 space-y-4 flex flex-col h-full">
+    <div className="bg-hc-surface border border-hc-border rounded-2xl p-5 space-y-4 flex flex-col h-full shadow-card-dark">
       <div className="flex items-center justify-between pb-3 border-b border-hc-border">
         <div className="flex items-center space-x-2">
           <Layers className="w-4 h-4 text-hc-active" />
@@ -29,18 +29,18 @@ export default function LayerStack3D({
             3D Spatial Layer Stack Preview
           </h3>
         </div>
-        <span className="text-[10px] font-mono text-hc-active bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800/40">
+        <span className="text-[10px] font-mono text-cyan-800 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200 font-semibold">
           CO-REGISTERED (WGS84)
         </span>
       </div>
 
       {/* 3D Perspective Isometric Projection Box */}
-      <div className="relative w-full h-72 rounded-xl bg-hc-canvas border border-hc-border/80 flex items-center justify-center overflow-hidden p-4">
+      <div className="relative w-full h-72 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center overflow-hidden p-4 shadow-inner">
         {/* Ambient Grid Floor */}
         <div
-          className="absolute inset-0 opacity-15"
+          className="absolute inset-0 opacity-40"
           style={{
-            backgroundImage: `radial-gradient(#38BDF8 1px, transparent 1px)`,
+            backgroundImage: `radial-gradient(#94A3B8 1px, transparent 1px)`,
             backgroundSize: '16px 16px',
           }}
         />
@@ -57,21 +57,21 @@ export default function LayerStack3D({
           <div
             className={`absolute inset-0 rounded-xl border-2 transition-all duration-300 ${
               layers.find((l) => l.id === 'dem')?.active
-                ? 'bg-amber-950/40 border-amber-500/80 shadow-lg shadow-amber-500/20'
-                : 'opacity-20 border-dashed border-gray-600'
+                ? 'bg-amber-100/90 border-amber-500 shadow-md'
+                : 'opacity-20 border-dashed border-gray-400'
             }`}
             style={{
               transform: 'translateZ(0px)',
             }}
           >
-            <div className="p-3 text-[10px] font-mono text-amber-300 font-bold flex items-center justify-between">
+            <div className="p-3 text-[10px] font-mono text-amber-900 font-bold flex items-center justify-between">
               <span>DEM TERRAIN</span>
               <span>30m</span>
             </div>
             {/* Topographic Contour Lines SVG */}
-            <svg viewBox="0 0 100 60" className="w-full h-20 opacity-40">
-              <path d="M 0,30 Q 30,10 60,35 T 100,20" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
-              <path d="M 0,45 Q 40,25 70,50 T 100,35" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
+            <svg viewBox="0 0 100 60" className="w-full h-20 opacity-60">
+              <path d="M 0,30 Q 30,10 60,35 T 100,20" fill="none" stroke="#D97706" strokeWidth="1.5" />
+              <path d="M 0,45 Q 40,25 70,50 T 100,35" fill="none" stroke="#D97706" strokeWidth="1.5" />
             </svg>
           </div>
 
@@ -79,19 +79,19 @@ export default function LayerStack3D({
           <div
             className={`absolute inset-0 rounded-xl border-2 transition-all duration-300 ${
               layers.find((l) => l.id === 'lulc')?.active
-                ? 'bg-emerald-950/40 border-emerald-500/80 shadow-lg shadow-emerald-500/20'
-                : 'opacity-20 border-dashed border-gray-600'
+                ? 'bg-emerald-100/90 border-emerald-500 shadow-md'
+                : 'opacity-20 border-dashed border-gray-400'
             }`}
             style={{
               transform: 'translateZ(36px)',
             }}
           >
-            <div className="p-3 text-[10px] font-mono text-emerald-300 font-bold flex items-center justify-between">
+            <div className="p-3 text-[10px] font-mono text-emerald-900 font-bold flex items-center justify-between">
               <span>LAND USE (LULC)</span>
               <span>10m</span>
             </div>
             {/* Land Cover Polygons */}
-            <svg viewBox="0 0 100 60" className="w-full h-20 opacity-30">
+            <svg viewBox="0 0 100 60" className="w-full h-20 opacity-50">
               <polygon points="10,10 45,15 35,45 15,40" fill="#10B981" />
               <polygon points="55,20 85,25 80,50 50,45" fill="#059669" />
             </svg>
@@ -101,14 +101,14 @@ export default function LayerStack3D({
           <div
             className={`absolute inset-0 rounded-xl border-2 transition-all duration-300 ${
               layers.find((l) => l.id === 'river')?.active
-                ? 'bg-cyan-950/40 border-cyan-400 shadow-lg shadow-cyan-500/30'
-                : 'opacity-20 border-dashed border-gray-600'
+                ? 'bg-cyan-100/90 border-cyan-500 shadow-md'
+                : 'opacity-20 border-dashed border-gray-400'
             }`}
             style={{
               transform: 'translateZ(72px)',
             }}
           >
-            <div className="p-3 text-[10px] font-mono text-cyan-300 font-bold flex items-center justify-between">
+            <div className="p-3 text-[10px] font-mono text-cyan-900 font-bold flex items-center justify-between">
               <span>RIVER NETWORK</span>
               <span>VECTOR</span>
             </div>
@@ -117,7 +117,7 @@ export default function LayerStack3D({
               <path
                 d="M 10,15 Q 40,40 60,25 T 95,50"
                 fill="none"
-                stroke="#00E5FF"
+                stroke="#0284C7"
                 strokeWidth="3.5"
                 strokeLinecap="round"
                 className="animate-pulse"
@@ -129,25 +129,25 @@ export default function LayerStack3D({
           <div
             className={`absolute inset-0 rounded-xl border-2 transition-all duration-300 ${
               layers.find((l) => l.id === 'imagery')?.active
-                ? 'bg-blue-900/40 border-blue-400 shadow-xl shadow-blue-500/40 backdrop-blur-xs'
-                : 'opacity-20 border-dashed border-gray-600'
+                ? 'bg-blue-100/90 border-blue-500 shadow-lg'
+                : 'opacity-20 border-dashed border-gray-400'
             }`}
             style={{
               transform: 'translateZ(108px)',
             }}
           >
-            <div className="p-3 text-[10px] font-mono text-blue-200 font-bold flex items-center justify-between">
+            <div className="p-3 text-[10px] font-mono text-blue-900 font-bold flex items-center justify-between">
               <span>SATELLITE IMAGERY</span>
               <span>SENTINEL-2</span>
             </div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 via-transparent to-blue-500/20 pointer-events-none rounded-xl" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/15 via-transparent to-blue-500/25 pointer-events-none rounded-xl" />
           </div>
         </div>
       </div>
 
       {/* Layer Toggle Strip */}
       <div className="space-y-2 pt-1">
-        <span className="text-[10px] font-mono text-hc-textMuted uppercase block">
+        <span className="text-[10px] font-mono text-hc-textMuted uppercase block font-semibold">
           Layer Visibility &amp; Spatial Alignment
         </span>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -159,12 +159,12 @@ export default function LayerStack3D({
                 onClick={() => toggleLayer(l.id)}
                 className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center justify-between transition ${
                   l.active
-                    ? 'bg-hc-card border-hc-border text-hc-ink'
-                    : 'bg-hc-canvas/60 border-hc-border/40 text-hc-textMuted'
+                    ? 'bg-hc-card border-hc-border text-hc-ink shadow-sm'
+                    : 'bg-hc-bg border-hc-border/60 text-hc-textMuted'
                 }`}
               >
                 <div className="flex items-center space-x-2">
-                  <Icon className="w-3.5 h-3.5" style={{ color: l.active ? l.color : '#64748b' }} />
+                  <Icon className="w-3.5 h-3.5" style={{ color: l.active ? l.color : '#94a3b8' }} />
                   <span className="truncate">{l.name.split(' (')[0]}</span>
                 </div>
                 {l.active ? (

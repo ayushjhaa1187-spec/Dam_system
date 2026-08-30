@@ -86,9 +86,9 @@ export default function Overview({
 
     // River centerline
     L.polyline(riverCoords, {
-      color: '#00E5FF',
+      color: '#0284C7',
       weight: 3.5,
-      opacity: 0.8,
+      opacity: 0.9,
     }).addTo(map);
 
     // Multi-color Inundation Plume Polygon (Blue to Red)
@@ -110,9 +110,9 @@ export default function Overview({
     ];
 
     L.polygon(plumePolygon, {
-      color: '#EF4444',
-      fillColor: '#F97316',
-      fillOpacity: 0.45,
+      color: '#DC2626',
+      fillColor: '#EA580C',
+      fillOpacity: 0.5,
       weight: 2,
     }).addTo(map);
 
@@ -125,8 +125,8 @@ export default function Overview({
         className: 'custom-poi-marker',
         html: `
           <div style="
-            background: ${isDam ? '#2563EB' : isCrit ? '#EF4444' : '#101B33'};
-            border: 1.5px solid ${isDam ? '#60A5FA' : isCrit ? '#FCA5A5' : '#38BDF8'};
+            background: ${isDam ? '#2563EB' : isCrit ? '#DC2626' : '#0F172A'};
+            border: 1.5px solid ${isDam ? '#93C5FD' : isCrit ? '#FCA5A5' : '#94A3B8'};
             color: #FFFFFF;
             border-radius: 8px;
             padding: 3px 8px;
@@ -134,12 +134,12 @@ export default function Overview({
             font-weight: 700;
             font-family: monospace;
             white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+            box-shadow: 0 4px 12px rgba(15,23,42,0.3);
             display: flex;
             align-items: center;
             gap: 5px;
           ">
-            <span style="width: 6px; height: 6px; border-radius: 50%; background: ${isDam ? '#93C5FD' : isCrit ? '#FEF08A' : '#34D399'}; display: inline-block;"></span>
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: ${isDam ? '#BFDBFE' : isCrit ? '#FEF08A' : '#6EE7B7'}; display: inline-block;"></span>
             <span>${st.name}</span>
           </div>
         `,
@@ -159,20 +159,20 @@ export default function Overview({
   return (
     <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 text-hc-ink">
       {/* 1. Header Banner */}
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-hc-surface/90 border border-hc-border rounded-2xl p-5">
+      <div className="flex flex-wrap items-center justify-between gap-4 bg-hc-surface border border-hc-border rounded-2xl p-5 shadow-card-dark">
         <div>
           <div className="flex items-center space-x-2.5">
             <h2 className="text-base font-extrabold text-hc-ink font-mono tracking-tight">
               Chenab River Basin
             </h2>
-            <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-blue-950 text-blue-300 border border-blue-800">
+            <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200">
               JAMMU &amp; KASHMIR, INDIA
             </span>
           </div>
           <p className="text-xs text-hc-textSecondary mt-0.5 flex items-center gap-2">
             <span>Case: <strong>Dam Break (Full Breach)</strong></span>
             <span>&bull;</span>
-            <span>Model: <strong className="text-cyan-300">DELFT3D FM</strong></span>
+            <span>Model: <strong className="text-blue-700">DELFT3D FM</strong></span>
           </p>
         </div>
 
@@ -180,7 +180,7 @@ export default function Overview({
           {onNavigate && (
             <button
               onClick={() => onNavigate('predictor')}
-              className="flex items-center space-x-1.5 px-3.5 py-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 hover:bg-purple-500/20 text-purple-700 font-bold text-xs transition"
+              className="flex items-center space-x-1.5 px-3.5 py-2.5 rounded-xl bg-purple-50 border border-purple-200 hover:bg-purple-100 text-purple-700 font-bold text-xs transition"
             >
               <span>AI Flood Predictor</span>
             </button>
@@ -197,16 +197,16 @@ export default function Overview({
       </div>
 
       {/* 2. Top Warning Alert Banner */}
-      <div className="p-3.5 rounded-xl bg-red-950/40 border border-red-800 flex items-center justify-between text-xs text-red-200">
+      <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 flex items-center justify-between text-xs text-red-800 shadow-sm">
         <div className="flex items-center gap-2.5">
-          <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 animate-pulse" />
+          <AlertTriangle className="w-4 h-4 text-red-600 shrink-0 animate-pulse" />
           <span>
             <strong>Active Alerts: 3</strong> &bull; High Risk Flood Zone in Ramban District — Inundation depth &gt; 5.0m. Immediate evacuation required.
           </span>
         </div>
         <button
           onClick={() => onNavigate && onNavigate('alerts')}
-          className="text-[11px] font-bold text-red-300 hover:underline flex items-center gap-1 shrink-0"
+          className="text-[11px] font-bold text-red-700 hover:underline flex items-center gap-1 shrink-0"
         >
           <span>View Alerts</span>
           <ArrowRight className="w-3 h-3" />
@@ -218,12 +218,12 @@ export default function Overview({
         {/* Left 8 cols: 3D Terrain Map + Scrubber + Scenario Box */}
         <div className="lg:col-span-8 space-y-4">
           {/* Main Map Container */}
-          <div className="relative w-full h-[460px] rounded-2xl overflow-hidden border border-hc-border bg-hc-canvas shadow-card-dark">
+          <div className="relative w-full h-[460px] rounded-2xl overflow-hidden border border-hc-border bg-slate-100 shadow-card-dark">
             <div ref={mapContainerRef} className="absolute inset-0 w-full h-full z-0" />
 
             {/* Depth Legend Floating Overlay */}
-            <div className="absolute top-4 left-4 z-10 bg-hc-surface/90 backdrop-blur-md border border-hc-border p-3 rounded-xl shadow-lg space-y-1.5 font-mono text-[10px]">
-              <span className="font-bold text-hc-ink block text-[11px]">Inundation Depth (m)</span>
+            <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-md border border-slate-200 p-3 rounded-xl shadow-lg space-y-1.5 font-mono text-[10px] text-slate-800">
+              <span className="font-bold text-slate-900 block text-[11px]">Inundation Depth (m)</span>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="w-3 h-3 rounded bg-red-600" />
@@ -238,7 +238,7 @@ export default function Overview({
                   <span>2.0 – 5.0 m (Moderate)</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded bg-cyan-400" />
+                  <span className="w-3 h-3 rounded bg-cyan-500" />
                   <span>0.5 – 2.0 m (Shallow)</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -249,20 +249,20 @@ export default function Overview({
             </div>
 
             {/* 3D Compass / Tilt Badge */}
-            <div className="absolute top-4 right-4 z-10 bg-hc-surface/90 backdrop-blur-md border border-hc-border px-3 py-1.5 rounded-xl text-xs font-mono text-cyan-300 shadow-lg flex items-center gap-1.5">
-              <Compass className="w-3.5 h-3.5 text-cyan-400 animate-spin" style={{ animationDuration: '10s' }} />
+            <div className="absolute top-4 right-4 z-10 bg-white/95 backdrop-blur-md border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-mono text-blue-700 shadow-lg flex items-center gap-1.5 font-semibold">
+              <Compass className="w-3.5 h-3.5 text-blue-600 animate-spin" style={{ animationDuration: '10s' }} />
               <span>3D TERRAIN TILT</span>
             </div>
 
             {/* Flow Direction Indicator */}
-            <div className="absolute bottom-4 right-4 z-10 bg-hc-surface/90 backdrop-blur-md border border-hc-border px-3 py-1.5 rounded-xl text-[10px] font-mono text-emerald-300 shadow-lg flex items-center gap-1.5">
-              <Waves className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="absolute bottom-4 right-4 z-10 bg-white/95 backdrop-blur-md border border-slate-200 px-3 py-1.5 rounded-xl text-[10px] font-mono text-emerald-800 shadow-lg flex items-center gap-1.5 font-semibold">
+              <Waves className="w-3.5 h-3.5 text-emerald-600" />
               <span>FLOW DIRECTION: SOUTH-WEST</span>
             </div>
           </div>
 
           {/* Simulation Timeline Scrubber (0h to 24h) */}
-          <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-4 flex items-center justify-between gap-4">
+          <div className="bg-hc-surface border border-hc-border rounded-2xl p-4 flex items-center justify-between gap-4 shadow-card-dark">
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => setIsPlaying(!isPlaying)}
@@ -272,7 +272,7 @@ export default function Overview({
               </button>
               <div>
                 <span className="text-xs font-bold text-hc-ink block">Simulation Timeline</span>
-                <span className="text-[10px] font-mono text-cyan-400 font-bold">
+                <span className="text-[10px] font-mono text-cyan-700 font-bold">
                   Time: {currentTimeHr.toFixed(1)} hr / 24.0 hr
                 </span>
               </div>
@@ -286,7 +286,7 @@ export default function Overview({
                 step="0.5"
                 value={currentTimeHr}
                 onChange={(e) => setCurrentTimeHr(parseFloat(e.target.value))}
-                className="w-full accent-cyan-500 cursor-pointer"
+                className="w-full accent-cyan-600 cursor-pointer"
               />
               <div className="flex justify-between text-[9px] font-mono text-hc-textMuted mt-1">
                 <span>0h (Breach Start)</span>
@@ -299,15 +299,15 @@ export default function Overview({
           </div>
 
           {/* Scenario Quick Specs Box */}
-          <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+          <div className="bg-hc-surface border border-hc-border rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-xs font-mono shadow-card-dark">
             <div className="flex items-center space-x-2">
-              <ShieldAlert className="w-4 h-4 text-amber-400" />
+              <ShieldAlert className="w-4 h-4 text-amber-600" />
               <span className="font-bold text-hc-ink">Scenario: Worst Case (Full Breach)</span>
             </div>
             <div className="flex items-center space-x-4 text-hc-textSecondary">
               <span>Breach Width: <strong className="text-hc-ink font-bold">120 m</strong></span>
-              <span>Reservoir Level: <strong className="text-cyan-400 font-bold">98%</strong></span>
-              <span>Breach Time: <strong className="text-amber-400 font-bold">00:15 hr</strong></span>
+              <span>Reservoir Level: <strong className="text-cyan-700 font-bold">98%</strong></span>
+              <span>Breach Time: <strong className="text-amber-600 font-bold">00:15 hr</strong></span>
             </div>
           </div>
         </div>
@@ -315,74 +315,74 @@ export default function Overview({
         {/* Right 4 cols: 5 Operational KPI Stat Cards */}
         <div className="lg:col-span-4 space-y-3.5">
           {/* 1. Max Inundation Depth (Blue) */}
-          <div className="p-4 bg-hc-surface border border-blue-500/40 rounded-2xl shadow-sm space-y-1">
-            <div className="flex items-center justify-between text-xs text-blue-300 font-medium">
+          <div className="p-4 bg-hc-surface border border-blue-200 rounded-2xl shadow-card-dark space-y-1">
+            <div className="flex items-center justify-between text-xs text-blue-700 font-semibold">
               <span>Max Inundation Depth</span>
-              <Waves className="w-4 h-4 text-blue-400" />
+              <Waves className="w-4 h-4 text-blue-600" />
             </div>
             <div className="flex items-baseline space-x-1.5">
-              <span className="text-2xl font-extrabold font-mono text-white">12.6</span>
-              <span className="text-xs font-mono text-blue-300">m</span>
+              <span className="text-2xl font-extrabold font-mono text-hc-ink">12.6</span>
+              <span className="text-xs font-mono text-blue-700 font-bold">m</span>
             </div>
-            <span className="text-[10px] font-mono text-blue-300/80 block">At Downstream Dam Axis</span>
+            <span className="text-[10px] font-mono text-hc-textSecondary block">At Downstream Dam Axis</span>
           </div>
 
           {/* 2. Affected Area (Green) */}
-          <div className="p-4 bg-hc-surface border border-emerald-500/40 rounded-2xl shadow-sm space-y-1">
-            <div className="flex items-center justify-between text-xs text-emerald-300 font-medium">
+          <div className="p-4 bg-hc-surface border border-emerald-200 rounded-2xl shadow-card-dark space-y-1">
+            <div className="flex items-center justify-between text-xs text-emerald-700 font-semibold">
               <span>Affected Area</span>
-              <Layers className="w-4 h-4 text-emerald-400" />
+              <Layers className="w-4 h-4 text-emerald-600" />
             </div>
             <div className="flex items-baseline space-x-1.5">
-              <span className="text-2xl font-extrabold font-mono text-white">48.7</span>
-              <span className="text-xs font-mono text-emerald-300">km²</span>
+              <span className="text-2xl font-extrabold font-mono text-hc-ink">48.7</span>
+              <span className="text-xs font-mono text-emerald-700 font-bold">km²</span>
             </div>
-            <span className="text-[10px] font-mono text-emerald-300/80 block">Total Wetted Perimeter</span>
+            <span className="text-[10px] font-mono text-hc-textSecondary block">Total Wetted Perimeter</span>
           </div>
 
           {/* 3. Population At Risk (Orange) */}
-          <div className="p-4 bg-hc-surface border border-amber-500/40 rounded-2xl shadow-sm space-y-1">
-            <div className="flex items-center justify-between text-xs text-amber-300 font-medium">
+          <div className="p-4 bg-hc-surface border border-amber-200 rounded-2xl shadow-card-dark space-y-1">
+            <div className="flex items-center justify-between text-xs text-amber-800 font-semibold">
               <span>Population At Risk</span>
-              <Users className="w-4 h-4 text-amber-400" />
+              <Users className="w-4 h-4 text-amber-600" />
             </div>
             <div className="flex items-baseline space-x-1.5">
-              <span className="text-2xl font-extrabold font-mono text-white">25,340</span>
-              <span className="text-xs font-mono text-amber-300">People</span>
+              <span className="text-2xl font-extrabold font-mono text-hc-ink">25,340</span>
+              <span className="text-xs font-mono text-amber-700 font-bold">People</span>
             </div>
-            <span className="text-[10px] font-mono text-amber-300/80 block">Direct Inundation Corridor</span>
+            <span className="text-[10px] font-mono text-hc-textSecondary block">Direct Inundation Corridor</span>
           </div>
 
           {/* 4. Estimated Damage (Red) */}
-          <div className="p-4 bg-hc-surface border border-red-500/40 rounded-2xl shadow-sm space-y-1">
-            <div className="flex items-center justify-between text-xs text-red-300 font-medium">
+          <div className="p-4 bg-hc-surface border border-red-200 rounded-2xl shadow-card-dark space-y-1">
+            <div className="flex items-center justify-between text-xs text-red-700 font-semibold">
               <span>Estimated Damage</span>
-              <Building2 className="w-4 h-4 text-red-400" />
+              <Building2 className="w-4 h-4 text-red-600" />
             </div>
             <div className="flex items-baseline space-x-1.5">
-              <span className="text-2xl font-extrabold font-mono text-white">₹ 1,240</span>
-              <span className="text-xs font-mono text-red-300">Cr</span>
+              <span className="text-2xl font-extrabold font-mono text-hc-ink">₹ 1,240</span>
+              <span className="text-xs font-mono text-red-700 font-bold">Cr</span>
             </div>
-            <span className="text-[10px] font-mono text-red-300/80 block">Potential Economic Loss</span>
+            <span className="text-[10px] font-mono text-hc-textSecondary block">Potential Economic Loss</span>
           </div>
 
           {/* 5. Peak Discharge (Cyan with Sparkline) */}
-          <div className="p-4 bg-hc-surface border border-cyan-500/40 rounded-2xl shadow-sm space-y-2">
-            <div className="flex items-center justify-between text-xs text-cyan-300 font-medium">
+          <div className="p-4 bg-hc-surface border border-cyan-200 rounded-2xl shadow-card-dark space-y-2">
+            <div className="flex items-center justify-between text-xs text-cyan-800 font-semibold">
               <span>Peak Discharge</span>
-              <TrendingUp className="w-4 h-4 text-cyan-400" />
+              <TrendingUp className="w-4 h-4 text-cyan-600" />
             </div>
             <div className="flex items-baseline space-x-1.5">
-              <span className="text-2xl font-extrabold font-mono text-white">45,600</span>
-              <span className="text-xs font-mono text-cyan-300">m³/s</span>
+              <span className="text-2xl font-extrabold font-mono text-hc-ink">45,600</span>
+              <span className="text-xs font-mono text-cyan-700 font-bold">m³/s</span>
             </div>
             {/* Outflow Sparkline */}
             <svg viewBox="0 0 100 24" className="w-full h-7">
               <path
                 d="M 0,22 Q 25,2 40,3 T 70,18 T 100,22"
                 fill="none"
-                stroke="#06B6D4"
-                strokeWidth="2"
+                stroke="#0284C7"
+                strokeWidth="2.5"
                 strokeLinecap="round"
               />
             </svg>

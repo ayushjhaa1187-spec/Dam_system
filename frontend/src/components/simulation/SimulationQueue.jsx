@@ -50,7 +50,7 @@ export default function SimulationQueue({
   };
 
   return (
-    <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-5 space-y-4">
+    <div className="bg-hc-surface border border-hc-border rounded-2xl p-5 space-y-4 shadow-card-dark">
       <div className="flex items-center justify-between pb-3 border-b border-hc-border">
         <div className="flex items-center space-x-2">
           <Activity className="w-4 h-4 text-hc-active" />
@@ -58,7 +58,7 @@ export default function SimulationQueue({
             Asynchronous Simulation Queue
           </h3>
         </div>
-        <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800/40">
+        <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold">
           CELERY + REDIS ONLINE
         </span>
       </div>
@@ -75,23 +75,23 @@ export default function SimulationQueue({
               key={item.id}
               className={`p-3.5 rounded-xl border transition cursor-pointer ${
                 isRunning
-                  ? 'bg-hc-card border-hc-active ring-1 ring-cyan-500/30'
-                  : 'bg-hc-card/70 border-hc-border hover:border-hc-borderLight'
+                  ? 'bg-sky-50/60 border-sky-400 ring-1 ring-sky-400/30'
+                  : 'bg-hc-card border-hc-border hover:border-hc-borderLight'
               }`}
               onClick={() => toggleExpand(item.id)}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2.5">
                   {isRunning ? (
-                    <div className="w-6 h-6 rounded-lg bg-cyan-950 text-hc-active flex items-center justify-center border border-cyan-800">
+                    <div className="w-6 h-6 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center border border-cyan-300">
                       <Activity className="w-3.5 h-3.5 animate-spin" />
                     </div>
                   ) : isCompleted ? (
-                    <div className="w-6 h-6 rounded-lg bg-emerald-950 text-emerald-400 flex items-center justify-center border border-emerald-800">
+                    <div className="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center border border-emerald-300">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                     </div>
                   ) : (
-                    <div className="w-6 h-6 rounded-lg bg-red-950 text-red-400 flex items-center justify-center border border-red-800">
+                    <div className="w-6 h-6 rounded-lg bg-red-100 text-red-700 flex items-center justify-center border border-red-300">
                       <AlertTriangle className="w-3.5 h-3.5" />
                     </div>
                   )}
@@ -107,7 +107,7 @@ export default function SimulationQueue({
                 <div className="flex items-center space-x-3 text-right">
                   <div>
                     <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
-                      isRunning ? 'bg-cyan-950 text-cyan-300 border border-cyan-800' : 'bg-emerald-950 text-emerald-300 border border-emerald-800'
+                      isRunning ? 'bg-cyan-100 text-cyan-800 border border-cyan-300' : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                     }`}>
                       {isRunning ? `${item.progress}% RUNNING` : 'COMPLETED'}
                     </span>
@@ -126,9 +126,9 @@ export default function SimulationQueue({
 
               {/* Progress bar if running */}
               {isRunning && (
-                <div className="w-full h-1.5 bg-hc-canvas rounded-full overflow-hidden mt-3 border border-hc-border">
+                <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden mt-3 border border-hc-border">
                   <div
-                    className="h-full bg-gradient-to-r from-cyan-500 to-emerald-400 animate-pulse"
+                    className="h-full bg-gradient-to-r from-cyan-500 to-emerald-500 animate-pulse"
                     style={{ width: `${item.progress}%` }}
                   />
                 </div>
@@ -140,15 +140,15 @@ export default function SimulationQueue({
                   <div className="grid grid-cols-3 gap-2 bg-hc-canvas p-2.5 rounded-lg border border-hc-border">
                     <div>
                       <span className="text-[9px] text-hc-textMuted block">Run ID:</span>
-                      <span className="text-[10px] text-hc-ink truncate block">{item.id}</span>
+                      <span className="text-[10px] text-hc-ink truncate block font-semibold">{item.id}</span>
                     </div>
                     <div>
                       <span className="text-[9px] text-hc-textMuted block">Peak Qp:</span>
-                      <span className="text-[10px] text-red-400 font-bold">{item.peakFlow}</span>
+                      <span className="text-[10px] text-red-600 font-bold">{item.peakFlow}</span>
                     </div>
                     <div>
                       <span className="text-[9px] text-hc-textMuted block">Validation CSI:</span>
-                      <span className="text-[10px] text-emerald-400 font-bold">{item.csi ? `CSI = ${item.csi}` : 'Computing...'}</span>
+                      <span className="text-[10px] text-emerald-600 font-bold">{item.csi ? `CSI = ${item.csi}` : 'Computing...'}</span>
                     </div>
                   </div>
                   <div className="text-[10px] text-hc-textMuted">
