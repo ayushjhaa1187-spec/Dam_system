@@ -1,0 +1,126 @@
+import os
+import sys
+
+# Ensure UTF-8 output on Windows consoles
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
+# Importing basic Libraries
+
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import OneHotEncoder
+
+#loading the data
+
+df = pd.read_csv("comprehensive_dam_collapse_dataset.csv")
+df.head()
+
+# Data Preprocessing
+
+df.columns
+df.info()
+df_id_drop = df.drop(columns=["dam_id"], axis = 1)
+df_ins = df_id_drop.drop(columns=["instrumentation_density"], axis = 1)
+df_ins.head()
+
+cols = ["region", "dam_type","foundation_type", "spillway_type", "failure_mode"]
+ohe = OneHotEncoder(
+    drop="first",
+    sparse_output=False,
+    handle_unknown="ignore"
+)
+
+encoded = ohe.fit_transform(df_ins[cols])
+
+encoded_df = pd.DataFrame(encoded, columns = ohe.get_feature_names_out(cols), index = df_ins.index)
+
+df_ins = pd.concat([df_ins.drop(columns = cols), encoded_df], axis = 1)
+
+from sklearn.preprocessing import LabelEncoder            #Label Encoding
+
+le = LabelEncoder()
+df_ins["hazard_potential_rating"] = le.fit_transform(df_ins["hazard_potential_rating"])     
+df_ins["spillway_condition_rating"] = le.fit_transform(df_ins["spillway_condition_rating"])
+
+# Train Test Split
+
+from sklearn.model_selection import train_test_split
+
+X = df_ins.drop(columns=["collapse_status"]) # Defining Target and features
+y = df_ins["collapse_status"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
+)
+
+# Defining ML models
+
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+from sklearn.linear_model import LogisticRegression
+from xgboost import XGBClassifier
+
+rf = RandomForestClassifier(
+    n_estimators=300,
+    random_state=42,
+    n_jobs=-1
+)
+
+xgb = XGBClassifier(
+    n_estimators=300,
+    learning_rate=0.05,
+    max_depth=5,
+    random_state=42,
+    eval_metric="logloss"
+)
+
+lr = LogisticRegression(
+    max_iter=1000,
+    random_state=42
+)
+
+voting = VotingClassifier(
+    estimators=[
+        ("rf", rf),
+        ("xgb", xgb),
+        ("lr", lr)
+    ],
+    voting="soft"
+)
+
+# Training the models
+
+voting.fit(X_train, y_train)
+
+# Prediction
+
+y_pred = voting.predict(X_test)
+
+# Model Evaluation
+
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    roc_auc_score,
+    confusion_matrix,
+    classification_report
+)
+
+print("Accuracy :", accuracy_score(y_test, y_pred))
+print("Precision:", precision_score(y_test, y_pred))
+print("Recall   :", recall_score(y_test, y_pred))
+print("F1 Score :", f1_score(y_test, y_pred))
+
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+# End of the code 
