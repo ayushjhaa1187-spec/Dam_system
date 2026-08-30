@@ -22,9 +22,11 @@ import HADRDashboard from './pages/HADRDashboard'; // HADR Decision Brief
 import ImpactExportScreen from './pages/ImpactExportScreen'; // Panel 7: Reports & Export Hub
 import FloodPredictorScreen from './pages/FloodPredictorScreen'; // AI Ensemble Flood Predictor
 
-import { api, FALLBACK_PRESETS } from './services/api';
+import { api, FALLBACK_PRESETS, checkBackendHealth } from './services/api';
+import { getModeFromResult, EXECUTION_MODES } from './utils/executionMode';
 
 const RECENT_RUNS_KEY = 'hydroshield_recent_runs_v2';
+
 
 export default function App() {
   // Hybrid Navigation State
@@ -38,6 +40,8 @@ export default function App() {
   const [simulationResult, setSimulationResult] = useState(null);
   const [isSimulating, setIsSimulating] = useState(false);
   const [recentRuns, setRecentRuns] = useState([]);
+  const [backendStatus, setBackendStatus] = useState('CHECKING'); // 'CHECKING' | 'ONLINE' | 'OFFLINE'
+
 
   // Modals
   const [isTutorialOpen, setIsTutorialOpen] = useState(false);
@@ -45,8 +49,11 @@ export default function App() {
   const [isDemModalOpen, setIsDemModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
-  // 1. Load presets on mount
+  // 1. Load presets on mount + check backend health
   useEffect(() => {
+    // Check backend health
+    checkBackendHealth().then(status => setBackendStatus(status));
+
     api.getPresets()
       .then((data) => {
         const list = Array.isArray(data) ? data : data.scenarios || [];
@@ -159,7 +166,7 @@ export default function App() {
   const handleRunSimulation = async (payload = {}) => {
     setIsSimulating(true);
     try {
-      const scenarioId = payload.scenario_id || selectedPreset?.id || 'chenab_dam_axis';
+      const scenarioId = payload.scenario_id || selectedPreset?.id || 'tehri_controlled_release';
       const runPayload = {
         ...payload,
         scenario_id: scenarioId,
@@ -253,6 +260,7 @@ export default function App() {
                   onNavigate={handleSelectTopTab}
                   onRunSimulation={handleRunSimulation}
                   isSimulating={isSimulating}
+                  backendStatus={backendStatus}
                 />
               )}
 
@@ -302,15 +310,17 @@ export default function App() {
                   onRunSimulation={handleRunSimulation}
                   isSimulating={isSimulating}
                   onNavigate={handleSelectTopTab}
+                  backendStatus={backendStatus}
                 />
               )}
 
-              {/* Top Tab 6: Reports (HADR Decision Brief & 120-Page Report Hub) */}
+              {/* Top Tab 6: Reports (HADR Decision Brief & Export Hub) */}
               {!activeSubView && activeTopTab === 'reports' && (
                 <ImpactExportScreen
                   simulationResult={simulationResult}
                   selectedPreset={selectedPreset}
                   onNavigate={handleSelectTopTab}
+                  backendStatus={backendStatus}
                 />
               )}
             </motion.div>
