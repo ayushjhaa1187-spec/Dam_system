@@ -52,7 +52,6 @@ class ScenarioComparator:
                 hits = int(np.sum(sph_wet & delft_wet))
                 false_alarms = int(np.sum(sph_wet & (~delft_wet)))
                 misses = int(np.sum((~sph_wet) & delft_wet))
-                correct_negatives = int(np.sum((~sph_wet) & (~delft_wet)))
 
                 total_hits += hits
                 total_false_alarms += false_alarms

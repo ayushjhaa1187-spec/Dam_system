@@ -730,7 +730,6 @@ class GeospatialExporter:
         # 4. District Exposure & Loss Assessment Table
         story.append(Paragraph("2. Downstream Exposure, Damage & HADR Loss Estimates", h2_style))
         exp = damage_data.get("exposure_and_loss", {})
-        haz = damage_data.get("hazard_metrics", {})
         res = damage_data.get("resource_allocation", {})
 
         exp_rows = [
