@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import {
   GitCompare,
@@ -15,6 +15,7 @@ import {
   Cpu,
 } from 'lucide-react';
 import PageHeader from '../components/common/PageHeader';
+import { getModeFromResult, ExecutionModeBadge, ExecutionModeBanner } from '../utils/executionMode';
 import MetricCard from '../components/common/MetricCard';
 import ComparisonCharts from '../components/simulation/ComparisonCharts';
 import { createBasemapLayer } from '../utils/mapTiles';
@@ -100,7 +101,7 @@ export default function ScenarioComparison({
         <MetricCard
           title="Critical Success Index (CSI)"
           value="0.865"
-          subtitle="Benchmark Target Met (≥ 0.70)"
+          subtitle="Benchmark Target Met (â‰¥ 0.70)"
           provenance="DERIVED"
           accentColor="emerald"
           icon={CheckCircle2}
@@ -125,7 +126,7 @@ export default function ScenarioComparison({
         <MetricCard
           title="Far-Field Peak Outflow (Delft3D)"
           value="45,600"
-          unit="m³/s"
+          unit="mÂ³/s"
           subtitle="Flexible Mesh Flow Rate"
           provenance="MODELLED"
           accentColor="cyan"
@@ -215,7 +216,7 @@ export default function ScenarioComparison({
                 <th className="py-2.5">Maximum Depth</th>
                 <th className="py-2.5 text-cyan-700 font-bold">SPH Velocity</th>
                 <th className="py-2.5 text-blue-700 font-bold">Delft3D Velocity</th>
-                <th className="py-2.5">Model Δ %</th>
+                <th className="py-2.5">Model Î” %</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-hc-border/60">
@@ -238,7 +239,7 @@ export default function ScenarioComparison({
         <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-start gap-3 text-xs text-hc-textSecondary shadow-xs">
           <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
           <p className="leading-relaxed">
-            <strong className="text-hc-ink">Inter-Model Synthesis:</strong> SPH predicts <strong>20.0% higher near-field peak depth</strong> at Station 1 (Dam Axis) due to 3D vertical velocity momentum and turbulent gorge splashback. Further downstream (&gt; 38 km), Delft3D Flexible Mesh and SPH converge within <strong>±3.2% error</strong>, confirming robust mass conservation across both solvers.
+            <strong className="text-hc-ink">Inter-Model Synthesis:</strong> SPH predicts <strong>20.0% higher near-field peak depth</strong> at Station 1 (Dam Axis) due to 3D vertical velocity momentum and turbulent gorge splashback. Further downstream (&gt; 38 km), Delft3D Flexible Mesh and SPH converge within <strong>Â±3.2% error</strong>, confirming robust mass conservation across both solvers.
           </p>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import {
   Map,
@@ -25,6 +25,7 @@ import {
   PieChart,
 } from 'lucide-react';
 import PageHeader from '../components/common/PageHeader';
+import { getModeFromResult, ExecutionModeBadge, ExecutionModeBanner } from '../utils/executionMode';
 import { createBasemapLayer } from '../utils/mapTiles';
 import { api } from '../services/api';
 
@@ -369,7 +370,7 @@ export default function ResultsMapScreen({
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-xs font-bold text-hc-ink">
                   <span>Inundated Area Distribution</span>
-                  <span className="text-cyan-700 font-mono">48.7 km²</span>
+                  <span className="text-cyan-700 font-mono">48.7 kmÂ²</span>
                 </div>
 
                 <div className="flex items-center justify-between gap-4 p-2 bg-slate-50 rounded-xl border border-hc-border shadow-inner">
@@ -388,19 +389,19 @@ export default function ResultsMapScreen({
                       <span className="flex items-center gap-1 text-red-700">
                         <span className="w-2 h-2 rounded-full bg-red-600" /> High Risk:
                       </span>
-                      <strong className="text-slate-900">18.2 km²</strong>
+                      <strong className="text-slate-900">18.2 kmÂ²</strong>
                     </div>
                     <div className="flex items-center justify-between gap-4">
                       <span className="flex items-center gap-1 text-amber-800">
                         <span className="w-2 h-2 rounded-full bg-amber-500" /> Med Risk:
                       </span>
-                      <strong className="text-slate-900">17.6 km²</strong>
+                      <strong className="text-slate-900">17.6 kmÂ²</strong>
                     </div>
                     <div className="flex items-center justify-between gap-4">
                       <span className="flex items-center gap-1 text-cyan-700">
                         <span className="w-2 h-2 rounded-full bg-cyan-600" /> Low Risk:
                       </span>
-                      <strong className="text-slate-900">12.9 km²</strong>
+                      <strong className="text-slate-900">12.9 kmÂ²</strong>
                     </div>
                   </div>
                 </div>
@@ -447,7 +448,7 @@ export default function ResultsMapScreen({
         </div>
       </div>
 
-      {/* Bottom Action Bar: Export KML · Export Shapefile · Generate Report */}
+      {/* Bottom Action Bar: Export KML Â· Export Shapefile Â· Generate Report */}
       <div className="bg-hc-surface border border-hc-border rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-card-dark">
         <div className="flex items-center space-x-2 text-xs text-hc-textSecondary font-mono">
           <span>Simulation Run: <strong className="text-hc-ink">Chenab_WorstCase_Coupled_v1</strong></span>

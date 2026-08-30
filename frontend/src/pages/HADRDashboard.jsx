@@ -31,7 +31,7 @@ export default function HADRDashboard({
 
   const payload = {
     run_id: simulationResult?.run_id || 'hadr_latest_brief',
-    scenario_name: selectedPreset?.name || 'Chenab River Basin',
+    scenario_name: selectedPreset?.name || 'Tehri Dam — Bhagirathi River',
   };
 
   useEffect(() => {
@@ -39,8 +39,8 @@ export default function HADRDashboard({
     if (mapInstanceRef.current) return;
 
     const map = L.map(mapContainerRef.current, {
-      center: [23.5937, 78.9629], // India Center
-      zoom: 5,
+      center: [30.25, 78.45], // Tehri Dam — Bhagirathi River, Uttarakhand
+      zoom: 8,
       zoomControl: false,
       attributionControl: false,
     });
@@ -48,25 +48,35 @@ export default function HADRDashboard({
     createBasemapLayer(map, 'bright').addTo(map);
     mapInstanceRef.current = map;
 
-    // Major River Basin Exposure Polygons (Indus, Ganga, Brahmaputra)
-    const northCorridor = [
-      [34.5, 74.0], [33.0, 76.5], [30.5, 78.5], [28.5, 79.5],
-      [27.0, 84.0], [25.5, 87.5], [23.5, 88.5], [26.0, 85.0],
-      [29.0, 77.0], [32.5, 74.5],
+    // Tehri downstream flood corridor: Tehri → Koteshwar → Devprayag → Rishikesh → Haridwar
+    const tehriCorridor = [
+      [30.390, 78.510], [30.330, 78.440], [30.315, 78.380],
+      [30.250, 78.500], [30.155, 78.610], [30.165, 78.700],
+      [30.130, 78.510], [30.100, 78.290], [29.950, 78.175],
+      [29.920, 78.130], [29.960, 78.120], [30.110, 78.255],
+      [30.145, 78.490], [30.235, 78.470], [30.310, 78.360],
+      [30.370, 78.465], [30.390, 78.510],
     ];
 
-    L.polygon(northCorridor, {
+    L.polygon(tehriCorridor, {
       color: '#DC2626',
       fillColor: '#EA580C',
-      fillOpacity: 0.55,
+      fillOpacity: 0.45,
       weight: 2,
     }).addTo(map);
+
+    // Bhagirathi river centerline
+    L.polyline([
+      [30.378,78.481],[30.312,78.367],[30.148,78.596],
+      [30.087,78.268],[29.945,78.164],
+    ], { color: '#00E5FF', weight: 3, opacity: 0.8 }).addTo(map);
 
     return () => {
       map.remove();
       mapInstanceRef.current = null;
     };
   }, []);
+
 
   return (
     <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 text-hc-ink">

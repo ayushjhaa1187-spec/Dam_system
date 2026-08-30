@@ -1,21 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import {
-  ShieldAlert,
   Waves,
   TrendingUp,
-  MapPin,
-  Clock,
   Play,
   Pause,
   ArrowRight,
-  Activity,
   Layers,
   Compass,
   AlertTriangle,
   Building2,
   Users,
-  IndianRupee,
 } from 'lucide-react';
 import PageHeader from '../components/common/PageHeader';
 import MetricCard from '../components/common/MetricCard';
@@ -301,7 +296,7 @@ export default function Overview({
           {/* Scenario Quick Specs Box */}
           <div className="bg-hc-surface border border-hc-border rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-xs font-mono shadow-card-dark">
             <div className="flex items-center space-x-2">
-              <ShieldAlert className="w-4 h-4 text-amber-600" />
+              <AlertTriangle className="w-4 h-4 text-amber-600" />
               <span className="font-bold text-hc-ink">Scenario: Worst Case (Full Breach)</span>
             </div>
             <div className="flex items-center space-x-4 text-hc-textSecondary">

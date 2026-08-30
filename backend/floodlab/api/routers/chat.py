@@ -18,8 +18,10 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+
 def _get_api_key():
     return get_settings().gemini_api_key or os.getenv("AI_API_KEY") or ""
+
 
 SYSTEM_PROMPT = """You are "HydroBot AI" (JalRakshak AI), the AI assistant for HydroBreach / FloodLab.
 HydroBreach is an Indian dam break, river blockage flash flood simulation, and HADR decision-support platform.

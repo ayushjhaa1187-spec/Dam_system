@@ -11,6 +11,7 @@ import {
   Activity,
   CheckCircle2,
 } from 'lucide-react';
+import { getModeFromResult, ExecutionModeBadge } from '../../utils/executionMode';
 
 export const TOP_TABS = [
   { id: 'dashboard', label: 'Dashboard' },
@@ -36,7 +37,7 @@ export default function Topbar({
   onOpenAlerts,
   alertCount = 3,
 }) {
-  const modelType = simulationResult?.scenario_params?.solver_type || selectedPreset?.solver_type || 'DELFT3D';
+  const executionMode = getModeFromResult(simulationResult);
 
   return (
     <header className="h-16 bg-hc-bg/95 backdrop-blur-md border-b border-hc-border px-4 sm:px-6 flex items-center justify-between z-20 sticky top-0 gap-4">
@@ -57,7 +58,7 @@ export default function Topbar({
           </div>
         </div>
 
-        {/* 6 Top Navigation Tabs */}
+        {/* Top Navigation Tabs */}
         <nav className="hidden md:flex items-center space-x-1 bg-hc-surface/80 p-1 rounded-xl border border-hc-border/80">
           {TOP_TABS.map((tab) => {
             const isActive = activeTopTab === tab.id;
@@ -78,8 +79,11 @@ export default function Topbar({
         </nav>
       </div>
 
-      {/* 2. Middle: Scenario Preset & Case/Model Badges */}
+      {/* 2. Middle: Scenario Preset, Execution Mode Badge, Case Badge */}
       <div className="hidden xl:flex items-center space-x-3">
+        {/* Execution Mode Badge — always visible */}
+        <ExecutionModeBadge mode={executionMode} compact />
+
         {/* Preset Selector */}
         <div className="relative">
           <select
@@ -98,16 +102,12 @@ export default function Topbar({
 
         {/* Case Badge */}
         <span className="px-2.5 py-1 rounded-lg bg-hc-surface border border-hc-border text-[11px] font-mono text-hc-textSecondary">
-          Case: <strong className="text-hc-ink">Dam Break</strong>
-        </span>
-
-        {/* Model Badge */}
-        <span className="px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200 text-[11px] font-mono text-blue-700">
-          Model: <strong className="text-blue-800 uppercase">{modelType}</strong>
+          Case: <strong className="text-hc-ink">Tehri Dam — Bhagirathi River</strong>
         </span>
       </div>
 
-      {/* 3. Right: Simulation CTA, Alert Bell, User Avatar Card */}
+      {/* 3. Right: Simulation CTA, Alert Bell, User Avatar */}
+
       <div className="flex items-center space-x-3">
         {/* Run Simulation Primary Action */}
         <button

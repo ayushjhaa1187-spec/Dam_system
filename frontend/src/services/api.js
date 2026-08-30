@@ -1,5 +1,5 @@
 import { runLocalCalculation } from '../utils/localCalculation.js';
-import { EXECUTION_MODES } from '../utils/executionMode.js';
+import { EXECUTION_MODES } from '../utils/executionMode';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
 
