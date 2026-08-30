@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 
 import HomeScreen from '../pages/HomeScreen';
@@ -30,12 +30,12 @@ describe('HydroShield Product Screens', () => {
     );
 
     expect(screen.getByText(/Predict\. Prepare\./i)).toBeInTheDocument();
-    expect(screen.getByText(/Simulations Run/i)).toBeInTheDocument();
-    expect(screen.getByText(/River Basins Covered/i)).toBeInTheDocument();
-    expect(screen.getByText(/Lives Protected/i)).toBeInTheDocument();
+    expect(screen.getByText(/Configured Scenario Templates/i)).toBeInTheDocument();
+    expect(screen.getByText(/Primary Tehri Demo Corridor/i)).toBeInTheDocument();
+    expect(screen.getByText(/Real Public Datasets Used/i)).toBeInTheDocument();
   });
 
-  it('Screen 2: Mission Control Dashboard / Overview renders 5 KPI cards and Chenab Basin', () => {
+  it('Screen 2: Mission Control Dashboard / Overview renders 5 KPI cards and Tehri Basin', () => {
     render(
       <Overview
         selectedPreset={FALLBACK_PRESETS[0]}
@@ -46,7 +46,7 @@ describe('HydroShield Product Screens', () => {
       />
     );
 
-    expect(screen.getByText(/Chenab River Basin/i)).toBeInTheDocument();
+    expect(screen.getByText(/Tehri Dam — Bhagirathi River/i)).toBeInTheDocument();
     expect(screen.getByText(/Max Inundation Depth/i)).toBeInTheDocument();
     expect(screen.getByText(/Affected Area/i)).toBeInTheDocument();
     expect(screen.getByText(/Population At Risk/i)).toBeInTheDocument();
@@ -65,11 +65,9 @@ describe('HydroShield Product Screens', () => {
 
     expect(screen.getByText(/New Dam Break Simulation Wizard/i)).toBeInTheDocument();
     expect(screen.getByText(/1\. Study Area Selection/i)).toBeInTheDocument();
-
-    const continueBtn = screen.getByText(/^Continue$/i);
-    fireEvent.click(continueBtn);
-
-    expect(screen.getByText(/2\. Dam Structure & Reservoir Parameters/i)).toBeInTheDocument();
+    expect(screen.getByText(/2\. Dam Parameters/i)).toBeInTheDocument();
+    expect(screen.getByText(/3\. Model Selection/i)).toBeInTheDocument();
+    expect(screen.getByText(/4\. Breach Scenario/i)).toBeInTheDocument();
   });
 
   it('Screen 4: Data Studio renders 6 upload cards and 3D layer preview', () => {
@@ -82,12 +80,14 @@ describe('HydroShield Product Screens', () => {
     );
 
     expect(screen.getByText(/Data Input & Dataset Upload Hub/i)).toBeInTheDocument();
-    expect(screen.getByText(/DEM \(Terrain\)/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/DEM \(Terrain\)/i).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/River Network/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/3D Spatial Layer Stack Preview/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Land Use \/ Land Cover/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Reservoir \/ Dam Data/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Satellite Imagery/i).length).toBeGreaterThan(0);
   });
 
-  it('Screen 5: Model Config & Simulation Settings renders SPH, Delft3D, and sliders', () => {
+  it('Screen 5: Model Config renders SPH vs Delft3D settings and sliders', () => {
     render(
       <ModelConfigScreen
         selectedPreset={FALLBACK_PRESETS[0]}
@@ -98,29 +98,30 @@ describe('HydroShield Product Screens', () => {
     );
 
     expect(screen.getByText(/Simulation Settings & Solver Setup/i)).toBeInTheDocument();
-    expect(screen.getByText(/Delft3D \(Flexible Mesh\)/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Smooth Particle Hydrodynamics \(SPH\)/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Comparison Mode – Run Both Models & Compare Results/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Delft3D/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Smooth Particle Hydrodynamics/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Model Selection/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Hydraulic Params/i).length).toBeGreaterThan(0);
   });
 
-  it('Screen 6: Results & Inundation Map Detailed renders layer controls and tabs', () => {
+  it('Screen 6: Results Map renders map layer controls, hydrographs, and gauges', () => {
     render(
       <ResultsMapScreen
         simulationResult={null}
         selectedPreset={FALLBACK_PRESETS[0]}
         onRunSimulation={vi.fn()}
-        onNavigate={vi.fn()}
         isSimulating={false}
+        onNavigate={vi.fn()}
       />
     );
 
     expect(screen.getByText(/Results & Inundation Map \(Detailed\)/i)).toBeInTheDocument();
     expect(screen.getByText(/Layer Control/i)).toBeInTheDocument();
-    expect(screen.getByText(/Export KML/i)).toBeInTheDocument();
-    expect(screen.getByText(/Export Shapefile/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Inundation Depth/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Flow Velocity/i)).toBeInTheDocument();
   });
 
-  it('Screen 7: Model Comparison & Analysis renders dual SPH vs Delft3D stats', () => {
+  it('Screen 7: Scenario Comparison renders dual SPH vs Delft3D viewports and CSI score', () => {
     render(
       <ScenarioComparison
         simulationResult={null}
@@ -132,31 +133,23 @@ describe('HydroShield Product Screens', () => {
 
     expect(screen.getByText(/Model Comparison & Analysis \(SPH vs Delft3D\)/i)).toBeInTheDocument();
     expect(screen.getByText(/Critical Success Index \(CSI\)/i)).toBeInTheDocument();
-    expect(screen.getByText(/Inter-Model Hydrodynamic Comparison Table/i)).toBeInTheDocument();
+    expect(screen.getByText(/Probability of Detection \(POD\)/i)).toBeInTheDocument();
   });
 
-  it('Screen 8: GEE Monitoring renders satellite SAR controls and queue', () => {
-    render(
-      <SatelliteMonitor
-        selectedPreset={FALLBACK_PRESETS[0]}
-        simulationResult={null}
-        onNavigate={vi.fn()}
-        onRunSimulation={vi.fn()}
-        isSimulating={false}
-      />
-    );
+  it('Screen 8: Satellite Monitor renders GEE Sentinel-1 SAR controls', () => {
+    render(<SatelliteMonitor onNavigate={vi.fn()} />);
 
     expect(screen.getByText(/GEE Monitoring \(Sentinel-1 SAR & Sentinel-2\)/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Near Real-Time Flood Extent/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Asynchronous Simulation Queue/i)).toBeInTheDocument();
+    expect(screen.getByText(/Satellite Layer Overlays/i)).toBeInTheDocument();
+    expect(screen.getByText(/Fetch Live GEE Pass/i)).toBeInTheDocument();
   });
 
   it('Screen 9: Alerts & Notifications renders active hazard list', () => {
     render(<AlertsScreen onNavigate={vi.fn()} />);
 
     expect(screen.getByText(/Alerts & Real-Time Hazard Notifications/i)).toBeInTheDocument();
-    expect(screen.getByText(/High Risk Flood Zone — Ramban District/i)).toBeInTheDocument();
-    expect(screen.getByText(/Dam Water Level High — Chenab Dam/i)).toBeInTheDocument();
+    expect(screen.getByText(/High Risk Flood Zone — Rishikesh Town/i)).toBeInTheDocument();
+    expect(screen.getByText(/Tehri Reservoir Level Critical/i)).toBeInTheDocument();
   });
 
   it('Screen 10: HADR Decision Brief renders 3 download buttons', () => {
@@ -174,7 +167,7 @@ describe('HydroShield Product Screens', () => {
     expect(screen.getByText(/Download Official PDF Brief/i)).toBeInTheDocument();
   });
 
-  it('Screen 11: Reports / Export Hub renders 120-page preview and checklist', () => {
+  it('Screen 11: Reports / Export Hub renders export formats and checklist', () => {
     render(
       <ImpactExportScreen
         simulationResult={null}
@@ -186,6 +179,8 @@ describe('HydroShield Product Screens', () => {
     expect(screen.getByText(/Reports \/ Export Center/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Dam Break Inundation Report/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Executive Summary/i)).toBeInTheDocument();
-    expect(screen.getByText(/PDF Report/i)).toBeInTheDocument();
+    expect(screen.getByText(/Download CSV/i)).toBeInTheDocument();
+    expect(screen.getByText(/Download GeoJSON/i)).toBeInTheDocument();
   });
 });
+

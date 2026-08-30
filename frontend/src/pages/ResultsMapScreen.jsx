@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import {
   Map,
@@ -30,10 +30,12 @@ import { createBasemapLayer } from '../utils/mapTiles';
 import { api } from '../services/api';
 
 export const RESULTS_STATIONS = [
-  { id: 'st_01', name: 'Village A (Near Dam Axis)', km: 4.2, depth: '12.6 m', vel: '22.4 m/s', arrival: 'T+8m', lat: 33.155, lon: 75.740, risk: 'High' },
-  { id: 'st_02', name: 'Village B (Gorge Bend)', km: 18.5, depth: '9.8 m', vel: '18.2 m/s', arrival: 'T+24m', lat: 33.165, lon: 75.650, risk: 'High' },
-  { id: 'st_03', name: 'Village C (Valley Confluence)', km: 38.0, depth: '6.4 m', vel: '12.0 m/s', arrival: 'T+52m', lat: 33.148, lon: 75.520, risk: 'Medium' },
-  { id: 'st_04', name: 'Downstream Plain Sector', km: 65.0, depth: '3.8 m', vel: '7.5 m/s', arrival: 'T+95m', lat: 33.230, lon: 75.260, risk: 'Low' },
+  { id: 'st_01', name: 'Tehri Dam Axis (0 km)', km: 0.0, depth: '62.5 m', vel: '24.5 m/s', arrival: 'T+0m', lat: 30.378, lon: 78.481, risk: 'High' },
+  { id: 'st_02', name: 'Koteshwar Dam (22 km)', km: 22.0, depth: '42.0 m', vel: '21.0 m/s', arrival: 'T+32m', lat: 30.312, lon: 78.367, risk: 'High' },
+  { id: 'st_03', name: 'Devprayag Sangam (42 km)', km: 42.0, depth: '28.5 m', vel: '17.5 m/s', arrival: 'T+68m', lat: 30.148, lon: 78.596, risk: 'High' },
+  { id: 'st_04', name: 'Shivpuri Gorge (62 km)', km: 62.0, depth: '22.0 m', vel: '14.8 m/s', arrival: 'T+92m', lat: 30.164, lon: 78.689, risk: 'Medium' },
+  { id: 'st_05', name: 'Rishikesh Town (78 km)', km: 78.0, depth: '15.2 m', vel: '11.2 m/s', arrival: 'T+118m', lat: 30.087, lon: 78.268, risk: 'Medium' },
+  { id: 'st_06', name: 'Haridwar Plains (100 km)', km: 100.0, depth: '9.4 m', vel: '7.6 m/s', arrival: 'T+175m', lat: 29.945, lon: 78.164, risk: 'Low' },
 ];
 
 export default function ResultsMapScreen({
@@ -42,9 +44,11 @@ export default function ResultsMapScreen({
   onRunSimulation,
   isSimulating,
   onNavigate,
+  backendStatus,
 }) {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const executionMode = getModeFromResult(simulationResult);
 
   const [currentTimeHr, setCurrentTimeHr] = useState(12.0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -88,8 +92,8 @@ export default function ResultsMapScreen({
     if (mapInstanceRef.current) return;
 
     const map = L.map(mapContainerRef.current, {
-      center: [33.180, 75.580],
-      zoom: 10,
+      center: [30.25, 78.45],
+      zoom: 9,
       zoomControl: false,
       attributionControl: false,
     });
@@ -97,39 +101,45 @@ export default function ResultsMapScreen({
     createBasemapLayer(map, 'satellite').addTo(map);
     mapInstanceRef.current = map;
 
-    // River centerline
+    // Bhagirathi River centerline
     const riverCoords = [
-      [33.310, 75.766],
-      [33.220, 75.720],
-      [33.145, 75.760],
-      [33.160, 75.680],
-      [33.143, 75.546],
-      [33.190, 75.400],
-      [33.242, 75.244],
+      [30.378, 78.481],
+      [30.330, 78.420],
+      [30.312, 78.367],
+      [30.240, 78.490],
+      [30.148, 78.596],
+      [30.164, 78.689],
+      [30.120, 78.500],
+      [30.087, 78.268],
+      [29.945, 78.164],
     ];
 
     L.polyline(riverCoords, {
-      color: '#0284C7',
+      color: '#00E5FF',
       weight: 3.5,
       opacity: 0.9,
     }).addTo(map);
 
-    // Inundation Plume Polygon
+    // Inundation Plume Polygon (Tehri corridor)
     const plumePolygon = [
-      [33.320, 75.775],
-      [33.230, 75.735],
-      [33.155, 75.770],
-      [33.175, 75.690],
-      [33.155, 75.555],
-      [33.205, 75.410],
-      [33.255, 75.250],
-      [33.230, 75.240],
-      [33.175, 75.390],
-      [33.130, 75.535],
-      [33.145, 75.670],
-      [33.135, 75.750],
-      [33.210, 75.705],
-      [33.300, 75.755],
+      [30.390, 78.495],
+      [30.330, 78.430],
+      [30.315, 78.380],
+      [30.250, 78.500],
+      [30.155, 78.610],
+      [30.170, 78.700],
+      [30.130, 78.510],
+      [30.100, 78.290],
+      [29.950, 78.175],
+      [29.930, 78.150],
+      [29.955, 78.130],
+      [30.110, 78.255],
+      [30.145, 78.490],
+      [30.140, 78.580],
+      [30.235, 78.470],
+      [30.310, 78.355],
+      [30.365, 78.460],
+      [30.390, 78.495],
     ];
 
     L.polygon(plumePolygon, {
@@ -139,7 +149,7 @@ export default function ResultsMapScreen({
       weight: 2,
     }).addTo(map);
 
-    // Add Settlement Markers (Village A, Village B, Village C)
+    // Add Settlement Markers
     RESULTS_STATIONS.forEach((st) => {
       const isHigh = st.risk === 'High';
       const icon = L.divIcon({
@@ -150,12 +160,12 @@ export default function ResultsMapScreen({
             border: 1.5px solid ${isHigh ? '#FCA5A5' : '#94A3B8'};
             color: #FFFFFF;
             border-radius: 8px;
-            padding: 3px 8px;
+            padding: 3px 7px;
             font-size: 10px;
             font-weight: 700;
             font-family: monospace;
             white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(15,23,42,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             display: flex;
             align-items: center;
             gap: 4px;
@@ -179,18 +189,20 @@ export default function ResultsMapScreen({
 
   const downloadPayload = {
     run_id: simulationResult?.run_id || 'sim_latest',
-    scenario_name: selectedPreset?.name || 'Chenab River Basin',
+    scenario_name: selectedPreset?.name || 'Tehri Dam — Bhagirathi River',
   };
 
   return (
     <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 text-hc-ink">
+      <ExecutionModeBanner mode={executionMode} backendStatus={backendStatus || 'OFFLINE'} />
+
       {/* Header */}
       <PageHeader
-        category="DETAILED RESULTS EXPLORER &bull; SCREEN 5 OF HYDROSHIELD"
+        category="DETAILED RESULTS EXPLORER &bull; HYDROSHIELD"
         title="Results &amp; Inundation Map (Detailed)"
         subtitle="3D perspective terrain tilt, dynamic flood wave progression timeline, multi-layer GIS overlay, and gauge hydrograph analytics."
-        status="COMPLETED"
-        statusLabel="DYNAMIC WAVE MESH READY"
+        status={simulationResult ? 'PROTOTYPE' : 'READY'}
+        statusLabel={simulationResult ? 'SIMULATION RESULT READY' : 'CLICK RUN SIMULATION'}
         actions={
           <div className="flex items-center space-x-2">
             <button
@@ -227,7 +239,7 @@ export default function ResultsMapScreen({
                 { id: 'waterLevel', label: 'Water Level (m MSL)' },
                 { id: 'arrivalTime', label: 'Arrival Time (Contours)' },
                 { id: 'buildings', label: 'Affected Buildings' },
-                { id: 'roads', label: 'Roads & Bridges (NH-44)' },
+                { id: 'roads', label: 'Roads & Bridges (NH-58 Corridor)' },
                 { id: 'population', label: 'Population Density Exposure' },
               ].map((layer) => (
                 <label

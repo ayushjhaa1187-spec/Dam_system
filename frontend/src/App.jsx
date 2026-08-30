@@ -299,6 +299,7 @@ export default function App() {
                   selectedPreset={selectedPreset}
                   onRunSimulation={handleRunSimulation}
                   isSimulating={isSimulating}
+                  backendStatus={backendStatus}
                 />
               )}
 
