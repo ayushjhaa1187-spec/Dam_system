@@ -30,12 +30,12 @@ describe('HydroShield Product Screens', () => {
     );
 
     expect(screen.getByText(/Predict\. Prepare\./i)).toBeInTheDocument();
-    expect(screen.getByText(/Configured Scenario Templates/i)).toBeInTheDocument();
-    expect(screen.getByText(/Primary Tehri Demo Corridor/i)).toBeInTheDocument();
-    expect(screen.getByText(/Real Public Datasets Used/i)).toBeInTheDocument();
+    expect(screen.getByText(/Simulations Run/i)).toBeInTheDocument();
+    expect(screen.getByText(/River Basins Covered/i)).toBeInTheDocument();
+    expect(screen.getByText(/Lives Protected/i)).toBeInTheDocument();
   });
 
-  it('Screen 2: Mission Control Dashboard / Overview renders 5 KPI cards and Tehri Basin', () => {
+  it('Screen 2: Mission Control Dashboard / Overview renders 5 KPI cards and Chenab Basin', () => {
     render(
       <Overview
         selectedPreset={FALLBACK_PRESETS[0]}
@@ -46,7 +46,7 @@ describe('HydroShield Product Screens', () => {
       />
     );
 
-    expect(screen.getByText(/Tehri Dam — Bhagirathi River/i)).toBeInTheDocument();
+    expect(screen.getByText(/Chenab River Basin/i)).toBeInTheDocument();
     expect(screen.getByText(/Max Inundation Depth/i)).toBeInTheDocument();
     expect(screen.getByText(/Affected Area/i)).toBeInTheDocument();
     expect(screen.getByText(/Population At Risk/i)).toBeInTheDocument();
@@ -144,15 +144,15 @@ describe('HydroShield Product Screens', () => {
     expect(screen.getByText(/Fetch Live GEE Pass/i)).toBeInTheDocument();
   });
 
-  it('Screen 9: Alerts & Notifications renders active hazard list', () => {
+  it("Screen 9: Alerts & Notifications renders active hazard list", () => {
     render(<AlertsScreen onNavigate={vi.fn()} />);
 
     expect(screen.getByText(/Alerts & Real-Time Hazard Notifications/i)).toBeInTheDocument();
-    expect(screen.getByText(/High Risk Flood Zone — Rishikesh Town/i)).toBeInTheDocument();
-    expect(screen.getByText(/Tehri Reservoir Level Critical/i)).toBeInTheDocument();
+    expect(screen.getByText(/High Risk Flood Zone — Ramban District/i)).toBeInTheDocument();
+    expect(screen.getByText(/Dam Water Level High — Chenab Dam/i)).toBeInTheDocument();
   });
 
-  it('Screen 10: HADR Decision Brief renders 3 download buttons', () => {
+  it("Screen 10: HADR Decision Brief renders 3 download buttons", () => {
     render(
       <HADRDashboard
         selectedPreset={FALLBACK_PRESETS[0]}
@@ -167,7 +167,7 @@ describe('HydroShield Product Screens', () => {
     expect(screen.getByText(/Download Official PDF Brief/i)).toBeInTheDocument();
   });
 
-  it('Screen 11: Reports / Export Hub renders export formats and checklist', () => {
+  it("Screen 11: Reports / Export Hub renders export options and checklist", () => {
     render(
       <ImpactExportScreen
         simulationResult={null}
@@ -178,9 +178,10 @@ describe('HydroShield Product Screens', () => {
 
     expect(screen.getByText(/Reports \/ Export Center/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Dam Break Inundation Report/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Executive Summary/i)).toBeInTheDocument();
-    expect(screen.getByText(/Download CSV/i)).toBeInTheDocument();
-    expect(screen.getByText(/Download GeoJSON/i)).toBeInTheDocument();
+    expect(screen.getByText(/Executive Publication Dossier/i)).toBeInTheDocument();
+    expect(screen.getByText(/PDF Report/i)).toBeInTheDocument();
+    expect(screen.getByText(/KML File/i)).toBeInTheDocument();
+    expect(screen.getByText(/Shapefile \(SHP\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/CSV Data/i)).toBeInTheDocument();
   });
 });
-
