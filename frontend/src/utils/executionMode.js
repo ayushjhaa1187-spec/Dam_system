@@ -1,4 +1,4 @@
-﻿/**
+/**
  * executionMode.js
  * Global execution mode types and UI badge for FloodLab.
  *
@@ -86,35 +86,71 @@ export function ExecutionModeBadge({ mode, compact = false, showSublabel = false
   };
 
   if (compact) {
-    return (
-      <span style={{
-        display: "inline-flex", alignItems: "center", gap: 5,
-        background: m.bg, border: `1px solid ${m.border}`, borderRadius: 6,
-        padding: "2px 8px", fontSize: 10, fontFamily: "monospace",
-        fontWeight: 700, color: m.text, whiteSpace: "nowrap",
-      }}>
-        <span style={dotStyle} />
-        {m.label}
-      </span>
+    return React.createElement(
+      "span",
+      {
+        style: {
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 5,
+          background: m.bg,
+          border: `1px solid ${m.border}`,
+          borderRadius: 6,
+          padding: "2px 8px",
+          fontSize: 10,
+          fontFamily: "monospace",
+          fontWeight: 700,
+          color: m.text,
+          whiteSpace: "nowrap",
+        },
+      },
+      React.createElement("span", { style: dotStyle }),
+      m.label
     );
   }
 
-  return (
-    <div style={{
-      display: "inline-flex", flexDirection: "column", gap: 2,
-      background: m.bg, border: `1px solid ${m.border}`, borderRadius: 8,
-      padding: "6px 12px", fontFamily: "monospace",
-    }}>
-      <span style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 700, color: m.text }}>
-        <span style={dotStyle} />
-        {m.label}
-      </span>
-      {showSublabel && (
-        <span style={{ fontSize: 9, color: m.text, opacity: 0.75, paddingLeft: 13 }}>
-          {m.sublabel}
-        </span>
-      )}
-    </div>
+  return React.createElement(
+    "div",
+    {
+      style: {
+        display: "inline-flex",
+        flexDirection: "column",
+        gap: 2,
+        background: m.bg,
+        border: `1px solid ${m.border}`,
+        borderRadius: 8,
+        padding: "6px 12px",
+        fontFamily: "monospace",
+      },
+    },
+    React.createElement(
+      "span",
+      {
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          fontSize: 11,
+          fontWeight: 700,
+          color: m.text,
+        },
+      },
+      React.createElement("span", { style: dotStyle }),
+      m.label
+    ),
+    showSublabel &&
+      React.createElement(
+        "span",
+        {
+          style: {
+            fontSize: 9,
+            color: m.text,
+            opacity: 0.75,
+            paddingLeft: 13,
+          },
+        },
+        m.sublabel
+      )
   );
 }
 
@@ -127,23 +163,55 @@ export function ExecutionModeBanner({ mode, backendStatus }) {
   if (mode === EXECUTION_MODES.BACKEND_API && backendStatus === "ONLINE") return null;
   const m = MODE_META[mode] || MODE_META.LOCAL_CALCULATION;
   const isOffline = backendStatus === "OFFLINE";
-  return (
-    <div style={{
-      display: "flex", alignItems: "center", justifyContent: "space-between",
-      background: m.bg, border: `1px solid ${m.border}`, borderRadius: 10,
-      padding: "8px 16px", marginBottom: 12, fontFamily: "monospace",
-      fontSize: 11, color: m.text, gap: 8, flexWrap: "wrap",
-    }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-        <span style={{ width: 8, height: 8, borderRadius: "50%", background: m.dot, flexShrink: 0 }} />
-        <strong>Current mode: {m.label}</strong>
-        <span style={{ opacity: 0.7 }}>
-          &middot; Backend: {isOffline ? "OFFLINE" : "CHECKING"} &middot; Source: {m.sublabel}
-        </span>
-      </div>
-      <span style={{ fontSize: 9, opacity: 0.65, whiteSpace: "nowrap" }}>
-        Scientific solver: Not connected in this deployment
-      </span>
-    </div>
+  return React.createElement(
+    "div",
+    {
+      style: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        background: m.bg,
+        border: `1px solid ${m.border}`,
+        borderRadius: 10,
+        padding: "8px 16px",
+        marginBottom: 12,
+        fontFamily: "monospace",
+        fontSize: 11,
+        color: m.text,
+        gap: 8,
+        flexWrap: "wrap",
+      },
+    },
+    React.createElement(
+      "div",
+      {
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          flexWrap: "wrap",
+        },
+      },
+      React.createElement("span", {
+        style: {
+          width: 8,
+          height: 8,
+          borderRadius: "50%",
+          background: m.dot,
+          flexShrink: 0,
+        },
+      }),
+      React.createElement("strong", null, `Current mode: ${m.label}`),
+      React.createElement(
+        "span",
+        { style: { opacity: 0.7 } },
+        ` · Backend: ${isOffline ? "OFFLINE" : "CHECKING"} · Source: ${m.sublabel}`
+      )
+    ),
+    React.createElement(
+      "span",
+      { style: { fontSize: 9, opacity: 0.65, whiteSpace: "nowrap" } },
+      "Scientific solver: Not connected in this deployment"
+    )
   );
 }
