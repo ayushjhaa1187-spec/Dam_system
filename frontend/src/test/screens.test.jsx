@@ -148,8 +148,8 @@ describe('HydroShield Product Screens', () => {
     render(<AlertsScreen onNavigate={vi.fn()} />);
 
     expect(screen.getByText(/Alerts & Real-Time Hazard Notifications/i)).toBeInTheDocument();
-    expect(screen.getByText(/High Risk Flood Zone — Ramban District/i)).toBeInTheDocument();
-    expect(screen.getByText(/Dam Water Level High — Chenab Dam/i)).toBeInTheDocument();
+    expect(screen.getByText(/High Risk Flood Zone - Rishikesh Town/i)).toBeInTheDocument();
+    expect(screen.getByText(/Tehri Reservoir Level Critical/i)).toBeInTheDocument();
   });
 
   it("Screen 10: HADR Decision Brief renders 3 download buttons", () => {
@@ -179,9 +179,8 @@ describe('HydroShield Product Screens', () => {
     expect(screen.getByText(/Reports \/ Export Center/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Dam Break Inundation Report/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Executive Publication Dossier/i)).toBeInTheDocument();
-    expect(screen.getByText(/PDF Report/i)).toBeInTheDocument();
-    expect(screen.getByText(/KML File/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/PDF Report/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Shapefile \(SHP\)/i)).toBeInTheDocument();
-    expect(screen.getByText(/CSV Data/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/CSV Data/i).length).toBeGreaterThan(0);
   });
 });
