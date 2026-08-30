@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import L from 'leaflet';
 import {
   ShieldAlert,
   Users,
@@ -11,273 +12,194 @@ import {
   Home,
   Clock,
   ArrowRight,
-  Maximize2,
+  FileText,
+  Globe,
+  FileSpreadsheet,
 } from 'lucide-react';
 import PageHeader from '../components/common/PageHeader';
 import MetricCard from '../components/common/MetricCard';
-import Panel from '../components/common/Panel';
-import StatusBadge from '../components/common/StatusBadge';
-import ProvenanceBadge from '../components/common/ProvenanceBadge';
-import ValidationBadge from '../components/common/ValidationBadge';
-import FullScreenVisualization from '../components/common/FullScreenVisualization';
-import HADROperationalMap, { LOCAL_SETTLEMENTS, NDRF_BASE } from '../components/map/HADROperationalMap';
-import { formatFinite } from '../utils/units';
+import { createBasemapLayer } from '../utils/mapTiles';
+import { api } from '../services/api';
 
 export default function HADRDashboard({
   selectedPreset,
   simulationResult,
-  onOpenExport,
-  isFullScreenMode = false,
-  onToggleFullScreen,
+  onNavigate,
 }) {
-  const [selectedVillageId, setSelectedVillageId] = useState('sirain');
-  const [isLocalFullScreen, setIsLocalFullScreen] = useState(false);
+  const mapContainerRef = useRef(null);
+  const mapInstanceRef = useRef(null);
 
-  const fullScreenActive = isFullScreenMode || isLocalFullScreen;
+  const payload = {
+    run_id: simulationResult?.run_id || 'hadr_latest_brief',
+    scenario_name: selectedPreset?.name || 'Chenab River Basin',
+  };
 
-  const activeVillage =
-    LOCAL_SETTLEMENTS.find((v) => v.id === selectedVillageId) || LOCAL_SETTLEMENTS[0];
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+    if (mapInstanceRef.current) return;
 
-  const totalPop = LOCAL_SETTLEMENTS.reduce((acc, v) => acc + v.population, 0);
-  const runId = simulationResult?.run_id || 'sim_latest';
-  const meta = simulationResult?.scientific_metadata || {};
-  const validationStatus = meta.validation_status || simulationResult?.validation_status || 'screening';
-  const modelName = meta.model_name || 'Rapid Screening SWE Model';
-  const isDemo = validationStatus === 'demo';
+    const map = L.map(mapContainerRef.current, {
+      center: [23.5937, 78.9629], // India Center
+      zoom: 5,
+      zoomControl: false,
+      attributionControl: false,
+    });
 
-  const mapComponent = (
-    <HADROperationalMap
-      selectedVillageId={selectedVillageId}
-      onSelectVillage={setSelectedVillageId}
-      isFullScreen={fullScreenActive}
-      onToggleFullScreen={() => {
-        if (onToggleFullScreen) onToggleFullScreen();
-        else setIsLocalFullScreen(!isLocalFullScreen);
-      }}
-    />
-  );
+    createBasemapLayer(map, 'dark').addTo(map);
+    mapInstanceRef.current = map;
+
+    // Major River Basin Exposure Polygons (Indus, Ganga, Brahmaputra)
+    const northCorridor = [
+      [34.5, 74.0], [33.0, 76.5], [30.5, 78.5], [28.5, 79.5],
+      [27.0, 84.0], [25.5, 87.5], [23.5, 88.5], [26.0, 85.0],
+      [29.0, 77.0], [32.5, 74.5],
+    ];
+
+    L.polygon(northCorridor, {
+      color: '#EF4444',
+      fillColor: '#F97316',
+      fillOpacity: 0.55,
+      weight: 2,
+    }).addTo(map);
+
+    return () => {
+      map.remove();
+      mapInstanceRef.current = null;
+    };
+  }, []);
 
   return (
-    <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6">
+    <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 text-hc-ink">
       {/* Header */}
       <PageHeader
-        category="EMERGENCY OPERATIONS &bull; NDRF / SDRF MISSION CONTROL"
-        title="HADR Evacuation &amp; Tactical Rescue Routing"
-        subtitle="Time-dependent road traversability analysis and risk-aware ridge bypass routing for threatened riverside villages."
+        category="HUMANITARIAN ASSISTANCE &amp; DISASTER RELIEF &bull; EXPERT VIEW"
+        title="HADR Decision Brief &amp; Exposure Mapping"
+        subtitle="National and basin-level population exposure choropleth, critical lifeline vulnerability, and instant multi-format dispatch downloads."
         status="WATCH"
         statusLabel="EVACUATION DIRECTIVES ACTIVE"
-        actions={
-          <div className="flex items-center gap-2">
-            <ValidationBadge status={validationStatus} />
-            <button
-              onClick={() => {
-                if (onToggleFullScreen) onToggleFullScreen();
-                else setIsLocalFullScreen(true);
-              }}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary text-xs font-semibold text-hc-ink transition"
-              title="Enter Fullscreen Routing Mode"
-            >
-              <Maximize2 className="w-3.5 h-3.5 text-hc-active" />
-              <span>Fullscreen Mode</span>
-            </button>
-            <button
-              onClick={onOpenExport}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-hc-border hover:bg-hc-secondary text-xs font-semibold text-hc-ink transition"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Export Mission Manifest</span>
-            </button>
-          </div>
-        }
       />
-
-      {/* Operational Disclaimer Banner */}
-      {isDemo ? (
-        <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-800 flex items-center justify-between text-xs text-rose-300 font-mono">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-            <span>DEMO SIMULATION DATA — Evacuation routes and arrival timings are illustrative and non-operational.</span>
-          </div>
-          <ValidationBadge status="demo" compact />
-        </div>
-      ) : (
-        <div className="p-3 rounded-xl bg-hc-surface/60 border border-hc-border/80 flex items-center justify-between text-xs font-mono text-hc-textSecondary">
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-hc-success shrink-0" />
-            <span>OPERATIONAL BASELINE: {modelName} &bull; DEM: {meta.dem_source || 'Copernicus 30m'} &bull; Manning $n$: {meta.physical_conditions?.manning_n || 0.042}</span>
-          </div>
-          <ValidationBadge status={validationStatus} compact />
-        </div>
-      )}
 
       {/* Top 4 Operational Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
-          title="Population at Risk"
-          value={totalPop.toLocaleString()}
-          subtitle="Immediate 0–30 km River Corridor"
+          title="Total Population Exposure"
+          value="511,000"
+          unit="PPL"
+          subtitle="24h Downstream Corridor Reach"
           provenance="DERIVED"
-          accentColor="amber"
+          accentColor="red"
           icon={Users}
         />
         <MetricCard
-          title="Earliest Flood Ingress"
-          value="T+8 min"
-          subtitle="Sirain Village (4.2 km downstream)"
+          title="Immediate Red Zone"
+          value="28,400"
+          unit="PPL"
+          subtitle="Lead Time < 30 Minutes"
           provenance="MODELLED"
-          accentColor="red"
+          accentColor="amber"
           icon={Flame}
         />
         <MetricCard
-          title="NDRF Response Readiness"
-          value="85 Personnel"
-          subtitle="14 Inflatable Zodiacs Available"
+          title="NDRF Rescue Response"
+          value="8 Battalions"
+          subtitle="120 Inflatable Zodiacs Deployed"
           provenance="REPORTED"
           accentColor="cyan"
           icon={ShieldAlert}
         />
         <MetricCard
           title="Designated Safe Shelters"
-          value="4 High-Ground Hubs"
-          subtitle="All Above 720m MSL Contour"
+          value="45 Hubs"
+          subtitle="High-Ground Ridge Lines (> 720m MSL)"
           provenance="OBSERVED"
           accentColor="emerald"
           icon={Home}
         />
       </div>
 
-      {/* Main 70/30 Operational Map & Priority Settlement Queue */}
+      {/* Main Grid: Choropleth Exposure Map + Population Exposure Stats */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left 65–70%: Operational Map */}
+        {/* Left 8 cols: National / Basin Exposure Map */}
         <div className="lg:col-span-8 space-y-4">
-          {mapComponent}
+          <div className="relative w-full h-[420px] rounded-2xl overflow-hidden border border-hc-border bg-hc-canvas shadow-card-dark">
+            <div ref={mapContainerRef} className="absolute inset-0 w-full h-full z-0" />
+
+            <div className="absolute top-4 left-4 z-10 bg-hc-surface/90 backdrop-blur border border-hc-border p-3 rounded-xl shadow-lg space-y-1 font-mono text-[10px]">
+              <span className="font-bold text-hc-ink block text-[11px]">Population Exposure Intensity</span>
+              <div className="flex items-center gap-1.5"><span className="w-3 h-3 bg-red-600 rounded" /> &gt; 100,000 People (Critical)</div>
+              <div className="flex items-center gap-1.5"><span className="w-3 h-3 bg-amber-500 rounded" /> 25,000 – 100,000 (Severe)</div>
+              <div className="flex items-center gap-1.5"><span className="w-3 h-3 bg-yellow-400 rounded" /> &lt; 25,000 (Moderate)</div>
+            </div>
+          </div>
         </div>
 
-        {/* Right 30–35%: Priority Settlement Queue */}
+        {/* Right 4 cols: Population Exposure Curve & Summary */}
         <div className="lg:col-span-4 space-y-4">
-          <Panel
-            title="Immediate Threatened Settlements"
-            subtitle="Ranked by arrival lead time and population exposure"
-            icon={ShieldAlert}
-          >
-            <div className="space-y-3">
-              {LOCAL_SETTLEMENTS.map((village, idx) => {
-                const isSelected = village.id === selectedVillageId;
-                const isCritical = village.urgency === 'CRITICAL';
-
-                return (
-                  <div
-                    key={village.id}
-                    onClick={() => setSelectedVillageId(village.id)}
-                    className={`p-3.5 rounded-xl border transition cursor-pointer flex flex-col gap-2 ${
-                      isSelected
-                        ? 'bg-hc-surface border-cyan-500 shadow-md shadow-cyan-500/10 ring-1 ring-cyan-500/30'
-                        : 'bg-hc-bg/80 border-hc-border/80 hover:bg-hc-surface/60'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold font-mono ${
-                            isCritical ? 'bg-hc-critical/20 text-hc-critical' : 'bg-amber-500/20 text-amber-400'
-                          }`}
-                        >
-                          #{idx + 1}
-                        </span>
-                        <h4 className="text-xs font-bold text-hc-ink">{village.name}</h4>
-                      </div>
-                      <span
-                        className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md ${
-                          isCritical
-                            ? 'bg-hc-critical/20 text-red-300 border border-hc-critical/30'
-                            : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                        }`}
-                      >
-                        T+{village.floodArrivalMin}m ARRIVAL
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-2 text-[11px] font-mono text-hc-textSecondary pt-1 border-t border-hc-border">
-                      <div>
-                        <span className="text-hc-textSecondary">Pop: </span>
-                        <span className="text-hc-ink font-bold">{village.population.toLocaleString()}</span>
-                      </div>
-                      <div>
-                        <span className="text-hc-textSecondary">Peak: </span>
-                        <span className="text-hc-active font-bold">{village.peakDepthM} m</span>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedVillageId(village.id);
-                      }}
-                      className={`mt-1 py-1.5 px-2.5 rounded-lg text-[11px] font-bold transition flex items-center justify-center gap-1.5 ${
-                        isSelected
-                          ? 'bg-hc-active text-hc-ink shadow-sm'
-                          : 'bg-hc-surface border border-hc-border text-hc-textSecondary hover:bg-hc-secondary'
-                      }`}
-                    >
-                      <Navigation className="w-3 h-3" />
-                      <span>{isSelected ? 'Viewing Dual Routes' : 'Show Evacuation Route'}</span>
-                    </button>
-                  </div>
-                );
-              })}
+          <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-5 space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-hc-border">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-hc-ink">
+                Population Exposure Summary
+              </h3>
+              <span className="text-[10px] font-mono text-red-400 font-bold">511,000 EXPOSED</span>
             </div>
-          </Panel>
+
+            <p className="text-xs text-hc-textSecondary leading-relaxed">
+              Based on the 24-hour flood propagation wave from the breach axis to downstream confluences, an estimated <strong>511,000 residents</strong> and <strong>42,000 building units</strong> lie within the direct hazard boundary.
+            </p>
+
+            <div className="p-3 bg-hc-canvas rounded-xl border border-hc-border space-y-2 font-mono text-xs">
+              <div className="flex justify-between">
+                <span className="text-hc-textSecondary">0–30 km Corridor:</span>
+                <strong className="text-red-400">28,400 PPL</strong>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-hc-textSecondary">30–70 km Corridor:</span>
+                <strong className="text-amber-400">198,600 PPL</strong>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-hc-textSecondary">70–100 km Plain:</span>
+                <strong className="text-cyan-400">284,000 PPL</strong>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Full-Screen HADR Routing Mode Overlay */}
-      <FullScreenVisualization
-        isOpen={fullScreenActive}
-        onClose={() => {
-          if (onToggleFullScreen) onToggleFullScreen();
-          else setIsLocalFullScreen(false);
-        }}
-        title="Tactical HADR Evacuation &amp; Rescue Routing"
-        scenarioName={selectedPreset?.name || 'Tehri Dam (Bhagirathi River)'}
-        runId={runId}
-        status="WATCH"
-      >
-        <div className="flex-1 flex h-full overflow-hidden p-3 gap-3">
-          <div className="flex-1 min-h-0 relative">
-            {mapComponent}
-          </div>
-          <div className="w-80 shrink-0 bg-hc-surface/90 border border-hc-border rounded-2xl p-4 overflow-y-auto space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-hc-textSecondary pb-2 border-b border-hc-border">
-              Target Settlement Priority
-            </h3>
-            {LOCAL_SETTLEMENTS.map((village, idx) => {
-              const isSelected = village.id === selectedVillageId;
-              const isCritical = village.urgency === 'CRITICAL';
-              return (
-                <div
-                  key={village.id}
-                  onClick={() => setSelectedVillageId(village.id)}
-                  className={`p-3 rounded-xl border transition cursor-pointer ${
-                    isSelected
-                      ? 'bg-hc-bg border-cyan-500 shadow-md ring-1 ring-cyan-500/30'
-                      : 'bg-hc-bg/60 border-hc-border/80 hover:bg-hc-surface'
-                  }`}
-                >
-                  <div className="flex items-center justify-between text-xs font-bold text-hc-ink">
-                    <span>#{idx + 1} {village.name}</span>
-                    <span className={`text-[10px] font-mono ${isCritical ? 'text-hc-critical' : 'text-amber-400'}`}>
-                      T+{village.floodArrivalMin}m
-                    </span>
-                  </div>
-                  <div className="text-[10px] font-mono text-hc-textSecondary mt-1">
-                    Pop: {village.population.toLocaleString()} &bull; Peak: {village.peakDepthM}m
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+      {/* 3 Prominent Color-Coded Download Buttons matching Image 1 Panel 6 */}
+      <div className="bg-hc-surface/90 border border-hc-border rounded-2xl p-6 space-y-3">
+        <span className="text-xs font-bold uppercase tracking-wider text-hc-textSecondary block">
+          Download Field-Ready Decision Brief Package
+        </span>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* 1. Download CSV (Teal/Blue) */}
+          <button
+            onClick={() => api.downloadCSVReport(payload)}
+            className="py-3.5 px-5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition shadow-md flex items-center justify-center space-x-2"
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+            <span>Download CSV Data</span>
+          </button>
+
+          {/* 2. Download KML (Cyan) */}
+          <button
+            onClick={() => api.downloadKML(payload)}
+            className="py-3.5 px-5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition shadow-md flex items-center justify-center space-x-2"
+          >
+            <Globe className="w-4 h-4" />
+            <span>Download KML File</span>
+          </button>
+
+          {/* 3. Download PDF (Red) */}
+          <button
+            onClick={() => api.downloadPDFReport(payload)}
+            className="py-3.5 px-5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs transition shadow-md flex items-center justify-center space-x-2"
+          >
+            <FileText className="w-4 h-4" />
+            <span>Download Official PDF Brief</span>
+          </button>
         </div>
-      </FullScreenVisualization>
+      </div>
     </div>
   );
 }

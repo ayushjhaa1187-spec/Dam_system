@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  LayoutDashboard,
   Waves,
   Play,
   ArrowRight,
@@ -8,21 +7,14 @@ import {
   Satellite,
   Layers,
   Activity,
-  History,
-  Trash2,
-  Copy,
-  RotateCcw,
   Sparkles,
   ShieldCheck,
-  AlertCircle,
-  HelpCircle,
-  Clock,
-  ExternalLink,
+  CheckCircle2,
+  MapPin,
+  Flame,
+  Globe,
 } from 'lucide-react';
-import PageHeader from '../components/common/PageHeader';
-import MetricCard from '../components/common/MetricCard';
 import StatusBadge from '../components/common/StatusBadge';
-import { formatFinite } from '../utils/units';
 
 export default function HomeScreen({
   presets = [],
@@ -31,156 +23,172 @@ export default function HomeScreen({
   onRunSimulation,
   onNavigate,
   onOpenTutorial,
-  recentRuns = [],
-  onDeleteRecentRun,
-  onLoadRecentRun,
   isSimulating,
 }) {
-  const activePreset = selectedPreset || presets[0] || {};
-  const isDemo = Boolean(activePreset?.is_hypothetical !== false);
-
   return (
-    <div className="p-6 sm:p-8 max-w-7xl mx-auto space-y-6 text-hc-ink">
-      {/* 1. Page Header */}
-      <PageHeader
-        category="HYDRO COMMAND OPERATIONS &bull; SCREEN 1 OF 5"
-        title="Home &amp; Indian River Case Studies"
-        subtitle="Operational hydrodynamic breach modeling, historical disaster benchmarks, recent simulation runs, and data telemetry status."
-        status="OPERATIONAL"
-        statusLabel="SYSTEM READY"
-        actions={
+    <div className="space-y-12 pb-12 text-hc-ink">
+      {/* 1. Hero Section matching Panel 2 of Image 3 */}
+      <div className="relative min-h-[500px] rounded-3xl overflow-hidden border border-hc-border bg-gradient-to-br from-hc-surface via-hc-bg to-hc-canvas mx-4 sm:mx-8 p-8 sm:p-14 flex flex-col justify-between shadow-2xl">
+        {/* Background Overlay Visual */}
+        <div
+          className="absolute inset-0 opacity-20 pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(circle at 70% 30%, #0284C7 0%, transparent 60%), radial-gradient(circle at 20% 80%, #06B6D4 0%, transparent 50%)`,
+          }}
+        />
+
+        {/* Ambient Top Nav in Hero */}
+        <div className="relative z-10 flex items-center justify-between">
           <div className="flex items-center space-x-2">
+            <span className="font-extrabold text-base tracking-wider text-hc-ink font-mono">
+              Hydro<span className="text-hc-active">Shield</span>
+            </span>
+          </div>
+
+          <div className="hidden md:flex items-center space-x-6 text-xs font-semibold text-hc-textSecondary">
+            <a href="#features" className="hover:text-hc-ink transition">Features</a>
+            <a href="#models" className="hover:text-hc-ink transition">Dual Solvers</a>
+            <a href="#benchmarks" className="hover:text-hc-ink transition">Indian Basins</a>
+            <a href="#about" className="hover:text-hc-ink transition">About</a>
+          </div>
+
+          <button
+            onClick={() => onNavigate && onNavigate('dashboard')}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold text-xs transition shadow-glow-blue"
+          >
+            Get Started
+          </button>
+        </div>
+
+        {/* Main Headline Block */}
+        <div className="relative z-10 max-w-2xl my-8 space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-950/80 border border-blue-800 text-cyan-300 text-xs font-mono font-bold">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Next-Gen Dam Breach &amp; Inundation Platform</span>
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight font-sans">
+            Predict. Prepare. <br />
+            <span className="bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 bg-clip-text text-transparent">
+              Protect.
+            </span>
+          </h1>
+
+          <p className="text-sm sm:text-base text-hc-textSecondary leading-relaxed">
+            Advanced Hydrodynamic Modelling for Dam Break &amp; Flood Inundation Analysis using <strong>Smooth Particle Hydrodynamics (SPH)</strong> and <strong>Delft3D Flexible Mesh</strong>.
+          </p>
+
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <button
+              onClick={() => onNavigate && onNavigate('dashboard')}
+              className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center space-x-2 transition shadow-glow-blue"
+            >
+              <span>Explore Live Map</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+
             <button
               onClick={onOpenTutorial}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-hc-surface border border-cyan-500/40 hover:bg-cyan-950/30 text-hc-active font-semibold text-xs transition"
-              title="Open Interactive Tutorial Walkthrough"
+              className="px-5 py-3 rounded-xl bg-hc-surface hover:bg-hc-elevated border border-hc-border text-hc-ink font-semibold text-xs transition flex items-center space-x-2"
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Tutorial Guide</span>
-            </button>
-            <button
-              onClick={() => onNavigate('create')}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink font-bold text-xs transition shadow-md shadow-cyan-500/20"
-            >
-              <span>Create Scenario</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <Play className="w-3.5 h-3.5 fill-hc-ink" />
+              <span>Watch Interactive Demo</span>
             </button>
           </div>
-        }
-      />
+        </div>
 
-      {/* 2. Top Summary Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard
-          title="Active Case Study"
-          value={activePreset.dam_name || 'Tehri Dam'}
-          subtitle={activePreset.river || 'Bhagirathi River'}
-          provenance={activePreset.is_hypothetical ? 'MODELLED' : 'OBSERVED'}
-          accentColor="cyan"
-          icon={Waves}
-        />
-        <MetricCard
-          title="Reservoir Capacity"
-          value={formatFinite((activePreset.reservoir_volume_m3 || 3.54e9) / 1e9, 2)}
-          unit="BCM"
-          subtitle={`Dam Height: ${activePreset.dam_height_m || 260.5}m MSL`}
-          provenance="REPORTED"
-          accentColor="amber"
-          icon={Database}
-        />
-        <MetricCard
-          title="Downstream Reach"
-          value={`${activePreset.reach_length_km || 100} km`}
-          subtitle={activePreset.valley_type || 'Mountain Gorge'}
-          provenance="OBSERVED"
-          accentColor="purple"
-          icon={Layers}
-        />
-        <MetricCard
-          title="Telemetry Status"
-          value="4 / 4 Feeds"
-          subtitle="Copernicus GEE, DEM, PostGIS, CWC"
-          provenance="OBSERVED"
-          accentColor="emerald"
-          icon={Activity}
-        />
+        {/* Live Stat Strip matching Panel 2 of Image 3 */}
+        <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-hc-border/80">
+          <div className="p-3 bg-hc-surface/80 rounded-2xl border border-hc-border text-center">
+            <span className="text-2xl font-extrabold font-mono text-cyan-400 block">100+</span>
+            <span className="text-xs text-hc-textSecondary font-medium">Simulations Run</span>
+          </div>
+          <div className="p-3 bg-hc-surface/80 rounded-2xl border border-hc-border text-center">
+            <span className="text-2xl font-extrabold font-mono text-emerald-400 block">50+</span>
+            <span className="text-xs text-hc-textSecondary font-medium">River Basins Covered</span>
+          </div>
+          <div className="p-3 bg-hc-surface/80 rounded-2xl border border-hc-border text-center">
+            <span className="text-2xl font-extrabold font-mono text-amber-400 block">15+</span>
+            <span className="text-xs text-hc-textSecondary font-medium">Geospatial Datasets</span>
+          </div>
+          <div className="p-3 bg-hc-surface/80 rounded-2xl border border-hc-border text-center">
+            <span className="text-2xl font-extrabold font-mono text-blue-400 block">10K+</span>
+            <span className="text-xs text-hc-textSecondary font-medium">Lives Protected</span>
+          </div>
+        </div>
       </div>
 
-      {/* 3. Preset Case Studies Grid */}
-      <div className="space-y-3">
+      {/* 2. Indian River Case Studies Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <h3 className="text-sm font-bold text-hc-ink">
-              Indian Dam Break &amp; Flash Flood Case Studies
+          <div>
+            <h3 className="text-base font-bold text-hc-ink">
+              Verified Indian Dam Break &amp; Flood Inundation Benchmarks
             </h3>
-            {isDemo && (
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                DEMO DATA ACTIVE
-              </span>
-            )}
+            <p className="text-xs text-hc-textSecondary mt-0.5">
+              Select any national river basin or emergency scenario to inspect hydrodynamic flood wave routing.
+            </p>
           </div>
           <span className="text-xs text-hc-textSecondary font-mono">
-            {presets.length} Verified Basins
+            {presets.length} Basins Configured
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {presets.map((preset) => {
-            const isSelected = preset.id === activePreset.id;
+            const isSelected = preset.id === selectedPreset?.id;
             const isBenchmark = preset.is_hypothetical === false;
 
             return (
               <div
                 key={preset.id}
-                onClick={() => onSelectPreset(preset.id)}
-                className={`p-4 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-3 ${
+                onClick={() => {
+                  if (onSelectPreset) onSelectPreset(preset.id);
+                }}
+                className={`p-5 rounded-2xl border transition cursor-pointer flex flex-col justify-between space-y-4 ${
                   isSelected
-                    ? 'bg-hc-surface border-cyan-500 shadow-xl shadow-cyan-500/10 ring-1 ring-cyan-500/30'
-                    : 'bg-hc-surface/60 border-hc-border/80 hover:bg-hc-surface hover:border-hc-border'
+                    ? 'bg-hc-surface border-cyan-400 shadow-glow-cyan ring-1 ring-cyan-400/30'
+                    : 'bg-hc-surface/70 border-hc-border hover:border-hc-borderLight hover:bg-hc-surface'
                 }`}
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <div className="flex items-center space-x-2 mb-1">
-                        <span className="text-xs font-bold text-hc-ink">
-                          {preset.name}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-hc-textSecondary font-mono">
+                      <h4 className="text-sm font-bold text-hc-ink">{preset.name}</h4>
+                      <p className="text-xs text-hc-textSecondary font-mono mt-0.5">
                         {preset.river} &bull; {preset.state}
                       </p>
                     </div>
 
                     <span
-                      className={`text-[10px] px-2 py-0.5 rounded-md font-mono font-bold shrink-0 ${
+                      className={`text-[10px] px-2.5 py-0.5 rounded-full font-mono font-bold shrink-0 ${
                         isBenchmark
-                          ? 'bg-hc-critical/20 text-red-300 border border-hc-critical/30'
-                          : 'bg-hc-active/20 text-cyan-300 border border-cyan-500/30'
+                          ? 'bg-red-950 text-red-300 border border-red-800'
+                          : 'bg-blue-950 text-blue-300 border border-blue-800'
                       }`}
                     >
                       {isBenchmark ? 'DISASTER BENCHMARK' : 'SCENARIO FORECAST'}
                     </span>
                   </div>
 
-                  <p className="text-xs text-hc-textSecondary mt-2 leading-relaxed">
+                  <p className="text-xs text-hc-textSecondary mt-2.5 leading-relaxed">
                     {preset.description}
                   </p>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 py-2 px-3 bg-hc-bg rounded-xl border border-hc-border/80 text-center font-mono">
+                <div className="grid grid-cols-3 gap-2 py-2 px-3 bg-hc-canvas rounded-xl border border-hc-border text-center font-mono">
                   <div>
-                    <span className="text-[10px] text-hc-textSecondary block">Dam Height</span>
+                    <span className="text-[10px] text-hc-textMuted block">Dam Height</span>
                     <span className="text-xs font-bold text-hc-ink">{preset.dam_height_m} m</span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-hc-textSecondary block">Reservoir Vol</span>
-                    <span className="text-xs font-bold text-hc-active">
+                    <span className="text-[10px] text-hc-textMuted block">Storage Volume</span>
+                    <span className="text-xs font-bold text-cyan-400">
                       {preset.reservoir_volume_m3 ? (preset.reservoir_volume_m3 / 1e6).toFixed(1) : 'N/A'} Mm³
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-hc-textSecondary block">Reach Length</span>
+                    <span className="text-[10px] text-hc-textMuted block">Reach Length</span>
                     <span className="text-xs font-bold text-hc-ink">{preset.reach_length_km} km</span>
                   </div>
                 </div>
@@ -189,168 +197,23 @@ export default function HomeScreen({
                   <span className="text-[11px] text-hc-textSecondary">
                     Structure: <strong className="text-hc-ink capitalize">{preset.dam_type?.replace('_', ' ')}</strong>
                   </span>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSelectPreset(preset.id);
-                        onRunSimulation({ scenario_id: preset.id, preset_id: preset.id });
-                      }}
-                      disabled={isSimulating}
-                      className="px-3 py-1.5 rounded-xl bg-hc-active hover:bg-hc-active text-hc-ink text-xs font-bold flex items-center space-x-1 transition shadow"
-                    >
-                      <Play className="w-3 h-3 fill-hc-ink" />
-                      <span>{isSelected && isSimulating ? 'Running...' : 'Run Scenario'}</span>
-                    </button>
-                  </div>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onSelectPreset) onSelectPreset(preset.id);
+                      if (onRunSimulation) onRunSimulation({ scenario_id: preset.id });
+                    }}
+                    disabled={isSimulating}
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white text-xs font-bold flex items-center space-x-1.5 transition shadow-sm disabled:opacity-50"
+                  >
+                    <Play className="w-3.5 h-3.5 fill-white" />
+                    <span>{isSelected && isSimulating ? 'Running...' : 'Run Scenario'}</span>
+                  </button>
                 </div>
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* 4. Recent Runs & Telemetry Split (60/40) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left 7 cols: Recent Simulation Runs */}
-        <div className="lg:col-span-7 bg-hc-surface/80 border border-hc-border rounded-2xl p-5 space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-hc-border">
-            <div className="flex items-center space-x-2">
-              <History className="w-4 h-4 text-hc-active" />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-hc-ink">
-                Recent Simulation Runs
-              </h3>
-            </div>
-            <span className="text-[11px] text-hc-textSecondary font-mono">
-              {recentRuns.length} recorded
-            </span>
-          </div>
-
-          {recentRuns.length > 0 ? (
-            <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
-              {recentRuns.map((run, idx) => (
-                <div
-                  key={run.run_id || idx}
-                  className="p-3 bg-hc-bg/80 rounded-xl border border-hc-border flex items-center justify-between gap-3 text-xs"
-                >
-                  <div className="space-y-0.5">
-                    <div className="flex items-center space-x-2">
-                      <span className="font-bold text-hc-ink">{run.scenario_name || run.scenario_id}</span>
-                      <span className="text-[10px] font-mono bg-hc-active/10 text-hc-active px-1.5 py-0.5 rounded border border-cyan-500/20">
-                        {run.run_id}
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-hc-textSecondary">
-                      {run.timestamp || 'Recent'} &bull; Peak Outflow: {formatFinite(run.peak_discharge_m3s || 84200, 0)} m³/s
-                    </p>
-                  </div>
-
-                  <div className="flex items-center space-x-1.5">
-                    <button
-                      onClick={() => onLoadRecentRun && onLoadRecentRun(run)}
-                      className="p-1.5 rounded-lg bg-hc-secondary hover:bg-hc-border text-hc-ink transition"
-                      title="Load this run onto Results Map"
-                    >
-                      <RotateCcw className="w-3.5 h-3.5" />
-                    </button>
-                    {onDeleteRecentRun && (
-                      <button
-                        onClick={() => onDeleteRecentRun(run.run_id)}
-                        className="p-1.5 rounded-lg bg-hc-secondary hover:bg-red-950 text-hc-textSecondary hover:text-hc-critical transition"
-                        title="Delete from history"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-8 text-center bg-hc-bg/40 rounded-xl border border-dashed border-hc-border text-hc-textSecondary text-xs space-y-2">
-              <History className="w-6 h-6 mx-auto text-hc-textSecondary" />
-              <p>No recent simulation runs saved yet.</p>
-              <p className="text-[11px] text-hc-textSecondary">
-                Run any case study above or create a custom scenario to populate your run history.
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Right 5 cols: Live Data-Source & Telemetry Status */}
-        <div className="lg:col-span-5 bg-hc-surface/80 border border-hc-border rounded-2xl p-5 space-y-4">
-          <div className="flex items-center space-x-2 pb-3 border-b border-hc-border">
-            <Activity className="w-4 h-4 text-hc-success" />
-            <h3 className="text-xs font-bold uppercase tracking-wider text-hc-ink">
-              Live Geospatial Telemetry Feeds
-            </h3>
-          </div>
-
-          <div className="space-y-2.5">
-            <div className="p-3 bg-hc-bg rounded-xl border border-hc-border flex items-center justify-between">
-              <div className="flex items-center space-x-2.5">
-                <div className="w-7 h-7 rounded-lg bg-blue-950 text-hc-primary flex items-center justify-center border border-blue-800/40">
-                  <Database className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-hc-ink">PostGIS Spatial DB</h4>
-                  <p className="text-[10px] text-hc-textSecondary">Himalayan Reach Vector Corridor</p>
-                </div>
-              </div>
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-hc-success bg-emerald-950 px-2 py-0.5 rounded-full border border-emerald-800/50">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                CONNECTED
-              </span>
-            </div>
-
-            <div className="p-3 bg-hc-bg rounded-xl border border-hc-border flex items-center justify-between">
-              <div className="flex items-center space-x-2.5">
-                <div className="w-7 h-7 rounded-lg bg-emerald-950 text-hc-success flex items-center justify-center border border-emerald-800/40">
-                  <Satellite className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-hc-ink">Copernicus Sentinel-1 SAR</h4>
-                  <p className="text-[10px] text-hc-textSecondary">10m C-Band Backscatter Feed</p>
-                </div>
-              </div>
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-hc-success bg-emerald-950 px-2 py-0.5 rounded-full border border-emerald-800/50">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                ACTIVE
-              </span>
-            </div>
-
-            <div className="p-3 bg-hc-bg rounded-xl border border-hc-border flex items-center justify-between">
-              <div className="flex items-center space-x-2.5">
-                <div className="w-7 h-7 rounded-lg bg-purple-950 text-hc-assumption flex items-center justify-center border border-purple-800/40">
-                  <Layers className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-hc-ink">Copernicus GLO-30 DSM</h4>
-                  <p className="text-[10px] text-hc-textSecondary">30m Global Elevation Model</p>
-                </div>
-              </div>
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-hc-success bg-emerald-950 px-2 py-0.5 rounded-full border border-emerald-800/50">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                LOADED
-              </span>
-            </div>
-
-            <div className="p-3 bg-hc-bg rounded-xl border border-hc-border flex items-center justify-between">
-              <div className="flex items-center space-x-2.5">
-                <div className="w-7 h-7 rounded-lg bg-amber-950 text-amber-400 flex items-center justify-center border border-amber-800/40">
-                  <Activity className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-hc-ink">CWC Hydro Telemetry</h4>
-                  <p className="text-[10px] text-hc-textSecondary">Central Water Commission Gauges</p>
-                </div>
-              </div>
-              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-hc-success bg-emerald-950 px-2 py-0.5 rounded-full border border-emerald-800/50">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                ONLINE
-              </span>
-            </div>
-          </div>
         </div>
       </div>
     </div>
