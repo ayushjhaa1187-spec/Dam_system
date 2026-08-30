@@ -1,13 +1,9 @@
-"""Unit tests for ML Ensemble Flood Probability Predictor Engine."""
-import pytest
 from floodlab.engines.flood_predictor import (
-    FloodEnsemblePredictor,
-    get_flood_predictor,
-    FEATURE_NAMES,
-    FEATURE_DESCRIPTIONS,
-    FEATURE_CATEGORIES,
     DEFAULT_PRESETS,
+    FEATURE_DESCRIPTIONS,
+    FEATURE_NAMES,
     classify_risk,
+    get_flood_predictor,
 )
 
 
