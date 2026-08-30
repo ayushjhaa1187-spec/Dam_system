@@ -261,7 +261,6 @@ class SPHHydroSolver:
         for step in range(num_steps):
             current_time = step * dt
             time_min = current_time / 60.0
-            time_hrs = current_time / 3600.0
 
             # Current inflow discharge from hydrograph
             current_q = float(np.interp(current_time, hydro_times_sec, hydro_flows)) if len(hydro_times_sec) > 1 else hydro_flows[0]
