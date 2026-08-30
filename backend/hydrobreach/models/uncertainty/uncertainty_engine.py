@@ -10,7 +10,7 @@ Implements:
 import math
 import random
 import numpy as np
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 from pydantic import BaseModel, Field
 
 from hydrobreach.models.breach_mechanics import BreachMechanicsEngine, DamBreachInput

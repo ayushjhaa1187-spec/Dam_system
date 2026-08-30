@@ -8,11 +8,9 @@ Tests for High-Risk User Journeys & Edge Cases:
 - Backend error handling & empty responses
 """
 
-import pytest
 from fastapi.testclient import TestClient
 from floodlab.api.main import app
-from hydrobreach.data.preset_scenarios import INDIAN_PRESET_SCENARIOS, get_preset_by_id
-from hydrobreach.models.breach_mechanics import BreachMechanicsEngine, DamBreachInput
+from hydrobreach.data.preset_scenarios import get_preset_by_id
 
 client = TestClient(app)
 

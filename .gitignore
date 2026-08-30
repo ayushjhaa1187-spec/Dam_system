@@ -32,3 +32,6 @@ data/cache/*
 .env.local
 .DS_Store
 Thumbs.db
+catboost_info/
+*/catboost_info/
+

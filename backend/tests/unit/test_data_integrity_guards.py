@@ -2,7 +2,6 @@
 Unit tests for FloodLab scientific data integrity, numerical guards, unit conversions,
 CSI comparison logic, mass conservation, uncertainty intervals, and provenance propagation.
 """
-import math
 import numpy as np
 import pytest
 
@@ -10,18 +9,16 @@ from floodlab.core.units import (
     m2_to_km2,
     km2_to_m2,
     ha_to_km2,
-    km2_to_ha,
     m3_to_mcm,
     m3_to_billion_m3,
     validate_array_finite,
     validate_hydrograph_integrity,
-    is_finite_number,
     sanitize_float,
 )
 from hydrobreach.models.scenario_comparator.comparison import ScenarioComparator
 from hydrobreach.models.uncertainty.uncertainty_engine import UncertaintyEngine, UncertaintyInput
 from hydrobreach.models.loss_damage.damage_estimator import LossAndDamageEngine
-from floodlab.validation.metrics import SpatialMetrics, HydrographMetrics
+from floodlab.validation.metrics import SpatialMetrics
 
 
 class TestUnitConversions:

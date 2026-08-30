@@ -177,6 +177,14 @@ export default function Overview({
         </div>
 
         <div className="flex items-center space-x-3">
+          {onNavigate && (
+            <button
+              onClick={() => onNavigate('predictor')}
+              className="flex items-center space-x-1.5 px-3.5 py-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 hover:bg-purple-500/20 text-purple-700 font-bold text-xs transition"
+            >
+              <span>AI Flood Predictor</span>
+            </button>
+          )}
           <button
             onClick={() => onRunSimulation && onRunSimulation()}
             disabled={isSimulating}

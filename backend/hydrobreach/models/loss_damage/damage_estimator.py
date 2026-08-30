@@ -4,9 +4,7 @@ Calculates flood hazard ratings (HR = d*(v+0.5)+DF), structural damage vulnerabi
 population exposure (WorldPop), economic damages (INR Crores), and NDRF evacuation zones.
 """
 
-import math
-from typing import Dict, Any, List, Optional
-import numpy as np
+from typing import Dict, Any
 
 
 class LossAndDamageEngine:

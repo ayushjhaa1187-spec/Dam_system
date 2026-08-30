@@ -1,0 +1,40 @@
+{
+  "scenario_id": "chenab-jk-worstcase",
+  "description": "Catastrophic breach scenario for Baglihar / Chenab Dam in Jammu & Kashmir mountain gorge.",
+  "basin": {
+    "name": "Chenab River Basin",
+    "aoi_boundary": "datasets/chenab/aoi.geojson",
+    "state": "Jammu and Kashmir",
+    "country": "India"
+  },
+  "inputs": {
+    "dem": "datasets/chenab/dem.tif",
+    "river_network": "datasets/chenab/river.geojson",
+    "land_use": "datasets/chenab/landuse.tif",
+    "population": "datasets/chenab/population.tif"
+  },
+  "dam": {
+    "name": "Baglihar Dam (Chenab)",
+    "location": [
+      33.15,
+      75.35
+    ],
+    "height_m": 143.0,
+    "storage_volume_mcm": 1960.0,
+    "dam_type": "concrete_gravity",
+    "crest_length_m": 317.0
+  },
+  "breach": {
+    "failure_type": "instantaneous",
+    "breach_width_m": 120.0,
+    "breach_formation_time_hr": 0.25,
+    "reservoir_level_pct": 98.0,
+    "breach_model": "froehlich_2008"
+  },
+  "run_settings": {
+    "grid_resolution_m": 30.0,
+    "manning_n": 0.035,
+    "simulation_duration_hr": 24.0,
+    "target_crs": "EPSG:32643"
+  }
+}

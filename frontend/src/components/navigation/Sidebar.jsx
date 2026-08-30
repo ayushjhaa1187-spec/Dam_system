@@ -18,6 +18,7 @@ import {
 
 export const SIDEBAR_NAV = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+  { id: 'predictor', label: 'AI Predictor', icon: Sparkles },
   { id: 'rivers', label: 'River Basins', icon: Waves },
   { id: 'dams', label: 'Dam & Reservoirs', icon: Database },
   { id: 'simulations', label: 'Simulations', icon: Activity },

@@ -5,7 +5,7 @@ breach hydrograph calculation, and DEM elevation profiles.
 """
 
 from fastapi import APIRouter, HTTPException, Query
-from typing import Dict, Any, List, Optional
+from typing import Optional
 from pydantic import BaseModel, Field
 
 from hydrobreach.data.preset_scenarios import INDIAN_PRESET_SCENARIOS, get_preset_by_id

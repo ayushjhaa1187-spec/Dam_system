@@ -20,6 +20,7 @@ import SatelliteMonitor from './pages/SatelliteMonitor'; // GEE Monitoring
 import AlertsScreen from './pages/AlertsScreen'; // Panel 6: Alerts & Notifications
 import HADRDashboard from './pages/HADRDashboard'; // HADR Decision Brief
 import ImpactExportScreen from './pages/ImpactExportScreen'; // Panel 7: Reports & Export Hub
+import FloodPredictorScreen from './pages/FloodPredictorScreen'; // AI Ensemble Flood Predictor
 
 import { api, FALLBACK_PRESETS } from './services/api';
 
@@ -109,6 +110,7 @@ export default function App() {
 
     // Sync corresponding sidebar item
     if (tabId === 'dashboard') setActiveSidebarItem('overview');
+    else if (tabId === 'predictor') setActiveSidebarItem('predictor');
     else if (tabId === 'modeling') setActiveSidebarItem('dams');
     else if (tabId === 'data') setActiveSidebarItem('data_sources');
     else if (tabId === 'scenarios') setActiveSidebarItem('simulations');
@@ -122,6 +124,9 @@ export default function App() {
 
     if (itemId === 'overview') {
       setActiveTopTab('dashboard');
+      setActiveSubView(null);
+    } else if (itemId === 'predictor') {
+      setActiveTopTab('predictor');
       setActiveSubView(null);
     } else if (itemId === 'rivers') {
       setActiveTopTab('dashboard');
@@ -251,7 +256,16 @@ export default function App() {
                 />
               )}
 
-              {/* Top Tab 2: Modeling (Simulation Wizard / Settings) */}
+              {/* Top Tab 2: AI Predictor (XGBoost + LightGBM + CatBoost Ensemble) */}
+              {!activeSubView && activeTopTab === 'predictor' && (
+                <FloodPredictorScreen
+                  onNavigate={handleSelectTopTab}
+                  onRunSimulation={handleRunSimulation}
+                  isSimulating={isSimulating}
+                />
+              )}
+
+              {/* Top Tab 3: Modeling (Simulation Wizard / Settings) */}
               {!activeSubView && activeTopTab === 'modeling' && (
                 <ModelConfigScreen
                   selectedPreset={selectedPreset}

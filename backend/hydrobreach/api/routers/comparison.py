@@ -3,7 +3,6 @@ HydroBreach API - Scenario Comparison Router
 """
 
 from fastapi import APIRouter, HTTPException
-from typing import Dict, Any
 from pydantic import BaseModel
 
 from hydrobreach.models.scenario_comparator.comparison import ScenarioComparator

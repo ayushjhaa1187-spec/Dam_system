@@ -3,40 +3,58 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 
 import HomeScreen from '../pages/HomeScreen';
+import Overview from '../pages/Overview';
 import CreateScenarioScreen from '../pages/CreateScenarioScreen';
-import RunMonitorScreen from '../pages/RunMonitorScreen';
+import DataStudioScreen from '../pages/DataStudioScreen';
+import ModelConfigScreen from '../pages/ModelConfigScreen';
 import ResultsMapScreen from '../pages/ResultsMapScreen';
+import ScenarioComparison from '../pages/ScenarioComparison';
+import SatelliteMonitor from '../pages/SatelliteMonitor';
+import AlertsScreen from '../pages/AlertsScreen';
+import HADRDashboard from '../pages/HADRDashboard';
 import ImpactExportScreen from '../pages/ImpactExportScreen';
-import TutorialModal from '../components/common/TutorialModal';
-import KeyboardShortcutsModal from '../components/common/KeyboardShortcutsModal';
-import MobileWarning from '../components/common/MobileWarning';
 import { FALLBACK_PRESETS } from '../services/api';
 
-describe('Screen 1: Home & Case Studies', () => {
-  it('renders home screen title, case study cards, and telemetry status', () => {
-    const onSelectPreset = vi.fn();
-    const onRunSimulation = vi.fn();
-
+describe('HydroShield Product Screens', () => {
+  it('Screen 1: Landing Page / HomeScreen renders Predict. Prepare. Protect. and live stats strip', () => {
     render(
       <HomeScreen
         presets={FALLBACK_PRESETS}
         selectedPreset={FALLBACK_PRESETS[0]}
-        onSelectPreset={onSelectPreset}
-        onRunSimulation={onRunSimulation}
+        onSelectPreset={vi.fn()}
+        onRunSimulation={vi.fn()}
         onNavigate={vi.fn()}
+        onOpenTutorial={vi.fn()}
+        isSimulating={false}
       />
     );
 
-    expect(screen.getByText(/Home & Indian River Case Studies/i)).toBeInTheDocument();
-    expect(screen.getByText(/Tehri Dam \(Bhagirathi River, Uttarakhand\)/i)).toBeInTheDocument();
-    expect(screen.getByText(/DEMO DATA ACTIVE/i)).toBeInTheDocument();
-    expect(screen.getByText(/PostGIS Spatial DB/i)).toBeInTheDocument();
-    expect(screen.getByText(/Copernicus Sentinel-1 SAR/i)).toBeInTheDocument();
+    expect(screen.getByText(/Predict\. Prepare\./i)).toBeInTheDocument();
+    expect(screen.getByText(/Simulations Run/i)).toBeInTheDocument();
+    expect(screen.getByText(/River Basins Covered/i)).toBeInTheDocument();
+    expect(screen.getByText(/Lives Protected/i)).toBeInTheDocument();
   });
-});
 
-describe('Screen 2: Create Scenario Wizard', () => {
-  it('renders step 1 inputs and validates required fields', () => {
+  it('Screen 2: Mission Control Dashboard / Overview renders 5 KPI cards and Chenab Basin', () => {
+    render(
+      <Overview
+        selectedPreset={FALLBACK_PRESETS[0]}
+        simulationResult={null}
+        onNavigate={vi.fn()}
+        onRunSimulation={vi.fn()}
+        isSimulating={false}
+      />
+    );
+
+    expect(screen.getByText(/Chenab River Basin/i)).toBeInTheDocument();
+    expect(screen.getByText(/Max Inundation Depth/i)).toBeInTheDocument();
+    expect(screen.getByText(/Affected Area/i)).toBeInTheDocument();
+    expect(screen.getByText(/Population At Risk/i)).toBeInTheDocument();
+    expect(screen.getByText(/Estimated Damage/i)).toBeInTheDocument();
+    expect(screen.getByText(/Peak Discharge/i)).toBeInTheDocument();
+  });
+
+  it('Screen 3: New Simulation Wizard renders multi-step setup', () => {
     render(
       <CreateScenarioScreen
         onRunSimulation={vi.fn()}
@@ -45,33 +63,33 @@ describe('Screen 2: Create Scenario Wizard', () => {
       />
     );
 
-    expect(screen.getByText(/1\. Dam Identity & Structural Context/i)).toBeInTheDocument();
-    const titleInput = screen.getByPlaceholderText(/Tehri Dam PMF Outflow Scenario/i);
-    expect(titleInput).toBeInTheDocument();
+    expect(screen.getByText(/New Dam Break Simulation Wizard/i)).toBeInTheDocument();
+    expect(screen.getByText(/1\. Study Area Selection/i)).toBeInTheDocument();
 
-    // Advance to next step
     const continueBtn = screen.getByText(/^Continue$/i);
     fireEvent.click(continueBtn);
 
-    // Should move to step 2
-    expect(screen.getByText(/2\. Reservoir Storage & Hydraulic Head/i)).toBeInTheDocument();
+    expect(screen.getByText(/2\. Dam Structure & Reservoir Parameters/i)).toBeInTheDocument();
   });
-});
 
-describe('Screen 3: Run Monitor', () => {
-  it('renders progress bar, 5-stage phase tracker, and console logs', () => {
-    const sampleResult = {
-      run_id: 'sim_test_01',
-      status: 'COMPLETED',
-      scientific_metadata: {
-        reproducibility_id: 'REP-COU-TEST',
-        compute_duration_s: 2.5,
-      },
-    };
-
+  it('Screen 4: Data Studio renders 6 upload cards and 3D layer preview', () => {
     render(
-      <RunMonitorScreen
-        simulationResult={sampleResult}
+      <DataStudioScreen
+        onNavigate={vi.fn()}
+        onRunSimulation={vi.fn()}
+        isSimulating={false}
+      />
+    );
+
+    expect(screen.getByText(/Data Input & Dataset Upload Hub/i)).toBeInTheDocument();
+    expect(screen.getByText(/DEM \(Terrain\)/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/River Network/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/3D Spatial Layer Stack Preview/i)).toBeInTheDocument();
+  });
+
+  it('Screen 5: Model Config & Simulation Settings renders SPH, Delft3D, and sliders', () => {
+    render(
+      <ModelConfigScreen
         selectedPreset={FALLBACK_PRESETS[0]}
         onRunSimulation={vi.fn()}
         onNavigate={vi.fn()}
@@ -79,14 +97,13 @@ describe('Screen 3: Run Monitor', () => {
       />
     );
 
-    expect(screen.getByText(/Hydrodynamic Job Progress & Compute Telemetry/i)).toBeInTheDocument();
-    expect(screen.getByText(/Execution Log Stream/i)).toBeInTheDocument();
-    expect(screen.getByText(/REP-COU-TEST/i)).toBeInTheDocument();
+    expect(screen.getByText(/Simulation Settings & Solver Setup/i)).toBeInTheDocument();
+    expect(screen.getByText(/Delft3D \(Flexible Mesh\)/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Smooth Particle Hydrodynamics \(SPH\)/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Comparison Mode – Run Both Models & Compare Results/i)).toBeInTheDocument();
   });
-});
 
-describe('Screen 4: Results Map', () => {
-  it('renders metrics, colorblind palette selectors, and station cards', () => {
+  it('Screen 6: Results & Inundation Map Detailed renders layer controls and tabs', () => {
     render(
       <ResultsMapScreen
         simulationResult={null}
@@ -97,14 +114,67 @@ describe('Screen 4: Results Map', () => {
       />
     );
 
-    expect(screen.getByText(/Interactive Hydrodynamic Simulation Map/i)).toBeInTheDocument();
-    expect(screen.getByText(/Cividis \(Colorblind-Safe\)/i)).toBeInTheDocument();
-    expect(screen.getByText(/Viridis \(Perceptual\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Results & Inundation Map \(Detailed\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Layer Control/i)).toBeInTheDocument();
+    expect(screen.getByText(/Export KML/i)).toBeInTheDocument();
+    expect(screen.getByText(/Export Shapefile/i)).toBeInTheDocument();
   });
-});
 
-describe('Screen 5: Impact & Export Center', () => {
-  it('renders damage assessment metrics and download cards', () => {
+  it('Screen 7: Model Comparison & Analysis renders dual SPH vs Delft3D stats', () => {
+    render(
+      <ScenarioComparison
+        simulationResult={null}
+        selectedPreset={FALLBACK_PRESETS[0]}
+        onRunSimulation={vi.fn()}
+        isSimulating={false}
+      />
+    );
+
+    expect(screen.getByText(/Model Comparison & Analysis \(SPH vs Delft3D\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Critical Success Index \(CSI\)/i)).toBeInTheDocument();
+    expect(screen.getByText(/Inter-Model Hydrodynamic Comparison Table/i)).toBeInTheDocument();
+  });
+
+  it('Screen 8: GEE Monitoring renders satellite SAR controls and queue', () => {
+    render(
+      <SatelliteMonitor
+        selectedPreset={FALLBACK_PRESETS[0]}
+        simulationResult={null}
+        onNavigate={vi.fn()}
+        onRunSimulation={vi.fn()}
+        isSimulating={false}
+      />
+    );
+
+    expect(screen.getByText(/GEE Monitoring \(Sentinel-1 SAR & Sentinel-2\)/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Near Real-Time Flood Extent/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Asynchronous Simulation Queue/i)).toBeInTheDocument();
+  });
+
+  it('Screen 9: Alerts & Notifications renders active hazard list', () => {
+    render(<AlertsScreen onNavigate={vi.fn()} />);
+
+    expect(screen.getByText(/Alerts & Real-Time Hazard Notifications/i)).toBeInTheDocument();
+    expect(screen.getByText(/High Risk Flood Zone — Ramban District/i)).toBeInTheDocument();
+    expect(screen.getByText(/Dam Water Level High — Chenab Dam/i)).toBeInTheDocument();
+  });
+
+  it('Screen 10: HADR Decision Brief renders 3 download buttons', () => {
+    render(
+      <HADRDashboard
+        selectedPreset={FALLBACK_PRESETS[0]}
+        simulationResult={null}
+        onNavigate={vi.fn()}
+      />
+    );
+
+    expect(screen.getByText(/HADR Decision Brief & Exposure Mapping/i)).toBeInTheDocument();
+    expect(screen.getByText(/Download CSV Data/i)).toBeInTheDocument();
+    expect(screen.getByText(/Download KML File/i)).toBeInTheDocument();
+    expect(screen.getByText(/Download Official PDF Brief/i)).toBeInTheDocument();
+  });
+
+  it('Screen 11: Reports / Export Hub renders 120-page preview and checklist', () => {
     render(
       <ImpactExportScreen
         simulationResult={null}
@@ -113,30 +183,9 @@ describe('Screen 5: Impact & Export Center', () => {
       />
     );
 
-    expect(screen.getByText(/HADR Damage Assessment & Standard GIS Downloads/i)).toBeInTheDocument();
-    expect(screen.getByText(/ESRI Shapefile Package \(\.zip\)/i)).toBeInTheDocument();
-    expect(screen.getByText(/Google Earth OGC KML \(\.kml\)/i)).toBeInTheDocument();
-    expect(screen.getByText(/Web GIS GeoJSON \(\.geojson\)/i)).toBeInTheDocument();
-    expect(screen.getByText(/Executive Decision-Maker PDF Report \(\.pdf\)/i)).toBeInTheDocument();
-    expect(screen.getByText(/GeoTIFF Inundation Depth Raster \(\.tif\)/i)).toBeInTheDocument();
-  });
-});
-
-describe('Global Modals & Utilities', () => {
-  it('renders TutorialModal steps correctly', () => {
-    const onClose = vi.fn();
-    render(<TutorialModal isOpen={true} onClose={onClose} />);
-
-    expect(screen.getByText(/Welcome to FLOODLAB \(HydroBreach\)/i)).toBeInTheDocument();
-    const nextBtn = screen.getByText(/^Next$/i);
-    fireEvent.click(nextBtn);
-    expect(screen.getByText(/Screen 1: Home & Case Studies/i)).toBeInTheDocument();
-  });
-
-  it('renders KeyboardShortcutsModal with shortcut list', () => {
-    render(<KeyboardShortcutsModal isOpen={true} onClose={vi.fn()} />);
-
-    expect(screen.getByText(/Accessible Keyboard Shortcuts/i)).toBeInTheDocument();
-    expect(screen.getByText(/Switch to Screen 1: Home & Case Studies/i)).toBeInTheDocument();
+    expect(screen.getByText(/Reports \/ Export Center/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Dam Break Inundation Report/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Executive Summary/i)).toBeInTheDocument();
+    expect(screen.getByText(/PDF Report/i)).toBeInTheDocument();
   });
 });

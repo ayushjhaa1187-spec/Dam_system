@@ -1,5 +1,4 @@
 """API endpoints tests using TestClient."""
-import pytest
 from fastapi.testclient import TestClient
 from floodlab.api.main import app
 

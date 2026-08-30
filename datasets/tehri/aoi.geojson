@@ -1,0 +1,39 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tehri Bhagirathi Basin Study Area",
+        "state": "Uttarakhand"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.2,
+              30.15
+            ],
+            [
+              78.75,
+              30.15
+            ],
+            [
+              78.75,
+              30.55
+            ],
+            [
+              78.2,
+              30.55
+            ],
+            [
+              78.2,
+              30.15
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

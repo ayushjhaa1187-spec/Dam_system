@@ -9,7 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from floodlab.config.settings import get_settings
 from floodlab.api.routers import (
     simulations, hydrology, scenarios, uncertainty,
-    satellite, exposure, routing, validation, export, jobs, chat
+    satellite, exposure, routing, validation, export, jobs, chat,
+    flood_predictor
 )
 
 settings = get_settings()
@@ -42,6 +43,7 @@ app.include_router(validation.router, prefix="/api/validation", tags=["validatio
 app.include_router(export.router)
 app.include_router(jobs.router, prefix="/api/jobs", tags=["jobs"])
 app.include_router(chat.router, prefix="/api/chat", tags=["chat"])
+app.include_router(flood_predictor.router, prefix="/api/flood-predictor", tags=["flood-predictor"])
 
 
 @app.get("/health")

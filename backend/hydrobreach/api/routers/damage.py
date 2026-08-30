@@ -2,7 +2,7 @@
 HydroBreach API - Loss & Damage Router
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from typing import Dict, Any, Optional
 from pydantic import BaseModel, Field
 

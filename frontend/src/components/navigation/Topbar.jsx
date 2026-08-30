@@ -14,6 +14,7 @@ import {
 
 export const TOP_TABS = [
   { id: 'dashboard', label: 'Dashboard' },
+  { id: 'predictor', label: 'AI Predictor' },
   { id: 'modeling', label: 'Modeling' },
   { id: 'data', label: 'Data' },
   { id: 'scenarios', label: 'Scenarios' },

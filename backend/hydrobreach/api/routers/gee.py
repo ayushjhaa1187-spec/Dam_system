@@ -2,13 +2,12 @@
 HydroBreach API - Google Earth Engine & Near-Real-Time Satellite Router
 """
 
-from fastapi import APIRouter, Query, Response
-from typing import Dict, Any, List, Optional
+from fastapi import APIRouter, Response
+from typing import List
 from pydantic import BaseModel, Field
 import json
 
 from hydrobreach.models.gee_monitor.gee_service import GEESentinel1Monitor
-from hydrobreach.models.exporters.vector_exporter import GeospatialExporter
 
 router = APIRouter(prefix="/api/gee", tags=["Google Earth Engine SAR"])
 
