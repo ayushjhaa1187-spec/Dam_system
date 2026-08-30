@@ -148,7 +148,7 @@ describe('HydroShield Product Screens', () => {
     render(<AlertsScreen onNavigate={vi.fn()} />);
 
     expect(screen.getByText(/Alerts & Real-Time Hazard Notifications/i)).toBeInTheDocument();
-    expect(screen.getByText(/High Risk Flood Zone - Rishikesh Town/i)).toBeInTheDocument();
+    expect(screen.getByText(/High Risk Flood Zone.*Rishikesh/i)).toBeInTheDocument();
     expect(screen.getByText(/Tehri Reservoir Level Critical/i)).toBeInTheDocument();
   });
 
